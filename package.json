@@ -26,10 +26,8 @@
     "babel-preset-react": "^6.3.13",
     "eslint": "^1.10.3",
     "eslint-plugin-react": "^3.11.3",
-    "express": "^4.13.3",
-    "install": "^0.4.1",
-    "npm": "^3.5.2",
+    "open": "0.0.5",
     "webpack": "^1.12.9",
-    "webpack-dev-middleware": "^1.4.0"
+    "webpack-dev-server": "^1.14.0"
   }
 }

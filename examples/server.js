@@ -1,23 +1,25 @@
 /*eslint-disable no-console, no-var */
-var express = require('express')
-var webpack = require('webpack')
-var webpackDevMiddleware = require('webpack-dev-middleware')
-var WebpackConfig = require('./webpack.config')
+'use strict';
 
-var app = express()
+const webpack = require('webpack');
+const WebpackDevServer = require('webpack-dev-server');
+const config = require('./webpack.config');
+const open = require('open');
+const port = 8080;
 
-app.use(webpackDevMiddleware(webpack(WebpackConfig), {
+const app = new WebpackDevServer(webpack(config), {
   publicPath: '/__build__/',
+  contentBase: 'examples/',
   stats: {
     colors: true
   }
-}))
+});
 
-var fs = require('fs')
-var path = require('path')
-
-app.use(express.static(__dirname))
-
-app.listen(8080, function () {
-  console.log('Server listening on http://localhost:8080, Ctrl+C to stop')
-})
+app.listen(port, 'localhost', function(err) {
+    if (err) {
+      console.log(err);
+    }
+    console.log('Listening at localhost:' + port);
+    console.log('Opening your system browser...');
+    open('http://localhost:' + port + '/webpack-dev-server/');
+  });
