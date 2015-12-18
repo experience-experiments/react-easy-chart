@@ -1,0 +1,25 @@
+{
+  "name": "rc-d3",
+  "version": "0.0.1",
+  "description": "React component implementations of Mike Bostok's D3 visualisation library.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rma-consulting/rc-d3.git"
+  },
+  "author": "",
+  "license": "SEE LICENSE IN LICENSE",
+  "bugs": {
+    "url": "https://github.com/rma-consulting/rc-d3/issues"
+  },
+  "homepage": "https://github.com/rma-consulting/rc-d3#readme",
+  "devDependencies": {
+    "eslint": "^1.10.3",
+    "eslint-plugin-react": "^3.11.3",
+    "install": "^0.4.1",
+    "npm": "^3.5.2"
+  }
+}
