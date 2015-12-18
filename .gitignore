@@ -1,0 +1,39 @@
+# IntelliJ project files
+.idea
+*.iml
+
+### OSX template
+.DS_Store
+
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+### Node template
+# Logs
+logs
+*.log
+node_modules
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pem
+*.PublishSettings
+coverage/
