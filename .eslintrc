@@ -1,0 +1,20 @@
+{
+  "extends": [
+    "./eslint-config/default/.eslintrc",
+    "./eslint-config/es6/.eslintrc",
+    "./eslint-config/react/.eslintrc"
+  ],
+  "env": {
+    "browser": true
+  },
+  "ecmaFeatures": {},
+  "globals": {
+    "GATEWAY_URL": true
+  },
+  "rules": {
+    "react/prop-types": [2, {"ignore":["children"]}],
+    "comma-dangle": [2, "never"],
+    "object-curly-spacing": [0, "always"],
+    "space-after-keywords": [0, "always"]
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "env": {
+    "browser": true
+  },
+  "parser": "babel-eslint",
+  "ecmaFeatures": {
+    "arrowFunctions": true,
+    "blockBindings": true,
+    "classes": true,
+    "defaultParams": true,
+    "destructuring": true,
+    "forOf": true,
+    "generators": false,
+    "modules": true,
+    "objectLiteralComputedProperties": true,
+    "objectLiteralDuplicateProperties": false,
+    "objectLiteralShorthandMethods": true,
+    "objectLiteralShorthandProperties": true,
+    "restParams": true,
+    "spread": true,
+    "superInFunctions": true,
+    "templateStrings": true
+  },
+  "rules": {
+    "arrow-parens": 0,
+    "arrow-spacing": [
+      2,
+      {
+        "before": true,
+        "after": true
+      }
+    ],
+    "comma-dangle": [2, "always-multiline"],
+    "constructor-super": 0,
+    "generator-star-spacing": 0,
+    "no-class-assign": 0,
+    "no-cond-assign": [2, "always"],
+    "no-console": 1,
+    "no-const-assign": 2,
+    "no-constant-condition": 1,
+    "no-control-regex": 2,
+    "no-debugger": 1,
+    "no-delete-var": 2,
+    "no-dupe-args": 2,
+    "no-dupe-keys": 2,
+    "no-duplicate-case": 2,
+    "no-empty-character-class": 2,
+    "no-empty": 2,
+    "no-ex-assign": 2,
+    "no-extra-boolean-cast": 0,
+    "no-extra-parens": [2, "functions"],
+    "no-extra-semi": 2,
+    "no-func-assign": 2,
+    "no-inner-declarations": 2,
+    "no-invalid-regexp": 2,
+    "no-irregular-whitespace": 2,
+    "no-negated-in-lhs": 2,
+    "no-obj-calls": 2,
+    "no-regex-spaces": 2,
+    "no-sparse-arrays": 2,
+    "no-this-before-super": 0,
+    "no-unreachable": 2,
+    "no-undef": 1,
+    "no-undefined": 0,
+    "no-unexpected-multiline": 0,
+    "no-unused-vars": [
+      2,
+      {
+        "vars": "local",
+        "args": "after-used"
+      }
+    ],
+    "object-shorthand": 0,
+    "prefer-const": 2,
+    "prefer-spread": 0,
+    "prefer-reflect": 0,
+    "quotes": [
+      2,
+      "single"
+    ],
+    "require-yield": 0,
+    "strict": [
+      2,
+      "never"
+    ],
+    "use-isnan": 2,
+    "valid-jsdoc": 0,
+    "valid-typeof": 2
+
+  }
+}
