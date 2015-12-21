@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "eslint": "eslint ./modules/ ./examples/",
-    "start": "node examples/server.js"
+    "start": "node examples/server.js",
+    "build": "rimraf lib && babel ./modules -d lib"
   },
   "repository": {
     "type": "git",
@@ -18,6 +19,7 @@
   },
   "homepage": "https://github.com/rma-consulting/rc-d3#readme",
   "devDependencies": {
+    "babel-cli": "^6.3.17",
     "babel-core": "^6.3.21",
     "babel-eslint": "^4.1.6",
     "babel-loader": "^6.2.0",
@@ -26,6 +28,7 @@
     "eslint": "^1.10.3",
     "eslint-plugin-react": "^3.11.3",
     "open": "0.0.5",
+    "rimraf": "^2.4.4",
     "webpack": "^1.12.9",
     "webpack-dev-server": "^1.14.0"
   },
