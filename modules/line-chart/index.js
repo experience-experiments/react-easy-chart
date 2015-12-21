@@ -2,36 +2,49 @@ import React from 'react';
 import {line} from 'd3-shape';
 import {linear} from 'd3-scale';
 import {extent} from 'd3-array';
-import {format} from 'd3-time-format';
 
-const parseDate = format('%d-%b-%y').parse;
 const merge = (...args) => Object.assign({}, ...args);
 
+const defaultLineStyle = {
+  fill: 'none',
+  strokeWidth: 1,
+  stroke: 'black'
+};
+
 export default class LineChart extends React.Component {
+
   render() {
-    const x = linear().domain(extent(this.props.data, (d) => parseDate(d[0]))).range([0, this.props.width]);
-    const y = linear().domain(extent(this.props.data, (d) => d[1])).range([this.props.height, 0]);
-    const baseTranslate = `translate(${this.props.marginLeft},${this.props.marginTop})`;
-    const plots = line().x((d) => x(parseDate(d[0]))).y((d) => y(d[1]));
+    const {data, xValue, yValue, width, height, lineStyle, xScale, yScale} = this.props;
 
-    const lineStyle = merge({
-      fill: 'none',
-      strokeWidth: 1,
-      stroke: 'black'
-    }, this.props.lineStyle);
+    const x = xScale().domain(extent(data, xValue)).range([0, width]);
+    const y = yScale().domain(extent(data, yValue)).range([height, 0]);
+    const linePath = line().x((d) => x(xValue(d))).y((d) => y(yValue(d)));
+    const pathStyle = merge(defaultLineStyle, lineStyle);
+    const baseTranslate = `translate(0,0)`;
 
-    return (<svg width={this.props.width} height={this.props.height}>
+    return (
+      <svg width={width} height={height}>
         <g transform={baseTranslate}>
-        <path style={lineStyle} d={plots(this.props.data)}/>
+        <path style={pathStyle} d={linePath(data)}/>
         </g>
-      </svg>);
+      </svg>
+    );
   }
 }
+
 LineChart.propTypes = {
-  data: React.PropTypes.array.isRequired,
-  lineStyle: React.PropTypes.any.isOptional,
   width: React.PropTypes.number.isRequired,
   height: React.PropTypes.number.isRequired,
-  marginLeft: React.PropTypes.number.isRequired,
-  marginTop: React.PropTypes.number.isRequired
+  data: React.PropTypes.array.isRequired,
+  xValue: React.PropTypes.func.isRequired,
+  yValue: React.PropTypes.func.isRequired,
+  lineStyle: React.PropTypes.object,
+  xScale: React.PropTypes.func,
+  yScale: React.PropTypes.func
+};
+
+LineChart.defaultProps = {
+  lineStyle: defaultLineStyle,
+  xScale: linear,
+  yScale: linear
 };
