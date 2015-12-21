@@ -1,16 +1,27 @@
 import React from 'react';
 import {line} from 'd3-shape';
 import {linear} from 'd3-scale';
+import {extent} from 'd3-array';
+import {format} from 'd3-time-format';
+
+const parseDate = format('%d-%b-%y').parse;
 
 export default class LineChart extends React.Component {
   render() {
-    const y = linear().range([this.props.width, 0]);
-    const x = linear().range([this.props.width, 0]);
+    const x = linear().domain(extent(this.props.data, (d) => parseDate(d[0]))).range([0, this.props.width]);
+    const y = linear().domain(extent(this.props.data, (d) => d[1])).range([this.props.height, 0]);
     const baseTranslate = `translate(${this.props.marginLeft},${this.props.marginTop})`;
-    const plots = line().x((d, i) => x(i)).y((d, i) => y(i));
+    const plots = line().x((d) => x(parseDate(d[0]))).y((d) => y(d[1]));
+
+    const lineStyle = {
+      fill: 'none',
+      strokeWidth: 1,
+      stroke: 'black'
+    };
+
     return (<svg width={this.props.width} height={this.props.height}>
         <g transform={baseTranslate}>
-        <path d={plots}/>
+        <path style={lineStyle} d={plots(this.props.data)}/>
         </g>
       </svg>);
   }
