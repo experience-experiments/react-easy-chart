@@ -5,6 +5,7 @@ import {extent} from 'd3-array';
 import {format} from 'd3-time-format';
 
 const parseDate = format('%d-%b-%y').parse;
+const merge = (...args) => Object.assign({}, ...args);
 
 export default class LineChart extends React.Component {
   render() {
@@ -13,11 +14,11 @@ export default class LineChart extends React.Component {
     const baseTranslate = `translate(${this.props.marginLeft},${this.props.marginTop})`;
     const plots = line().x((d) => x(parseDate(d[0]))).y((d) => y(d[1]));
 
-    const lineStyle = {
+    const lineStyle = merge({
       fill: 'none',
       strokeWidth: 1,
       stroke: 'black'
-    };
+    }, this.props.lineStyle);
 
     return (<svg width={this.props.width} height={this.props.height}>
         <g transform={baseTranslate}>
@@ -28,6 +29,7 @@ export default class LineChart extends React.Component {
 }
 LineChart.propTypes = {
   data: React.PropTypes.array.isRequired,
+  lineStyle: React.PropTypes.any.isOptional,
   width: React.PropTypes.number.isRequired,
   height: React.PropTypes.number.isRequired,
   marginLeft: React.PropTypes.number.isRequired,
