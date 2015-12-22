@@ -29,7 +29,7 @@ class BarChartContainer extends React.Component {
 
 
     turnOnSetTimeout() {
-        setInterval( this.updateData.bind(this), 100);
+        setInterval( this.updateData.bind(this), 500);
     }
 
 
@@ -54,11 +54,6 @@ class BarChartContainer extends React.Component {
             <BarChart
             mouseOverHandler={mouseOverHandler}
             data={this.data}/>
-            <BarChart
-                mouseOverHandler={mouseOverHandler}
-                width={100}
-                height={60}
-                data={this.data}/>
         </div>
     }
 }
