@@ -35,6 +35,7 @@
   "dependencies": {
     "d3": "^3.5.12",
     "react": "^0.14.3",
-    "react-dom": "^0.14.3"
+    "react-dom": "^0.14.3",
+    "react-faux-dom": "^2.1.1"
   }
 }
