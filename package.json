@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "eslint": "eslint ./modules/ ./examples/",
-    "start": "node examples/server.js",
+    "start": "npm run eslint && node examples/server.js",
     "build": "rimraf lib && babel ./modules -d lib"
   },
   "repository": {
@@ -38,7 +38,6 @@
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
     "react-faux-dom": "^2.1.1",
-    "radium": "^0.15.3",
-
+    "radium": "^0.15.3"
   }
 }
