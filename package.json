@@ -25,6 +25,7 @@
     "babel-loader": "^6.2.0",
     "babel-preset-es2015": "^6.3.13",
     "babel-preset-react": "^6.3.13",
+    "d3": "^3.5.12",
     "d3-scale": "^0.2.0",
     "eslint": "^1.10.3",
     "eslint-plugin-react": "^3.11.3",
@@ -35,6 +36,9 @@
   },
   "dependencies": {
     "react": "^0.14.3",
-    "react-dom": "^0.14.3"
+    "react-dom": "^0.14.3",
+    "react-faux-dom": "^2.1.1",
+    "radium": "^0.15.3",
+
   }
 }
