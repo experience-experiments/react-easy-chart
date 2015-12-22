@@ -5,33 +5,45 @@ import PieChart from 'rc-d3/pie-chart';
 
 const pieData = [
   {
-    age: '<5',
-    population: 2704659
+    label: '<5',
+    value: 2704659,
+    color: '#1f77b4'
   },
   {
-    age: '5-13',
-    population: 4499890
+    label: '5-13',
+    value: 4499890,
+    color: '#ff7f0e'
   },
   {
-    age: '14-17',
-    population: 2159981
+    label: '14-17',
+    value: 2159981,
+    color: '#2ca02c'
   },
   {
-    age: '18-24',
-    population: 3853788
+    label: '18-24',
+    value: 3853788,
+    color: '#d62728'
   },
   {
-    age: '25-44',
-    population: 14106543
+    label: '25-44',
+    value: 14106543,
+    color: '#9467bd'
   },
   {
-    age: '45-64',
-    population: 8819342
+    label: '45-64',
+    value: 8819342,
+    color: '#8c564b'
   },
   {
-    age: '>65',
-    population: 612463
+    label: '>65',
+    value: 612463,
+    color: '#e377c2'
   }
 ];
 
-ReactDOM.render(<PieChart data={pieData} />, document.getElementById('root'));
+const settings = {
+  innerRadius: 200,
+  outerRadius: 300
+};
+
+ReactDOM.render(<PieChart data={pieData} settings={settings} />, document.getElementById('root'));
