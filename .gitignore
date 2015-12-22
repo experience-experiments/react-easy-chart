@@ -36,4 +36,7 @@ pids
 *.seed
 *.pem
 *.PublishSettings
+
+# Build Folders
 coverage/
+lib
