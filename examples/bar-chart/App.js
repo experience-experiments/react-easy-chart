@@ -13,161 +13,56 @@ let mouseOverHandler = function (e) {
 class BarChartContainer extends React.Component {
     constructor(props) {
         super(props);
-        this.data = props.data;
+        this.data = this.generateData();
+    }
+
+    generateData() {
+        let data = [],
+            keys = ['A','B','C','D','E','F','G','H','I','J','K','L','M'];
+
+        keys.map((key, i) => {
+            data.push({key: key, value: this.getRandomArbitrary(0.1, 0)});
+        })
+        return data;
     }
 
 
 
+    turnOnSetTimeout() {
+        setInterval( this.updateData.bind(this), 100);
+    }
+
+
+    generateDataSingle() {
+        this.data[0].value = this.getRandomArbitrary(0.08, 0);
+        return this.data;
+    }
+
+    getRandomArbitrary(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+
     updateData (e) {
-        this.data = [
-            {
-                "key": "A",
-                "value": .09167
-            },
-            {
-                "key": "B",
-                "value": .02167
-            },{
-                "key": "C",
-                "value": .02167
-            },{
-                "key": "D",
-                "value": .09167
-            },{
-                "key": "E",
-                "value": .09167
-            },{
-                "key": "F",
-                "value": .09167
-            },{
-                "key": "G",
-                "value": .09167
-            },{
-                "key": "H",
-                "value": .09167
-            },{
-                "key": "I",
-                "value": .09167
-            },{
-                "key": "K",
-                "value": .09167
-            },{
-                "key": "L",
-                "value": .09167
-            },{
-                "key": "M",
-                "value": .09167
-            },{
-                "key": "N",
-                "value": .09167
-            },{
-                "key": "O",
-                "value": .09167
-            },{
-                "key": "P",
-                "value": .09167
-            },{
-                "key": "Q",
-                "value": .09167
-            },{
-                "key": "R",
-                "value": .09167
-            },{
-                "key": "S",
-                "value": .09167
-            },{
-                "key": "T",
-                "value": .09167
-            },{
-                "key": "U",
-                "value": .02167
-            },{
-                "key": "V",
-                "value": .02167
-            }
-        ];
+        this.data = this.generateData();
         this.forceUpdate();
     }
 
     render() {
         return <div>
             <input type='button' value='reset the data' onClick={this.updateData.bind(this)}></input>
+            <input type='button' value='Turn On setTimeOut' onClick={this.turnOnSetTimeout.bind(this)}></input>
             <BarChart
             mouseOverHandler={mouseOverHandler}
             data={this.data}/>
+            <BarChart
+                mouseOverHandler={mouseOverHandler}
+                width={100}
+                height={60}
+                data={this.data}/>
         </div>
     }
 }
 
-BarChartContainer.defaultProps = {
-    data: [
-        {
-            "key": "A",
-            "value": .03167
-        },
-        {
-            "key": "B",
-            "value": .02167
-        },{
-            "key": "C",
-            "value": .02167
-        },{
-            "key": "D",
-            "value": .09167
-        },{
-            "key": "E",
-            "value": .09167
-        },{
-            "key": "F",
-            "value": .09167
-        },{
-            "key": "G",
-            "value": .09167
-        },{
-            "key": "H",
-            "value": .09167
-        },{
-            "key": "I",
-            "value": .09167
-        },{
-            "key": "K",
-            "value": .09167
-        },{
-            "key": "L",
-            "value": .09167
-        },{
-            "key": "M",
-            "value": .09167
-        },{
-            "key": "N",
-            "value": .09167
-        },{
-            "key": "O",
-            "value": .09167
-        },{
-            "key": "P",
-            "value": .09167
-        },{
-            "key": "Q",
-            "value": .09167
-        },{
-            "key": "R",
-            "value": .09167
-        },{
-            "key": "S",
-            "value": .09167
-        },{
-            "key": "T",
-            "value": .09167
-        },{
-            "key": "U",
-            "value": .09167
-        },{
-            "key": "V",
-            "value": .09167
-        }
-    ]
-};
 
 ReactDOM.render(
     <BarChartContainer/>
