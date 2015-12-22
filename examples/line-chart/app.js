@@ -10,9 +10,7 @@ import marketData from './data.js';
 const parseDate = format('%d-%b-%y').parse;
 const xValue = (d) => parseDate(d[0]);
 const yValue = (d) => d[1];
-const lineStyle = {
-  stroke: 'blue'
-};
+
 
 ReactDom.render(<LineChart
   width={600}
@@ -20,7 +18,6 @@ ReactDom.render(<LineChart
   data={marketData}
   xValue={xValue}
   yValue={yValue}
-  lineStyle={lineStyle}
   xScale={time}
   yScale={linear}
 />, document.getElementById('root')
