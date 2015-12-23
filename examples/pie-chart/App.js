@@ -43,13 +43,19 @@ const pieData = [
 
 const settings = {
   innerRadius: 100,
-  outerRadius: 300
+  outerRadius: 200,
+  labelRadius: 180,
+  padding: 10
 };
 
 const styles = {
   '.arc path': {
-    stroke: 'rgba(255, 255, 255, 1)',
-    strokeWidth: 4
+    stroke: 'rgba(255, 0, 255, 1)',
+    strokeWidth: 2
+  },
+  '.arc text': {
+    fontSize: '12px',
+    fill: 'white'
   }
 };
 

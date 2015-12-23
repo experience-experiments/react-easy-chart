@@ -1,65 +1,67 @@
 import React from 'react';
-import d3 from 'd3';
-import ReactFauxDOM from 'react-faux-dom';
+import { event as d3LastEvent, select, svg, layout} from 'd3';
+import { createElement } from 'react-faux-dom';
 import { Style } from 'radium';
-import objectAssignDeep from 'object-assign-deep';
+import {merge} from 'lodash';
 
-const styles = {
+const defaultStyles = {
   '.arc path': {
     stroke: '#fff'
   },
   '.arc text': {
-    font: '10px sans-serif',
+    fontFamily: 'sans-serif',
+    fontSize: '10px',
     textAnchor: 'middle'
   }
 };
 
+function noop() {}
+
 export default class PieChart extends React.Component {
 
-  onMouseOver(e) {
-    console.log('mouseover', e);
-  }
-
   render() {
-    const { outerRadius, innerRadius } = this.props.settings;
+    const { outerRadius, innerRadius, labelRadius, padding } = this.props.settings;
+    const { styles, mouseOverHandler, mouseOutHandler, clickHandler } = this.props.styles;
     const w = outerRadius * 2;
     const h = outerRadius * 2;
 
-    const arc = d3.svg.arc()
-      .outerRadius(outerRadius)
-      .innerRadius(innerRadius);
+    const arc = svg.arc()
+      .outerRadius(outerRadius - padding)
+      .innerRadius(innerRadius - padding);
 
-    const labelArc = d3.svg.arc()
-      .outerRadius(outerRadius - 40)
-      .innerRadius(outerRadius - 40);
+    const labelArc = svg.arc()
+      .outerRadius(labelRadius - padding)
+      .innerRadius(labelRadius - padding);
 
-    const node = ReactFauxDOM.createElement('svg');
+    const node = createElement('svg');
 
-    const svg = d3.select(node)
+    const svgNode = select(node)
       .attr('width', w)
       .attr('height', h)
       .append('g')
       .attr('transform', `translate(${ outerRadius }, ${ outerRadius })`);
 
-    const g = svg.selectAll('.arc')
-      .data(d3.layout.pie().value((d) => d.value)(this.props.data))
+    const g = svgNode.selectAll('.arc')
+      .data(layout.pie().value((d) => d.value)(this.props.data))
       .enter().append('g')
       .attr('class', 'arc');
 
     g.append('path')
       .attr('d', arc)
-      .on('mouseover', this.onMouseOver.bind(this))
-      .style('fill', (d) => d.data.color);
+      .style('fill', (d) => d.data.color)
+      .on('mouseover', (d) => mouseOverHandler(d, d3LastEvent))
+      .on('mouseout', (d) => mouseOutHandler(d, d3LastEvent))
+      .on('click', (d) => clickHandler(d, d3LastEvent));
 
     g.append('text')
       .attr('transform', (d) => `translate(${labelArc.centroid(d)})`)
-      .attr('dy', '.35em')
+
       .text((d) => d.data.label);
-    objectAssignDeep(styles, this.props.styles);
+    merge(defaultStyles, styles);
 
     return (
       <div className="pie-chart">
-        <Style scopeSelector=".pie-chart" rules={styles}/>
+        <Style scopeSelector=".pie-chart" rules={defaultStyles}/>
         {node.toReact()}
       </div>
     );
@@ -68,6 +70,19 @@ export default class PieChart extends React.Component {
 
 PieChart.propTypes = {
   data: React.PropTypes.array.isRequired,
-  settings: React.PropTypes.object.isRequired,
+  settings: React.PropTypes.object,
   styles: React.PropTypes.object
+};
+
+PieChart.defaultProps = {
+  settings: {
+    innerRadius: 0,
+    outerRadius: 300,
+    labelRadius: 200,
+    padding: 20
+  },
+  styles: {},
+  mouseOverHandler: noop,
+  mouseOutHandler: noop,
+  clickHandler: noop
 };
