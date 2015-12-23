@@ -59,9 +59,11 @@ export default class PieChart extends React.Component {
         .text((d) => d.data.label);
     }
 
+    const uid = Math.floor(Math.random() * new Date().getTime());
+    const cn = `pie-chart-${uid}`;
     return (
-      <div className="pie-chart">
-        <Style scopeSelector=".pie-chart" rules={merge(defaultStyles, styles)}/>
+      <div className={cn}>
+        <Style scopeSelector={`.${cn}`} rules={merge({}, defaultStyles, styles)}/>
         {node.toReact()}
       </div>
     );

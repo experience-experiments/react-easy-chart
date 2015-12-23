@@ -41,7 +41,7 @@ const pieData = [
   }
 ];
 
-const settings = {
+const settingsA = {
   innerRadius: 100,
   outerRadius: 240,
   labelRadius: 180,
@@ -49,7 +49,15 @@ const settings = {
   hasLabels: true
 };
 
-const styles = {
+const settingsB = {
+  innerRadius: 60,
+  outerRadius: 180,
+  labelRadius: 120,
+  padding: 10,
+  hasLabels: false
+};
+
+const stylesA = {
   '.arc path': {
     stroke: 'rgba(0, 0, 0, 1)',
     strokeWidth: 2
@@ -60,4 +68,43 @@ const styles = {
   }
 };
 
-ReactDOM.render(<PieChart data={pieData} settings={settings} styles={styles} />, document.getElementById('root'));
+const stylesB = {
+  '.arc path': {
+    strokeWidth: 1
+  },
+  '.arc text': {
+    fontSize: '12px',
+    fill: 'black'
+  }
+};
+
+class PieChartContainer extends React.Component {
+  render() {
+    return (
+      <div>
+        <div>
+          <h1>Pie &amp; Doughnut Charts</h1>
+        </div>
+        <div>
+          <h2>Default example</h2>
+          <PieChart data={pieData} />
+          <pre>
+            <code>
+              <span>const data = &#91;&#123;label: '25-44', value: 14106543, color: '#9467bd'&#125;&#93;</span>
+            </code>
+          </pre>
+        </div>
+        <div>
+          <PieChart data={pieData} settings={settingsA} styles={stylesA} />
+        </div>
+        <div>
+          <PieChart data={pieData} settings={settingsB} styles={stylesB} />
+        </div>
+      </div>
+    );
+  }
+}
+
+export default PieChartContainer;
+
+ReactDOM.render(<PieChartContainer />, document.getElementById('root'));
