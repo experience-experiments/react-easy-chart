@@ -20,8 +20,8 @@ function noop() {}
 export default class PieChart extends React.Component {
 
   render() {
+    const { mouseOverHandler, mouseOutHandler, clickHandler, styles } = this.props;
     const { outerRadius, innerRadius, labelRadius, padding, hasLabels } = this.props.settings;
-    const { styles, mouseOverHandler, mouseOutHandler, clickHandler } = this.props.styles;
     const w = outerRadius * 2;
     const h = outerRadius * 2;
 
@@ -59,11 +59,9 @@ export default class PieChart extends React.Component {
         .text((d) => d.data.label);
     }
 
-    merge(defaultStyles, styles);
-
     return (
       <div className="pie-chart">
-        <Style scopeSelector=".pie-chart" rules={defaultStyles}/>
+        <Style scopeSelector=".pie-chart" rules={merge(defaultStyles, styles)}/>
         {node.toReact()}
       </div>
     );
@@ -73,7 +71,10 @@ export default class PieChart extends React.Component {
 PieChart.propTypes = {
   data: React.PropTypes.array.isRequired,
   settings: React.PropTypes.object,
-  styles: React.PropTypes.object
+  styles: React.PropTypes.object,
+  mouseOverHandler: React.PropTypes.func,
+  mouseOutHandler: React.PropTypes.func,
+  clickHandler: React.PropTypes.func
 };
 
 PieChart.defaultProps = {
