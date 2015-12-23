@@ -3,8 +3,11 @@ import { ordinal, linear } from 'd3-scale';
 import { event as d3LastEvent, select, svg, max} from 'd3';
 import { createElement } from 'react-faux-dom';
 import { Style } from 'radium';
+import {merge} from 'lodash';
 
-const styles = {
+function noop() {}
+
+const defaultStyle = {
   'svg': {
     border: 'solid silver 1px'
   },
@@ -27,12 +30,11 @@ const styles = {
   }
 };
 
-function noop() {}
 
 export default class BarChart extends React.Component {
 
     render() {
-      const { data, margin, mouseOverHandler, mouseOutHandler, clickHandler, mouseMoveHandler} = this.props;
+      const { data, margin, mouseOverHandler, mouseOutHandler, clickHandler, mouseMoveHandler, style} = this.props;
       let {width, height} = this.props;
       width = width - margin.left - margin.right;
       height = height - margin.top - margin.bottom;
@@ -96,7 +98,7 @@ export default class BarChart extends React.Component {
 
       return (
         <div className="bar-chart">
-          <Style scopeSelector=".bar-chart" rules={styles}/>
+          <Style scopeSelector=".bar-chart" rules={merge(defaultStyle, style)}/>
           {node.toReact()}
         </div>
       );
@@ -111,7 +113,8 @@ BarChart.propTypes = {
   mouseOverHandler: React.PropTypes.func,
   mouseOutHandler: React.PropTypes.func,
   mouseMoveHandler: React.PropTypes.func,
-  clickHandler: React.PropTypes.func
+  clickHandler: React.PropTypes.func,
+  style: React.PropTypes.object
 };
 
 BarChart.defaultProps = {

@@ -64,11 +64,23 @@ export default class BarChartContainer extends React.Component {
     }
 
     render() {
+      const overRideStyle = {'.bar': {fill: 'green'}};
       return (<div>
-          {this.state.showToolTip ? <ToolTip top={this.state.top} left={this.state.left}>The value of {this.state.key} is {this.state.value}</ToolTip> : null}
-          <input type="button" value="reset the data" onClick={this.updateData.bind(this)}></input>
-          <input type="button" value="Turn On setTimeOut" onClick={this.turnOnSetTimeout.bind(this)}></input>
-          <BarChart mouseOverHandler={this.mouseOverHandler.bind(this)} mouseOutHandler={this.mouseOutHandler.bind(this)} mouseMoveHandler={this.mouseMoveHandler.bind(this)} clickHandler={this.clickHandler.bind(this)} data={this.data}/>
+        {this.state.showToolTip ? <ToolTip top={this.state.top} left={this.state.left}>The value of {this.state.key} is {this.state.value}</ToolTip> : null}
+        <input
+          type="button"
+          value="reset the data"
+          onClick={this.updateData.bind(this)}
+        />
+        <input type="button" value="Turn On setTimeOut" onClick={this.turnOnSetTimeout.bind(this)}></input>
+        <BarChart
+          mouseOverHandler={this.mouseOverHandler.bind(this)}
+          mouseOutHandler={this.mouseOutHandler.bind(this)}
+          mouseMoveHandler={this.mouseMoveHandler.bind(this)}
+          clickHandler={this.clickHandler.bind(this)}
+          data={this.data}
+          style={overRideStyle}
+        />
         </div>
       );
     }
