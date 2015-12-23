@@ -18,7 +18,10 @@ const defaultStyle = {
     fill: 'brown'
   },
   '.axis': {
-    font: '10px sans-serif'
+    font: '10px arial'
+  },
+  '.axis .label': {
+    font: '14px arial'
   },
   '.axis path,.axis line': {
     fill: 'none',
@@ -34,7 +37,7 @@ const defaultStyle = {
 export default class BarChart extends React.Component {
 
     render() {
-      const { data, margin, mouseOverHandler, mouseOutHandler, clickHandler, mouseMoveHandler, style} = this.props;
+      const { data, margin, mouseOverHandler, mouseOutHandler, clickHandler, mouseMoveHandler, style, axes, axisLabels} = this.props;
       let {width, height} = this.props;
       width = width - margin.left - margin.right;
       height = height - margin.top - margin.bottom;
@@ -67,20 +70,29 @@ export default class BarChart extends React.Component {
       y.domain([0, max(data, (d) => d.value)]);
 
       data.map(() => {
-        svgContainer.append('g')
+        if (axes) {
+          svgContainer.append('g')
             .attr('class', 'x axis')
             .attr('transform', 'translate(0,' + height + ')')
-            .call(xAxis);
+            .call(xAxis)
+            .append('text')
+            .attr('class', 'label')
+            .attr('y', margin.bottom - 0.9)
+            .attr('x', (width - margin.left) / 2)
+            .text(axisLabels.x);
 
-        svgContainer.append('g')
+          svgContainer.append('g')
             .attr('class', 'y axis')
             .call(yAxis)
             .append('text')
+            .attr('class', 'label')
             .attr('transform', 'rotate(-90)')
-            .attr('y', 6)
-            .attr('dy', '.71em')
+            .attr('x', (0 - height) / 2)
+            .attr('y', 0 - margin.left)
+            .attr('dy', '.9em')
             .style('text-anchor', 'end')
-            .text('Frequency');
+            .text(axisLabels.y);
+        }
 
         svgContainer.selectAll('.bar')
             .data(data)
@@ -96,9 +108,11 @@ export default class BarChart extends React.Component {
             .on('click', (d) => clickHandler(d, d3LastEvent));
       });
 
+      const uid = Math.floor(Math.random() * new Date().getTime());
+
       return (
-        <div className="bar-chart">
-          <Style scopeSelector=".bar-chart" rules={merge(defaultStyle, style)}/>
+        <div className={`bar-chart${uid}`}>
+          <Style scopeSelector={`.bar-chart${uid}`} rules={merge({}, defaultStyle, style)}/>
           {node.toReact()}
         </div>
       );
@@ -114,7 +128,9 @@ BarChart.propTypes = {
   mouseOutHandler: React.PropTypes.func,
   mouseMoveHandler: React.PropTypes.func,
   clickHandler: React.PropTypes.func,
-  style: React.PropTypes.object
+  style: React.PropTypes.object,
+  axes: React.PropTypes.bool,
+  axisLabels: React.PropTypes.object
 };
 
 BarChart.defaultProps = {
@@ -124,5 +140,7 @@ BarChart.defaultProps = {
   mouseOverHandler: noop,
   mouseOutHandler: noop,
   mouseMoveHandler: noop,
-  clickHandler: noop
+  clickHandler: noop,
+  axes: true,
+  axisLabels: {x: 'letters', y: 'Frequency'}
 };

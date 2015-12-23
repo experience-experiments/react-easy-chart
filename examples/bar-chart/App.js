@@ -40,7 +40,6 @@ export default class BarChartContainer extends React.Component {
     }
 
     mouseOverHandler(d, e) {
-      this.setState({showToolTip: true});
       this.setState({
         showToolTip: true,
         top: `${e.y - 10}px`,
@@ -59,12 +58,11 @@ export default class BarChartContainer extends React.Component {
       this.setState({showToolTip: false});
     }
 
-    clickHandler() {
-      console.log('click happening');
+    clickHandler(d) {
+      this.setState({dataDisplay: `The amount selected is ${d.value}`});
     }
 
     render() {
-      const overRideStyle = {'.bar': {fill: 'green'}};
       return (<div>
         {this.state.showToolTip ? <ToolTip top={this.state.top} left={this.state.left}>The value of {this.state.key} is {this.state.value}</ToolTip> : null}
         <input
@@ -74,13 +72,36 @@ export default class BarChartContainer extends React.Component {
         />
         <input type="button" value="Turn On setTimeOut" onClick={this.turnOnSetTimeout.bind(this)}></input>
         <BarChart
+          width={90}
+          height={40}
+          axes={false}
+          data={this.data}
+          margin={{top: 0, right: 0, bottom: 0, left: 0}}
+        />
+        <BarChart
+          width={20}
+          height={15}
+          axes={false}
+          data={this.data}
+          margin={{top: 0, right: 0, bottom: 0, left: 0}}
+        />
+        <BarChart
+          width={200}
+          height={150}
+          axes={false}
+          data={this.data}
+          margin={{top: 0, right: 0, bottom: 0, left: 0}}
+          style={{'.bar': {fill: 'red'}}}
+        />
+        <BarChart
           mouseOverHandler={this.mouseOverHandler.bind(this)}
           mouseOutHandler={this.mouseOutHandler.bind(this)}
           mouseMoveHandler={this.mouseMoveHandler.bind(this)}
           clickHandler={this.clickHandler.bind(this)}
           data={this.data}
-          style={overRideStyle}
+          style={{'.bar': {fill: 'green'}}}
         />
+        {this.state.dataDisplay}
         </div>
       );
     }
