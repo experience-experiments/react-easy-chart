@@ -4,43 +4,33 @@ import ReactFauxDOM from 'react-faux-dom';
 
 export default class PieChart extends React.Component {
 
-  getValue(d) {
-    return d.value;
-  }
-
-  getColor(d) {
-    return d.data.color;
-  }
-
   onMouseOver(e) {
     console.log('mouseover', e);
   }
 
   render() {
-    let { outerRadius, innerRadius } = this.props.settings;
-    let w = outerRadius * 2;
-    let h = outerRadius * 2;
+    const { outerRadius, innerRadius } = this.props.settings;
+    const w = outerRadius * 2;
+    const h = outerRadius * 2;
 
-    let arc = d3.svg.arc()
+    const arc = d3.svg.arc()
       .outerRadius(outerRadius)
       .innerRadius(innerRadius);
 
-    let node = ReactFauxDOM.createElement('svg');
-    let svg = d3.select(node)
+    const node = ReactFauxDOM.createElement('svg');
+    const svg = d3.select(node)
       .attr('width', w)
       .attr('height', h)
       .append('g')
-      .attr('transform', `translate(${ outerRadius }, ${ outerRadius })`);
-
-    let g = svg.selectAll(".arc")
-      .data(d3.layout.pie().value(this.getValue.bind(this))(this.props.data))
-      .enter().append("g")
-      .attr("class", "arc")
-      .append("path")
-      .attr("d", arc)
+      .attr('transform', `translate(${ outerRadius }, ${ outerRadius })`)
+      .selectAll('.arc')
+      .data(d3.layout.pie().value((d) => d.value)(this.props.data))
+      .enter().append('g')
+      .attr('class', 'arc')
+      .append('path')
+      .attr('d', arc)
       .on('mouseover', this.onMouseOver.bind(this))
-      .style("fill", this.getColor.bind(this));
-
+      .style('fill', (d) => d.data.color);
 
     return node.toReact();
   }
