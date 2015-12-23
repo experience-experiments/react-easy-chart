@@ -45,7 +45,8 @@ const settings = {
   innerRadius: 100,
   outerRadius: 200,
   labelRadius: 180,
-  padding: 10
+  padding: 10,
+  hasLabels: false
 };
 
 const styles = {

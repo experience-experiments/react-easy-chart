@@ -20,7 +20,7 @@ function noop() {}
 export default class PieChart extends React.Component {
 
   render() {
-    const { outerRadius, innerRadius, labelRadius, padding } = this.props.settings;
+    const { outerRadius, innerRadius, labelRadius, padding, hasLabels } = this.props.settings;
     const { styles, mouseOverHandler, mouseOutHandler, clickHandler } = this.props.styles;
     const w = outerRadius * 2;
     const h = outerRadius * 2;
@@ -53,10 +53,12 @@ export default class PieChart extends React.Component {
       .on('mouseout', (d) => mouseOutHandler(d, d3LastEvent))
       .on('click', (d) => clickHandler(d, d3LastEvent));
 
-    g.append('text')
-      .attr('transform', (d) => `translate(${labelArc.centroid(d)})`)
+    if (hasLabels === true) {
+      g.append('text')
+        .attr('transform', (d) => `translate(${labelArc.centroid(d)})`)
+        .text((d) => d.data.label);
+    }
 
-      .text((d) => d.data.label);
     merge(defaultStyles, styles);
 
     return (
@@ -79,7 +81,8 @@ PieChart.defaultProps = {
     innerRadius: 0,
     outerRadius: 300,
     labelRadius: 200,
-    padding: 20
+    padding: 20,
+    hasLabels: true
   },
   styles: {},
   mouseOverHandler: noop,
