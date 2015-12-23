@@ -1,6 +1,6 @@
 {
   "env ": {
-    "node ": true
+    "node": true
   },
   "rules ": {
     "callback-return": 0,
