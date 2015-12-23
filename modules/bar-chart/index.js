@@ -32,7 +32,7 @@ function noop() {}
 export default class BarChart extends React.Component {
 
     render() {
-      const { data, margin, mouseOverHandler, mouseOutHandler, clickHandler} = this.props;
+      const { data, margin, mouseOverHandler, mouseOutHandler, clickHandler, mouseMoveHandler} = this.props;
       let {width, height} = this.props;
       width = width - margin.left - margin.right;
       height = height - margin.top - margin.bottom;
@@ -90,6 +90,7 @@ export default class BarChart extends React.Component {
             .attr('height', (d) => height - y(d.value))
             .on('mouseover', (d) => mouseOverHandler(d, d3LastEvent))
             .on('mouseout', (d) => mouseOutHandler(d, d3LastEvent))
+            .on('mousemove', () => mouseMoveHandler(d3LastEvent))
             .on('click', (d) => clickHandler(d, d3LastEvent));
       });
 
@@ -109,6 +110,7 @@ BarChart.propTypes = {
   margin: React.PropTypes.object,
   mouseOverHandler: React.PropTypes.func,
   mouseOutHandler: React.PropTypes.func,
+  mouseMoveHandler: React.PropTypes.func,
   clickHandler: React.PropTypes.func
 };
 
@@ -118,5 +120,6 @@ BarChart.defaultProps = {
   height: 500,
   mouseOverHandler: noop,
   mouseOutHandler: noop,
+  mouseMoveHandler: noop,
   clickHandler: noop
 };

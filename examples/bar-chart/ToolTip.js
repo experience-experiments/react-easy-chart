@@ -8,7 +8,6 @@ const toolTipStyles = {
     position: 'absolute',
     backgroundColor: 'white',
     borderRadius: '4px',
-    boxShadow: '5px 5px 8px #CCC',
     padding: '10px'
   }
 };

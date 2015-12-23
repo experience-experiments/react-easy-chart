@@ -7,7 +7,7 @@ export default class BarChartContainer extends React.Component {
     constructor(props) {
       super(props);
       this.data = this.generateData();
-      this.state = {showToolTip: false, key: null, value: null};
+      this.state = {showToolTip: false};
     }
 
     getRandomArbitrary(min, max) {
@@ -43,10 +43,16 @@ export default class BarChartContainer extends React.Component {
       this.setState({showToolTip: true});
       this.setState({
         showToolTip: true,
-        top: `${e.y}px`,
-        left: `${e.x}px`,
+        top: `${e.y - 10}px`,
+        left: `${e.x + 10}px`,
         value: d.value,
         key: d.key});
+    }
+
+    mouseMoveHandler(e) {
+      if (this.state.showToolTip) {
+        this.setState({top: `${e.y - 10}px`, left: `${e.x + 10}px`});
+      }
     }
 
     mouseOutHandler() {
@@ -62,7 +68,7 @@ export default class BarChartContainer extends React.Component {
           {this.state.showToolTip ? <ToolTip top={this.state.top} left={this.state.left}>The value of {this.state.key} is {this.state.value}</ToolTip> : null}
           <input type="button" value="reset the data" onClick={this.updateData.bind(this)}></input>
           <input type="button" value="Turn On setTimeOut" onClick={this.turnOnSetTimeout.bind(this)}></input>
-          <BarChart mouseOverHandler={this.mouseOverHandler.bind(this)} mouseOutHandler={this.mouseOutHandler.bind(this)} clickHandler={this.clickHandler.bind(this)} data={this.data}/>
+          <BarChart mouseOverHandler={this.mouseOverHandler.bind(this)} mouseOutHandler={this.mouseOutHandler.bind(this)} mouseMoveHandler={this.mouseMoveHandler.bind(this)} clickHandler={this.clickHandler.bind(this)} data={this.data}/>
         </div>
       );
     }
