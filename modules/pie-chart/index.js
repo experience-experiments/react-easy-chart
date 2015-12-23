@@ -9,6 +9,12 @@ export default class PieChart extends React.Component {
   }
 
   render() {
+    const styles = {
+      path: {
+        stroke: '#fff'
+      }
+    };
+
     const { outerRadius, innerRadius } = this.props.settings;
     const w = outerRadius * 2;
     const h = outerRadius * 2;
@@ -32,7 +38,11 @@ export default class PieChart extends React.Component {
       .on('mouseover', this.onMouseOver.bind(this))
       .style('fill', (d) => d.data.color);
 
-    return node.toReact();
+    return (
+      <div style={styles}>
+        {node.toReact()}
+      </div>
+    )
   }
 }
 
