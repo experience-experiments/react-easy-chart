@@ -4,13 +4,9 @@
     "./eslint-config/es6/.eslintrc",
     "./eslint-config/react/.eslintrc"
   ],
-  "env": {
-    "browser": true
-  },
+  "env": {},
   "ecmaFeatures": {},
-  "globals": {
-    "GATEWAY_URL": true
-  },
+  "globals": {},
   "rules": {
     "react/prop-types": [2, {"ignore":["children"]}],
     "comma-dangle": [2, "never"],
