@@ -4,15 +4,10 @@ const path = require('path');
 module.exports = (config) => {
   config.set({
     basePath: '.',
-    browsers: ['PhantomJS'],
+    frameworks: ['mocha', 'chai', 'phantomjs-shim'],
     files: [
       './tests/index.js'
     ],
-    port: 9000,
-    captureTimeout: 60000,
-    frameworks: ['mocha', 'chai'],
-    singleRun: true,
-    reporters: ['progress'],
     preprocessors: {
       './tests/index.js': ['webpack', 'sourcemap']
     },
@@ -24,7 +19,7 @@ module.exports = (config) => {
       },
       module: {
         loaders: [
-          { test: /\.js$/, loader: 'babel', include: [path.join(__dirname, 'modules'), path.join(__dirname, 'tests')]}
+          { test: /\.js$/, loader: 'babel', exclude: /node_modules/ }
         ]
       },
       devtool: 'inline-source-map'
@@ -32,12 +27,16 @@ module.exports = (config) => {
     webpackServer: {
       noInfo: true
     },
+    browsers: ['PhantomJS'],
+    singleRun: true,
+    reporters: ['progress'],
     plugins: [
       require('karma-mocha'),
       require('karma-chai'),
       require('karma-webpack'),
       require('karma-sourcemap-loader'),
-      require('karma-phantomjs-launcher')
+      require('karma-phantomjs-launcher'),
+      require('karma-phantomjs-shim')
     ]
   });
 };
