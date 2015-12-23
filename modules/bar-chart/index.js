@@ -1,6 +1,6 @@
 import React from 'react';
 import { ordinal, linear } from 'd3-scale';
-import { select, svg, max} from 'd3';
+import { event as d3LastEvent, select, svg, max} from 'd3';
 import { createElement } from 'react-faux-dom';
 import { Style } from 'radium';
 
@@ -27,10 +27,12 @@ const styles = {
   }
 };
 
+function noop() {}
 
 export default class BarChart extends React.Component {
+
     render() {
-      const { data, margin, mouseOverHandler} = this.props;
+      const { data, margin, mouseOverHandler, mouseOutHandler, clickHandler} = this.props;
       let {width, height} = this.props;
       width = width - margin.left - margin.right;
       height = height - margin.top - margin.bottom;
@@ -86,7 +88,9 @@ export default class BarChart extends React.Component {
             .attr('width', x.rangeBand())
             .attr('y', (d) => y(d.value))
             .attr('height', (d) => height - y(d.value))
-            .on('mouseover', (d) => mouseOverHandler(d));
+            .on('mouseover', (d) => mouseOverHandler(d, d3LastEvent))
+            .on('mouseout', (d) => mouseOutHandler(d, d3LastEvent))
+            .on('click', (d) => clickHandler(d, d3LastEvent));
       });
 
       return (
@@ -103,11 +107,16 @@ BarChart.propTypes = {
   width: React.PropTypes.number,
   height: React.PropTypes.number,
   margin: React.PropTypes.object,
-  mouseOverHandler: React.PropTypes.func
+  mouseOverHandler: React.PropTypes.func,
+  mouseOutHandler: React.PropTypes.func,
+  clickHandler: React.PropTypes.func
 };
 
 BarChart.defaultProps = {
   margin: {top: 20, right: 20, bottom: 30, left: 40},
   width: 960,
-  height: 500
+  height: 500,
+  mouseOverHandler: noop,
+  mouseOutHandler: noop,
+  clickHandler: noop
 };
