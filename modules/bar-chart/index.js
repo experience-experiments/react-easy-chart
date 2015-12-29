@@ -142,5 +142,5 @@ BarChart.defaultProps = {
   mouseMoveHandler: noop,
   clickHandler: noop,
   axes: true,
-  axisLabels: {x: 'letters', y: 'Frequency'}
+  axisLabels: {x: 'x axis', y: 'y axis'}
 };
