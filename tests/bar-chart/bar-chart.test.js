@@ -1,8 +1,10 @@
 /* eslint-env node, mocha */
-import {should as chaiShould, expect as chaiExpect} from 'chai';
+import chai, {should as chaiShould, expect as chaiExpect} from 'chai';
 import React from 'react';
+import ReactDOM from 'react-dom';
 import TestUtils from 'react/lib/ReactTestUtils';
 import {BarChart} from 'rc-d3';
+import spies from 'chai-spies';
 
 const should = chaiShould();
 const expect = chaiExpect;
@@ -20,7 +22,6 @@ describe('BarChart component', () => {
 
   it('should render without problems', () => {
     const chart = TestUtils.renderIntoDocument(<BarChart data={testData}/>);
-    console.log(chart);
     should.exist(chart);
   });
 
@@ -56,5 +57,17 @@ describe('BarChart component', () => {
     expect(g.props.children[3].type).to.equal('rect');
     expect(g.props.children[4].type).to.equal('rect');
     expect(g.props.children[5].type).to.not.equal('rect');
+  });
+
+  it('should support clickHandler', () => {
+    chai.use(spies);
+    function testClickHandler() {return 'test';}
+    const spy = chai.spy(testClickHandler);
+    const chart = TestUtils.renderIntoDocument(<BarChart data={testData} clickHandler={spy}/>);
+    const domRoot = ReactDOM.findDOMNode(chart);
+    const svgNode = domRoot.childNodes[1];
+    const barNode = svgNode.childNodes[0].childNodes[3];
+    TestUtils.Simulate.click(barNode);
+    expect(spy).to.have.been.called();
   });
 });
