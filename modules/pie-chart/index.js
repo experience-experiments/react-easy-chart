@@ -5,10 +5,10 @@ import { Style } from 'radium';
 import merge from 'lodash.merge';
 
 const defaultStyles = {
-  '.arc path': {
+  '.pie-chart-lines': {
     stroke: '#fff'
   },
-  '.arc text': {
+  '.pie-chart-text': {
     fontFamily: 'sans-serif',
     fontSize: '10px',
     textAnchor: 'middle'
@@ -27,36 +27,35 @@ export default class PieChart extends React.Component {
       mouseMoveHandler,
       clickHandler,
       styles,
-      innerRadius,
-      outerRadius,
-      labelRadius,
+      innerHoleHeight,
+      height,
       padding,
       hasLabels } = this.props;
-
+    const outerRadius = height / 2;
     const arc = svg.arc()
       .outerRadius(outerRadius - padding)
-      .innerRadius(innerRadius - padding);
+      .innerRadius((innerHoleHeight / 2) - padding);
 
     const labelArc = svg.arc()
-      .outerRadius(labelRadius - padding)
-      .innerRadius(labelRadius - padding);
+      .outerRadius(outerRadius - padding - ((20 * outerRadius) / 100))
+      .innerRadius(outerRadius - padding - ((20 * outerRadius) / 100));
 
     const node = createElement('svg');
 
     const svgNode = select(node)
-      .attr('width', outerRadius * 2)
-      .attr('height', outerRadius * 2)
+      .attr('width', height)
+      .attr('height', height)
       .append('g')
       .attr('transform', `translate(${ outerRadius }, ${ outerRadius })`);
 
     const g = svgNode.selectAll('.arc')
       .data(layout.pie().value((d) => d.value)(this.props.data))
-      .enter().append('g')
-      .attr('class', 'arc');
+      .enter().append('g');
 
     g.append('path')
       .attr('d', arc)
       .style('fill', (d) => d.data.color ? d.data.color : color(d.data.value))
+      .attr('class', 'pie-chart-lines')
       .on('mouseover', (d) => mouseOverHandler(d, d3LastEvent))
       .on('mouseout', (d) => mouseOutHandler(d, d3LastEvent))
       .on('mousemove', () => mouseMoveHandler(d3LastEvent))
@@ -65,7 +64,8 @@ export default class PieChart extends React.Component {
     if (hasLabels === true) {
       g.append('text')
         .attr('transform', (d) => `translate(${labelArc.centroid(d)})`)
-        .text((d) => d.data.label);
+        .text((d) => d.data.label)
+        .attr('class', 'pie-chart-text');
     }
 
     return (
@@ -79,9 +79,8 @@ export default class PieChart extends React.Component {
 
 PieChart.propTypes = {
   data: React.PropTypes.array.isRequired,
-  innerRadius: React.PropTypes.number,
-  outerRadius: React.PropTypes.number,
-  labelRadius: React.PropTypes.number,
+  innerHoleHeight: React.PropTypes.number,
+  height: React.PropTypes.number,
   padding: React.PropTypes.number,
   hasLabels: React.PropTypes.bool,
   styles: React.PropTypes.object,
@@ -92,9 +91,8 @@ PieChart.propTypes = {
 };
 
 PieChart.defaultProps = {
-  innerRadius: 0,
-  outerRadius: 300,
-  labelRadius: 200,
+  height: 200,
+  innerHoleHeight: 0,
   padding: 20,
   hasLabels: false,
   styles: {},
