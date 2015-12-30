@@ -41,14 +41,6 @@ const pieData = [
   }
 ];
 
-const settings = {
-  innerRadius: 100,
-  outerRadius: 240,
-  labelRadius: 180,
-  padding: 10,
-  hasLabels: true
-};
-
 const styles = {
   '.arc path': {
     stroke: 'rgba(0, 0, 0, 1)',
@@ -60,4 +52,12 @@ const styles = {
   }
 };
 
-ReactDOM.render(<PieChart data={pieData} settings={settings} styles={styles} />, document.getElementById('root'));
+ReactDOM.render(
+  <PieChart data={pieData}
+    innerRadius={100}
+    outerRadius={240}
+    labelRadius={180}
+    padding={10}
+    hasLabels
+    styles={styles}
+  />, document.getElementById('root'));
