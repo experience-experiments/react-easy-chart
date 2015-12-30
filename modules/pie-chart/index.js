@@ -2,7 +2,7 @@ import React from 'react';
 import { event as d3LastEvent, select, svg, layout} from 'd3';
 import { createElement } from 'react-faux-dom';
 import { Style } from 'radium';
-import {merge} from 'lodash';
+import merge from 'lodash.merge';
 
 const defaultStyles = {
   '.arc path': {

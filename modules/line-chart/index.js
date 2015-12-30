@@ -5,7 +5,7 @@ import {linear} from 'd3-scale';
 import {extent} from 'd3-array';
 import {select, svg} from 'd3';
 import {Style} from 'radium';
-import {merge} from 'lodash';
+import merge from 'lodash.merge';
 
 const defaultStyle = {
   '.line': {

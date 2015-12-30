@@ -3,7 +3,7 @@ import { ordinal, linear } from 'd3-scale';
 import { event as d3LastEvent, select, svg, max} from 'd3';
 import { createElement } from 'react-faux-dom';
 import { Style } from 'radium';
-import {merge} from 'lodash';
+import merge from 'lodash.merge';
 
 function noop() {}
 
