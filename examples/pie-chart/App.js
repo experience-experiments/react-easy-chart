@@ -5,39 +5,30 @@ import PieChart from 'rc-d3/pie-chart';
 
 const pieData = [
   {
-    label: '<5',
-    value: 2704659,
-    color: '#1f77b4'
+    value: 20
   },
   {
     label: '5-13',
-    value: 4499890,
-    color: '#ff7f0e'
+    value: 40
   },
   {
     label: '14-17',
-    value: 2159981,
-    color: '#2ca02c'
+    value: 10
   },
   {
     label: '18-24',
-    value: 3853788,
-    color: '#d62728'
+    value: 15
   },
   {
     label: '25-44',
-    value: 14106543,
-    color: '#9467bd'
+    value: 5
   },
   {
     label: '45-64',
-    value: 8819342,
-    color: '#8c564b'
+    value: 19
   },
   {
-    label: '>65',
-    value: 612463,
-    color: '#e377c2'
+    value: 1
   }
 ];
 

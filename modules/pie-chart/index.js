@@ -1,5 +1,5 @@
 import React from 'react';
-import { event as d3LastEvent, select, svg, layout} from 'd3';
+import { event as d3LastEvent, select, svg, layout, scale} from 'd3';
 import { createElement } from 'react-faux-dom';
 import { Style } from 'radium';
 import merge from 'lodash.merge';
@@ -15,14 +15,24 @@ const defaultStyles = {
   }
 };
 
+const color = scale.ordinal()
+  .range(['#98abc5', '#8a89a6', '#7b6888', '#6b486b', '#a05d56', '#d0743c', '#ff8c00']);
+
 function noop() {}
 
 export default class PieChart extends React.Component {
 
   render() {
-    const { mouseOverHandler, mouseOutHandler, clickHandler, styles, innerRadius, outerRadius, labelRadius, padding, hasLabels } = this.props;
-    const w = outerRadius * 2;
-    const h = outerRadius * 2;
+    const {
+      mouseOverHandler,
+      mouseOutHandler,
+      clickHandler,
+      styles,
+      innerRadius,
+      outerRadius,
+      labelRadius,
+      padding,
+      hasLabels } = this.props;
 
     const arc = svg.arc()
       .outerRadius(outerRadius - padding)
@@ -35,8 +45,8 @@ export default class PieChart extends React.Component {
     const node = createElement('svg');
 
     const svgNode = select(node)
-      .attr('width', w)
-      .attr('height', h)
+      .attr('width', outerRadius * 2)
+      .attr('height', outerRadius * 2)
       .append('g')
       .attr('transform', `translate(${ outerRadius }, ${ outerRadius })`);
 
@@ -47,7 +57,7 @@ export default class PieChart extends React.Component {
 
     g.append('path')
       .attr('d', arc)
-      .style('fill', (d) => d.data.color)
+      .style('fill', (d) => d.data.color ? d.data.color : color(d.data.value))
       .on('mouseover', (d) => mouseOverHandler(d, d3LastEvent))
       .on('mouseout', (d) => mouseOutHandler(d, d3LastEvent))
       .on('click', (d) => clickHandler(d, d3LastEvent));
@@ -85,7 +95,7 @@ PieChart.defaultProps = {
   outerRadius: 300,
   labelRadius: 200,
   padding: 20,
-  hasLabels: true,
+  hasLabels: false,
   styles: {},
   mouseOverHandler: noop,
   mouseOutHandler: noop,
