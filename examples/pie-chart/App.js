@@ -35,8 +35,13 @@ export default class PieChartContainer extends React.Component {
       return data;
     }
 
-    turnOnSetTimeout() {
-      setInterval(this.updateData.bind(this), 500);
+    turnOnRandomData() {
+      this.setState({randomDataIntervalId: setInterval(this.updateData.bind(this), 500)});
+    }
+
+    turnOffRandomData() {
+      clearInterval(this.state.randomDataIntervalId);
+      this.setState({randomDataIntervalId: null});
     }
 
     updateData() {
@@ -54,7 +59,7 @@ export default class PieChartContainer extends React.Component {
 
     mouseMoveHandler(e) {
       if (this.state.showToolTip) {
-        this.setState({top: `${e.y - 10}px`, left: `${e.x + 10}px`});
+        this.setState({top: `${e.y}px`, left: `${e.x + 10}px`});
       }
     }
 
@@ -74,7 +79,10 @@ export default class PieChartContainer extends React.Component {
           value="reset the data"
           onClick={this.updateData.bind(this)}
         />
-        <input type="button" value="Turn on random data" onClick={this.turnOnSetTimeout.bind(this)}></input>
+        {
+          this.state.randomDataIntervalId ? <input type="button" value="Stop random data" onClick={this.turnOffRandomData.bind(this)}></input>
+          :
+          <input type="button" value="Start random data" onClick={this.turnOnRandomData.bind(this)}></input>}
         <PieChart
           data={this.data}
           mouseOverHandler={this.mouseOverHandler.bind(this)}
