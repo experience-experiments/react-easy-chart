@@ -9,12 +9,12 @@ export default class PieChartContainer extends React.Component {
       this.data = this.generateData();
       this.state = {showToolTip: false};
       this.styles = {
-        '.arc path': {
+        '.pie-chart-lines': {
           stroke: 'rgba(0, 0, 0, 1)',
-          strokeWidth: 2
+          strokeWidth: 1
         },
-        '.arc text': {
-          fontSize: '12px',
+        '.pie-chart-text': {
+          fontSize: '16px',
           fill: 'white'
         }
       };
@@ -74,23 +74,19 @@ export default class PieChartContainer extends React.Component {
     render() {
       return (<div>
         {this.state.showToolTip ? <ToolTip top={this.state.top} left={this.state.left}>The value is {this.state.value}</ToolTip> : null}
-        <input
-          type="button"
-          value="reset the data"
-          onClick={this.updateData.bind(this)}
-        />
         {
           this.state.randomDataIntervalId ? <input type="button" value="Stop random data" onClick={this.turnOffRandomData.bind(this)}></input>
           :
-          <input type="button" value="Start random data" onClick={this.turnOnRandomData.bind(this)}></input>}
+          <input type="button" value="Start random data" onClick={this.turnOnRandomData.bind(this)}></input>
+        }
         <PieChart
           data={this.data}
           mouseOverHandler={this.mouseOverHandler.bind(this)}
           mouseOutHandler={this.mouseOutHandler.bind(this)}
           mouseMoveHandler={this.mouseMoveHandler.bind(this)}
           clickHandler={this.clickHandler.bind(this)}
-          innerRadius={100}
-          labelRadius={180}
+          innerHoleHeight={50}
+          height={200}
           padding={10}
           hasLabels
           styles={this.styles}
