@@ -18,14 +18,13 @@ const defaultStyles = {
 const color = scale.ordinal()
   .range(['#98abc5', '#8a89a6', '#7b6888', '#6b486b', '#a05d56', '#d0743c', '#ff8c00']);
 
-function noop() {}
-
 export default class PieChart extends React.Component {
 
   render() {
     const {
       mouseOverHandler,
       mouseOutHandler,
+      mouseMoveHandler,
       clickHandler,
       styles,
       innerRadius,
@@ -60,6 +59,7 @@ export default class PieChart extends React.Component {
       .style('fill', (d) => d.data.color ? d.data.color : color(d.data.value))
       .on('mouseover', (d) => mouseOverHandler(d, d3LastEvent))
       .on('mouseout', (d) => mouseOutHandler(d, d3LastEvent))
+      .on('mousemove', () => mouseMoveHandler(d3LastEvent))
       .on('click', (d) => clickHandler(d, d3LastEvent));
 
     if (hasLabels === true) {
@@ -87,6 +87,7 @@ PieChart.propTypes = {
   styles: React.PropTypes.object,
   mouseOverHandler: React.PropTypes.func,
   mouseOutHandler: React.PropTypes.func,
+  mouseMoveHandler: React.PropTypes.func,
   clickHandler: React.PropTypes.func
 };
 
@@ -97,7 +98,8 @@ PieChart.defaultProps = {
   padding: 20,
   hasLabels: false,
   styles: {},
-  mouseOverHandler: noop,
-  mouseOutHandler: noop,
-  clickHandler: noop
+  mouseOverHandler: () => {},
+  mouseOutHandler: () => {},
+  mouseMoveHandler: () => {},
+  clickHandler: () => {}
 };

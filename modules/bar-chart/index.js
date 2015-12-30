@@ -5,8 +5,6 @@ import { createElement } from 'react-faux-dom';
 import { Style } from 'radium';
 import merge from 'lodash.merge';
 
-function noop() {}
-
 const defaultStyle = {
   'svg': {
     border: 'solid silver 1px'
@@ -37,7 +35,16 @@ const defaultStyle = {
 export default class BarChart extends React.Component {
 
     render() {
-      const { data, margin, mouseOverHandler, mouseOutHandler, clickHandler, mouseMoveHandler, style, axes, axisLabels} = this.props;
+      const {
+        data,
+        margin,
+        mouseOverHandler,
+        mouseOutHandler,
+        clickHandler,
+        mouseMoveHandler,
+        style,
+        axes,
+        axisLabels} = this.props;
       let {width, height} = this.props;
       width = width - margin.left - margin.right;
       height = height - margin.top - margin.bottom;
@@ -137,10 +144,10 @@ BarChart.defaultProps = {
   margin: {top: 20, right: 20, bottom: 30, left: 40},
   width: 960,
   height: 500,
-  mouseOverHandler: noop,
-  mouseOutHandler: noop,
-  mouseMoveHandler: noop,
-  clickHandler: noop,
+  mouseOverHandler: () => {},
+  mouseOutHandler: () => {},
+  mouseMoveHandler: () => {},
+  clickHandler: () => {},
   axes: true,
   axisLabels: {x: 'x axis', y: 'y axis'}
 };
