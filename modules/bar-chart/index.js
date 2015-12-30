@@ -6,9 +6,6 @@ import { Style } from 'radium';
 import merge from 'lodash.merge';
 
 const defaultStyle = {
-  'svg': {
-    border: 'solid silver 1px'
-  },
   '.bar': {
     fill: 'blue'
   },

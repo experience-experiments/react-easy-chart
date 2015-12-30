@@ -1,0 +1,47 @@
+body {
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #333;
+  background-color: #fff;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+h2 {
+    font-size: 40px;
+    font-weight: 400;
+    margin-bottom: 5px;
+}
+
+.container {
+  width: 1170px;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.introduction {
+  text-align: center;
+}
+
+.example-with-image {
+  display: inline-block;
+  width: 200px;
+  margin-right: 20px;
+  vertical-align: top;
+  position: relative;
+}
+
+.example-with-image .description {
+  position: absolute;
+  top: 200px;
+}

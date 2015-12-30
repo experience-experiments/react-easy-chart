@@ -15,9 +15,6 @@ const defaultStyles = {
   }
 };
 
-const color = scale.ordinal()
-  .range(['#98abc5', '#8a89a6', '#7b6888', '#6b486b', '#a05d56', '#d0743c', '#ff8c00']);
-
 export default class PieChart extends React.Component {
 
   render() {
@@ -39,6 +36,9 @@ export default class PieChart extends React.Component {
     const labelArc = svg.arc()
       .outerRadius(outerRadius - padding - ((20 * outerRadius) / 100))
       .innerRadius(outerRadius - padding - ((20 * outerRadius) / 100));
+
+    const color = scale.ordinal()
+        .range(['#98abc5', '#8a89a6', '#7b6888', '#6b486b', '#a05d56', '#d0743c', '#ff8c00']);
 
     const node = createElement('svg');
 
@@ -93,7 +93,7 @@ PieChart.propTypes = {
 PieChart.defaultProps = {
   height: 200,
   innerHoleHeight: 0,
-  padding: 20,
+  padding: 2,
   hasLabels: false,
   styles: {},
   mouseOverHandler: () => {},

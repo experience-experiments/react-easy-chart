@@ -14,7 +14,7 @@ export default class PieChartContainer extends React.Component {
           strokeWidth: 1
         },
         '.pie-chart-text': {
-          fontSize: '16px',
+          fontSize: '10px',
           fill: 'white'
         }
       };
@@ -26,7 +26,7 @@ export default class PieChartContainer extends React.Component {
 
     generateData() {
       const data = [];
-      const labels = ['A', 'B', 'C', 'D'];
+      const labels = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
 
       labels.map((label) => {
         data.push({label: label, value: this.getRandomArbitrary(1, 1000)});
@@ -79,13 +79,19 @@ export default class PieChartContainer extends React.Component {
           :
           <input type="button" value="Start random data" onClick={this.turnOnRandomData.bind(this)}></input>
         }
+        <h3>Small Chart - no interactions</h3>
+        <PieChart
+          data={this.data}
+          height={50}
+        />
+        <h3>Large Chart - mouseover and click handler functionality</h3>
         <PieChart
           data={this.data}
           mouseOverHandler={this.mouseOverHandler.bind(this)}
           mouseOutHandler={this.mouseOutHandler.bind(this)}
           mouseMoveHandler={this.mouseMoveHandler.bind(this)}
           clickHandler={this.clickHandler.bind(this)}
-          innerHoleHeight={50}
+          innerHoleHeight={0}
           height={200}
           padding={10}
           hasLabels
