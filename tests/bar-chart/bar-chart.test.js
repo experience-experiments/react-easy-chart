@@ -1,5 +1,5 @@
 /* eslint-env node, mocha */
-import chai, {should as chaiShould, expect as chaiExpect} from 'chai';
+import chai, {should as chaiShould, expect} from 'chai';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react/lib/ReactTestUtils';
@@ -7,7 +7,7 @@ import {BarChart} from 'rc-d3';
 import spies from 'chai-spies';
 
 const should = chaiShould();
-const expect = chaiExpect;
+chai.use(spies);
 
 const testData = [
   {key: 'A', value: 0.5},
@@ -29,6 +29,7 @@ describe('BarChart component', () => {
     const chart = TestUtils.renderIntoDocument(<BarChart data={testData}/>);
     chart.should.have.property('props');
     chart.props.data.should.have.length(3);
+
     // margin test
     expect(chart.props).to.have.deep.property('margin.top', 20);
 
@@ -38,6 +39,7 @@ describe('BarChart component', () => {
 
     // axes test
     expect(chart.props).to.have.property('axes', true);
+
     // axes labels
     expect(chart.props).to.have.deep.property('axisLabels.x', 'x axis');
   });
@@ -59,15 +61,37 @@ describe('BarChart component', () => {
     expect(g.props.children[5].type).to.not.equal('rect');
   });
 
-  it('should support clickHandler', () => {
-    chai.use(spies);
-    function testClickHandler() {return 'test';}
-    const spy = chai.spy(testClickHandler);
+  it('should support clickHandler on bar', () => {
+    const spy = chai.spy(() => {});
     const chart = TestUtils.renderIntoDocument(<BarChart data={testData} clickHandler={spy}/>);
     const domRoot = ReactDOM.findDOMNode(chart);
     const svgNode = domRoot.childNodes[1];
     const barNode = svgNode.childNodes[0].childNodes[3];
     TestUtils.Simulate.click(barNode);
     expect(spy).to.have.been.called();
+  });
+
+  it('should support mouseOver, mouseOut and mousemove', () => {
+    const mouseOverSpy = chai.spy(() => {});
+    const mouseOutSpy = chai.spy(() => {});
+    const mouseMoveSpy = chai.spy(() => {});
+    const chart = TestUtils.renderIntoDocument(
+      <BarChart data={testData}
+        mouseOverHandler={mouseOverSpy}
+        mouseOutHandler={mouseOutSpy}
+        mouseMoveHandler={mouseMoveSpy}
+      />);
+    const domRoot = ReactDOM.findDOMNode(chart);
+    const svgNode = domRoot.childNodes[1];
+    const barNode = svgNode.childNodes[0].childNodes[3];
+
+    TestUtils.SimulateNative.mouseOver(barNode);
+    expect(mouseOverSpy).to.have.been.called();
+
+    TestUtils.SimulateNative.mouseOut(barNode);
+    expect(mouseOutSpy).to.have.been.called();
+
+    TestUtils.SimulateNative.mouseMove(barNode);
+    expect(mouseMoveSpy).to.have.been.called();
   });
 });
