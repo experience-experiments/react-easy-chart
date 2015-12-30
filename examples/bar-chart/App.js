@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import BarChart from 'rc-d3/bar-chart';
-import ToolTip from './ToolTip';
+import ToolTip from '../ToolTip';
 
 export default class BarChartContainer extends React.Component {
     constructor(props) {
