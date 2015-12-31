@@ -28,7 +28,7 @@ class LineChartContainer extends React.Component {
       const dates = ['1-Jan-10', '1-Jan-11', '1-Jan-12', '1-Jan-13', '1-Jan-14', '1-Jan-15'];
 
       dates.map((date) => {
-        data.push([date, this.getRandomArbitrary(10, 100)]);
+        data.push([date, this.getRandomArbitrary(0, 100)]);
       });
 
       return data;
@@ -98,6 +98,8 @@ class LineChartContainer extends React.Component {
           xType={'time'}
           width={500}
           height={200}
+          yDomainRange={[0, 100]}
+          xDomainRange={['1-Jan-08', '1-Jan-16']}
           axes
         />
         {this.state.dataDisplay}

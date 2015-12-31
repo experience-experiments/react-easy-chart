@@ -52,19 +52,31 @@ export default class LineChart extends React.Component {
     }
   }
 
+  calcDefaultDomain(domainRange, type) {
+    switch (type) {
+      case 'time':
+        const parseDate = format(this.props.datePattern).parse;
+        return [parseDate(domainRange[0]), parseDate(domainRange[1])];
+      default:
+        return domainRange;
+    }
+  }
+
   calcMargin(axes) {
-    return axes ? {top: 0, right: 0, bottom: 30, left: 50} : {top: 0, right: 0, bottom: 0, left: 0};
+    return axes ? {top: 10, right: 20, bottom: 30, left: 50} : {top: 0, right: 0, bottom: 0, left: 0};
   }
 
   render() {
     const {data, xType, yType, style, axes} = this.props;
-    let {margin} = this.props;
+    let {margin, yDomainRange, xDomainRange} = this.props;
     const xScale = this.getScale(xType);
     const yScale = this.getScale(yType);
     const yValue = this.getValue('y', yType);
     const xValue = this.getValue('x', xType);
 
     margin = margin ? margin : this.calcMargin(axes);
+    yDomainRange = yDomainRange ? this.calcDefaultDomain(yDomainRange, yType) : null;
+    xDomainRange = xDomainRange ? this.calcDefaultDomain(xDomainRange, xType) : null;
 
     let {width, height} = this.props;
     width = width - (margin.left + margin.right);
@@ -79,15 +91,16 @@ export default class LineChart extends React.Component {
     select(svgNode).attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom);
     const root = select(svgNode).append('g').attr('transform', `translate(${margin.left},${margin.top})`);
 
-    x.domain(extent(data, xValue));
-    y.domain(extent(data, yValue));
+
+    x.domain(xDomainRange ? xDomainRange : extent(data, xValue));
+    y.domain(yDomainRange ? yDomainRange : extent(data, yValue));
 
     if (axes) {
       const xAxis = svg.axis().scale(x).orient('bottom');
       const yAxis = svg.axis().scale(y).orient('left');
       root.append('g')
         .attr('class', 'x axis')
-        .attr('transform', 'translate(0,' + height + ')')
+        .attr('transform', `translate(0,${height})`)
         .call(xAxis);
 
       root.append('g')
@@ -124,7 +137,9 @@ LineChart.propTypes = {
   datePattern: React.PropTypes.string,
   style: React.PropTypes.object,
   margin: React.PropTypes.object,
-  axes: React.PropTypes.bool
+  axes: React.PropTypes.bool,
+  xDomainRange: React.PropTypes.array,
+  yDomainRange: React.PropTypes.array
 };
 
 LineChart.defaultProps = {
