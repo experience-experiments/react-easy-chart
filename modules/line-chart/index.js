@@ -12,8 +12,19 @@ import {format} from 'd3-time-format';
 const defaultStyle = {
   '.line': {
     fill: 'none',
-    stroke: 'steelblue',
     strokeWidth: 1.5
+  },
+  '.line0': {
+    stroke: 'steelblue'
+  },
+  '.line1': {
+    stroke: 'orange'
+  },
+  '.line2': {
+    stroke: 'red'
+  },
+  '.line3': {
+    stroke: 'darkblue'
   },
   '.axis': {
     font: '10px arial'
@@ -42,7 +53,7 @@ export default class LineChart extends React.Component {
   }
 
   getValueFunction(scale, type) {
-    const dataIndex = scale === 'x' ? 0 : 1;
+    const dataIndex = scale === 'x' ? 'key' : 'value';
     switch (type) {
       case 'time':
         const parseDate = format(this.props.datePattern).parse;
@@ -92,8 +103,8 @@ export default class LineChart extends React.Component {
     const root = select(svgNode).append('g').attr('transform', `translate(${margin.left},${margin.top})`);
 
 
-    x.domain(xDomainRange ? xDomainRange : extent(data, xValue));
-    y.domain(yDomainRange ? yDomainRange : extent(data, yValue));
+    x.domain(xDomainRange ? xDomainRange : extent(data[0], xValue));
+    y.domain(yDomainRange ? yDomainRange : extent(data[0], yValue));
 
     if (axes) {
       const xAxis = svg.axis().scale(x).orient('bottom');
@@ -113,11 +124,12 @@ export default class LineChart extends React.Component {
         // .style('text-anchor', 'end')
         // .text('Price ($)');
     }
-
-    root.append('path')
-      .datum(data)
-      .attr('class', 'line')
-      .attr('d', linePath);
+    data.map((dataElelment, i) => {
+      root.append('path')
+        .datum(dataElelment)
+        .attr('class', `line line${i}`)
+        .attr('d', linePath);
+    });
 
     const uid = Math.floor(Math.random() * new Date().getTime());
 

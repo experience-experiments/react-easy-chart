@@ -4,8 +4,6 @@ import ToolTip from '../ToolTip';
 
 import {LineChart} from 'rc-d3';
 
-import marketData from './data.js';
-
 const style = {
   '.line': {
     stroke: 'green'
@@ -15,7 +13,8 @@ const style = {
 class LineChartContainer extends React.Component {
     constructor(props) {
       super(props);
-      this.data = this.generateData();
+      // Generate multiple lines of data
+      this.data = [this.generateData(), this.generateData(), this.generateData(), this.generateData()];
       this.state = {showToolTip: false};
     }
 
@@ -25,10 +24,10 @@ class LineChartContainer extends React.Component {
 
     generateData() {
       const data = [];
-      const dates = ['1-Jan-10', '1-Jan-11', '1-Jan-12', '1-Jan-13', '1-Jan-14', '1-Jan-15'];
+      const keys = ['1-Jan-15', '1-Feb-15', '1-Mar-15', '1-Apr-15', '1-Jun-15', '1-Jul-15', '1-Aug-15'];
 
-      dates.map((date) => {
-        data.push([date, this.getRandomArbitrary(0, 100)]);
+      keys.map((key) => {
+        data.push({key: key, value: this.getRandomArbitrary(0, 100)});
       });
 
       return data;
@@ -43,13 +42,8 @@ class LineChartContainer extends React.Component {
       this.setState({randomDataIntervalId: null});
     }
 
-    generateDataSingle() {
-      this.data[0].value = this.getRandomArbitrary(0.08, 0);
-      return this.data;
-    }
-
     updateData() {
-      this.data = this.generateData();
+      this.data = [this.generateData(), this.generateData(), this.generateData(), this.generateData()];
       this.forceUpdate();
     }
 
@@ -85,7 +79,7 @@ class LineChartContainer extends React.Component {
           <input type="button" value="Start random data" onClick={this.turnOnRandomData.bind(this)}></input>
         }
         <LineChart
-          data={marketData}
+          data={this.data}
           datePattern={'%d-%b-%y'}
           xType={'time'}
           style={style}
@@ -99,7 +93,7 @@ class LineChartContainer extends React.Component {
           width={500}
           height={200}
           yDomainRange={[0, 100]}
-          xDomainRange={['1-Jan-08', '1-Jan-16']}
+          xDomainRange={['1-Jan-15', '1-Aug-15']}
           axes
         />
         {this.state.dataDisplay}

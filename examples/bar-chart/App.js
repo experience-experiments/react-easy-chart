@@ -17,11 +17,9 @@ export default class BarChartContainer extends React.Component {
     generateData() {
       const data = [];
       const keys = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M'];
-
       keys.map((key) => {
-        data.push({key: key, value: this.getRandomArbitrary(0.1, 0)});
+        data.push({key: key, value: this.getRandomArbitrary(1, 100)});
       });
-
       return data;
     }
 
@@ -47,8 +45,8 @@ export default class BarChartContainer extends React.Component {
     mouseOverHandler(d, e) {
       this.setState({
         showToolTip: true,
-        top: `${e.y - 10}px`,
-        left: `${e.x + 10}px`,
+        top: `${e.screenY - 10}px`,
+        left: `${e.screenX + 10}px`,
         value: d.value,
         key: d.key});
     }
@@ -104,6 +102,7 @@ export default class BarChartContainer extends React.Component {
           clickHandler={this.clickHandler.bind(this)}
           data={this.data}
           style={{'.bar': {fill: 'green'}}}
+          yDomainRange={[0, 100]}
         />
         {this.state.dataDisplay}
         </div>
