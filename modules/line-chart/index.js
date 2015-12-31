@@ -6,6 +6,8 @@ import {extent} from 'd3-array';
 import {select, svg} from 'd3';
 import {Style} from 'radium';
 import merge from 'lodash.merge';
+import {time} from 'd3';
+import {format} from 'd3-time-format';
 
 const defaultStyle = {
   '.line': {
@@ -26,9 +28,34 @@ const defaultStyle = {
 const defaultMargin = {top: 20, right: 20, bottom: 30, left: 50};
 
 export default class LineChart extends React.Component {
+  getScale(type) {
+    switch (type) {
+      case 'time':
+        return time.scale;
+      default:
+        return linear;
+    }
+  }
+
+  getValue(scale, type) {
+    const dataIndex = scale === 'x' ? 0 : 1;
+    switch (type) {
+      case 'time':
+        const parseDate = format(this.props.datePattern).parse;
+        return (d) => parseDate(d[dataIndex]);
+      default:
+        return (d) => d[dataIndex];
+    }
+  }
 
   render() {
-    const {data, xValue, yValue, xScale, yScale, margin, style} = this.props;
+    const {data, xType, yType, margin, style} = this.props;
+
+    const xScale = this.getScale(xType);
+    const yScale = this.getScale(yType);
+    const yValue = this.getValue('y', yType);
+    const xValue = this.getValue('x', xType);
+
     let {width, height} = this.props;
     width = width - (margin.left + margin.right);
     height = height - (margin.top + margin.bottom);
@@ -81,20 +108,18 @@ LineChart.propTypes = {
   data: React.PropTypes.array.isRequired,
   width: React.PropTypes.number,
   height: React.PropTypes.number,
-  xValue: React.PropTypes.func,
-  yValue: React.PropTypes.func,
+  xType: React.PropTypes.string,
+  yType: React.PropTypes.string,
+  datePattern: React.PropTypes.string,
   style: React.PropTypes.object,
-  margin: React.PropTypes.object,
-  xScale: React.PropTypes.func,
-  yScale: React.PropTypes.func
+  margin: React.PropTypes.object
 };
 
 LineChart.defaultProps = {
   width: 960,
   height: 500,
   margin: defaultMargin,
-  xScale: linear,
-  yScale: linear,
-  xValue: (d) => d[0],
-  yValue: (d) => d[1]
+  datePattern: '%d-%b-%y',
+  xType: 'default',
+  yType: 'default'
 };
