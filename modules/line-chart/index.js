@@ -41,7 +41,7 @@ export default class LineChart extends React.Component {
     }
   }
 
-  getValue(scale, type) {
+  getValueFunction(scale, type) {
     const dataIndex = scale === 'x' ? 0 : 1;
     switch (type) {
       case 'time':
@@ -71,8 +71,8 @@ export default class LineChart extends React.Component {
     let {margin, yDomainRange, xDomainRange} = this.props;
     const xScale = this.getScale(xType);
     const yScale = this.getScale(yType);
-    const yValue = this.getValue('y', yType);
-    const xValue = this.getValue('x', xType);
+    const yValue = this.getValueFunction('y', yType);
+    const xValue = this.getValueFunction('x', xType);
 
     margin = margin ? margin : this.calcMargin(axes);
     yDomainRange = yDomainRange ? this.calcDefaultDomain(yDomainRange, yType) : null;
@@ -119,9 +119,11 @@ export default class LineChart extends React.Component {
       .attr('class', 'line')
       .attr('d', linePath);
 
+    const uid = Math.floor(Math.random() * new Date().getTime());
+
     return (
-      <div className="line-chart">
-        <Style scopeSelector=".line-chart" rules={merge({}, defaultStyle, style)}/>
+      <div className={`line-chart${uid}`}>
+        <Style scopeSelector={`.line-chart${uid}`} rules={merge({}, defaultStyle, style)}/>
         {svgNode.toReact()}
       </div>
     );
@@ -146,7 +148,5 @@ LineChart.defaultProps = {
   width: 960,
   height: 500,
   datePattern: '%d-%b-%y',
-  xType: 'default',
-  yType: 'default',
   axes: false
 };
