@@ -51,15 +51,6 @@ export default class BarChart extends React.Component {
       const y = linear()
           .range([height, 0]);
 
-      const xAxis = svg.axis()
-          .scale(x)
-          .orient('bottom');
-
-      const yAxis = svg.axis()
-          .scale(y)
-          .orient('left')
-          .ticks(10, '%');
-
       const node = createElement('svg');
       const selection = select(node);
 
@@ -75,6 +66,15 @@ export default class BarChart extends React.Component {
 
       data.map(() => {
         if (axes) {
+          const xAxis = svg.axis()
+              .scale(x)
+              .orient('bottom');
+
+          const yAxis = svg.axis()
+              .scale(y)
+              .orient('left')
+              .ticks(10, '%');
+
           svgContainer.append('g')
             .attr('class', 'x axis')
             .attr('transform', 'translate(0,' + height + ')')

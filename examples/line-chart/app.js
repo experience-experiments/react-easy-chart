@@ -89,6 +89,17 @@ class LineChartContainer extends React.Component {
           datePattern={'%d-%b-%y'}
           xType={'time'}
           style={style}
+          width={100}
+          height={50}
+        />
+        <LineChart
+          data={marketData}
+          datePattern={'%d-%b-%y'}
+          xType={'time'}
+          style={style}
+          width={500}
+          height={200}
+          axes
         />
         {this.state.dataDisplay}
         </div>
