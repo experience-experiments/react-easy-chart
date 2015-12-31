@@ -15,12 +15,18 @@ const defaultStyle = {
     stroke: 'steelblue',
     strokeWidth: 1.5
   },
-  '.axis path, .axis line': {
+  '.axis': {
+    font: '10px arial'
+  },
+  '.axis .label': {
+    font: '14px arial'
+  },
+  '.axis path,.axis line': {
     fill: 'none',
     stroke: '#000',
-    shapeRendering: 'crispEdges'
+    'shape-rendering': 'crispEdges'
   },
-  '.x.axis path': {
+  'x.axis path': {
     display: 'none'
   }
 };
@@ -86,13 +92,13 @@ export default class LineChart extends React.Component {
 
       root.append('g')
         .attr('class', 'y axis')
-        .call(yAxis)
-        .append('text')
-        .attr('transform', 'rotate(-90)')
-        .attr('y', 6)
-        .attr('dy', '.71em')
-        .style('text-anchor', 'end')
-        .text('Price ($)');
+        .call(yAxis);
+        // .append('text')
+        // .attr('transform', 'rotate(-90)')
+        // .attr('y', 6)
+        // .attr('dy', '.71em')
+        // .style('text-anchor', 'end')
+        // .text('Price ($)');
     }
 
     root.append('path')
@@ -102,7 +108,7 @@ export default class LineChart extends React.Component {
 
     return (
       <div className="line-chart">
-        <Style scopeSelector=".line-chart" rules={merge(defaultStyle, style)}/>
+        <Style scopeSelector=".line-chart" rules={merge({}, defaultStyle, style)}/>
         {svgNode.toReact()}
       </div>
     );
