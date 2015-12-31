@@ -1,7 +1,6 @@
 import React from 'react';
 import { Style } from 'radium';
 
-
 const toolTipStyles = {
   '.tooltip': {
     border: 'solid silver 1px',

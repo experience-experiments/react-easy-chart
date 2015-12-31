@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import BarChart from 'rc-d3/bar-chart';
-import ToolTip from './ToolTip';
+import ToolTip from '../ToolTip';
 
 export default class BarChartContainer extends React.Component {
     constructor(props) {
@@ -25,8 +25,13 @@ export default class BarChartContainer extends React.Component {
       return data;
     }
 
-    turnOnSetTimeout() {
-      setInterval(this.updateData.bind(this), 500);
+    turnOnRandomData() {
+      this.setState({randomDataIntervalId: setInterval(this.updateData.bind(this), 500)});
+    }
+
+    turnOffRandomData() {
+      clearInterval(this.state.randomDataIntervalId);
+      this.setState({randomDataIntervalId: null});
     }
 
     generateDataSingle() {
@@ -65,12 +70,11 @@ export default class BarChartContainer extends React.Component {
     render() {
       return (<div>
         {this.state.showToolTip ? <ToolTip top={this.state.top} left={this.state.left}>The value of {this.state.key} is {this.state.value}</ToolTip> : null}
-        <input
-          type="button"
-          value="reset the data"
-          onClick={this.updateData.bind(this)}
-        />
-        <input type="button" value="Turn On setTimeOut" onClick={this.turnOnSetTimeout.bind(this)}></input>
+        {
+          this.state.randomDataIntervalId ? <input type="button" value="Stop random data" onClick={this.turnOffRandomData.bind(this)}></input>
+          :
+          <input type="button" value="Start random data" onClick={this.turnOnRandomData.bind(this)}></input>
+        }
         <BarChart
           width={90}
           height={40}
