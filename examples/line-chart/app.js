@@ -24,7 +24,7 @@ class LineChartContainer extends React.Component {
 
     generateData() {
       const data = [];
-      const keys = ['1-Jan-15', '1-Feb-15', '1-Mar-15', '1-Apr-15', '1-Jun-15', '1-Jul-15', '1-Aug-15'];
+      const keys = ['1-Jan-15', '1-Feb-15', '1-Mar-15', '1-Apr-15', '1-Jun-15', '1-Jul-15'];
 
       keys.map((key) => {
         data.push({key: key, value: this.getRandomArbitrary(0, 100)});
@@ -94,6 +94,14 @@ class LineChartContainer extends React.Component {
           height={200}
           yDomainRange={[0, 100]}
           xDomainRange={['1-Jan-15', '1-Aug-15']}
+          axes
+        />
+        <LineChart
+          data={this.data}
+          datePattern={'%d-%b-%y'}
+          xType={'time'}
+          width={500}
+          height={200}
           axes
         />
         {this.state.dataDisplay}

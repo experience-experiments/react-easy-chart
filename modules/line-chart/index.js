@@ -63,6 +63,17 @@ export default class LineChart extends React.Component {
     }
   }
 
+  findLargestExtent(data, value) {
+    let low;
+    let high;
+    data.map((dataElelment) => {
+      const calcDomainRange = extent(dataElelment, value);
+      low = low < calcDomainRange[0] ? low : calcDomainRange[0];
+      high = high > calcDomainRange[1] ? high : calcDomainRange[1];
+    });
+    return [low, high];
+  }
+
   calcDefaultDomain(domainRange, type) {
     switch (type) {
       case 'time':
@@ -103,8 +114,8 @@ export default class LineChart extends React.Component {
     const root = select(svgNode).append('g').attr('transform', `translate(${margin.left},${margin.top})`);
 
 
-    x.domain(xDomainRange ? xDomainRange : extent(data[0], xValue));
-    y.domain(yDomainRange ? yDomainRange : extent(data[0], yValue));
+    x.domain(xDomainRange ? xDomainRange : this.findLargestExtent(data, xValue));
+    y.domain(yDomainRange ? yDomainRange : this.findLargestExtent(data, yValue));
 
     if (axes) {
       const xAxis = svg.axis().scale(x).orient('bottom');
