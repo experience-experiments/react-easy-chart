@@ -1,7 +1,7 @@
 import React from 'react';
 import {createElement} from 'react-faux-dom';
 import {line} from 'd3-shape';
-import {linear} from 'd3-scale';
+import {linear, ordinal} from 'd3-scale';
 import {extent} from 'd3-array';
 import {select, svg} from 'd3';
 import {Style} from 'radium';
@@ -43,10 +43,13 @@ const defaultStyle = {
 };
 
 export default class LineChart extends React.Component {
+
   getScale(type) {
     switch (type) {
       case 'time':
         return time.scale;
+      case 'text':
+        return ordinal;
       default:
         return linear;
     }
@@ -63,6 +66,31 @@ export default class LineChart extends React.Component {
     }
   }
 
+  setXDomainAndRange(d3Axis, xDomainRange, data, type, width) {
+    switch (type) {
+      case 'text':
+        d3Axis.domain(data[0].map((d) => d.key));
+        d3Axis.rangePoints([0, width], 0);
+        break;
+      case 'linear':
+        d3Axis.domain(xDomainRange ?
+          this.calcDefaultDomain(xDomainRange, type)
+          :
+          this.findLargestExtent(data, this.getValueFunction('x', type)));
+        d3Axis.range([0, width]);
+        break;
+      case 'time':
+        d3Axis.domain(xDomainRange ?
+          this.calcDefaultDomain(xDomainRange, type)
+          :
+          this.findLargestExtent(data, this.getValueFunction('x', type)));
+        d3Axis.range([0, width]);
+        break;
+      default:
+        d3Axis.domain();
+    }
+  }
+
   findLargestExtent(data, value) {
     let low;
     let high;
@@ -75,6 +103,7 @@ export default class LineChart extends React.Component {
   }
 
   calcDefaultDomain(domainRange, type) {
+    if (!domainRange) return null;
     switch (type) {
       case 'time':
         const parseDate = format(this.props.datePattern).parse;
@@ -89,33 +118,29 @@ export default class LineChart extends React.Component {
   }
 
   render() {
-    const {data, xType, yType, style, axes, axisLabels} = this.props;
-    let {margin, yDomainRange, xDomainRange} = this.props;
-    const xScale = this.getScale(xType);
-    const yScale = this.getScale(yType);
-    const yValue = this.getValueFunction('y', yType);
-    const xValue = this.getValueFunction('x', xType);
-
-    margin = margin ? margin : this.calcMargin(axes);
-    yDomainRange = yDomainRange ? this.calcDefaultDomain(yDomainRange, yType) : null;
-    xDomainRange = xDomainRange ? this.calcDefaultDomain(xDomainRange, xType) : null;
-
+    const {data, xType, yType, style, axes, axisLabels, xDomainRange} = this.props;
+    let {margin, yDomainRange} = this.props;
     let {width, height} = this.props;
+    margin = margin ? margin : this.calcMargin(axes);
     width = width - (margin.left + margin.right);
     height = height - (margin.top + margin.bottom);
 
-    const x = xScale().range([0, width]);
-    const y = yScale().range([height, 0]);
+    const yValue = this.getValueFunction('y', yType);
+    const xValue = this.getValueFunction('x', xType);
+
+    const x = this.getScale(xType)();
+    const y = this.getScale(yType)().range([height, 0]);
+
+    yDomainRange = this.calcDefaultDomain(yDomainRange, yType);
+    this.setXDomainAndRange(x, xDomainRange, data, xType, width);
+
+    y.domain(yDomainRange ? yDomainRange : this.findLargestExtent(data, yValue));
 
     const linePath = line().x((d) => x(xValue(d))).y((d) => y(yValue(d)));
 
     const svgNode = createElement('svg');
     select(svgNode).attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom);
     const root = select(svgNode).append('g').attr('transform', `translate(${margin.left},${margin.top})`);
-
-
-    x.domain(xDomainRange ? xDomainRange : this.findLargestExtent(data, xValue));
-    y.domain(yDomainRange ? yDomainRange : this.findLargestExtent(data, yValue));
 
     if (axes) {
       const xAxis = svg.axis().scale(x).orient('bottom');
@@ -176,9 +201,11 @@ LineChart.propTypes = {
 };
 
 LineChart.defaultProps = {
-  width: 960,
-  height: 500,
+  width: 200,
+  height: 150,
   datePattern: '%d-%b-%y',
   axes: false,
+  xType: 'linear',
+  yType: 'linear',
   axisLabels: {x: 'x axis', y: 'y axis'}
 };

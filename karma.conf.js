@@ -27,15 +27,15 @@ module.exports = (config) => {
     webpackServer: {
       noInfo: true
     },
-    browsers: ['PhantomJS'],
-    singleRun: true,
+    browsers: ['Chrome'],
+    singleRun: false,
     reporters: ['progress'],
     plugins: [
       require('karma-mocha'),
       require('karma-chai'),
       require('karma-webpack'),
       require('karma-sourcemap-loader'),
-      require('karma-phantomjs-launcher'),
+      require('karma-chrome-launcher'),
       require('karma-phantomjs-shim')
     ]
   });

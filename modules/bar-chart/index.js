@@ -90,11 +90,7 @@ export default class BarChart extends React.Component {
 
     const svgContainer = selection.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
 
-    // x.domain(xDomainRange ? xDomainRange : extent(data, xValue));
-    // y.domain(yDomainRange ? yDomainRange : extent(data, yValue));
-
     x.domain(data.map((d) => d.key));
-    // y.domain([0, max(data, (d) => d.value)]);
     y.domain(yDomainRange ? yDomainRange : [0, max(data, (d) => d.value)]);
 
     data.map(() => {
