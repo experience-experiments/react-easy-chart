@@ -89,7 +89,7 @@ export default class LineChart extends React.Component {
   }
 
   render() {
-    const {data, xType, yType, style, axes} = this.props;
+    const {data, xType, yType, style, axes, axisLabels} = this.props;
     let {margin, yDomainRange, xDomainRange} = this.props;
     const xScale = this.getScale(xType);
     const yScale = this.getScale(yType);
@@ -123,17 +123,24 @@ export default class LineChart extends React.Component {
       root.append('g')
         .attr('class', 'x axis')
         .attr('transform', `translate(0,${height})`)
-        .call(xAxis);
+        .call(xAxis)
+        .append('text')
+        .attr('class', 'label')
+        .attr('y', margin.bottom - 0.9)
+        .attr('x', (width - margin.left) / 2)
+        .text(axisLabels.x);
 
       root.append('g')
         .attr('class', 'y axis')
-        .call(yAxis);
-        // .append('text')
-        // .attr('transform', 'rotate(-90)')
-        // .attr('y', 6)
-        // .attr('dy', '.71em')
-        // .style('text-anchor', 'end')
-        // .text('Price ($)');
+        .call(yAxis)
+        .append('text')
+        .attr('class', 'label')
+        .attr('transform', 'rotate(-90)')
+        .attr('x', (0 - height) / 2)
+        .attr('y', 0 - margin.left)
+        .attr('dy', '.9em')
+        .style('text-anchor', 'end')
+        .text(axisLabels.y);
     }
     data.map((dataElelment, i) => {
       root.append('path')
@@ -164,12 +171,14 @@ LineChart.propTypes = {
   margin: React.PropTypes.object,
   axes: React.PropTypes.bool,
   xDomainRange: React.PropTypes.array,
-  yDomainRange: React.PropTypes.array
+  yDomainRange: React.PropTypes.array,
+  axisLabels: React.PropTypes.object
 };
 
 LineChart.defaultProps = {
   width: 960,
   height: 500,
   datePattern: '%d-%b-%y',
-  axes: false
+  axes: false,
+  axisLabels: {x: 'x axis', y: 'y axis'}
 };
