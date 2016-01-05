@@ -143,7 +143,7 @@ export default class LineChart extends React.Component {
     const root = select(svgNode).append('g').attr('transform', `translate(${margin.left},${margin.top})`);
 
     if (axes) {
-      const xAxis = svg.axis().scale(x).ticks(time.month, 1).tickFormat(format('%B')).orient('bottom');
+      const xAxis = svg.axis().scale(x).orient('bottom');// TODO add in ticks .ticks(time.month, 1).tickFormat(format('%B'));
       const yAxis = svg.axis().scale(y).orient('left');
       root.append('g')
         .attr('class', 'x axis')
@@ -151,7 +151,7 @@ export default class LineChart extends React.Component {
         .call(xAxis)
         .append('text')
         .attr('class', 'label')
-        .attr('y', margin.bottom - 0.9)
+        .attr('y', margin.bottom - 4)
         .attr('x', (width - margin.left) / 2)
         .text(axisLabels.x);
 
