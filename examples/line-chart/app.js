@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 import ToolTip from '../ToolTip';
-
 import {LineChart} from 'rc-d3';
 
 // const style = {
@@ -70,6 +69,14 @@ class LineChartContainer extends React.Component {
       this.setState({dataDisplay: `The amount selected is ${d.value}`});
     }
 
+    escapeHTML(jsx) {
+      return jsx.replace(/&/g, '&amp;')
+      .replace(/</g, '&#60;')
+      .replace(/>/g, '&gt;')
+      .replace(/\"/g, '&quot;')
+      .replace(/\'/g, '&#39;');
+    }
+
     // {this.state.showToolTip ? <ToolTip top={this.state.top} left={this.state.left}>The value of {this.state.key} is {this.state.value}</ToolTip> : null}
     // <h2>The R2-D3 Line chart</h2>
     // <h3>Data</h3>
@@ -134,25 +141,62 @@ class LineChartContainer extends React.Component {
          simple line chart.</p>
         <p>The format of the data is an array of arrays which allows multiple lines to be generated.
         The key field represents the x axis and the value the y axis. This is to unify the data accross R2-D3 charts.</p>
-        <pre><code>
-        var data=&#123;[[&#123; key: 1, value: 20&#125;, &#123;key: 2, value: 10&#125;, &#123;key: 3, value: 25&#125;]]&#125;<br/>
-        &lt;LineChart data=&#123;data&#125; /&gt;
-        </code></pre>
+
+        <pre>
+        <code dangerouslySetInnerHTML={{__html: this.escapeHTML(`
+<LineChart
+  data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}]]}/>
+        `)}}
+        />
+        </pre>
+
         <LineChart
           data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}]]}
         />
         <p>If a second line is needed then this is easily added by adding a new data array to the existing array.</p>
-        <pre><code>
-        var data=&#123;[[&#123; key: 1, value: 20&#125;, &#123;key: 2, value: 10&#125;, &#123;key: 3, value: 25&#125;], [&#123; key: 1, value: 10&#125;, &#123;key: 2, value: 12&#125;, &#123;key: 3, value: 4&#125;]]&#125;<br/>
-        &lt;LineChart data=&#123;data&#125; /&gt;
-        </code></pre>
+        <pre>
+        <code dangerouslySetInnerHTML={{__html: this.escapeHTML(`
+<LineChart
+  data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1, value: 10}, {key: 2, value: 12}, {key: 3, value: 4}]]}/>
+        `)}}
+        />
+        </pre>
         <LineChart
           data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1, value: 10}, {key: 2, value: 12}, {key: 3, value: 4}]]}
         />
-        <p>The data passed to the axes can be in numeric, date (the default format is for example 1-Jan-15 but can be overridden)
+        <h3>axes</h3>
+        <p>The axes can be turned on by simply passing a boolean flag to true for <b>axes</b>.</p>
+        <pre>
+        <code dangerouslySetInnerHTML={{__html: this.escapeHTML(`
+<LineChart
+  axes
+  data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1, value: 10}, {key: 2, value: 12}, {key: 3, value: 4}]]}/>
+        `)}}
+        />
+        </pre>
+        <LineChart
+          axes
+          data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1, value: 10}, {key: 2, value: 12}, {key: 3, value: 4}]]}
+        />
+        <h3>xType or yType</h3>
+        <p>The axes can be turned on by simply passing a boolean flag to true for <b>axes</b>.</p>
+        <p>The data passed associated to the axes can be in numeric, date (the default format is for example 1-Jan-15 but can be overridden)
          or textual formats (used for labelling). The axis range is automatically calculated based on the smallest and the largest values</p>
         <p>For the example below the axes have been turned on and a width and height simply passed in as props and the x axis changed to textual labels.</p>
         <p>The x axis in the example needs to be defined as text in this case using the xType prop.</p>
+        <pre>
+        <code dangerouslySetInnerHTML={{__html: this.escapeHTML(`
+<LineChart
+  xType={'text'}
+  axes
+  data={[
+    [{key: 'Mon', value: 20}, {key: 'Tue', value: 10}, {key: 'Wed', value: 33}, {key: 'Thu', value: 45}, {key: 'Fri', value: 15}],
+    [{key: 'Mon', value: 10}, {key: 'Tue', value: 15}, {key: 'Wed', value: 13}, {key: 'Thu', value: 15}, {key: 'Fri', value: 10}]
+  ]}
+/>
+        `)}}
+        />
+        </pre>
         <LineChart
           xType={'text'}
           axes
@@ -174,6 +218,28 @@ class LineChartContainer extends React.Component {
             [{key: '1-Jan-15', value: 10}, {key: '1-Feb-15', value: 15}, {key: '1-Mar-15', value: 13}, {key: '1-Apr-15', value: 15}, {key: '1-May-15', value: 10}]
           ]}
         />
+        {
+          this.state.randomDataIntervalId ? <input type="button" value="Stop random data" onClick={this.turnOffRandomData.bind(this)}></input>
+          :
+          <input type="button" value="Start random data" onClick={this.turnOnRandomData.bind(this)}></input>
+        }
+        <pre>
+        <code dangerouslySetInnerHTML={{__html: this.escapeHTML(`
+<LineChart
+  xType={'text'}
+  axes
+  datePattern={'%d-%b-%y'}
+  xType={'time'}
+  width={800}
+  height={300}
+  data={[
+    [{key: '1-Jan-15', value: 20}, {key: '1-Feb-15', value: 10}, {key: '1-Mar-15', value: 33}, {key: '1-Apr-15', value: 45}, {key: '1-May-15', value: 15}],
+    [{key: '1-Jan-15', value: 10}, {key: '1-Feb-15', value: 15}, {key: '1-Mar-15', value: 13}, {key: '1-Apr-15', value: 15}, {key: '1-May-15', value: 10}]
+  ]}
+/>
+        `)}}
+        />
+        </pre>
         </div>
       );
     }

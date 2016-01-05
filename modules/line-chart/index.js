@@ -47,11 +47,11 @@ export default class LineChart extends React.Component {
   getScale(type) {
     switch (type) {
       case 'time':
-        return time.scale;
+        return time.scale();
       case 'text':
-        return ordinal;
+        return ordinal();
       default:
-        return linear;
+        return linear();
     }
   }
 
@@ -128,8 +128,8 @@ export default class LineChart extends React.Component {
     const yValue = this.getValueFunction('y', yType);
     const xValue = this.getValueFunction('x', xType);
 
-    const x = this.getScale(xType)();
-    const y = this.getScale(yType)().range([height, 0]);
+    const x = this.getScale(xType);
+    const y = this.getScale(yType).range([height, 0]);
 
     yDomainRange = this.calcDefaultDomain(yDomainRange, yType);
     this.setXDomainAndRange(x, xDomainRange, data, xType, width);
@@ -143,7 +143,7 @@ export default class LineChart extends React.Component {
     const root = select(svgNode).append('g').attr('transform', `translate(${margin.left},${margin.top})`);
 
     if (axes) {
-      const xAxis = svg.axis().scale(x).orient('bottom');
+      const xAxis = svg.axis().scale(x).ticks(time.month, 1).tickFormat(format('%B')).orient('bottom');
       const yAxis = svg.axis().scale(y).orient('left');
       root.append('g')
         .attr('class', 'x axis')
