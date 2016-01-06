@@ -70,33 +70,6 @@ export default class LineChart extends React.Component {
     const dataIndex = scale === 'x' ? 'key' : 'value';
     switch (type) {
       case 'text':
-        d3Axis.domain(data[0].map((d) => d[dataIndex]));
-        d3Axis.rangePoints([0, length], 0);
-        break;
-      case 'linear':
-        d3Axis.domain(domainRange ?
-          this.calcDefaultDomain(domainRange, type)
-          :
-          this.findLargestExtent(data, this.getValueFunction(scale, type)));
-        d3Axis.range([0, length]);
-        break;
-      case 'time':
-        d3Axis.domain(domainRange ?
-          this.calcDefaultDomain(domainRange, type)
-          :
-          this.findLargestExtent(data, this.getValueFunction(scale, type)));
-        d3Axis.range([0, length]);
-        break;
-      default:
-        d3Axis.domain();
-    }
-  }
-
-  setYDomainAndRange(scale, d3Axis, type, domainRange, data, length) {
-    const dataIndex = scale === 'x' ? 'key' : 'value';
-    switch (type) {
-      case 'text':
-        // d3Axis.domain(data[0].map((d) => d[dataIndex]));
         d3Axis.domain(domainRange ?
           this.calcDefaultDomain(domainRange, type)
           :
@@ -111,9 +84,14 @@ export default class LineChart extends React.Component {
           :
           this.findLargestExtent(data, this.getValueFunction(scale, type))
         );
-        d3Axis.range([0, length]);
-        // d3Axis.range([height, 0]);
-        // d3Axis.domain(yDomainRange ? yDomainRange : this.findLargestExtent(data, this.getValueFunction('y', type)));
+        d3Axis.range(scale === 'x' ? [0, length] : [length, 0]);
+        break;
+      case 'time':
+        d3Axis.domain(domainRange ?
+          this.calcDefaultDomain(domainRange, type)
+          :
+          this.findLargestExtent(data, this.getValueFunction(scale, type)));
+        d3Axis.range(scale === 'x' ? [0, length] : [length, 0]);
         break;
       default:
         break;
@@ -162,7 +140,7 @@ export default class LineChart extends React.Component {
 
     yDomainRange = this.calcDefaultDomain(yDomainRange, yType);
     this.setDomainAndRange('x', x, xDomainRange, data, xType, width);
-    this.setYDomainAndRange('y', y, yType, yDomainRange, data, height);
+    this.setDomainAndRange('y', y, yDomainRange, data, yType, height);
 
     const linePath = line().x((d) => x(xValue(d))).y((d) => y(yValue(d)));
 

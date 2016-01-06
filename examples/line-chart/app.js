@@ -267,7 +267,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
             [{key: 'Mon', value: 10}, {key: 'Tue', value: 15}, {key: 'Wed', value: 13}, {key: 'Thu', value: 15}, {key: 'Fri', value: 10}]
           ]}
         />
-        <p>Using a time based xType</p>
+        <p>Setting the <b>yType</b> to be <b>time</b></p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: this.escapeHTML(`
 <LineChart
@@ -294,7 +294,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
           ]}
         />
 
-        <p>Setting the <b>yType</b> to be <b>text</b>. The yDomainRange has also been set to keep the range order.</p>
+        <p>Setting the <b>yType</b> to be <b>text</b>. (The yDomainRange has also been set to keep the range order.)</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: this.escapeHTML(`
 <LineChart
@@ -323,6 +323,36 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
           yDomainRange={['Allot', 'Perfect', 'Little']}
           data={[
             [{key: 'Mon', value: 'Little'}, {key: 'Tue', value: 'Perfect'}, {key: 'Wed', value: 'Allot'}, {key: 'Thu', value: 'Little'}, {key: 'Fri', value: 'Perfect'}]
+          ]}
+        />
+        <p>Using a time based yType</p>
+        <pre>
+        <code dangerouslySetInnerHTML={{__html: this.escapeHTML(`
+<LineChart
+  axisLabels={{x: 'Total Revenue', y: 'January'}}
+  margin={{top: 10, right: 30, bottom: 50, left: 70}}
+  yType={'time'}
+  axes
+  width={500}
+  height={500}
+  data={[
+    [{key: 10, value: '1-Jan-15'}, {key: 20, value: '10-Jan-15'}, {key: 40, value: '21-Jan-15'}, {key: 80, value: '31-Jan-15'}],
+    [{key: 0, value: '1-Jan-15'}, {key: 15, value: '10-Jan-15'}, {key: 20, value: '21-Jan-15'}, {key: 25, value: '31-Jan-15'}]
+  ]}
+/>
+        `)}}
+        />
+        </pre>
+        <LineChart
+          axisLabels={{x: 'Total Revenue', y: 'January'}}
+          margin={{top: 10, right: 30, bottom: 50, left: 70}}
+          yType={'time'}
+          axes
+          width={500}
+          height={500}
+          data={[
+            [{key: 10, value: '1-Jan-15'}, {key: 20, value: '10-Jan-15'}, {key: 40, value: '21-Jan-15'}, {key: 80, value: '31-Jan-15'}],
+            [{key: 0, value: '1-Jan-15'}, {key: 15, value: '10-Jan-15'}, {key: 20, value: '21-Jan-15'}, {key: 25, value: '31-Jan-15'}]
           ]}
         />
 
@@ -359,7 +389,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
             [{key: 10, value: 40}, {key: 20, value: 30}, {key: 30, value: 25}, {key: 40, value: 60}, {key: 50, value: 22}, {key: 60, value: 9}]
           ]}
         />
-
+        <h3>Setting the tick values</h3>
 
         <h3>style</h3>
         <p>The styles can be overridden easily either partially or globally. To allow this we use Radium.</p>
@@ -369,7 +399,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
 <LineChart
   axes
   xDomainRange={[0, 100]}
-  yDomainRange={[0, 100]}
+  yDomainRange={[100, 0]}
   style={{
     '.line0': {
       stroke: 'red'
