@@ -4,6 +4,7 @@ body {
   line-height: 1.42857143;
   color: #333;
   background-color: #fff;
+  margin: 0 20px;
 }
 
 ul {
@@ -18,9 +19,11 @@ pre {
   width: auto;
   padding: 5px;
   background-color: #eee;
-  width: 650px!ie7;
-  padding-bottom: 20px!ie7;
   max-height: 600px;
+}
+
+pre > code {
+  margin: 30px;
 }
 
 a {

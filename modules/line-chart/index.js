@@ -125,7 +125,7 @@ export default class LineChart extends React.Component {
   }
 
   render() {
-    const {data, xType, yType, style, axes, axisLabels, xDomainRange} = this.props;
+    const {data, xType, yType, style, axes, axisLabels, xDomainRange, xTicks, yTicks} = this.props;
     let {margin, yDomainRange} = this.props;
     let {width, height} = this.props;
     margin = margin ? margin : this.calcMargin(axes);
@@ -150,7 +150,9 @@ export default class LineChart extends React.Component {
 
     if (axes) {
       const xAxis = svg.axis().scale(x).orient('bottom');// TODO add in ticks .ticks(time.month, 1).tickFormat(format('%B'));
+      if (xTicks) xAxis.ticks(xTicks);
       const yAxis = svg.axis().scale(y).orient('left');
+      if (yTicks) yAxis.ticks(yTicks);
       root.append('g')
         .attr('class', 'x axis')
         .attr('transform', `translate(0,${height})`)
@@ -204,7 +206,9 @@ LineChart.propTypes = {
   axes: React.PropTypes.bool,
   xDomainRange: React.PropTypes.array,
   yDomainRange: React.PropTypes.array,
-  axisLabels: React.PropTypes.object
+  axisLabels: React.PropTypes.object,
+  yTicks: React.PropTypes.number,
+  xTicks: React.PropTypes.number
 };
 
 LineChart.defaultProps = {

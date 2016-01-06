@@ -71,61 +71,6 @@ class LineChartContainer extends React.Component {
       .replace(/\'/g, '&#39;');
     }
 
-    // {this.state.showToolTip ? <ToolTip top={this.state.top} left={this.state.left}>The value of {this.state.key} is {this.state.value}</ToolTip> : null}
-    // <h2>The R2-D3 Line chart</h2>
-    // <h3>Data</h3>
-    // <p>At the most basic the line chart can just take a single data file supplied in a JSON format and will render a
-    //  simple line chart.</p>
-    // <p>The format of the data is an array of arrays which allows multiple lines to be generated.
-    // The key field represents the x axis and the value the y axis. This is to unify the data accross R2-D3 charts.</p>
-    // <pre><code>
-    // var data=&#123;[[&#123; key: 1, value: 20&#125;, &#123;key: 2, value: 10&#125;, &#123;key: 3, value: 25&#125;]]&#125;<br/>
-    // &lt;LineChart data=&#123;data&#125; /&gt;
-    // </code></pre>
-    // <LineChart
-    //   data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}]]}
-    // />
-    // <p>If a second line is needed then this is easily added by adding a new data array.</p>
-    // <pre><code>
-    // var data=&#123;[[&#123; key: 1, value: 20&#125;, &#123;key: 2, value: 10&#125;, &#123;key: 3, value: 25&#125;], [&#123; key: 1, value: 10&#125;, &#123;key: 2, value: 12&#125;, &#123;key: 3, value: 4&#125;]]&#125;<br/>
-    // &lt;LineChart data=&#123;data&#125; /&gt;
-    // </code></pre>
-    // <LineChart
-    //   data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1, value: 10}, {key: 2, value: 12}, {key: 3, value: 4}]]}
-    // />
-    // <p>The data passed to the axes can be in numeric, date (the default format is for example 1-Jan-15 but can be overridden)
-    //  or textual formats (used for labelling). The axis range is automatically calculated based on the smallest and the largest values</p>
-    // <p>For the example below the axes have been turned on and a width and height simply passed in as props and the x axis changed to textual labels.</p>
-    //
-
-    // <h4>The API</h4>
-    //
-    // <LineChart
-    //   data={this.data}
-    //   datePattern={'%d-%b-%y'}
-    //   xType={'time'}
-    //   width={500}
-    //   height={200}
-    //   yDomainRange={[0, 100]}
-    //   xDomainRange={['1-Jan-15', '1-Aug-15']}
-    //   axes
-    //   style={style}
-    // />
-    // {
-    //   this.state.randomDataIntervalId ? <input type="button" value="Stop random data" onClick={this.turnOffRandomData.bind(this)}></input>
-    //   :
-    //   <input type="button" value="Start random data" onClick={this.turnOnRandomData.bind(this)}></input>
-    // }
-    // <LineChart
-    //   data={this.data}
-    //   datePattern={'%d-%b-%y'}
-    //   xType={'time'}
-    //   width={500}
-    //   height={200}
-    //   axes
-    // />
-    // {this.state.dataDisplay}
-
     render() {
       return (<div>
         {this.state.showToolTip ? <ToolTip top={this.state.top} left={this.state.left}>The value of {this.state.key} is {this.state.value}</ToolTip> : null}
@@ -174,6 +119,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
           height={50}
           data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1, value: 10}, {key: 2, value: 12}, {key: 3, value: 4}]]}
         />
+
         <h3>Margin</h3>
         <p>The Margin can be overridden by passing in a margin object. The margin object must define the following: top, right, bottom and left</p>
         <p>This can be particulary useful if a label is cut off.</p>
@@ -219,7 +165,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
         <code dangerouslySetInnerHTML={{__html: this.escapeHTML(`
 <LineChart
   axes
-  margin={{top: 0, right: 0, bottom: 100, left: 100}}
+  margin={{top: 10, right: 10, bottom: 50, left: 50}}
   axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
   width={250}
   height={250}
@@ -229,7 +175,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
         </pre>
         <LineChart
           axes
-          margin={{top: 10, right: 0, bottom: 50, left: 50}}
+          margin={{top: 10, right: 10, bottom: 50, left: 50}}
           axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
           width={350}
           height={250}
@@ -325,7 +271,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
             [{key: 'Mon', value: 'Little'}, {key: 'Tue', value: 'Perfect'}, {key: 'Wed', value: 'Allot'}, {key: 'Thu', value: 'Little'}, {key: 'Fri', value: 'Perfect'}]
           ]}
         />
-        <p>Using a time based yType</p>
+        <p>Setting the <b>yType</b> to be <b>time</b></p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: this.escapeHTML(`
 <LineChart
@@ -390,6 +336,39 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
           ]}
         />
         <h3>Setting the tick values</h3>
+        <p>The number of ticks on the x and y axis can be set by passing in a number to xTicks or yTicks.
+        This can make the axis easier to read.</p>
+        <pre>
+        <code dangerouslySetInnerHTML={{__html: this.escapeHTML(`
+<LineChart
+  axes
+  xTicks={5}
+  yTicks={5}
+  xDomainRange={[0, 100]}
+  yDomainRange={[0, 100]}
+  width={500}
+  height={250}
+  data={[
+    [{key: 10, value: 25}, {key: 20, value: 10}, {key: 30, value: 25}, {key: 40, value: 10}, {key: 50, value: 12}, {key: 60, value: 25}],
+    [{key: 10, value: 40}, {key: 20, value: 30}, {key: 30, value: 25}, {key: 40, value: 60}, {key: 50, value: 22}, {key: 60, value: 9}]
+  ]}
+/>
+        `)}}
+        />
+        </pre>
+        <LineChart
+          axes
+          xTicks={5}
+          yTicks={5}
+          xDomainRange={[0, 100]}
+          yDomainRange={[0, 100]}
+          width={500}
+          height={250}
+          data={[
+            [{key: 10, value: 25}, {key: 20, value: 10}, {key: 30, value: 25}, {key: 40, value: 10}, {key: 50, value: 12}, {key: 60, value: 25}],
+            [{key: 10, value: 40}, {key: 20, value: 30}, {key: 30, value: 25}, {key: 40, value: 60}, {key: 50, value: 22}, {key: 60, value: 9}]
+          ]}
+        />
 
         <h3>style</h3>
         <p>The styles can be overridden easily either partially or globally. To allow this we use Radium.</p>
@@ -442,17 +421,19 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
         <h3>Updating the data</h3>
         <p>By selecting the button below to start the random data you can see a simulation of the performance if a data feed is passed in.
         React provides the functionality to only update the elements of the dom when required so should just change the line attributes.</p>
+        <br/>
         {
           this.state.randomDataIntervalId ? <input type="button" value="Stop random data" onClick={this.turnOffRandomData.bind(this)}></input>
           :
           <input type="button" value="Start random data" onClick={this.turnOnRandomData.bind(this)}></input>
         }
+        <br/><br/>
         <LineChart
           data={this.data}
           datePattern={'%d-%b-%y'}
           xType={'time'}
-          width={500}
-          height={200}
+          width={800}
+          height={400}
           yDomainRange={[0, 100]}
           xDomainRange={['1-Jan-15', '1-Aug-15']}
           axes
@@ -461,6 +442,8 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
             stroke: 'green'
           }}}
         />
+        <br/>
+        <br/>
         </div>
       );
     }
