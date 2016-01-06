@@ -66,28 +66,57 @@ export default class LineChart extends React.Component {
     }
   }
 
-  setXDomainAndRange(d3Axis, xDomainRange, data, type, width) {
+  setDomainAndRange(scale, d3Axis, domainRange, data, type, length) {
+    const dataIndex = scale === 'x' ? 'key' : 'value';
     switch (type) {
       case 'text':
-        d3Axis.domain(data[0].map((d) => d.key));
-        d3Axis.rangePoints([0, width], 0);
+        d3Axis.domain(data[0].map((d) => d[dataIndex]));
+        d3Axis.rangePoints([0, length], 0);
         break;
       case 'linear':
-        d3Axis.domain(xDomainRange ?
-          this.calcDefaultDomain(xDomainRange, type)
+        d3Axis.domain(domainRange ?
+          this.calcDefaultDomain(domainRange, type)
           :
-          this.findLargestExtent(data, this.getValueFunction('x', type)));
-        d3Axis.range([0, width]);
+          this.findLargestExtent(data, this.getValueFunction(scale, type)));
+        d3Axis.range([0, length]);
         break;
       case 'time':
-        d3Axis.domain(xDomainRange ?
-          this.calcDefaultDomain(xDomainRange, type)
+        d3Axis.domain(domainRange ?
+          this.calcDefaultDomain(domainRange, type)
           :
-          this.findLargestExtent(data, this.getValueFunction('x', type)));
-        d3Axis.range([0, width]);
+          this.findLargestExtent(data, this.getValueFunction(scale, type)));
+        d3Axis.range([0, length]);
         break;
       default:
         d3Axis.domain();
+    }
+  }
+
+  setYDomainAndRange(scale, d3Axis, type, domainRange, data, length) {
+    const dataIndex = scale === 'x' ? 'key' : 'value';
+    switch (type) {
+      case 'text':
+        // d3Axis.domain(data[0].map((d) => d[dataIndex]));
+        d3Axis.domain(domainRange ?
+          this.calcDefaultDomain(domainRange, type)
+          :
+          data[0].map((d) => d[dataIndex])
+        );
+
+        d3Axis.rangePoints([0, length], 0);
+        break;
+      case 'linear':
+        d3Axis.domain(domainRange ?
+          this.calcDefaultDomain(domainRange, type)
+          :
+          this.findLargestExtent(data, this.getValueFunction(scale, type))
+        );
+        d3Axis.range([0, length]);
+        // d3Axis.range([height, 0]);
+        // d3Axis.domain(yDomainRange ? yDomainRange : this.findLargestExtent(data, this.getValueFunction('y', type)));
+        break;
+      default:
+        break;
     }
   }
 
@@ -129,12 +158,11 @@ export default class LineChart extends React.Component {
     const xValue = this.getValueFunction('x', xType);
 
     const x = this.getScale(xType);
-    const y = this.getScale(yType).range([height, 0]);
+    const y = this.getScale(yType);
 
     yDomainRange = this.calcDefaultDomain(yDomainRange, yType);
-    this.setXDomainAndRange(x, xDomainRange, data, xType, width);
-
-    y.domain(yDomainRange ? yDomainRange : this.findLargestExtent(data, yValue));
+    this.setDomainAndRange('x', x, xDomainRange, data, xType, width);
+    this.setYDomainAndRange('y', y, yType, yDomainRange, data, height);
 
     const linePath = line().x((d) => x(xValue(d))).y((d) => y(yValue(d)));
 

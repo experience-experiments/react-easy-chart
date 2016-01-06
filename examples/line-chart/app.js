@@ -294,6 +294,39 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
           ]}
         />
 
+        <p>Setting the <b>yType</b> to be <b>text</b>. The yDomainRange has also been set to keep the range order.</p>
+        <pre>
+        <code dangerouslySetInnerHTML={{__html: this.escapeHTML(`
+<LineChart
+  yType={'text'}
+  xType={'text'}
+  axes
+  margin={{top: 0, right: 0, bottom: 100, left: 100}}
+  yDomainRange={['Allot', 'Middle', 'Less']}
+  width={350}
+  height={250}
+  data={[
+    [{key: 'Mon', value: 'Less'}, {key: 'Tue', value: 'Middle'}, {key: 'Wed', value: 'Middle'}, {key: 'Thu', value: 'Less'}, {key: 'Fri', value: 'Middle'}]
+  ]}
+/>
+        `)}}
+        />
+        </pre>
+        <LineChart
+          yType={'text'}
+          xType={'text'}
+          axisLabels={{x: 'Day', y: 'How much did I eat'}}
+          axes
+          margin={{top: 10, right: 0, bottom: 50, left: 70}}
+          width={350}
+          height={250}
+          yDomainRange={['Allot', 'Perfect', 'Little']}
+          data={[
+            [{key: 'Mon', value: 'Little'}, {key: 'Tue', value: 'Perfect'}, {key: 'Wed', value: 'Allot'}, {key: 'Thu', value: 'Little'}, {key: 'Fri', value: 'Perfect'}]
+          ]}
+        />
+
+
         <h3>range yDomainRange, xDomainRange</h3>
         <p>By default the axis ranges are automatically calculated based on the smallest and the largest values.</p>
         <p>The range can be fixed by passing an array param of 2 numbers for the particular axis.
