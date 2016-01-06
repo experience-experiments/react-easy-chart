@@ -180,7 +180,8 @@ export default class LineChart extends React.Component {
         .append('text')
         .attr('class', 'label')
         .attr('y', margin.bottom - 4)
-        .attr('x', (width - margin.left) / 2)
+        .attr('x', (width))
+        .style('text-anchor', 'end')
         .text(axisLabels.x);
 
       root.append('g')
@@ -189,7 +190,7 @@ export default class LineChart extends React.Component {
         .append('text')
         .attr('class', 'label')
         .attr('transform', 'rotate(-90)')
-        .attr('x', (0 - height) / 2)
+        .attr('x', 0)
         .attr('y', 0 - margin.left)
         .attr('dy', '.9em')
         .style('text-anchor', 'end')

@@ -317,7 +317,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
           xType={'text'}
           axisLabels={{x: 'Day', y: 'How much did I eat'}}
           axes
-          margin={{top: 10, right: 0, bottom: 50, left: 70}}
+          margin={{top: 10, right: 30, bottom: 50, left: 70}}
           width={350}
           height={250}
           yDomainRange={['Allot', 'Perfect', 'Little']}
