@@ -1,43 +1,146 @@
 import React from 'react';
 import {createElement} from 'react-faux-dom';
 import {line} from 'd3-shape';
-import {linear} from 'd3-scale';
+import {linear, ordinal} from 'd3-scale';
 import {extent} from 'd3-array';
 import {select, svg} from 'd3';
 import {Style} from 'radium';
 import merge from 'lodash.merge';
+import {time} from 'd3';
+import {format} from 'd3-time-format';
 
 const defaultStyle = {
   '.line': {
     fill: 'none',
-    stroke: 'steelblue',
     strokeWidth: 1.5
   },
-  '.axis path, .axis line': {
+  '.line0': {
+    stroke: 'steelblue'
+  },
+  '.line1': {
+    stroke: 'orange'
+  },
+  '.line2': {
+    stroke: 'red'
+  },
+  '.line3': {
+    stroke: 'darkblue'
+  },
+  '.axis': {
+    font: '10px arial'
+  },
+  '.axis .label': {
+    font: '14px arial'
+  },
+  '.axis path,.axis line': {
     fill: 'none',
     stroke: '#000',
-    shapeRendering: 'crispEdges'
+    'shape-rendering': 'crispEdges'
   },
-  '.x.axis path': {
+  'x.axis path': {
     display: 'none'
   }
 };
 
-const defaultMargin = {top: 20, right: 20, bottom: 30, left: 50};
-
 export default class LineChart extends React.Component {
 
+  getScale(type) {
+    switch (type) {
+      case 'time':
+        return time.scale();
+      case 'text':
+        return ordinal();
+      default:
+        return linear();
+    }
+  }
+
+  getValueFunction(scale, type) {
+    const dataIndex = scale === 'x' ? 'key' : 'value';
+    switch (type) {
+      case 'time':
+        const parseDate = format(this.props.datePattern).parse;
+        return (d) => parseDate(d[dataIndex]);
+      default:
+        return (d) => d[dataIndex];
+    }
+  }
+
+  setDomainAndRange(scale, d3Axis, domainRange, data, type, length) {
+    const dataIndex = scale === 'x' ? 'key' : 'value';
+    switch (type) {
+      case 'text':
+        d3Axis.domain(domainRange ?
+          this.calcDefaultDomain(domainRange, type)
+          :
+          data[0].map((d) => d[dataIndex])
+        );
+
+        d3Axis.rangePoints([0, length], 0);
+        break;
+      case 'linear':
+        d3Axis.domain(domainRange ?
+          this.calcDefaultDomain(domainRange, type)
+          :
+          this.findLargestExtent(data, this.getValueFunction(scale, type))
+        );
+        d3Axis.range(scale === 'x' ? [0, length] : [length, 0]);
+        break;
+      case 'time':
+        d3Axis.domain(domainRange ?
+          this.calcDefaultDomain(domainRange, type)
+          :
+          this.findLargestExtent(data, this.getValueFunction(scale, type)));
+        d3Axis.range(scale === 'x' ? [0, length] : [length, 0]);
+        break;
+      default:
+        break;
+    }
+  }
+
+  findLargestExtent(data, value) {
+    let low;
+    let high;
+    data.map((dataElelment) => {
+      const calcDomainRange = extent(dataElelment, value);
+      low = low < calcDomainRange[0] ? low : calcDomainRange[0];
+      high = high > calcDomainRange[1] ? high : calcDomainRange[1];
+    });
+    return [low, high];
+  }
+
+  calcDefaultDomain(domainRange, type) {
+    if (!domainRange) return null;
+    switch (type) {
+      case 'time':
+        const parseDate = format(this.props.datePattern).parse;
+        return [parseDate(domainRange[0]), parseDate(domainRange[1])];
+      default:
+        return domainRange;
+    }
+  }
+
+  calcMargin(axes) {
+    return axes ? {top: 10, right: 20, bottom: 30, left: 50} : {top: 0, right: 0, bottom: 0, left: 0};
+  }
+
   render() {
-    const {data, xValue, yValue, xScale, yScale, margin, style} = this.props;
+    const {data, xType, yType, style, axes, axisLabels, xDomainRange, xTicks, yTicks} = this.props;
+    let {margin, yDomainRange} = this.props;
     let {width, height} = this.props;
+    margin = margin ? margin : this.calcMargin(axes);
     width = width - (margin.left + margin.right);
     height = height - (margin.top + margin.bottom);
 
-    const x = xScale().range([0, width]);
-    const y = yScale().range([height, 0]);
+    const yValue = this.getValueFunction('y', yType);
+    const xValue = this.getValueFunction('x', xType);
 
-    const xAxis = svg.axis().scale(x).orient('bottom');
-    const yAxis = svg.axis().scale(y).orient('left');
+    const x = this.getScale(xType);
+    const y = this.getScale(yType);
+
+    yDomainRange = this.calcDefaultDomain(yDomainRange, yType);
+    this.setDomainAndRange('x', x, xDomainRange, data, xType, width);
+    this.setDomainAndRange('y', y, yDomainRange, data, yType, height);
 
     const linePath = line().x((d) => x(xValue(d))).y((d) => y(yValue(d)));
 
@@ -45,32 +148,46 @@ export default class LineChart extends React.Component {
     select(svgNode).attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom);
     const root = select(svgNode).append('g').attr('transform', `translate(${margin.left},${margin.top})`);
 
-    x.domain(extent(data, xValue));
-    y.domain(extent(data, yValue));
+    if (axes) {
+      const xAxis = svg.axis().scale(x).orient('bottom');// TODO add in ticks .ticks(time.month, 1).tickFormat(format('%B'));
+      if (xTicks) xAxis.ticks(xTicks);
+      const yAxis = svg.axis().scale(y).orient('left');
+      if (yTicks) yAxis.ticks(yTicks);
+      root.append('g')
+        .attr('class', 'x axis')
+        .attr('transform', `translate(0,${height})`)
+        .call(xAxis)
+        .append('text')
+        .attr('class', 'label')
+        .attr('y', margin.bottom - 4)
+        .attr('x', (width))
+        .style('text-anchor', 'end')
+        .text(axisLabels.x);
 
-    root.append('g')
-      .attr('class', 'x axis')
-      .attr('transform', 'translate(0,' + height + ')')
-      .call(xAxis);
+      root.append('g')
+        .attr('class', 'y axis')
+        .call(yAxis)
+        .append('text')
+        .attr('class', 'label')
+        .attr('transform', 'rotate(-90)')
+        .attr('x', 0)
+        .attr('y', 0 - margin.left)
+        .attr('dy', '.9em')
+        .style('text-anchor', 'end')
+        .text(axisLabels.y);
+    }
+    data.map((dataElelment, i) => {
+      root.append('path')
+        .datum(dataElelment)
+        .attr('class', `line line${i}`)
+        .attr('d', linePath);
+    });
 
-    root.append('g')
-      .attr('class', 'y axis')
-      .call(yAxis)
-    .append('text')
-      .attr('transform', 'rotate(-90)')
-      .attr('y', 6)
-      .attr('dy', '.71em')
-      .style('text-anchor', 'end')
-      .text('Price ($)');
-
-    root.append('path')
-      .datum(data)
-      .attr('class', 'line')
-      .attr('d', linePath);
+    const uid = Math.floor(Math.random() * new Date().getTime());
 
     return (
-      <div className="line-chart">
-        <Style scopeSelector=".line-chart" rules={merge(defaultStyle, style)}/>
+      <div className={`line-chart${uid}`}>
+        <Style scopeSelector={`.line-chart${uid}`} rules={merge({}, defaultStyle, style)}/>
         {svgNode.toReact()}
       </div>
     );
@@ -81,20 +198,25 @@ LineChart.propTypes = {
   data: React.PropTypes.array.isRequired,
   width: React.PropTypes.number,
   height: React.PropTypes.number,
-  xValue: React.PropTypes.func,
-  yValue: React.PropTypes.func,
+  xType: React.PropTypes.string,
+  yType: React.PropTypes.string,
+  datePattern: React.PropTypes.string,
   style: React.PropTypes.object,
   margin: React.PropTypes.object,
-  xScale: React.PropTypes.func,
-  yScale: React.PropTypes.func
+  axes: React.PropTypes.bool,
+  xDomainRange: React.PropTypes.array,
+  yDomainRange: React.PropTypes.array,
+  axisLabels: React.PropTypes.object,
+  yTicks: React.PropTypes.number,
+  xTicks: React.PropTypes.number
 };
 
 LineChart.defaultProps = {
-  width: 960,
-  height: 500,
-  margin: defaultMargin,
-  xScale: linear,
-  yScale: linear,
-  xValue: (d) => d[0],
-  yValue: (d) => d[1]
+  width: 200,
+  height: 150,
+  datePattern: '%d-%b-%y',
+  axes: false,
+  xType: 'linear',
+  yType: 'linear',
+  axisLabels: {x: 'x axis', y: 'y axis'}
 };

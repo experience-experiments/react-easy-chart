@@ -4,11 +4,22 @@ body {
   line-height: 1.42857143;
   color: #333;
   background-color: #fff;
+  margin: 0 20px;
 }
 
 ul {
   list-style: none;
   padding: 0;
+}
+
+pre {
+  font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;
+  margin-bottom: 10px;
+  overflow: auto;
+  width: auto;
+  padding: 0px 10px;
+  background-color: #eee;
+  max-height: 600px;
 }
 
 a {
