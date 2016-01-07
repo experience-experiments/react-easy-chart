@@ -420,7 +420,8 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
 
         <h3>Updating the data</h3>
         <p>By selecting the button below to start the random data you can see a simulation of the performance if a data feed is passed in.
-        React provides the functionality to only update the elements of the dom when required so should just change the line attributes.</p>
+        React provides the functionality to only update the elements of the dom when required so should just change the line attributes.
+        The data is passed in as a react param only and as soon as that data changes the chart will be reflect that change automatically.</p>
         <br/>
         {
           this.state.randomDataIntervalId ? <input type="button" value="Stop random data" onClick={this.turnOffRandomData.bind(this)}></input>
