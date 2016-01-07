@@ -27,10 +27,10 @@ export default class PieChartContainer extends React.Component {
 
     generateData() {
       const data = [];
-      const labels = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+      const keys = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
 
-      labels.map((label) => {
-        data.push({label: label, value: this.getRandomArbitrary(1, 1000)});
+      keys.map((key) => {
+        data.push({key: key, value: this.getRandomArbitrary(1, 1000)});
       });
 
       return data;
@@ -55,7 +55,8 @@ export default class PieChartContainer extends React.Component {
         showToolTip: true,
         top: `${e.y - 10}px`,
         left: `${e.x + 10}px`,
-        value: d.value});
+        value: d.value,
+        key: d.data.key});
     }
 
     mouseMoveHandler(e) {
@@ -74,13 +75,7 @@ export default class PieChartContainer extends React.Component {
 
     render() {
       return (<div>
-        {this.state.showToolTip ? <ToolTip top={this.state.top} left={this.state.left}>The value is {this.state.value}</ToolTip> : null}
-        {
-          this.state.randomDataIntervalId ? <input type="button" value="Stop random data" onClick={this.turnOffRandomData.bind(this)}></input>
-          :
-          <input type="button" value="Start random data" onClick={this.turnOnRandomData.bind(this)}></input>
-        }
-
+        {this.state.showToolTip ? <ToolTip top={this.state.top} left={this.state.left}>The value of {this.state.key} is {this.state.value}</ToolTip> : null}
         <h2>The R2-D3 Pie chart</h2>
         <h3>data</h3>
         <p>At the most basic the Pie chart can just take a single data file supplied in a JSON format and will render a
@@ -95,7 +90,7 @@ export default class PieChartContainer extends React.Component {
         <PieChart
           data={[{key: 'A', value: 100}, {key: 'B', value: 200}, {key: 'C', value: 50}]}
         />
-        <p>By default the color is generated randomly. The color can be overwritten for each section of the pie by providing an extra color hex value to the object.</p>
+        <p>By default the color is automatically assigned. The color can be overwritten for each section of the pie by providing an extra color hex value to the object.</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 <PieChart
@@ -211,21 +206,111 @@ export default class PieChartContainer extends React.Component {
          data={[{key: 'A', value: 100, color: '#ff0000'}, {key: 'B', value: 200, color: 'green'}, {key: 'C', value: 50, color: 'grey'}]}
        />
 
-       <h3>Large Chart - mouseover and click handler functionality</h3>
-        <PieChart
-          data={this.data}
-          mouseOverHandler={this.mouseOverHandler.bind(this)}
-          mouseOutHandler={this.mouseOutHandler.bind(this)}
-          mouseMoveHandler={this.mouseMoveHandler.bind(this)}
-          clickHandler={this.clickHandler.bind(this)}
-          innerHoleHeight={0}
-          size={200}
-          padding={10}
-          hasLabels
-          styles={this.styles}
-        />
-        {this.state.dataDisplay}
-        </div>
+
+       <h3>Mouse over/Mouse Move/Mouse Out</h3>
+       <p>The chart will send out a mouseOver event, mouseMove and mouseOut event. This can be used by your react application in anyway you would require.
+        The event handlers provides the mouse event and the segment data. The mouse event can for instance provide the x and y coordinates which can be used for a tool tip.
+         The data can be segment related to the pie chart.</p>
+       <pre>
+       <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+mouseOverHandler(d, e) {
+ this.setState({
+   showToolTip: true,
+   top: e.y,
+   left: e.x,
+   value: d.value,
+   key: d.data.key});
+}
+
+mouseMoveHandler(e) {
+ if (this.state.showToolTip) {
+   this.setState({top: e.y, left: e.x});
+ }
+}
+
+mouseOutHandler() {
+ this.setState({showToolTip: false});
+}
+
+{this.state.showToolTip ? <ToolTip top={this.state.top} left={this.state.left}>The value of {this.state.key} is {this.state.value}</ToolTip> : null}
+
+<PieChart
+ data={[{key: 'A', value: 100, color: '#ff0000'}, {key: 'B', value: 200, color: 'green'}, {key: 'C', value: 50, color: 'grey'}]}
+ mouseOverHandler={this.mouseOverHandler.bind(this)}
+ mouseOutHandler={this.mouseOutHandler.bind(this)}
+ mouseMoveHandler={this.mouseMoveHandler.bind(this)}
+ size={200}
+ padding={10}
+ styles={this.styles}
+/>
+       `)}}
+       />
+       </pre>
+       <PieChart
+         data={[{key: 'A', value: 100, color: '#ff0000'}, {key: 'B', value: 200, color: 'green'}, {key: 'C', value: 50, color: 'grey'}]}
+         mouseOverHandler={this.mouseOverHandler.bind(this)}
+         mouseOutHandler={this.mouseOutHandler.bind(this)}
+         mouseMoveHandler={this.mouseMoveHandler.bind(this)}
+         size={200}
+         padding={10}
+         styles={this.styles}
+       />
+
+       <h3>Click Handler</h3>
+       <p>The chart will send out a click event. The event will pass the data and the event.
+        This allows the data to be presented from the clicking of a segment in any way the react developer requires.</p>
+       <pre>
+       <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+ <div>
+   <div style={{display: 'inline-block'}}>
+     <PieChart
+       data={[{key: 'A', value: 100, color: '#ff0000'}, {key: 'B', value: 200, color: 'green'}, {key: 'C', value: 50, color: 'grey'}]}
+       clickHandler={(d) => this.setState({dataDisplay: \`The value of \${d.data.key} is \${d.value}\`})}
+     />
+   </div>
+   <div style={{display: 'inline-block', verticalAlign: 'top'}}>
+   {this.state.dataDisplay ? this.state.dataDisplay : 'Click on a segment to show the value'}
+   </div>
+ </div>
+     `)}}
+       />
+       </pre>
+       <div>
+         <div style={{display: 'inline-block'}}>
+           <PieChart
+             data={[{key: 'A', value: 100, color: '#ff0000'}, {key: 'B', value: 200, color: 'green'}, {key: 'C', value: 50, color: 'grey'}]}
+             clickHandler={(d) => this.setState({dataDisplay: `The value of ${d.data.key} is ${d.value}`})}
+           />
+         </div>
+         <div style={{display: 'inline-block', verticalAlign: 'top'}}>
+         {this.state.dataDisplay ? this.state.dataDisplay : 'Click on a segment to show the value'}
+         </div>
+       </div>
+
+       <h3>Updating the data</h3>
+       <p>By selecting the button below to start the random data you can see a simulation of the performance if a data feed is passed in.
+       React provides the functionality to only update the elements of the dom when required so will just change the path attributes.
+       The data is passed in as a react param only and as soon as that data changes the chart will reflect that change automatically.</p>
+       <br/>
+       {
+         this.state.randomDataIntervalId ? <input type="button" value="Stop random data" onClick={this.turnOffRandomData.bind(this)}></input>
+         :
+         <input type="button" value="Start random data" onClick={this.turnOnRandomData.bind(this)}></input>
+       }
+       <pre>
+       <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+<PieChart
+ labels
+ data={this.data}
+/>
+      `)}}
+       />
+      </pre>
+      <PieChart
+        labels
+        data={this.data}
+      />
+      </div>
       );
     }
 }

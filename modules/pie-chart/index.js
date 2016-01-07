@@ -5,13 +5,15 @@ import { Style } from 'radium';
 import merge from 'lodash.merge';
 
 const defaultStyles = {
-  '.pie-chart-lines': {
-    stroke: '#fff'
+  '.chart_lines': {
+    stroke: '#fff',
+    strokeWidth: 1
   },
-  '.pie-chart-text': {
+  '.chart_text': {
     fontFamily: 'sans-serif',
-    fontSize: '10px',
-    textAnchor: 'middle'
+    fontSize: '12px',
+    textAnchor: 'middle',
+    fill: '#fff'
   }
 };
 
@@ -24,27 +26,25 @@ export default class PieChart extends React.Component {
       mouseMoveHandler,
       clickHandler,
       styles,
-      innerHoleHeight,
-      height,
+      innerHoleSize,
+      size,
       padding,
-      hasLabels } = this.props;
-    const outerRadius = height / 2;
+      labels } = this.props;
+    const outerRadius = size / 2;
     const arc = svg.arc()
       .outerRadius(outerRadius - padding)
-      .innerRadius((innerHoleHeight / 2) - padding);
+      .innerRadius((innerHoleSize / 2) - padding);
 
     const labelArc = svg.arc()
       .outerRadius(outerRadius - padding - ((20 * outerRadius) / 100))
       .innerRadius(outerRadius - padding - ((20 * outerRadius) / 100));
 
-    const color = scale.ordinal()
-        .range(['#98abc5', '#8a89a6', '#7b6888', '#6b486b', '#a05d56', '#d0743c', '#ff8c00']);
-
+    const color = scale.category20();
     const node = createElement('svg');
 
     const svgNode = select(node)
-      .attr('width', height)
-      .attr('height', height)
+      .attr('width', size)
+      .attr('height', size)
       .append('g')
       .attr('transform', `translate(${ outerRadius }, ${ outerRadius })`);
 
@@ -54,23 +54,25 @@ export default class PieChart extends React.Component {
 
     g.append('path')
       .attr('d', arc)
-      .style('fill', (d) => d.data.color ? d.data.color : color(d.data.value))
-      .attr('class', 'pie-chart-lines')
+      .attr('class', 'chart_lines')
+      .style('fill', (d, i) => d.data.color ? d.data.color : color(i))
       .on('mouseover', (d) => mouseOverHandler(d, d3LastEvent))
       .on('mouseout', (d) => mouseOutHandler(d, d3LastEvent))
       .on('mousemove', () => mouseMoveHandler(d3LastEvent))
       .on('click', (d) => clickHandler(d, d3LastEvent));
 
-    if (hasLabels === true) {
+    if (labels) {
       g.append('text')
         .attr('transform', (d) => `translate(${labelArc.centroid(d)})`)
-        .text((d) => d.data.label)
-        .attr('class', 'pie-chart-text');
+        .text((d) => d.data.key)
+        .attr('class', 'chart_text')
+        .on('click', (d) => clickHandler(d, d3LastEvent));
     }
+    const uid = Math.floor(Math.random() * new Date().getTime());
 
     return (
-      <div className="pie-chart">
-        <Style scopeSelector=".pie-chart" rules={merge(defaultStyles, styles)}/>
+      <div className={`pie_chart${uid}`}>
+        <Style scopeSelector={`.pie_chart${uid}`} rules={merge({}, defaultStyles, styles)}/>
         {node.toReact()}
       </div>
     );
@@ -79,10 +81,10 @@ export default class PieChart extends React.Component {
 
 PieChart.propTypes = {
   data: React.PropTypes.array.isRequired,
-  innerHoleHeight: React.PropTypes.number,
-  height: React.PropTypes.number,
+  innerHoleSize: React.PropTypes.number,
+  size: React.PropTypes.number,
   padding: React.PropTypes.number,
-  hasLabels: React.PropTypes.bool,
+  labels: React.PropTypes.bool,
   styles: React.PropTypes.object,
   mouseOverHandler: React.PropTypes.func,
   mouseOutHandler: React.PropTypes.func,
@@ -91,10 +93,9 @@ PieChart.propTypes = {
 };
 
 PieChart.defaultProps = {
-  height: 200,
-  innerHoleHeight: 0,
+  size: 200,
+  innerHoleSize: 0,
   padding: 2,
-  hasLabels: false,
   styles: {},
   mouseOverHandler: () => {},
   mouseOutHandler: () => {},
