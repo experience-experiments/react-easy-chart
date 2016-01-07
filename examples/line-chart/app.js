@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDom from 'react-dom';
-import ToolTip from '../ToolTip';
+import {escapeHTML} from '../util';
 import {LineChart} from 'rc-d3';
 
 class LineChartContainer extends React.Component {
@@ -8,7 +8,7 @@ class LineChartContainer extends React.Component {
       super(props);
       // Generate multiple lines of data
       this.data = [this.generateData(), this.generateData(), this.generateData(), this.generateData()];
-      this.state = {showToolTip: false};
+      this.state = {};
     }
 
     getRandomArbitrary(min, max) {
@@ -40,40 +40,8 @@ class LineChartContainer extends React.Component {
       this.forceUpdate();
     }
 
-    mouseOverHandler(d, e) {
-      this.setState({
-        showToolTip: true,
-        top: `${e.y - 10}px`,
-        left: `${e.x + 10}px`,
-        value: d.value,
-        key: d.key});
-    }
-
-    mouseMoveHandler(e) {
-      if (this.state.showToolTip) {
-        this.setState({top: `${e.y - 10}px`, left: `${e.x + 10}px`});
-      }
-    }
-
-    mouseOutHandler() {
-      this.setState({showToolTip: false});
-    }
-
-    clickHandler(d) {
-      this.setState({dataDisplay: `The amount selected is ${d.value}`});
-    }
-
-    escapeHTML(jsx) {
-      return jsx.replace(/&/g, '&amp;')
-      .replace(/</g, '&#60;')
-      .replace(/>/g, '&gt;')
-      .replace(/\"/g, '&quot;')
-      .replace(/\'/g, '&#39;');
-    }
-
     render() {
       return (<div>
-        {this.state.showToolTip ? <ToolTip top={this.state.top} left={this.state.left}>The value of {this.state.key} is {this.state.value}</ToolTip> : null}
         <h2>The R2-D3 Line chart</h2>
         <h3>Data</h3>
         <p>At the most basic the line chart can just take a single data file supplied in a JSON format and will render a
@@ -82,7 +50,7 @@ class LineChartContainer extends React.Component {
         The key field represents the x axis and the value the y axis. This is to unify the data accross R2-D3 charts.</p>
 
         <pre>
-        <code dangerouslySetInnerHTML={{__html: this.escapeHTML(`
+        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 <LineChart
   data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}]]}/>
         `)}}
@@ -94,7 +62,7 @@ class LineChartContainer extends React.Component {
         />
         <p>If a second line is needed then this is easily added by adding a new data array to the existing array. The number of lines drawn is infinite but only coloured up to 4 lines.</p>
         <pre>
-        <code dangerouslySetInnerHTML={{__html: this.escapeHTML(`
+        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 <LineChart
   data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1, value: 10}, {key: 2, value: 12}, {key: 3, value: 4}]]}/>
         `)}}
@@ -106,7 +74,7 @@ class LineChartContainer extends React.Component {
         <h3>Height and Width</h3>
         <p>The height and width can be easily set by passing in a numeric value in as a prop.</p>
         <pre>
-        <code dangerouslySetInnerHTML={{__html: this.escapeHTML(`
+        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 <LineChart
 width={50}
 height={50}
@@ -124,7 +92,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
         <p>The Margin can be overridden by passing in a margin object. The margin object must define the following: top, right, bottom and left</p>
         <p>This can be particulary useful if a label is cut off.</p>
         <pre>
-        <code dangerouslySetInnerHTML={{__html: this.escapeHTML(`
+        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 <LineChart
 margin={{top: 0, right: 0, bottom: 30, left: 100}}
 width={250}
@@ -143,7 +111,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
         <h3>Axes</h3>
         <p>The axes can be turned on by simply passing a boolean flag to true for <b>axes</b>.</p>
         <pre>
-        <code dangerouslySetInnerHTML={{__html: this.escapeHTML(`
+        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 <LineChart
   axes
   width={250}
@@ -162,7 +130,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
         <h3>Axes labels</h3>
         <p>The axes labels can be overridden by simply passing <b>axisLabels</b> object with both a x and y value.</p>
         <pre>
-        <code dangerouslySetInnerHTML={{__html: this.escapeHTML(`
+        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 <LineChart
   axes
   margin={{top: 10, right: 10, bottom: 50, left: 50}}
@@ -189,7 +157,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
          or textual formats (used for labelling). </p>
         <p>For the example below the data for the key is text and so the <b>xType</b> needs to be changed to <b>text</b>.</p>
         <pre>
-        <code dangerouslySetInnerHTML={{__html: this.escapeHTML(`
+        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 <LineChart
   xType={'text'}
   axes
@@ -215,7 +183,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
         />
         <p>Setting the <b>yType</b> to be <b>time</b></p>
         <pre>
-        <code dangerouslySetInnerHTML={{__html: this.escapeHTML(`
+        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 <LineChart
   xType={'time'}
   axes
@@ -242,7 +210,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
 
         <p>Setting the <b>yType</b> to be <b>text</b>. (The yDomainRange has also been set to keep the range order.)</p>
         <pre>
-        <code dangerouslySetInnerHTML={{__html: this.escapeHTML(`
+        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 <LineChart
   yType={'text'}
   xType={'text'}
@@ -273,7 +241,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
         />
         <p>Setting the <b>yType</b> to be <b>time</b></p>
         <pre>
-        <code dangerouslySetInnerHTML={{__html: this.escapeHTML(`
+        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 <LineChart
   axisLabels={{x: 'Total Revenue', y: 'January'}}
   margin={{top: 10, right: 30, bottom: 50, left: 70}}
@@ -308,7 +276,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
         <p>The range can be fixed by passing an array param of 2 numbers for the particular axis.
         The first number is the bottom of the range the second is the higher point of the range.</p>
         <pre>
-        <code dangerouslySetInnerHTML={{__html: this.escapeHTML(`
+        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 <LineChart
   axes
   xDomainRange={[0, 100]}
@@ -339,7 +307,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
         <p>The number of ticks on the x and y axis can be set by passing in a number to xTicks or yTicks.
         This can make the axis easier to read.</p>
         <pre>
-        <code dangerouslySetInnerHTML={{__html: this.escapeHTML(`
+        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 <LineChart
   axes
   xTicks={5}
@@ -374,7 +342,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
         <p>The styles can be overridden easily either partially or globally. To allow this we use Radium.</p>
         <p>The following example would be to change the color of a the line.</p>
         <pre>
-        <code dangerouslySetInnerHTML={{__html: this.escapeHTML(`
+        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 <LineChart
   axes
   xDomainRange={[0, 100]}

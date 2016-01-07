@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ToolTip from '../ToolTip';
+import {escapeHTML} from '../util';
 import PieChart from 'rc-d3/pie-chart';
 
 export default class PieChartContainer extends React.Component {
@@ -79,11 +80,21 @@ export default class PieChartContainer extends React.Component {
           :
           <input type="button" value="Start random data" onClick={this.turnOnRandomData.bind(this)}></input>
         }
-        <h3>Small Chart - no interactions</h3>
+
+        <h2>The R2-D3 Pie chart</h2>
+        <h3>Data</h3>
+        <p>At the most basic the Pie chart can just take a single data file supplied in a JSON format and will render a
+         simple Pie chart.</p>
         <PieChart
-          data={this.data}
-          height={50}
+          data={[{key: 'A', value: 100}, {key: 'B', value: 200}, {key: 'C', value: 50}]}
         />
+        <pre>
+        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+<PieChart
+data={[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}]}/>
+`)}}
+        />
+        </pre>
         <h3>Large Chart - mouseover and click handler functionality</h3>
         <PieChart
           data={this.data}

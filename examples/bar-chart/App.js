@@ -73,6 +73,11 @@ export default class BarChartContainer extends React.Component {
           :
           <input type="button" value="Start random data" onClick={this.turnOnRandomData.bind(this)}></input>
         }
+
+        <h2>The R2-D3 Bar chart</h2>
+        <h3>Data</h3>
+        <p>At the most basic the Bar chart can just take a single data file supplied in a JSON format and will render a
+         simple Bar chart.</p>
         <BarChart
           width={90}
           height={40}
