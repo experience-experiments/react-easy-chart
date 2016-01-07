@@ -17,13 +17,9 @@ pre {
   margin-bottom: 10px;
   overflow: auto;
   width: auto;
-  padding: 5px;
+  padding: 0px 10px;
   background-color: #eee;
   max-height: 600px;
-}
-
-pre > code {
-  margin: 30px;
 }
 
 a {
