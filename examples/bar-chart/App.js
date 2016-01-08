@@ -68,13 +68,6 @@ export default class BarChartContainer extends React.Component {
 
     render() {
       return (<div>
-        {this.state.showToolTip ? <ToolTip top={this.state.top} left={this.state.left}>The value of {this.state.key} is {this.state.value}</ToolTip> : null}
-        {
-          this.state.randomDataIntervalId ? <input type="button" value="Stop random data" onClick={this.turnOffRandomData.bind(this)}></input>
-          :
-          <input type="button" value="Start random data" onClick={this.turnOnRandomData.bind(this)}></input>
-        }
-
         <h2>The R2-D3 Bar chart</h2>
         <h3>Data</h3>
         <p>At the most basic the Bar chart can just take a single data file supplied in a JSON format and will render a
@@ -98,6 +91,8 @@ export default class BarChartContainer extends React.Component {
          <pre>
          <code dangerouslySetInnerHTML={{__html: escapeHTML(`
  <BarChart
+   height={150}
+   width={150}
    data={[{key: 'A', value: 20}, {key: 'B', value: 30}, {key: 'C', value: 40},
     {key: 'D', value: 20}, {key: 'E', value: 40}, {key: 'F', value: 25}, {key: 'G', value: 5}]}
  />
@@ -128,6 +123,8 @@ export default class BarChartContainer extends React.Component {
           colorBars
           data={[{key: 'A', value: 20}, {key: 'B', value: 30}, {key: 'C', value: 40}, {key: 'D', value: 20}, {key: 'E', value: 40}, {key: 'F', value: 25}, {key: 'G', value: 5}]}
         />
+
+
         <h3>Overriding Bar colors</h3>
         <p>A single bar or number of bars can be colored by adding a color prop to the relevent data item.</p>
          <pre>
@@ -144,6 +141,33 @@ data={[{key: 'A', value: 20}, {key: 'B', value: 30}, {key: 'C', value: 40},
           data={[{key: 'A', value: 20}, {key: 'B', value: 30, color: '#f00'}, {key: 'C', value: 40}, {key: 'D', value: 20}, {key: 'E', value: 40}, {key: 'F', value: 25}, {key: 'G', value: 5, color: 'orange'}]}
         />
 
+        <h3>Axes</h3>
+        <p>The axes can be turned on by simply passing a boolean flag to true for axes</p>
+         <pre>
+         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+ <BarChart
+   axes
+   data={[{key: 'A', value: 20}, {key: 'B', value: 30, color: '#f00'}, {key: 'C', value: 40},
+    {key: 'D', value: 20}, {key: 'E', value: 40}, {key: 'F', value: 25}, {key: 'G', value: 5, color: 'orange'}]}
+ />
+         `)}}
+         />
+         </pre>
+
+        <BarChart
+          axes
+          data={[{key: 'A', value: 20}, {key: 'B', value: 30, color: '#f00'}, {key: 'C', value: 40},
+           {key: 'D', value: 20}, {key: 'E', value: 40}, {key: 'F', value: 25}, {key: 'G', value: 5, color: 'orange'}]}
+        />
+        <br/>
+        <br/>
+        <br/>
+        {this.state.showToolTip ? <ToolTip top={this.state.top} left={this.state.left}>The value of {this.state.key} is {this.state.value}</ToolTip> : null}
+        {
+          this.state.randomDataIntervalId ? <input type="button" value="Stop random data" onClick={this.turnOffRandomData.bind(this)}></input>
+          :
+          <input type="button" value="Start random data" onClick={this.turnOnRandomData.bind(this)}></input>
+        }
         </div>
       );
     }

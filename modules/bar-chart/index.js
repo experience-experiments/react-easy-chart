@@ -28,7 +28,6 @@ const defaultStyle = {
     display: 'none'
   }
 };
-
 const colorScale = scale.category20();
 export default class BarChart extends React.Component {
 
@@ -44,7 +43,7 @@ export default class BarChart extends React.Component {
   }
 
   calcMargin(axes) {
-    return axes ? {top: 20, right: 20, bottom: 30, left: 40} : {top: 0, right: 0, bottom: 0, left: 0};
+    return axes ? {top: 10, right: 20, bottom: 50, left: 50} : {top: 0, right: 0, bottom: 0, left: 0};
   }
 
   calcDefaultDomain(domainRange, type) {
@@ -73,12 +72,10 @@ export default class BarChart extends React.Component {
       style,
       axes,
       axisLabels,
+      colorBars,
       xType,
-      yType,
-      colorBars} = this.props;
+      yType} = this.props;
     let {margin} = this.props;
-    // const yValue = this.getValueFunction('y', yType);
-    // const xValue = this.getValueFunction('x', xType);
 
     let {width, height, yDomainRange, xDomainRange} = this.props;
     margin = margin ? margin : this.calcMargin(axes);
@@ -89,59 +86,63 @@ export default class BarChart extends React.Component {
 
     const barPadding = (width / data.length) > 40 ? 0.02 : 0.04;
 
-    const x = ordinal()
-        .rangeBands([0, width], barPadding);
+    const x = ordinal();
+    x.rangeBands([0, width], barPadding);
+    x.domain(data.map((d) => d.key));
+
     const y = linear()
         .range([height, 0]);
 
-    const node = createElement('svg');
-    const selection = select(node);
+    const svgNode = createElement('svg');
+    const selection = select(svgNode);
+
+    select(svgNode).attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom);
+    const root = select(svgNode).append('g').attr('transform', `translate(${margin.left},${margin.top})`);
 
     selection.attr({
       width: width + margin.left + margin.right,
       height: height + margin.top + margin.bottom
     });
 
-    const svgContainer = selection.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+    // const svgContainer = selection.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
 
-    x.domain(data.map((d) => d.key));
     y.domain(yDomainRange ? yDomainRange : [0, max(data, (d) => d.value)]);
 
+    if (axes) {
+      const xAxis = svg.axis()
+          .scale(x)
+          .orient('bottom');
+
+      root.append('g')
+        .attr('class', 'x axis')
+        .attr('transform', 'translate(0,' + height + ')')
+        .call(xAxis)
+        .append('text')
+        .attr('class', 'label')
+        .attr('y', margin.bottom - 4)
+        .attr('x', (width))
+        .style('text-anchor', 'end')
+        .text(axisLabels.x);
+
+      const yAxis = svg.axis()
+          .scale(y)
+          .orient('left')
+          .ticks(10);
+      root.append('g')
+        .attr('class', 'y axis')
+        .call(yAxis)
+        .append('text')
+        .attr('class', 'label')
+        .attr('transform', 'rotate(-90)')
+        .attr('x', 0)
+        .attr('y', 0 - margin.left)
+        .attr('dy', '.9em')
+        .style('text-anchor', 'end')
+        .text(axisLabels.y);
+    }
+
     data.map(() => {
-      if (axes) {
-        const xAxis = svg.axis()
-            .scale(x)
-            .orient('bottom');
-
-        const yAxis = svg.axis()
-            .scale(y)
-            .orient('left')
-            .ticks(10);
-
-        svgContainer.append('g')
-          .attr('class', 'x axis')
-          .attr('transform', 'translate(0,' + height + ')')
-          .call(xAxis)
-          .append('text')
-          .attr('class', 'label')
-          .attr('y', margin.bottom - 0.9)
-          .attr('x', (width - margin.left) / 2)
-          .text(axisLabels.x);
-
-        svgContainer.append('g')
-          .attr('class', 'y axis')
-          .call(yAxis)
-          .append('text')
-          .attr('class', 'label')
-          .attr('transform', 'rotate(-90)')
-          .attr('x', (0 - height) / 2)
-          .attr('y', 0 - margin.left)
-          .attr('dy', '.9em')
-          .style('text-anchor', 'end')
-          .text(axisLabels.y);
-      }
-
-      svgContainer.selectAll('.bar')
+      root.selectAll('.bar')
           .data(data)
           .enter().append('rect')
           .attr('class', 'bar')
@@ -161,7 +162,7 @@ export default class BarChart extends React.Component {
     return (
       <div className={`bar-chart${uid}`}>
         <Style scopeSelector={`.bar-chart${uid}`} rules={merge({}, defaultStyle, style)}/>
-        {node.toReact()}
+        {svgNode.toReact()}
       </div>
     );
   }
