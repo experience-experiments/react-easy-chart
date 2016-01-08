@@ -1,8 +1,7 @@
 import React from 'react';
 import { ordinal, linear } from 'd3-scale';
-import { event as d3LastEvent, select, svg, max} from 'd3';
+import { event as d3LastEvent, select, svg, max, scale} from 'd3';
 import {format} from 'd3-time-format';
-// import {extent} from 'd3-array';
 import { createElement } from 'react-faux-dom';
 import { Style } from 'radium';
 import merge from 'lodash.merge';
@@ -12,7 +11,7 @@ const defaultStyle = {
     fill: 'blue'
   },
   '.bar:hover': {
-    fill: 'brown'
+    opacity: 0.5
   },
   '.axis': {
     font: '10px arial'
@@ -30,11 +29,11 @@ const defaultStyle = {
   }
 };
 
-
+const colorScale = scale.category20();
 export default class BarChart extends React.Component {
 
-  getValueFunction(scale, type) {
-    const dataIndex = scale === 'x' ? 0 : 1;
+  getValueFunction(axis, type) {
+    const dataIndex = axis === 'x' ? 0 : 1;
     switch (type) {
       case 'time':
         const parseDate = format(this.props.datePattern).parse;
@@ -43,6 +42,11 @@ export default class BarChart extends React.Component {
         return (d) => d[dataIndex];
     }
   }
+
+  calcMargin(axes) {
+    return axes ? {top: 20, right: 20, bottom: 30, left: 40} : {top: 0, right: 0, bottom: 0, left: 0};
+  }
+
   calcDefaultDomain(domainRange, type) {
     switch (type) {
       case 'time':
@@ -53,30 +57,40 @@ export default class BarChart extends React.Component {
     }
   }
 
+  defineColor(i, d, colorBars) {
+    if (d.color) return d.color;
+    if (colorBars) return colorScale(i);
+    return null;
+  }
+
   render() {
     const {
       data,
-      margin,
       mouseOverHandler,
       mouseOutHandler,
-      clickHandler,
       mouseMoveHandler,
+      clickHandler,
       style,
       axes,
       axisLabels,
       xType,
-      yType} = this.props;
+      yType,
+      colorBars} = this.props;
+    let {margin} = this.props;
     // const yValue = this.getValueFunction('y', yType);
     // const xValue = this.getValueFunction('x', xType);
 
     let {width, height, yDomainRange, xDomainRange} = this.props;
+    margin = margin ? margin : this.calcMargin(axes);
     width = width - margin.left - margin.right;
     height = height - margin.top - margin.bottom;
     yDomainRange = yDomainRange ? this.calcDefaultDomain(yDomainRange, yType) : null;
     xDomainRange = xDomainRange ? this.calcDefaultDomain(xDomainRange, xType) : null;
 
+    const barPadding = (width / data.length) > 40 ? 0.02 : 0.04;
+
     const x = ordinal()
-        .rangeRoundBands([0, width], 0.1);
+        .rangeBands([0, width], barPadding);
     const y = linear()
         .range([height, 0]);
 
@@ -131,6 +145,7 @@ export default class BarChart extends React.Component {
           .data(data)
           .enter().append('rect')
           .attr('class', 'bar')
+          .style('fill', (d, i) => this.defineColor(i, d, colorBars))
           .attr('x', (d) => x(d.key))
           .attr('width', x.rangeBand())
           .attr('y', (d) => y(d.value))
@@ -162,6 +177,7 @@ BarChart.propTypes = {
   mouseMoveHandler: React.PropTypes.func,
   clickHandler: React.PropTypes.func,
   style: React.PropTypes.object,
+  colorBars: React.PropTypes.bool,
   axes: React.PropTypes.bool,
   axisLabels: React.PropTypes.object,
   xType: React.PropTypes.string,
@@ -172,14 +188,12 @@ BarChart.propTypes = {
 };
 
 BarChart.defaultProps = {
-  margin: {top: 20, right: 20, bottom: 30, left: 40},
-  width: 960,
-  height: 500,
+  width: 400,
+  height: 200,
   mouseOverHandler: () => {},
   mouseOutHandler: () => {},
   mouseMoveHandler: () => {},
   clickHandler: () => {},
-  axes: true,
   datePattern: '%d-%b-%y',
   axisLabels: {x: 'x axis', y: 'y axis'}
 };

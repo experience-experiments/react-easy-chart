@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import BarChart from 'rc-d3/bar-chart';
 import ToolTip from '../ToolTip';
+import {escapeHTML} from '../util';
 
 export default class BarChartContainer extends React.Component {
     constructor(props) {
@@ -78,42 +79,94 @@ export default class BarChartContainer extends React.Component {
         <h3>Data</h3>
         <p>At the most basic the Bar chart can just take a single data file supplied in a JSON format and will render a
          simple Bar chart.</p>
+         <pre>
+         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+ <BarChart
+   data={[{key: 'A', value: 20}, {key: 'B', value: 30}, {key: 'C', value: 40},
+    {key: 'D', value: 20}, {key: 'E', value: 40}, {key: 'F', value: 25}, {key: 'G', value: 5}]}
+ />
+         `)}}
+         />
+         </pre>
+
         <BarChart
-          width={90}
-          height={40}
-          axes={false}
-          data={this.data}
-          margin={{top: 0, right: 0, bottom: 0, left: 0}}
+          data={[{key: 'A', value: 20}, {key: 'B', value: 30}, {key: 'C', value: 40}, {key: 'D', value: 20}, {key: 'E', value: 40}, {key: 'F', value: 25}, {key: 'G', value: 5}]}
         />
+
+        <h3>Height and Width</h3>
+        <p>The height and width can be easily set by passing in a numeric value in as a prop.</p>
+         <pre>
+         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+ <BarChart
+   data={[{key: 'A', value: 20}, {key: 'B', value: 30}, {key: 'C', value: 40},
+    {key: 'D', value: 20}, {key: 'E', value: 40}, {key: 'F', value: 25}, {key: 'G', value: 5}]}
+ />
+         `)}}
+         />
+         </pre>
+
         <BarChart
-          width={20}
-          height={15}
-          axes={false}
-          data={this.data}
-          margin={{top: 0, right: 0, bottom: 0, left: 0}}
-        />
-        <BarChart
-          width={200}
           height={150}
-          axes={false}
-          data={this.data}
-          margin={{top: 0, right: 0, bottom: 0, left: 0}}
-          style={{'.bar': {fill: 'red'}}}
+          width={150}
+          data={[{key: 'A', value: 20}, {key: 'B', value: 30}, {key: 'C', value: 40}, {key: 'D', value: 20}, {key: 'E', value: 40}, {key: 'F', value: 25}, {key: 'G', value: 5}]}
         />
+
+        <h3>ColorBars</h3>
+        <p>The bars can be automatically colored by turning on the color boolean.</p>
+         <pre>
+         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+<BarChart
+ colorBars
+ data={[{key: 'A', value: 20}, {key: 'B', value: 30}, {key: 'C', value: 40},
+  {key: 'D', value: 20}, {key: 'E', value: 40}, {key: 'F', value: 25}, {key: 'G', value: 5}]}
+/>
+         `)}}
+         />
+         </pre>
+
         <BarChart
-          mouseOverHandler={this.mouseOverHandler.bind(this)}
-          mouseOutHandler={this.mouseOutHandler.bind(this)}
-          mouseMoveHandler={this.mouseMoveHandler.bind(this)}
-          clickHandler={this.clickHandler.bind(this)}
-          data={this.data}
-          style={{'.bar': {fill: 'green'}}}
-          yDomainRange={[0, 100]}
+          colorBars
+          data={[{key: 'A', value: 20}, {key: 'B', value: 30}, {key: 'C', value: 40}, {key: 'D', value: 20}, {key: 'E', value: 40}, {key: 'F', value: 25}, {key: 'G', value: 5}]}
         />
-        {this.state.dataDisplay}
+        <h3>Overriding Bar colors</h3>
+        <p>A single bar or number of bars can be colored by adding a color prop to the relevent data item.</p>
+         <pre>
+         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+<BarChart
+data={[{key: 'A', value: 20}, {key: 'B', value: 30}, {key: 'C', value: 40},
+ {key: 'D', value: 20}, {key: 'E', value: 40}, {key: 'F', value: 25}, {key: 'G', value: 5, color: 'orange'}]}
+/>
+         `)}}
+         />
+         </pre>
+
+        <BarChart
+          data={[{key: 'A', value: 20}, {key: 'B', value: 30, color: '#f00'}, {key: 'C', value: 40}, {key: 'D', value: 20}, {key: 'E', value: 40}, {key: 'F', value: 25}, {key: 'G', value: 5, color: 'orange'}]}
+        />
+
         </div>
       );
     }
 }
+
+// <BarChart
+//   width={200}
+//   height={150}
+//   axes={false}
+//   data={this.data}
+//   margin={{top: 0, right: 0, bottom: 0, left: 0}}
+//   style={{'.bar': {fill: 'red'}}}
+// />
+// <BarChart
+//   mouseOverHandler={this.mouseOverHandler.bind(this)}
+//   mouseOutHandler={this.mouseOutHandler.bind(this)}
+//   mouseMoveHandler={this.mouseMoveHandler.bind(this)}
+//   clickHandler={this.clickHandler.bind(this)}
+//   data={this.data}
+//   style={{'.bar': {fill: 'green'}}}
+//   yDomainRange={[0, 100]}
+// />
+// {this.state.dataDisplay}
 
 
 ReactDOM.render(<BarChartContainer/>, document.getElementById('root'));
