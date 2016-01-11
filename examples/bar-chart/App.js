@@ -182,7 +182,7 @@ data={[{key: 'A', value: 20}, {key: 'B', value: 30}, {key: 'C', value: 40},
         <h3>xType / yType</h3>
         <p>The data passed associated to the particular axes can be in numeric, date (the default format is for example 1-Jan-15 but can be overridden) or textual formats (used for labelling).</p>
 
-        <p>By default the xType is text and so allows text labelling. The example below passes 'linear' as the xType and the data key is numeric.</p>
+        <p>By default the xType is text (or ordinal in d3) and so allows text labelling. The example below passes 'linear' as the xType and the data key is numeric.</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 <BarChart
@@ -202,11 +202,135 @@ data={[{key: 'A', value: 20}, {key: 'B', value: 30}, {key: 'C', value: 40},
         />
 
         <p>The xType can also be a time based value. The default format for the date data is for example 1-Jan-15 but can be overridden.</p>
+        <pre>
+        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+<BarChart
+  axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+  axes
+  colorBars
+  xType={'time'}
+  data={[{key: '1-Jan-15', value: 20}, {key: '2-Jan-15', value: 10}, {key: '3-Jan-15', value: 33}]}
+/>
+        `)}}
+        />
+        </pre>
         <BarChart
           axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
           axes
+          colorBars
           xType={'time'}
           data={[{key: '1-Jan-15', value: 20}, {key: '2-Jan-15', value: 10}, {key: '3-Jan-15', value: 33}]}
+        />
+
+        <p>The bar width can also be overridden. The default 10px.</p>
+        <pre>
+        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+<BarChart
+  axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+  axes
+  colorBars
+  barWidth={20}
+  xType={'time'}
+  data={[{key: '1-Jan-15', value: 20}, {key: '2-Jan-15', value: 10}, {key: '3-Jan-15', value: 33}]}
+/>
+        `)}}
+        />
+        </pre>
+        <BarChart
+          axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+          axes
+          colorBars
+          barWidth={20}
+          xType={'time'}
+          data={[{key: '1-Jan-15', value: 20}, {key: '2-Jan-15', value: 10}, {key: '3-Jan-15', value: 33}]}
+        />
+
+        <h3>range yDomainRange, xDomainRange</h3>
+        <p>By default the axis ranges are automatically calculated based on the smallest and the largest values.</p>
+        <p>The range can be fixed by passing an array param of 2 numbers for the particular axis.
+        The first number is the bottom of the range the second is the higher point of the range.</p>
+        <pre>
+        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+<BarChart
+  axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+  axes
+  colorBars
+  barWidth={20}
+  xType={'time'}
+  xDomainRange={['1-Jan-15', '20-Jan-15']}
+  yDomainRange={[5, 50]}
+  data={[{key: '10-Jan-15', value: 20}, {key: '12-Jan-15', value: 10}, {key: '15-Jan-15', value: 33}]}
+/>
+        `)}}
+        />
+        </pre>
+        <BarChart
+          axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+          axes
+          colorBars
+          barWidth={20}
+          xType={'time'}
+          xDomainRange={['1-Jan-15', '20-Jan-15']}
+          yDomainRange={[5, 50]}
+          data={[{key: '10-Jan-15', value: 20}, {key: '12-Jan-15', value: 10}, {key: '15-Jan-15', value: 33}]}
+        />
+
+        <h3>Tick display format</h3>
+        <p>If the x or y axis  has an xType of time then a display for the axis can be overridden by setting the tickTimeDisplayFormat.</p>
+        <p>The options are very flexible and can be seen here <a href="https://github.com/mbostock/d3/wiki/Time-Formatting">Time Formatting</a></p>
+        <pre>
+        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+<BarChart
+  axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+  axes
+  colorBars
+  barWidth={20}
+  xType={'time'}
+  tickTimeDisplayFormat={'%a'}
+  xDomainRange={['1-Jan-15', '20-Jan-15']}
+  data={[{key: '10-Jan-15', value: 20}, {key: '12-Jan-15', value: 10}, {key: '15-Jan-15', value: 33}]}
+/>
+        `)}}
+        />
+        </pre>
+        <BarChart
+          axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+          axes
+          colorBars
+          barWidth={20}
+          xType={'time'}
+          tickTimeDisplayFormat={'%a'}
+          xDomainRange={['1-Jan-15', '20-Jan-15']}
+          data={[{key: '10-Jan-15', value: 20}, {key: '12-Jan-15', value: 10}, {key: '15-Jan-15', value: 33}]}
+        />
+        <h3>Number of ticks</h3>
+        <p>The number of ticks of the x and y axis can be overridden by setting the xTickNumber or yTickNumber.</p>
+        <pre>
+        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+<BarChart
+  axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+  axes
+  colorBars
+  barWidth={20}
+  xTickNumber={5}
+  yTickNumber={3}
+  xType={'time'}
+  xDomainRange={['1-Jan-15', '20-Jan-15']}
+  data={[{key: '10-Jan-15', value: 20}, {key: '12-Jan-15', value: 10}, {key: '15-Jan-15', value: 33}]}
+/>
+        `)}}
+        />
+        </pre>
+        <BarChart
+          axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+          axes
+          colorBars
+          barWidth={20}
+          xTickNumber={5}
+          yTickNumber={3}
+          xType={'time'}
+          xDomainRange={['1-Jan-15', '20-Jan-15']}
+          data={[{key: '10-Jan-15', value: 20}, {key: '12-Jan-15', value: 10}, {key: '15-Jan-15', value: 33}]}
         />
 
         <br/>
