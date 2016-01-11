@@ -153,12 +153,49 @@ data={[{key: 'A', value: 20}, {key: 'B', value: 30}, {key: 'C', value: 40},
          `)}}
          />
          </pre>
-
         <BarChart
           axes
           data={[{key: 'A', value: 20}, {key: 'B', value: 30, color: '#f00'}, {key: 'C', value: 40},
            {key: 'D', value: 20}, {key: 'E', value: 40}, {key: 'F', value: 25}, {key: 'G', value: 5, color: 'orange'}]}
         />
+
+        <h3>Axes Labels</h3>
+        <p>The axes labels can be overridden by simply passing <b>axisLabels</b> object with both a x and y value.</p>
+         <pre>
+         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+<BarChart
+  axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+  axes
+  data={[{key: 'A', value: 20}, {key: 'B', value: 30, color: '#f00'}, {key: 'C', value: 40},
+    {key: 'D', value: 20}, {key: 'E', value: 40}, {key: 'F', value: 25}, {key: 'G', value: 5, color: 'orange'}]}
+/>
+         `)}}
+         />
+         </pre>
+        <BarChart
+          axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+          axes
+          data={[{key: 'A', value: 20}, {key: 'B', value: 30, color: '#f00'}, {key: 'C', value: 40},
+           {key: 'D', value: 20}, {key: 'E', value: 40}, {key: 'F', value: 25}, {key: 'G', value: 5, color: 'orange'}]}
+        />
+
+        <h3>xType / yType</h3>
+        <p>The data passed associated to the particular axes can be in numeric, date (the default format is for example 1-Jan-15 but can be overridden) or textual formats (used for labelling).</p>
+
+        <p>By default the xType is text and so allows text labelling. The example below passes 'linear' as the xType and the data key is numeric.</p>
+        <pre>
+        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+        `)}}
+        />
+        </pre>
+        <BarChart
+          axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+          axes
+          xType={'linear'}
+          data={[{key: 10, value: 20}, {key: 12, value: 20}, {key: 30, value: 30, color: '#f00'}, {key: 40, value: 40}]}
+        />
+
+
         <br/>
         <br/>
         <br/>
