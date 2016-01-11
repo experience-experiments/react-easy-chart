@@ -82,7 +82,10 @@ export default class LineChart extends React.Component {
         d3Axis.domain(domainRange ?
           this.calcDefaultDomain(domainRange, type)
           :
-          this.findLargestExtent(data, this.getValueFunction(scale, type)));
+          this.findLargestExtent(data, this.getValueFunction(scale, type))
+        );
+        console.log(this.findLargestExtent(data, this.getValueFunction(scale, type)));
+
         d3Axis.range(scale === 'x' ? [0, length] : [length, 0]);
         break;
       default:

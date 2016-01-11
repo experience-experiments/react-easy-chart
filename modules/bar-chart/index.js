@@ -1,6 +1,6 @@
 import React from 'react';
 import { ordinal, linear } from 'd3-scale';
-import { event as d3LastEvent, select, svg, scale, max} from 'd3';
+import { event as d3LastEvent, select, time, svg, scale, max} from 'd3';
 import {extent} from 'd3-array';
 import {format} from 'd3-time-format';
 import { createElement } from 'react-faux-dom';
@@ -33,7 +33,7 @@ const colorScale = scale.category20();
 export default class BarChart extends React.Component {
 
   getValueFunction(axesType, type) {
-    const dataIndex = axesType === 'x' ? 0 : 1;
+    const dataIndex = axesType === 'x' ? 'key' : 'value';
     switch (type) {
       case 'time':
         const parseDate = format(this.props.datePattern).parse;
@@ -42,41 +42,6 @@ export default class BarChart extends React.Component {
         return (d) => d[dataIndex];
     }
   }
-
-  setYDomainAndRange(axesType, domainRange, data, type, length) {
-    const dataIndex = axesType === 'x' ? 'key' : 'value';
-    const barPadding = (length / data.length) > 40 ? 0.02 : 0.04;
-    let d3Axis;
-    switch (type) {
-      case 'text':
-        d3Axis = ordinal();
-        d3Axis.domain(data.map((d) => d[dataIndex]));
-        d3Axis.rangeBands([0, length], barPadding);
-        break;
-      case 'linear':
-        d3Axis = linear();
-        d3Axis.domain([0, max(data, (d) => d[dataIndex])]);
-        d3Axis.range([length, 0]);
-        const exR = extent(data, (d) => d[dataIndex]);
-        console.log(exR);
-        // d3Axis.domain(extent(data, (d) => d[dataIndex]));
-        // d3Axis.rangePoints([0, length], barPadding);
-        // d3Axis.domain([20, 30]);
-        // d3Axis.rangeRound([0, length]);
-        break;
-      case 'time':
-        d3Axis.domain(domainRange ?
-          this.calcDefaultDomain(domainRange, type)
-          :
-          this.findLargestExtent(data, this.getValueFunction(scale, type)));
-        d3Axis.range(scale === 'x' ? [0, length] : [length, 0]);
-        break;
-      default:
-        break;
-    }
-    return d3Axis;
-  }
-
 
   setDomainAndRange(axesType, domainRange, data, type, length) {
     const dataIndex = axesType === 'x' ? 'key' : 'value';
@@ -98,27 +63,18 @@ export default class BarChart extends React.Component {
         d3Axis.range(axesType === 'x' ? [0, length] : [length, 0]);
         break;
       case 'time':
+        d3Axis = time.scale();
         d3Axis.domain(domainRange ?
-          this.calcDefaultDomain(domainRange, type)
+          this.calcDefaultDomain(domainRange, axesType)
           :
-          this.findLargestExtent(data, this.getValueFunction(scale, type)));
+          extent(data, this.getValueFunction(axesType, 'time'))
+        );
         d3Axis.range(axesType === 'x' ? [0, length] : [length, 0]);
         break;
       default:
         break;
     }
     return d3Axis;
-  }
-
-  findLargestExtent(data, value) {
-    let low;
-    let high;
-    data.map((dataElement) => {
-      const calcDomainRange = extent(dataElement, value);
-      low = low < calcDomainRange[0] ? low : calcDomainRange[0];
-      high = high > calcDomainRange[1] ? high : calcDomainRange[1];
-    });
-    return [low, high];
   }
 
   calcMargin(axes) {
@@ -157,6 +113,7 @@ export default class BarChart extends React.Component {
     let {margin} = this.props;
 
     let {width, height, yDomainRange, xDomainRange} = this.props;
+
     margin = margin ? margin : this.calcMargin(axes);
     width = width - margin.left - margin.right;
     height = height - margin.top - margin.bottom;
@@ -165,18 +122,17 @@ export default class BarChart extends React.Component {
 
     const x = this.setDomainAndRange('x', xDomainRange, data, xType, width);
 
-    const y = this.setYDomainAndRange('y', yDomainRange, data, yType, height);
+    const y = this.setDomainAndRange('y', yDomainRange, data, yType, height);
 
     const svgNode = createElement('svg');
     const selection = select(svgNode);
-
-    select(svgNode).attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom);
-    const root = select(svgNode).append('g').attr('transform', `translate(${margin.left},${margin.top})`);
-
     selection.attr({
       width: width + margin.left + margin.right,
       height: height + margin.top + margin.bottom
     });
+
+    select(svgNode).attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom);
+    const root = select(svgNode).append('g').attr('transform', `translate(${margin.left},${margin.top})`);
 
     if (axes) {
       const xAxis = svg.axis()
@@ -199,6 +155,7 @@ export default class BarChart extends React.Component {
           .scale(y)
           .orient('left')
           .ticks(10);
+
       root.append('g')
         .attr('class', 'y axis')
         .call(yAxis)
@@ -218,12 +175,26 @@ export default class BarChart extends React.Component {
           .enter().append('rect')
           .attr('class', 'bar')
           .style('fill', (d, i) => this.defineColor(i, d, colorBars))
-          .attr('x', (d) => x(d.key))
+          .attr('x', (d) => {
+            switch (xType) {
+              case ('text'):
+                return x(d.key);
+              case ('linear'):
+                return x(d.key) - 5;
+              case ('time'):
+                const parseDate = format(this.props.datePattern).parse;
+                return x(parseDate(d.key));
+              default:
+                return x(d.key);
+            }
+          })
           .attr('width', () => {
             switch (xType) {
               case ('text'):
                 return x.rangeBand();
               case ('linear'):
+                return 10;
+              case ('time'):
                 return 10;
               default:
                 return () => {};

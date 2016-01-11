@@ -185,6 +185,12 @@ data={[{key: 'A', value: 20}, {key: 'B', value: 30}, {key: 'C', value: 40},
         <p>By default the xType is text and so allows text labelling. The example below passes 'linear' as the xType and the data key is numeric.</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+<BarChart
+  axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+  axes
+  xType={'linear'}
+  data={[{key: 10, value: 20}, {key: 12, value: 20}, {key: 30, value: 30, color: '#f00'}, {key: 40, value: 40}]}
+/>
         `)}}
         />
         </pre>
@@ -195,6 +201,13 @@ data={[{key: 'A', value: 20}, {key: 'B', value: 30}, {key: 'C', value: 40},
           data={[{key: 10, value: 20}, {key: 12, value: 20}, {key: 30, value: 30, color: '#f00'}, {key: 40, value: 40}]}
         />
 
+        <p>The xType can also be a time based value. The default format for the date data is for example 1-Jan-15 but can be overridden.</p>
+        <BarChart
+          axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+          axes
+          xType={'time'}
+          data={[{key: '1-Jan-15', value: 20}, {key: '2-Jan-15', value: 10}, {key: '3-Jan-15', value: 33}]}
+        />
 
         <br/>
         <br/>
@@ -209,25 +222,5 @@ data={[{key: 'A', value: 20}, {key: 'B', value: 30}, {key: 'C', value: 40},
       );
     }
 }
-
-// <BarChart
-//   width={200}
-//   height={150}
-//   axes={false}
-//   data={this.data}
-//   margin={{top: 0, right: 0, bottom: 0, left: 0}}
-//   style={{'.bar': {fill: 'red'}}}
-// />
-// <BarChart
-//   mouseOverHandler={this.mouseOverHandler.bind(this)}
-//   mouseOutHandler={this.mouseOutHandler.bind(this)}
-//   mouseMoveHandler={this.mouseMoveHandler.bind(this)}
-//   clickHandler={this.clickHandler.bind(this)}
-//   data={this.data}
-//   style={{'.bar': {fill: 'green'}}}
-//   yDomainRange={[0, 100]}
-// />
-// {this.state.dataDisplay}
-
 
 ReactDOM.render(<BarChartContainer/>, document.getElementById('root'));
