@@ -27,6 +27,10 @@ const defaultStyle = {
   },
   'x.axis path': {
     display: 'none'
+  },
+  '.tick line': {
+    stroke: 'lightgrey',
+    opacity: '0.7'
   }
 };
 const colorScale = scale.category20();
@@ -103,7 +107,8 @@ export default class BarChart extends React.Component {
       barWidth,
       tickTimeDisplayFormat,
       xTickNumber,
-      yTickNumber} = this.props;
+      yTickNumber,
+      grid} = this.props;
     parseDate = format(this.props.datePattern).parse;
     let {margin} = this.props;
 
@@ -137,7 +142,7 @@ export default class BarChart extends React.Component {
         xAxis.tickFormat(time.format(tickTimeDisplayFormat));
       }
       if (xTickNumber) xAxis.ticks(xTickNumber);
-
+      if (grid) xAxis.tickSize(-height, 6).tickPadding(12);
       root.append('g')
         .attr('class', 'x axis')
         .attr('transform', 'translate(0,' + height + ')')
@@ -153,7 +158,7 @@ export default class BarChart extends React.Component {
           .scale(y)
           .orient('left');
       if (yTickNumber) yAxis.ticks(yTickNumber);
-
+      if (grid) yAxis.tickSize(-width, 6).tickPadding(12);
       root.append('g')
         .attr('class', 'y axis')
         .call(yAxis)
@@ -220,6 +225,7 @@ BarChart.propTypes = {
   style: React.PropTypes.object,
   colorBars: React.PropTypes.bool,
   axes: React.PropTypes.bool,
+  grid: React.PropTypes.bool,
   axisLabels: React.PropTypes.object,
   xType: React.PropTypes.string,
   yType: React.PropTypes.string,

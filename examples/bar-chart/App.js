@@ -334,6 +334,39 @@ data={[{x: 'A', y: 20}, {x: 'B', y: 30}, {x: 'C', y: 40},
           data={[{x: '10-Jan-15', y: 20}, {x: '12-Jan-15', y: 10}, {x: '15-Jan-15', y: 33}]}
         />
 
+        <h3>Grid</h3>
+        <p>A grid can be added to the graph by just passing in a boolean.</p>
+        <pre>
+        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+<BarChart
+  axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+  axes
+  grid
+  colorBars
+  barWidth={20}
+  xTickNumber={5}
+  yTickNumber={3}
+  xType={'time'}
+  xDomainRange={['1-Jan-15', '20-Jan-15']}
+  data={[{x: '10-Jan-15', y: 20}, {x: '12-Jan-15', y: 10}, {x: '15-Jan-15', y: 33}]}
+/>
+        `)}}
+        />
+        </pre>
+<BarChart
+  axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+  axes
+  grid
+  colorBars
+  barWidth={20}
+  xTickNumber={5}
+  yTickNumber={3}
+  xType={'time'}
+  xDomainRange={['1-Jan-15', '20-Jan-15']}
+  data={[{x: '10-Jan-15', y: 20}, {x: '12-Jan-15', y: 10}, {x: '15-Jan-15', y: 33}]}
+/>
+
+
         <h3>mouseOverHandler, mouseOverHandler, mouseMoveHandler</h3>
         <p>The chart will send out a mouseOver event, mouseMove and mouseOut event. This can be used by your react application in anyway you would require.
          The event handlers provides the mouse event and the bar data. The mouse event can for instance provide the x and y coordinates which can be used for a tool tip.
