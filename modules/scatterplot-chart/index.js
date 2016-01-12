@@ -241,7 +241,6 @@ export default class ScatterplotChart extends React.Component {
 
     return (
       <div className={`scatterplot_chart${uid}`}>
-        <h1>Scatterplot Chart</h1>
         <Style scopeSelector={`.scatterplot_chart${uid}`} rules={merge({}, defaultStyle, style)}/>
         {node.toReact()}
       </div>
