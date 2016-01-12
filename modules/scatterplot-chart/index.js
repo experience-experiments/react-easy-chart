@@ -252,7 +252,7 @@ export default class ScatterplotChart extends React.Component {
 ScatterplotChart.propTypes = {
   axes: React.PropTypes.bool,
   axisLabels: React.PropTypes.object,
-  config: React.PropTypes.array.isRequired,
+  config: React.PropTypes.array,
   data: React.PropTypes.array.isRequired,
   datePattern: React.PropTypes.string,
   dotRadius: React.PropTypes.number,
@@ -272,6 +272,7 @@ ScatterplotChart.propTypes = {
 ScatterplotChart.defaultProps = {
   axes: false,
   clickHandler: () => {},
+  config: [],
   datePattern: '%d-%b-%y',
   dotRadius: 5,
   axisLabels: {},

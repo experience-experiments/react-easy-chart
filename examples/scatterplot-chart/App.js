@@ -86,6 +86,7 @@ const data = [
   }
 ];
 
+/*
 const config = [
   {
     type: 1,
@@ -106,21 +107,23 @@ const config = [
     type: 4,
     color: '#ffff00'
   }
-];
+];*/
 
+/*
+Options:
+axes
+axisLabels={{x: 'Sepal Width (cm)', y: 'Sepal Length (cm)'}}
+config={config}
+width={n}
+height={n}
+*/
 
 export default class ScatterplotContainer extends React.Component {
   render() {
     return (
       <div>
         <ScatterplotChart
-          axes
           data={data}
-          config={config}
-          useLegend
-          axisLabels={{x: 'Sepal Width (cm)', y: 'Sepal Length (cm)'}}
-          width={640}
-          height={360}
         />
       </div>
     );
