@@ -21,10 +21,10 @@ class LineChartContainer extends React.Component {
       const data = [];
       const keys = [];
 
-      let date = moment('2015 1 1', 'YYYY MM DD');
+      let date = moment('2015-1-1 00:00', 'YYYY-MM-DD HH:mm');
       for (let i = 1; i <= 12; i++) {
-        keys.push(date.format('D-MMM-YY'));
-        date = date.add(1, 'day');
+        keys.push(date.format('D-MMM-YY HH:mm'));
+        date = date.add(1, 'hour');
       }
       keys.map((key) => {
         data.push({key: key, value: this.getRandomArbitrary(0, 100)});
@@ -42,7 +42,7 @@ class LineChartContainer extends React.Component {
     }
 
     updateData() {
-      const parseDate = format('%d-%b-%y').parse;
+      const parseDate = format('%d-%b-%y %H:%M').parse;
       this.data.map((data) => {
         data.shift();
         let value = this.getRandomArbitrary(
@@ -50,8 +50,8 @@ class LineChartContainer extends React.Component {
            data[data.length - 1].value + 20);
         if (value < 0 || value > 100) value = data[data.length - 1].value;
         const date = moment(parseDate(data[data.length - 1].key));
-        date.add(1, 'days');
-        data.push({key: date.format('D-MMM-YY'), value: value});
+        date.add(1, 'hour');
+        data.push({key: date.format('D-MMM-YY HH:mm'), value: value});
       });
 
       this.forceUpdate();
@@ -454,7 +454,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
         <br/><br/>
         <LineChart
           data={this.data}
-          datePattern={'%d-%b-%y'}
+          datePattern={'%d-%b-%y %H:%M'}
           xType={'time'}
           width={800}
           height={400}
