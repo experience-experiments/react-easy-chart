@@ -1,6 +1,5 @@
 import React from 'react';
 import {createElement} from 'react-faux-dom';
-import {line} from 'd3-shape';
 import {linear, ordinal} from 'd3-scale';
 import {extent} from 'd3-array';
 import {select, svg, time} from 'd3';
@@ -119,7 +118,7 @@ export default class LineChart extends React.Component {
   }
 
   render() {
-    const {data, xType, yType, style, axes, axisLabels, xDomainRange, xTicks, yTicks} = this.props;
+    const {data, xType, yType, style, axes, axisLabels, xDomainRange, xTicks, yTicks, interpolate} = this.props;
     let {margin, yDomainRange} = this.props;
     let {width, height} = this.props;
     margin = margin ? margin : this.calcMargin(axes);
@@ -133,7 +132,7 @@ export default class LineChart extends React.Component {
     const x = this.setDomainAndRange('x', xDomainRange, data, xType, width);
     const y = this.setDomainAndRange('y', yDomainRange, data, yType, height);
 
-    const linePath = line().x((d) => x(xValue(d))).y((d) => y(yValue(d)));
+    const linePath = svg.line().interpolate(interpolate).x((d) => x(xValue(d))).y((d) => y(yValue(d)));
 
     const svgNode = createElement('svg');
     select(svgNode).attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom);
@@ -192,6 +191,7 @@ LineChart.propTypes = {
   xType: React.PropTypes.string,
   yType: React.PropTypes.string,
   datePattern: React.PropTypes.string,
+  interpolate: React.PropTypes.string,
   style: React.PropTypes.object,
   margin: React.PropTypes.object,
   axes: React.PropTypes.bool,
@@ -206,6 +206,7 @@ LineChart.defaultProps = {
   width: 200,
   height: 150,
   datePattern: '%d-%b-%y',
+  interpolate: 'linear',
   axes: false,
   xType: 'linear',
   yType: 'linear',

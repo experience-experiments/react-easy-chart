@@ -21,10 +21,10 @@ class LineChartContainer extends React.Component {
       const data = [];
       const keys = [];
 
-      let date = moment('2015-1-1 00:00');
+      let date = moment('2015 1 1', 'YYYY MM DD');
       for (let i = 1; i <= 12; i++) {
         keys.push(date.format('D-MMM-YY'));
-        date = date.add('day', 1);
+        date = date.add(1, 'day');
       }
       keys.map((key) => {
         data.push({key: key, value: this.getRandomArbitrary(0, 100)});
@@ -33,7 +33,7 @@ class LineChartContainer extends React.Component {
     }
 
     turnOnRandomData() {
-      this.setState({randomDataIntervalId: setInterval(this.updateData.bind(this), 400)});
+      this.setState({randomDataIntervalId: setInterval(this.updateData.bind(this), 200)});
     }
 
     turnOffRandomData() {
@@ -45,9 +45,13 @@ class LineChartContainer extends React.Component {
       const parseDate = format('%d-%b-%y').parse;
       this.data.map((data) => {
         data.shift();
+        let value = this.getRandomArbitrary(
+          data[data.length - 1].value - 20,
+           data[data.length - 1].value + 20);
+        if (value < 0 || value > 100) value = data[data.length - 1].value;
         const date = moment(parseDate(data[data.length - 1].key));
-        date.add('days', 1);
-        data.push({key: date.format('D-MMM-YY'), value: this.getRandomArbitrary(0, 100)});
+        date.add(1, 'days');
+        data.push({key: date.format('D-MMM-YY'), value: value});
       });
 
       this.forceUpdate();
@@ -163,6 +167,31 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
           data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1, value: 10}, {key: 2, value: 12}, {key: 3, value: 4}]]}
         />
 
+        <h3>Interpolate (Making the lines smooth)</h3>
+        <p>The Lines drawn can be set to be interpolated by passing in an interpolated param. By default this is set to linear.
+        We can though override this for instance to make a cardinal line. The options that can be chosen can be found <a href="https://github.com/mbostock/d3/wiki/SVG-Shapes">here</a> under the interpolate section.</p>
+        <pre>
+        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+<LineChart
+  axes
+  margin={{top: 10, right: 10, bottom: 50, left: 50}}
+  axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+  width={250}
+  interpolate={'cardinal'}
+  height={250}
+  data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1, value: 10}, {key: 2, value: 12}, {key: 3, value: 4}]]}/>
+        `)}}
+        />
+        </pre>
+        <LineChart
+          interpolate={'cardinal'}
+          axes
+          margin={{top: 10, right: 10, bottom: 50, left: 50}}
+          axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+          width={350}
+          height={250}
+          data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1, value: 10}, {key: 2, value: 12}, {key: 3, value: 4}]]}
+        />
 
         <h3>xType / yType</h3>
         <p>The data passed associated to the particular axes can be in numeric, date (the default
@@ -176,6 +205,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
   axes
   width={350}
   height={250}
+  interpolate={'cardinal'}
   data={[
     [{key: 'Mon', value: 20}, {key: 'Tue', value: 10}, {key: 'Wed', value: 33}, {key: 'Thu', value: 45}, {key: 'Fri', value: 15}],
     [{key: 'Mon', value: 10}, {key: 'Tue', value: 15}, {key: 'Wed', value: 13}, {key: 'Thu', value: 15}, {key: 'Fri', value: 10}]
@@ -187,6 +217,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
         <LineChart
           xType={'text'}
           axes
+          interpolate={'cardinal'}
           width={350}
           height={250}
           data={[
@@ -200,6 +231,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
 <LineChart
   xType={'time'}
   axes
+  interpolate={'cardinal'}
   width={750}
   height={250}
   data={[
@@ -213,6 +245,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
         <LineChart
           xType={'time'}
           axes
+          interpolate={'cardinal'}
           width={750}
           height={250}
           data={[
@@ -230,6 +263,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
   axes
   margin={{top: 0, right: 0, bottom: 100, left: 100}}
   yDomainRange={['Allot', 'Middle', 'Less']}
+  interpolate={'cardinal'}
   width={350}
   height={250}
   data={[
@@ -244,6 +278,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
           xType={'text'}
           axisLabels={{x: 'Day', y: 'How much did I eat'}}
           axes
+          interpolate={'cardinal'}
           margin={{top: 10, right: 30, bottom: 50, left: 70}}
           width={350}
           height={250}
@@ -274,6 +309,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
           axisLabels={{x: 'Total Revenue', y: 'January'}}
           margin={{top: 10, right: 30, bottom: 50, left: 70}}
           yType={'time'}
+          interpolate={'cardinal'}
           axes
           width={500}
           height={500}
@@ -297,6 +333,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
   margin={{top: 0, right: 0, bottom: 100, left: 100}}
   width={250}
   height={250}
+  interpolate={'cardinal'}
   data={[
     [{key: 10, value: 25}, {key: 20, value: 10}, {key: 30, value: 25}, {key: 40, value: 10}, {key: 50, value: 12}, {key: 60, value: 4}],
     [{key: 10, value: 40}, {key: 20, value: 30}, {key: 30, value: 25}, {key: 40, value: 60}, {key: 50, value: 22}, {key: 60, value: 9}]
@@ -311,6 +348,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
           yDomainRange={[0, 100]}
           width={500}
           height={250}
+          interpolate={'cardinal'}
           data={[
             [{key: 10, value: 25}, {key: 20, value: 10}, {key: 30, value: 25}, {key: 40, value: 10}, {key: 50, value: 12}, {key: 60, value: 25}],
             [{key: 10, value: 40}, {key: 20, value: 30}, {key: 30, value: 25}, {key: 40, value: 60}, {key: 50, value: 22}, {key: 60, value: 9}]
@@ -329,6 +367,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
   yDomainRange={[0, 100]}
   width={500}
   height={250}
+  interpolate={'cardinal'}
   data={[
     [{key: 10, value: 25}, {key: 20, value: 10}, {key: 30, value: 25}, {key: 40, value: 10}, {key: 50, value: 12}, {key: 60, value: 25}],
     [{key: 10, value: 40}, {key: 20, value: 30}, {key: 30, value: 25}, {key: 40, value: 60}, {key: 50, value: 22}, {key: 60, value: 9}]
@@ -345,6 +384,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
           yDomainRange={[0, 100]}
           width={500}
           height={250}
+          interpolate={'cardinal'}
           data={[
             [{key: 10, value: 25}, {key: 20, value: 10}, {key: 30, value: 25}, {key: 40, value: 10}, {key: 50, value: 12}, {key: 60, value: 25}],
             [{key: 10, value: 40}, {key: 20, value: 30}, {key: 30, value: 25}, {key: 40, value: 60}, {key: 50, value: 22}, {key: 60, value: 9}]
@@ -371,6 +411,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
   margin={{top: 0, right: 0, bottom: 100, left: 100}}
   width={250}
   height={250}
+  interpolate={'cardinal'}
   data={[
     [{key: 10, value: 25}, {key: 20, value: 10}, {key: 30, value: 25}, {key: 40, value: 10}, {key: 50, value: 12}, {key: 60, value: 4}],
     [{key: 10, value: 40}, {key: 20, value: 30}, {key: 30, value: 25}, {key: 40, value: 60}, {key: 50, value: 22}, {key: 60, value: 9}]
@@ -393,6 +434,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
           }}
           width={500}
           height={250}
+          interpolate={'cardinal'}
           data={[
             [{key: 10, value: 25}, {key: 20, value: 10}, {key: 30, value: 25}, {key: 40, value: 10}, {key: 50, value: 12}, {key: 60, value: 25}],
             [{key: 10, value: 40}, {key: 20, value: 30}, {key: 30, value: 25}, {key: 40, value: 60}, {key: 50, value: 22}, {key: 60, value: 9}]
@@ -416,6 +458,8 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
           xType={'time'}
           width={800}
           height={400}
+          interpolate={'cardinal'}
+          yDomainRange={[0, 100]}
           axes
           style={{'.line':
           {
