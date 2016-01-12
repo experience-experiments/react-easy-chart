@@ -17,9 +17,9 @@ export default class BarChartContainer extends React.Component {
 
     generateData() {
       const data = [];
-      const keys = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M'];
-      keys.map((key) => {
-        data.push({key: key, value: this.getRandomArbitrary(1, 100)});
+      const xs = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M'];
+      xs.map((x) => {
+        data.push({x: x, y: this.getRandomArbitrary(1, 100)});
       });
       return data;
     }
@@ -34,7 +34,7 @@ export default class BarChartContainer extends React.Component {
     }
 
     generateDataSingle() {
-      this.data[0].value = this.getRandomArbitrary(0.08, 0);
+      this.data[0].y = this.getRandomArbitrary(0.08, 0);
       return this.data;
     }
 
@@ -48,8 +48,8 @@ export default class BarChartContainer extends React.Component {
         showToolTip: true,
         top: `${e.screenY - 10}px`,
         left: `${e.screenX + 10}px`,
-        value: d.value,
-        key: d.key});
+        y: d.y,
+        x: d.x});
     }
 
     mouseMoveHandler(e) {
@@ -63,7 +63,7 @@ export default class BarChartContainer extends React.Component {
     }
 
     clickHandler(d) {
-      this.setState({dataDisplay: `The amount selected is ${d.value}`});
+      this.setState({dataDisplay: `The amount selected is ${d.y}`});
     }
 
     render() {
@@ -75,26 +75,26 @@ export default class BarChartContainer extends React.Component {
          <pre>
          <code dangerouslySetInnerHTML={{__html: escapeHTML(`
  <BarChart
-   data={[{key: 'A', value: 20}, {key: 'B', value: 30}, {key: 'C', value: 40},
-    {key: 'D', value: 20}, {key: 'E', value: 40}, {key: 'F', value: 25}, {key: 'G', value: 5}]}
+   data={[{x: 'A', y: 20}, {x: 'B', y: 30}, {x: 'C', y: 40},
+    {x: 'D', y: 20}, {x: 'E', y: 40}, {x: 'F', y: 25}, {x: 'G', y: 5}]}
  />
          `)}}
          />
          </pre>
 
         <BarChart
-          data={[{key: 'A', value: 20}, {key: 'B', value: 30}, {key: 'C', value: 40}, {key: 'D', value: 20}, {key: 'E', value: 40}, {key: 'F', value: 25}, {key: 'G', value: 5}]}
+          data={[{x: 'A', y: 20}, {x: 'B', y: 30}, {x: 'C', y: 40}, {x: 'D', y: 20}, {x: 'E', y: 40}, {x: 'F', y: 25}, {x: 'G', y: 5}]}
         />
 
         <h3>Height and Width</h3>
-        <p>The height and width can be easily set by passing in a numeric value in as a prop.</p>
+        <p>The height and width can be easily set by passing in a numeric y in as a prop.</p>
          <pre>
          <code dangerouslySetInnerHTML={{__html: escapeHTML(`
  <BarChart
    height={150}
    width={150}
-   data={[{key: 'A', value: 20}, {key: 'B', value: 30}, {key: 'C', value: 40},
-    {key: 'D', value: 20}, {key: 'E', value: 40}, {key: 'F', value: 25}, {key: 'G', value: 5}]}
+   data={[{x: 'A', y: 20}, {x: 'B', y: 30}, {x: 'C', y: 40},
+    {x: 'D', y: 20}, {x: 'E', y: 40}, {x: 'F', y: 25}, {x: 'G', y: 5}]}
  />
          `)}}
          />
@@ -103,17 +103,17 @@ export default class BarChartContainer extends React.Component {
         <BarChart
           height={150}
           width={150}
-          data={[{key: 'A', value: 20}, {key: 'B', value: 30}, {key: 'C', value: 40}, {key: 'D', value: 20}, {key: 'E', value: 40}, {key: 'F', value: 25}, {key: 'G', value: 5}]}
+          data={[{x: 'A', y: 20}, {x: 'B', y: 30}, {x: 'C', y: 40}, {x: 'D', y: 20}, {x: 'E', y: 40}, {x: 'F', y: 25}, {x: 'G', y: 5}]}
         />
 
         <h3>ColorBars</h3>
-        <p>The bars can be automatically colored by turning on the color boolean.</p>
+        <p>The bars can be automatically colored by turning on the colorBars boolean.</p>
          <pre>
          <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 <BarChart
  colorBars
- data={[{key: 'A', value: 20}, {key: 'B', value: 30}, {key: 'C', value: 40},
-  {key: 'D', value: 20}, {key: 'E', value: 40}, {key: 'F', value: 25}, {key: 'G', value: 5}]}
+ data={[{x: 'A', y: 20}, {x: 'B', y: 30}, {x: 'C', y: 40},
+  {x: 'D', y: 20}, {x: 'E', y: 40}, {x: 'F', y: 25}, {x: 'G', y: 5}]}
 />
          `)}}
          />
@@ -121,7 +121,7 @@ export default class BarChartContainer extends React.Component {
 
         <BarChart
           colorBars
-          data={[{key: 'A', value: 20}, {key: 'B', value: 30}, {key: 'C', value: 40}, {key: 'D', value: 20}, {key: 'E', value: 40}, {key: 'F', value: 25}, {key: 'G', value: 5}]}
+          data={[{x: 'A', y: 20}, {x: 'B', y: 30}, {x: 'C', y: 40}, {x: 'D', y: 20}, {x: 'E', y: 40}, {x: 'F', y: 25}, {x: 'G', y: 5}]}
         />
 
 
@@ -130,15 +130,15 @@ export default class BarChartContainer extends React.Component {
          <pre>
          <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 <BarChart
-data={[{key: 'A', value: 20}, {key: 'B', value: 30}, {key: 'C', value: 40},
- {key: 'D', value: 20}, {key: 'E', value: 40}, {key: 'F', value: 25}, {key: 'G', value: 5, color: 'orange'}]}
+data={[{x: 'A', y: 20}, {x: 'B', y: 30}, {x: 'C', y: 40},
+ {x: 'D', y: 20}, {x: 'E', y: 40}, {x: 'F', y: 25}, {x: 'G', y: 5, color: 'orange'}]}
 />
          `)}}
          />
          </pre>
 
         <BarChart
-          data={[{key: 'A', value: 20}, {key: 'B', value: 30, color: '#f00'}, {key: 'C', value: 40}, {key: 'D', value: 20}, {key: 'E', value: 40}, {key: 'F', value: 25}, {key: 'G', value: 5, color: 'orange'}]}
+          data={[{x: 'A', y: 20}, {x: 'B', y: 30, color: '#f00'}, {x: 'C', y: 40}, {x: 'D', y: 20}, {x: 'E', y: 40}, {x: 'F', y: 25}, {x: 'G', y: 5, color: 'orange'}]}
         />
 
         <h3>Axes</h3>
@@ -147,27 +147,27 @@ data={[{key: 'A', value: 20}, {key: 'B', value: 30}, {key: 'C', value: 40},
          <code dangerouslySetInnerHTML={{__html: escapeHTML(`
  <BarChart
    axes
-   data={[{key: 'A', value: 20}, {key: 'B', value: 30, color: '#f00'}, {key: 'C', value: 40},
-    {key: 'D', value: 20}, {key: 'E', value: 40}, {key: 'F', value: 25}, {key: 'G', value: 5, color: 'orange'}]}
+   data={[{x: 'A', y: 20}, {x: 'B', y: 30, color: '#f00'}, {x: 'C', y: 40},
+    {x: 'D', y: 20}, {x: 'E', y: 40}, {x: 'F', y: 25}, {x: 'G', y: 5, color: 'orange'}]}
  />
          `)}}
          />
          </pre>
         <BarChart
           axes
-          data={[{key: 'A', value: 20}, {key: 'B', value: 30, color: '#f00'}, {key: 'C', value: 40},
-           {key: 'D', value: 20}, {key: 'E', value: 40}, {key: 'F', value: 25}, {key: 'G', value: 5, color: 'orange'}]}
+          data={[{x: 'A', y: 20}, {x: 'B', y: 30, color: '#f00'}, {x: 'C', y: 40},
+           {x: 'D', y: 20}, {x: 'E', y: 40}, {x: 'F', y: 25}, {x: 'G', y: 5, color: 'orange'}]}
         />
 
         <h3>Axes Labels</h3>
-        <p>The axes labels can be overridden by simply passing <b>axisLabels</b> object with both a x and y value.</p>
+        <p>The axes labels can be overridden by simply passing <b>axisLabels</b> object with both a x and y y.</p>
          <pre>
          <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 <BarChart
   axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
   axes
-  data={[{key: 'A', value: 20}, {key: 'B', value: 30, color: '#f00'}, {key: 'C', value: 40},
-    {key: 'D', value: 20}, {key: 'E', value: 40}, {key: 'F', value: 25}, {key: 'G', value: 5, color: 'orange'}]}
+  data={[{x: 'A', y: 20}, {x: 'B', y: 30, color: '#f00'}, {x: 'C', y: 40},
+    {x: 'D', y: 20}, {x: 'E', y: 40}, {x: 'F', y: 25}, {x: 'G', y: 5, color: 'orange'}]}
 />
          `)}}
          />
@@ -175,21 +175,21 @@ data={[{key: 'A', value: 20}, {key: 'B', value: 30}, {key: 'C', value: 40},
         <BarChart
           axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
           axes
-          data={[{key: 'A', value: 20}, {key: 'B', value: 30, color: '#f00'}, {key: 'C', value: 40},
-           {key: 'D', value: 20}, {key: 'E', value: 40}, {key: 'F', value: 25}, {key: 'G', value: 5, color: 'orange'}]}
+          data={[{x: 'A', y: 20}, {x: 'B', y: 30, color: '#f00'}, {x: 'C', y: 40},
+           {x: 'D', y: 20}, {x: 'E', y: 40}, {x: 'F', y: 25}, {x: 'G', y: 5, color: 'orange'}]}
         />
 
         <h3>xType / yType</h3>
         <p>The data passed associated to the particular axes can be in numeric, date (the default format is for example 1-Jan-15 but can be overridden) or textual formats (used for labelling).</p>
 
-        <p>By default the xType is text (or ordinal in d3) and so allows text labelling. The example below passes 'linear' as the xType and the data key is numeric.</p>
+        <p>By default the xType is text (or ordinal in d3) and so allows text labelling. The example below passes 'linear' as the xType and the data x is numeric.</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 <BarChart
   axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
   axes
   xType={'linear'}
-  data={[{key: 10, value: 20}, {key: 12, value: 20}, {key: 30, value: 30, color: '#f00'}, {key: 40, value: 40}]}
+  data={[{x: 10, y: 20}, {x: 12, y: 20}, {x: 30, y: 30, color: '#f00'}, {x: 40, y: 40}]}
 />
         `)}}
         />
@@ -198,10 +198,10 @@ data={[{key: 'A', value: 20}, {key: 'B', value: 30}, {key: 'C', value: 40},
           axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
           axes
           xType={'linear'}
-          data={[{key: 10, value: 20}, {key: 12, value: 20}, {key: 30, value: 30, color: '#f00'}, {key: 40, value: 40}]}
+          data={[{x: 10, y: 20}, {x: 12, y: 20}, {x: 30, y: 30, color: '#f00'}, {x: 40, y: 40}]}
         />
 
-        <p>The xType can also be a time based value. The default format for the date data is for example 1-Jan-15 but can be overridden.</p>
+        <p>The xType can also be a time based y. The default format for the date data is for example 1-Jan-15 but can be overridden.</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 <BarChart
@@ -209,7 +209,7 @@ data={[{key: 'A', value: 20}, {key: 'B', value: 30}, {key: 'C', value: 40},
   axes
   colorBars
   xType={'time'}
-  data={[{key: '1-Jan-15', value: 20}, {key: '2-Jan-15', value: 10}, {key: '3-Jan-15', value: 33}]}
+  data={[{x: '1-Jan-15', y: 20}, {x: '2-Jan-15', y: 10}, {x: '3-Jan-15', y: 33}]}
 />
         `)}}
         />
@@ -219,7 +219,7 @@ data={[{key: 'A', value: 20}, {key: 'B', value: 30}, {key: 'C', value: 40},
           axes
           colorBars
           xType={'time'}
-          data={[{key: '1-Jan-15', value: 20}, {key: '2-Jan-15', value: 10}, {key: '3-Jan-15', value: 33}]}
+          data={[{x: '1-Jan-15', y: 20}, {x: '2-Jan-15', y: 10}, {x: '3-Jan-15', y: 33}]}
         />
 
         <p>The bar width can also be overridden. The default 10px.</p>
@@ -231,7 +231,7 @@ data={[{key: 'A', value: 20}, {key: 'B', value: 30}, {key: 'C', value: 40},
   colorBars
   barWidth={20}
   xType={'time'}
-  data={[{key: '1-Jan-15', value: 20}, {key: '2-Jan-15', value: 10}, {key: '3-Jan-15', value: 33}]}
+  data={[{x: '1-Jan-15', y: 20}, {x: '2-Jan-15', y: 10}, {x: '3-Jan-15', y: 33}]}
 />
         `)}}
         />
@@ -242,11 +242,11 @@ data={[{key: 'A', value: 20}, {key: 'B', value: 30}, {key: 'C', value: 40},
           colorBars
           barWidth={20}
           xType={'time'}
-          data={[{key: '1-Jan-15', value: 20}, {key: '2-Jan-15', value: 10}, {key: '3-Jan-15', value: 33}]}
+          data={[{x: '1-Jan-15', y: 20}, {x: '2-Jan-15', y: 10}, {x: '3-Jan-15', y: 33}]}
         />
 
         <h3>range yDomainRange, xDomainRange</h3>
-        <p>By default the axis ranges are automatically calculated based on the smallest and the largest values.</p>
+        <p>By default the axis ranges are automatically calculated based on the smallest and the largest ys.</p>
         <p>The range can be fixed by passing an array param of 2 numbers for the particular axis.
         The first number is the bottom of the range the second is the higher point of the range.</p>
         <pre>
@@ -259,7 +259,7 @@ data={[{key: 'A', value: 20}, {key: 'B', value: 30}, {key: 'C', value: 40},
   xType={'time'}
   xDomainRange={['1-Jan-15', '20-Jan-15']}
   yDomainRange={[5, 50]}
-  data={[{key: '10-Jan-15', value: 20}, {key: '12-Jan-15', value: 10}, {key: '15-Jan-15', value: 33}]}
+  data={[{x: '10-Jan-15', y: 20}, {x: '12-Jan-15', y: 10}, {x: '15-Jan-15', y: 33}]}
 />
         `)}}
         />
@@ -272,7 +272,7 @@ data={[{key: 'A', value: 20}, {key: 'B', value: 30}, {key: 'C', value: 40},
           xType={'time'}
           xDomainRange={['1-Jan-15', '20-Jan-15']}
           yDomainRange={[5, 50]}
-          data={[{key: '10-Jan-15', value: 20}, {key: '12-Jan-15', value: 10}, {key: '15-Jan-15', value: 33}]}
+          data={[{x: '10-Jan-15', y: 20}, {x: '12-Jan-15', y: 10}, {x: '15-Jan-15', y: 33}]}
         />
 
         <h3>Tick display format</h3>
@@ -288,7 +288,7 @@ data={[{key: 'A', value: 20}, {key: 'B', value: 30}, {key: 'C', value: 40},
   xType={'time'}
   tickTimeDisplayFormat={'%a'}
   xDomainRange={['1-Jan-15', '20-Jan-15']}
-  data={[{key: '10-Jan-15', value: 20}, {key: '12-Jan-15', value: 10}, {key: '15-Jan-15', value: 33}]}
+  data={[{x: '10-Jan-15', y: 20}, {x: '12-Jan-15', y: 10}, {x: '15-Jan-15', y: 33}]}
 />
         `)}}
         />
@@ -301,8 +301,9 @@ data={[{key: 'A', value: 20}, {key: 'B', value: 30}, {key: 'C', value: 40},
           xType={'time'}
           tickTimeDisplayFormat={'%a'}
           xDomainRange={['1-Jan-15', '20-Jan-15']}
-          data={[{key: '10-Jan-15', value: 20}, {key: '12-Jan-15', value: 10}, {key: '15-Jan-15', value: 33}]}
+          data={[{x: '10-Jan-15', y: 20}, {x: '12-Jan-15', y: 10}, {x: '15-Jan-15', y: 33}]}
         />
+
         <h3>Number of ticks</h3>
         <p>The number of ticks of the x and y axis can be overridden by setting the xTickNumber or yTickNumber.</p>
         <pre>
@@ -316,7 +317,7 @@ data={[{key: 'A', value: 20}, {key: 'B', value: 30}, {key: 'C', value: 40},
   yTickNumber={3}
   xType={'time'}
   xDomainRange={['1-Jan-15', '20-Jan-15']}
-  data={[{key: '10-Jan-15', value: 20}, {key: '12-Jan-15', value: 10}, {key: '15-Jan-15', value: 33}]}
+  data={[{x: '10-Jan-15', y: 20}, {x: '12-Jan-15', y: 10}, {x: '15-Jan-15', y: 33}]}
 />
         `)}}
         />
@@ -330,17 +331,76 @@ data={[{key: 'A', value: 20}, {key: 'B', value: 30}, {key: 'C', value: 40},
           yTickNumber={3}
           xType={'time'}
           xDomainRange={['1-Jan-15', '20-Jan-15']}
-          data={[{key: '10-Jan-15', value: 20}, {key: '12-Jan-15', value: 10}, {key: '15-Jan-15', value: 33}]}
+          data={[{x: '10-Jan-15', y: 20}, {x: '12-Jan-15', y: 10}, {x: '15-Jan-15', y: 33}]}
         />
+
+        <h3>mouseOverHandler, mouseOverHandler, mouseMoveHandler</h3>
+        <p>The chart will send out a mouseOver event, mouseMove and mouseOut event. This can be used by your react application in anyway you would require.
+         The event handlers provides the mouse event and the bar data. The mouse event can for instance provide the x and y coordinates which can be used for a tool tip.
+          The data is related to the bar currently moused over.</p>
+          <pre>
+          <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+mouseOverHandler(d, e) {
+  this.setState({
+    showToolTip: true,
+    top: \`\${e.screenY - 10}px\`,
+    left: \`\${e.screenX + 10}px\`,
+    y: d.y,
+    x: d.x});
+}
+
+mouseMoveHandler(e) {
+  if (this.state.showToolTip) {
+    this.setState({top: \`\${e.y - 10}px\`, left: \`\${e.x + 10}px\`});
+  }
+}
+
+mouseOutHandler() {
+  this.setState({showToolTip: false});
+}
+
+<BarChart
+  axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+  axes
+  colorBars
+  barWidth={20}
+  xTickNumber={5}
+  yTickNumber={5}
+  xType={'time'}
+  mouseOverHandler={this.mouseOverHandler.bind(this)}
+  mouseOutHandler={this.mouseOutHandler.bind(this)}
+  mouseMoveHandler={this.mouseMoveHandler.bind(this)}
+  xDomainRange={['1-Jan-15', '20-Jan-15']}
+  yDomainRange={[0, 50]}
+  data={[{x: '10-Jan-15', y: 20}, {x: '12-Jan-15', y: 10}, {x: '15-Jan-15', y: 33}]}
+/>
+          `)}}
+          />
+          </pre>
+          <BarChart
+            axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+            axes
+            colorBars
+            barWidth={20}
+            xTickNumber={5}
+            yTickNumber={5}
+            xType={'time'}
+            mouseOverHandler={this.mouseOverHandler.bind(this)}
+            mouseOutHandler={this.mouseOutHandler.bind(this)}
+            mouseMoveHandler={this.mouseMoveHandler.bind(this)}
+            xDomainRange={['1-Jan-15', '20-Jan-15']}
+            yDomainRange={[0, 50]}
+            data={[{x: '10-Jan-15', y: 20}, {x: '12-Jan-15', y: 10}, {x: '15-Jan-15', y: 33}]}
+          />
 
         <br/>
         <br/>
         <br/>
-        {this.state.showToolTip ? <ToolTip top={this.state.top} left={this.state.left}>The value of {this.state.key} is {this.state.value}</ToolTip> : null}
+        {this.state.showToolTip ? <ToolTip top={this.state.top} left={this.state.left}>The value on the {this.state.x} is {this.state.y}</ToolTip> : null}
         {
-          this.state.randomDataIntervalId ? <input type="button" value="Stop random data" onClick={this.turnOffRandomData.bind(this)}></input>
+          this.state.randomDataIntervalId ? <input type="button" y="Stop random data" onClick={this.turnOffRandomData.bind(this)}></input>
           :
-          <input type="button" value="Start random data" onClick={this.turnOnRandomData.bind(this)}></input>
+          <input type="button" y="Start random data" onClick={this.turnOnRandomData.bind(this)}></input>
         }
         </div>
       );
