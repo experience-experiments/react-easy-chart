@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import {escapeHTML} from '../util';
 import {LineChart} from 'rc-d3';
+import moment from 'moment';
+import {format} from 'd3-time-format';
 
 class LineChartContainer extends React.Component {
     constructor(props) {
@@ -17,17 +19,21 @@ class LineChartContainer extends React.Component {
 
     generateData() {
       const data = [];
-      const keys = ['1-Jan-15', '1-Feb-15', '1-Mar-15', '1-Apr-15', '1-Jun-15', '1-Jul-15'];
+      const keys = [];
 
+      let date = moment('2015-1-1 00:00');
+      for (let i = 1; i <= 12; i++) {
+        keys.push(date.format('D-MMM-YY'));
+        date = date.add('day', 1);
+      }
       keys.map((key) => {
         data.push({key: key, value: this.getRandomArbitrary(0, 100)});
       });
-
       return data;
     }
 
     turnOnRandomData() {
-      this.setState({randomDataIntervalId: setInterval(this.updateData.bind(this), 500)});
+      this.setState({randomDataIntervalId: setInterval(this.updateData.bind(this), 400)});
     }
 
     turnOffRandomData() {
@@ -36,7 +42,14 @@ class LineChartContainer extends React.Component {
     }
 
     updateData() {
-      this.data = [this.generateData(), this.generateData(), this.generateData(), this.generateData()];
+      const parseDate = format('%d-%b-%y').parse;
+      this.data.map((data) => {
+        data.shift();
+        const date = moment(parseDate(data[data.length - 1].key));
+        date.add('days', 1);
+        data.push({key: date.format('D-MMM-YY'), value: this.getRandomArbitrary(0, 100)});
+      });
+
       this.forceUpdate();
     }
 
@@ -403,8 +416,6 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
           xType={'time'}
           width={800}
           height={400}
-          yDomainRange={[0, 100]}
-          xDomainRange={['1-Jan-15', '1-Aug-15']}
           axes
           style={{'.line':
           {

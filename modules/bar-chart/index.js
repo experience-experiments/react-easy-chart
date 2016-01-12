@@ -30,21 +30,12 @@ const defaultStyle = {
   }
 };
 const colorScale = scale.category20();
+let parseDate = null;
+
 export default class BarChart extends React.Component {
 
-  getValueFunction(axesType, type) {
-    const dataIndex = axesType === 'x' ? 'key' : 'value';
-    switch (type) {
-      case 'time':
-        const parseDate = format(this.props.datePattern).parse;
-        return (d) => parseDate(d[dataIndex]);
-      default:
-        return (d) => d[dataIndex];
-    }
-  }
-
   setDomainAndRange(axesType, domainRange, data, type, length) {
-    const dataIndex = axesType === 'x' ? 'key' : 'value';
+    const dataIndex = axesType === 'x' ? 'x' : 'y';
     const barPadding = (length / data.length) > 40 ? 0.02 : 0.04;
     let d3Axis;
     switch (type) {
@@ -67,7 +58,7 @@ export default class BarChart extends React.Component {
         d3Axis.domain(domainRange ?
           this.calcDefaultDomain(domainRange, axesType)
           :
-          extent(data, this.getValueFunction(axesType, 'time'))
+          extent(data, (d) => parseDate(d[dataIndex]))
         );
         d3Axis.range(axesType === 'x' ? [0, length] : [length, 0]);
         break;
@@ -84,7 +75,6 @@ export default class BarChart extends React.Component {
   calcDefaultDomain(domainRange, type) {
     switch (type) {
       case 'time':
-        const parseDate = format(this.props.datePattern).parse;
         return [parseDate(domainRange[0]), parseDate(domainRange[1])];
       default:
         return domainRange;
@@ -109,7 +99,12 @@ export default class BarChart extends React.Component {
       axisLabels,
       colorBars,
       xType,
-      yType} = this.props;
+      yType,
+      barWidth,
+      tickTimeDisplayFormat,
+      xTickNumber,
+      yTickNumber} = this.props;
+    parseDate = format(this.props.datePattern).parse;
     let {margin} = this.props;
 
     let {width, height, yDomainRange, xDomainRange} = this.props;
@@ -137,8 +132,11 @@ export default class BarChart extends React.Component {
     if (axes) {
       const xAxis = svg.axis()
           .scale(x)
-          .ticks(10)
           .orient('bottom');
+      if (xType === 'time' && tickTimeDisplayFormat) {
+        xAxis.tickFormat(time.format(tickTimeDisplayFormat));
+      }
+      if (xTickNumber) xAxis.ticks(xTickNumber);
 
       root.append('g')
         .attr('class', 'x axis')
@@ -153,8 +151,8 @@ export default class BarChart extends React.Component {
 
       const yAxis = svg.axis()
           .scale(y)
-          .orient('left')
-          .ticks(10);
+          .orient('left');
+      if (yTickNumber) yAxis.ticks(yTickNumber);
 
       root.append('g')
         .attr('class', 'y axis')
@@ -177,31 +175,22 @@ export default class BarChart extends React.Component {
           .style('fill', (d, i) => this.defineColor(i, d, colorBars))
           .attr('x', (d) => {
             switch (xType) {
-              case ('text'):
-                return x(d.key);
-              case ('linear'):
-                return x(d.key) - 5;
               case ('time'):
-                const parseDate = format(this.props.datePattern).parse;
-                return x(parseDate(d.key));
+                return x(parseDate(d.x));
               default:
-                return x(d.key);
+                return x(d.x);
             }
           })
           .attr('width', () => {
             switch (xType) {
               case ('text'):
                 return x.rangeBand();
-              case ('linear'):
-                return 10;
-              case ('time'):
-                return 10;
               default:
-                return () => {};
+                return barWidth;
             }
           })
-          .attr('y', (d) => y(d.value))
-          .attr('height', (d) => height - y(d.value))
+          .attr('y', (d) => y(d.y))
+          .attr('height', (d) => height - y(d.y))
           .on('mouseover', (d) => mouseOverHandler(d, d3LastEvent))
           .on('mouseout', (d) => mouseOutHandler(d, d3LastEvent))
           .on('mousemove', () => mouseMoveHandler(d3LastEvent))
@@ -236,12 +225,17 @@ BarChart.propTypes = {
   yType: React.PropTypes.string,
   xDomainRange: React.PropTypes.array,
   yDomainRange: React.PropTypes.array,
-  datePattern: React.PropTypes.string
+  datePattern: React.PropTypes.string,
+  tickTimeDisplayFormat: React.PropTypes.string,
+  barWidth: React.PropTypes.number,
+  xTickNumber: React.PropTypes.number,
+  yTickNumber: React.PropTypes.number
 };
 
 BarChart.defaultProps = {
   width: 400,
   height: 200,
+  barWidth: 10,
   xType: 'text',
   yType: 'linear',
   mouseOverHandler: () => {},
