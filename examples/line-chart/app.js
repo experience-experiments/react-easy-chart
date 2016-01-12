@@ -319,6 +319,40 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
           ]}
         />
 
+        <h3>Grid</h3>
+        <p>A grid can be added to the graph by just passing in a boolean.</p>
+        <pre>
+        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+<LineChart
+  axisLabels={{x: 'Total Revenue', y: 'January'}}
+  margin={{top: 10, right: 30, bottom: 50, left: 70}}
+  yType={'time'}
+  axes
+  grid
+  width={500}
+  height={500}
+  data={[
+    [{key: 10, value: '1-Jan-15'}, {key: 20, value: '10-Jan-15'}, {key: 40, value: '21-Jan-15'}, {key: 80, value: '31-Jan-15'}],
+    [{key: 0, value: '1-Jan-15'}, {key: 15, value: '10-Jan-15'}, {key: 20, value: '21-Jan-15'}, {key: 25, value: '31-Jan-15'}]
+  ]}
+/>
+        `)}}
+        />
+        </pre>
+        <LineChart
+          axisLabels={{x: 'Total Revenue', y: 'January'}}
+          margin={{top: 10, right: 30, bottom: 50, left: 70}}
+          yType={'time'}
+          interpolate={'cardinal'}
+          axes
+          grid
+          width={500}
+          height={500}
+          data={[
+            [{key: 10, value: '1-Jan-15'}, {key: 20, value: '10-Jan-15'}, {key: 40, value: '21-Jan-15'}, {key: 80, value: '31-Jan-15'}],
+            [{key: 0, value: '1-Jan-15'}, {key: 15, value: '10-Jan-15'}, {key: 20, value: '21-Jan-15'}, {key: 25, value: '31-Jan-15'}]
+          ]}
+        />
 
         <h3>range yDomainRange, xDomainRange</h3>
         <p>By default the axis ranges are automatically calculated based on the smallest and the largest values.</p>
@@ -445,13 +479,32 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
         <p>By selecting the button below to start the random data you can see a simulation of the performance if a data feed is passed in.
         React provides the functionality to only update the elements of the dom when required so should just change the line attributes.
         The data is passed in as a react param only and as soon as that data changes the chart will reflect that change automatically.</p>
-        <br/>
+        <pre>
+        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+<LineChart
+  data={this.data} // this is generated randomly and updated randomly within a range of -20 to + 20
+  datePattern={'%d-%b-%y %H:%M'}
+  xType={'time'}
+  width={800}
+  height={400}
+  axisLabels={{x: 'Hour', y: 'Value'}}
+  interpolate={'cardinal'}
+  yDomainRange={[0, 100]}
+  axes
+  grid
+  style={{'.line0':
+  {
+    stroke: 'green'
+  }}}
+/>
+        `)}}
+        />
+        </pre>
         {
           this.state.randomDataIntervalId ? <input type="button" value="Stop random data" onClick={this.turnOffRandomData.bind(this)}></input>
           :
           <input type="button" value="Start random data" onClick={this.turnOnRandomData.bind(this)}></input>
         }
-        <br/><br/>
         <LineChart
           data={this.data}
           datePattern={'%d-%b-%y %H:%M'}
@@ -460,8 +513,10 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
           height={400}
           interpolate={'cardinal'}
           yDomainRange={[0, 100]}
+          axisLabels={{x: 'Hour', y: 'Value'}}
           axes
-          style={{'.line':
+          grid
+          style={{'.line0':
           {
             stroke: 'green'
           }}}

@@ -37,6 +37,10 @@ const defaultStyle = {
   },
   'x.axis path': {
     display: 'none'
+  },
+  '.tick line': {
+    stroke: 'lightgrey',
+    opacity: '0.7'
   }
 };
 
@@ -118,7 +122,7 @@ export default class LineChart extends React.Component {
   }
 
   render() {
-    const {data, xType, yType, style, axes, axisLabels, xDomainRange, xTicks, yTicks, interpolate} = this.props;
+    const {data, xType, yType, style, axes, axisLabels, xDomainRange, xTicks, yTicks, interpolate, grid} = this.props;
     let {margin, yDomainRange} = this.props;
     let {width, height} = this.props;
     margin = margin ? margin : this.calcMargin(axes);
@@ -140,6 +144,7 @@ export default class LineChart extends React.Component {
 
     if (axes) {
       const xAxis = svg.axis().scale(x).orient('bottom');
+      if (grid) xAxis.tickSize(-height, 6).tickPadding(12);
       if (xTicks) xAxis.ticks(xTicks);
       root.append('g')
         .attr('class', 'x axis')
@@ -147,12 +152,13 @@ export default class LineChart extends React.Component {
         .call(xAxis)
         .append('text')
         .attr('class', 'label')
-        .attr('y', margin.bottom - 4)
+        .attr('y', margin.bottom - 1)
         .attr('x', (width))
         .style('text-anchor', 'end')
         .text(axisLabels.x);
 
       const yAxis = svg.axis().scale(y).orient('left');
+      if (grid) yAxis.tickSize(-width, 6).tickPadding(12);
       if (yTicks) yAxis.ticks(yTicks);
       root.append('g')
         .attr('class', 'y axis')
@@ -195,6 +201,7 @@ LineChart.propTypes = {
   style: React.PropTypes.object,
   margin: React.PropTypes.object,
   axes: React.PropTypes.bool,
+  grid: React.PropTypes.bool,
   xDomainRange: React.PropTypes.array,
   yDomainRange: React.PropTypes.array,
   axisLabels: React.PropTypes.object,
