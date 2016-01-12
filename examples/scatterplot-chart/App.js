@@ -4,117 +4,124 @@ import ScatterplotChart from 'rc-d3/scatterplot-chart';
 
 const data = [
   {
-    species: 'setosa',
-    sepalLength: 5.1,
-    sepalWidth: 3.5,
-    petalLength: 1.4,
-    petalWidth: 0.2
+    type: 1,
+    y: 5.1,
+    x: 3.5,
+    color: '#cccccc'
   },
   {
-    species: 'setosa',
-    sepalLength: 4.9,
-    sepalWidth: 3.0,
-    petalLength: 1.4,
-    petalWidth: 0.2
+    type: 1,
+    y: 4.9,
+    x: 3.0
   },
   {
-    species: 'setosa',
-    sepalLength: 4.7,
-    sepalWidth: 3.2,
-    petalLength: 1.3,
-    petalWidth: 0.2
+    type: 1,
+    y: 4.7,
+    x: 3.2
   },
   {
-    species: 'setosa',
-    sepalLength: 4.6,
-    sepalWidth: 3.1,
-    petalLength: 1.5,
-    petalWidth: 0.2
+    type: 1,
+    y: 4.6,
+    x: 3.1
   },
   {
-    species: 'setosa',
-    sepalLength: 5.0,
-    sepalWidth: 3.6,
-    petalLength: 1.4,
-    petalWidth: 0.2
+    type: 1,
+    y: 5.0,
+    x: 3.6
   },
   {
-    species: 'versicolor',
-    sepalLength: 7.0,
-    sepalWidth: 3.2,
-    petalLength: 4.7,
-    petalWidth: 1.4
+    type: 2,
+    y: 7.0,
+    x: 3.2
   },
   {
-    species: 'versicolor',
-    sepalLength: 6.4,
-    sepalWidth: 3.2,
-    petalLength: 4.5,
-    petalWidth: 1.5
+    type: 2,
+    y: 6.4,
+    x: 3.2
   },
   {
-    species: 'versicolor',
-    sepalLength: 6.9,
-    sepalWidth: 3.1,
-    petalLength: 4.9,
-    petalWidth: 1.5
+    type: 2,
+    y: 6.9,
+    x: 3.1
   },
   {
-    species: 'versicolor',
-    sepalLength: 5.5,
-    sepalWidth: 2.3,
-    petalLength: 4.0,
-    petalWidth: 1.3
+    type: 2,
+    y: 5.5,
+    x: 2.3
   },
   {
-    species: 'versicolor',
-    sepalLength: 6.5,
-    sepalWidth: 2.8,
-    petalLength: 4.6,
-    petalWidth: 1.5
+    type: 2,
+    y: 6.5,
+    x: 2.8
   },
   {
-    species: 'virginica',
-    sepalLength: 6.3,
-    sepalWidth: 3.3,
-    petalLength: 6.0,
-    petalWidth: 2.5
+    type: 3,
+    y: 6.3,
+    x: 3.0
   },
   {
-    species: 'virginica',
-    sepalLength: 5.8,
-    sepalWidth: 2.7,
-    petalLength: 5.1,
-    petalWidth: 1.9
+    type: 3,
+    y: 5.8,
+    x: 2.7
   },
   {
-    species: 'virginica',
-    sepalLength: 7.1,
-    sepalWidth: 3.0,
-    petalLength: 5.9,
-    petalWidth: 2.1
+    type: 3,
+    y: 7.1,
+    x: 3.0
   },
   {
-    species: 'virginica',
-    sepalLength: 6.3,
-    sepalWidth: 2.9,
-    petalLength: 5.6,
-    petalWidth: 1.8
+    type: 3,
+    y: 6.3,
+    x: 2.9
   },
   {
-    species: 'virginica',
-    sepalLength: 6.3,
-    sepalWidth: 3.0,
-    petalLength: 5.8,
-    petalWidth: 2.2
+    type: 3,
+    y: 6.3,
+    x: 3.0
+  },
+  {
+    type: 4,
+    y: 3.0,
+    x: 3.0
   }
 ];
+
+const config = [
+  {
+    type: 1,
+    color: '#ff0000',
+    stroke: 'blue'
+  },
+  {
+    type: 2,
+    color: '#00ff00',
+    stroke: 'blue'
+  },
+  {
+    type: 3,
+    color: '#0000ff',
+    stroke: 'blue'
+  },
+  {
+    type: 4,
+    color: '#ffff00'
+  }
+];
+
 
 export default class ScatterplotContainer extends React.Component {
   render() {
     return (
       <div>
-        <ScatterplotChart data={data} />
+        <ScatterplotChart
+          axes
+          data={data}
+          config={config}
+          useLegend
+          axisLabels={{x: 'Sepal Width (cm)', y: 'Sepal Length (cm)'}}
+          width={640}
+          height={360}
+        />
       </div>
     );
   }
