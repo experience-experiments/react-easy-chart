@@ -29,6 +29,10 @@ const defaultStyle = {
   },
   '.dot': {
     stroke: '#000'
+  },
+  '.tick line': {
+    stroke: 'lightgrey',
+    opacity: '0.7'
   }
 };
 
@@ -61,13 +65,13 @@ export default class ScatterplotChart extends React.Component {
   }
 
   setDomainAndRange(scale, d3Axis, domainRange, data, type, length) {
-    const dataIndex = scale === 'x' ? 'key' : 'value';
+    const dataIndex = scale === 'x' ? 'x' : 'y';
     switch (type) {
       case 'text':
         d3Axis.domain(domainRange ?
           this.calcDefaultDomain(domainRange, type)
           :
-          data[0].map((d) => d[dataIndex])
+          data.map((d) => d[dataIndex])
         );
 
         d3Axis.rangePoints([0, length], 0);
@@ -138,7 +142,7 @@ export default class ScatterplotChart extends React.Component {
   }
 
   render() {
-    const {axes, axisLabels, data, dotRadius, style, xDomainRange, xTicks, yTicks, xType, yType} = this.props;
+    const {axes, axisLabels, data, dotRadius, grid, style, xDomainRange, xTicks, yTicks, xType, yType} = this.props;
     let {width, height, margin, yDomainRange} = this.props;
 
     margin = margin ? margin : this.calcMargin(axes, dotRadius * 2);
@@ -180,8 +184,12 @@ export default class ScatterplotChart extends React.Component {
       const yAxis = d3.svg.axis()
         .scale(y)
         .orient('left');
+
+      if (grid) xAxis.tickSize(-height, 6).tickPadding(12);
+      if (grid) yAxis.tickSize(-width, 6).tickPadding(12);
       if (xTicks) xAxis.ticks(xTicks);
       if (yTicks) yAxis.ticks(yTicks);
+
       svg.append('g')
         .attr('class', 'x axis')
         .attr('transform', `translate(0, ${height})`)
@@ -255,6 +263,7 @@ ScatterplotChart.propTypes = {
   data: React.PropTypes.array.isRequired,
   datePattern: React.PropTypes.string,
   dotRadius: React.PropTypes.number,
+  grid: React.PropTypes.bool,
   height: React.PropTypes.number,
   useLegend: React.PropTypes.bool,
   margin: React.PropTypes.object,
@@ -270,11 +279,12 @@ ScatterplotChart.propTypes = {
 
 ScatterplotChart.defaultProps = {
   axes: false,
+  axisLabels: {},
   clickHandler: () => {},
   config: [],
   datePattern: '%d-%b-%y',
   dotRadius: 5,
-  axisLabels: {},
+  grid: false,
   mouseOverHandler: () => {},
   mouseOutHandler: () => {},
   mouseMoveHandler: () => {},

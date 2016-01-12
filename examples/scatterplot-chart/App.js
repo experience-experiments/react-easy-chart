@@ -25,6 +25,29 @@ const exampleOne = [
     x: 3.0
   }
 ];
+/*
+const exampleText = [
+  {
+    type: 1,
+    x: 'Tue',
+    y: 10
+  },
+  {
+    type: 1,
+    x: 'Wed',
+    y: 20
+  },
+  {
+    type: 2,
+    x: 'Tue',
+    y: 30
+  },
+  {
+    type: 3,
+    x: 'Wed',
+    y: 40
+  }
+];*/
 
 const config = [
   {
@@ -198,6 +221,35 @@ const data = [
          height={270}
          config={config}
        />
+        <h3>Grid</h3>
+        <p>Apply a background grid with the grid boolean property</p>
+        <pre>
+        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+          <ScatterplotChart
+            data={exampleOne}
+            axes
+            axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+            dotRadius={10}
+            width={480}
+            height={270}
+            config={config}
+            grid
+          />
+        `)}}
+        />
+        </pre>
+        <ScatterplotChart
+          data={exampleOne}
+          axes
+          axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+          dotRadius={6}
+          width={480}
+          height={270}
+          config={config}
+          grid
+        />
+      <h3>xType &amp; yType</h3>
+      <p>Text example</p>
       </div>
     );
   }
