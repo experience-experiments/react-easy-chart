@@ -426,15 +426,59 @@ mouseOutHandler() {
             data={[{x: '10-Jan-15', y: 20}, {x: '12-Jan-15', y: 10}, {x: '15-Jan-15', y: 33}]}
           />
 
+        <h3>Click Handler</h3>
+        <p>The chart will send out a click event. The event will pass the data and the event. This allows the data to be presented from the clicking of a segment in any way the react developer requires.</p>
+        <pre>
+        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+<div>
+  <div style={{display: 'inline-block'}}>
+  <BarChart
+    axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+    axes
+    colorBars
+    barWidth={20}
+    xTickNumber={5}
+    yTickNumber={5}
+    xType={'time'}
+    data={[{x: '10-Jan-15', y: 20}, {x: '12-Jan-15', y: 10}, {x: '15-Jan-15', y: 33}]}
+    clickHandler={(d) => this.setState({dataDisplay: \`The value on the \${d.x} is \${d.y}\`})}
+  />
+  </div>
+  <div style={{display: 'inline-block', verticalAlign: 'top', paddingLeft: '20px'}}>
+    {this.state.dataDisplay ? this.state.dataDisplay : 'Click on a bar to show the value'}
+  </div>
+</div>
+          `)}}
+        />
+        </pre>
+        <div>
+          <div style={{display: 'inline-block'}}>
+          <BarChart
+            axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+            axes
+            colorBars
+            grid
+            barWidth={20}
+            xTickNumber={5}
+            yTickNumber={5}
+            xType={'time'}
+            data={[{x: '10-Jan-15', y: 20}, {x: '12-Jan-15', y: 10}, {x: '15-Jan-15', y: 33}]}
+            clickHandler={(d) => this.setState({dataDisplay: `The value on the ${d.x} is ${d.y}`})}
+          />
+          </div>
+          <div style={{display: 'inline-block', verticalAlign: 'top', paddingLeft: '20px'}}>
+            {this.state.dataDisplay ? this.state.dataDisplay : 'Click on a bar to show the value'}
+          </div>
+        </div>
+        {
+          this.state.randomDataIntervalId ? <input type="button" value="Stop random data" onClick={this.turnOffRandomData.bind(this)}></input>
+          :
+          <input type="button" value="Start random data" onClick={this.turnOnRandomData.bind(this)}></input>
+        }
         <br/>
         <br/>
         <br/>
         {this.state.showToolTip ? <ToolTip top={this.state.top} left={this.state.left}>The value on the {this.state.x} is {this.state.y}</ToolTip> : null}
-        {
-          this.state.randomDataIntervalId ? <input type="button" y="Stop random data" onClick={this.turnOffRandomData.bind(this)}></input>
-          :
-          <input type="button" y="Start random data" onClick={this.turnOnRandomData.bind(this)}></input>
-        }
         </div>
       );
     }
