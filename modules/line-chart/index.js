@@ -1,12 +1,10 @@
 import React from 'react';
 import {createElement} from 'react-faux-dom';
-import {line} from 'd3-shape';
 import {linear, ordinal} from 'd3-scale';
 import {extent} from 'd3-array';
-import {select, svg} from 'd3';
+import {select, svg, time} from 'd3';
 import {Style} from 'radium';
 import merge from 'lodash.merge';
-import {time} from 'd3';
 import {format} from 'd3-time-format';
 
 const defaultStyle = {
@@ -39,21 +37,14 @@ const defaultStyle = {
   },
   'x.axis path': {
     display: 'none'
+  },
+  '.tick line': {
+    stroke: 'lightgrey',
+    opacity: '0.7'
   }
 };
 
 export default class LineChart extends React.Component {
-
-  getScale(type) {
-    switch (type) {
-      case 'time':
-        return time.scale();
-      case 'text':
-        return ordinal();
-      default:
-        return linear();
-    }
-  }
 
   getValueFunction(scale, type) {
     const dataIndex = scale === 'x' ? 'key' : 'value';
@@ -66,10 +57,12 @@ export default class LineChart extends React.Component {
     }
   }
 
-  setDomainAndRange(scale, d3Axis, domainRange, data, type, length) {
+  setDomainAndRange(scale, domainRange, data, type, length) {
     const dataIndex = scale === 'x' ? 'key' : 'value';
+    let d3Axis;
     switch (type) {
       case 'text':
+        d3Axis = ordinal();
         d3Axis.domain(domainRange ?
           this.calcDefaultDomain(domainRange, type)
           :
@@ -79,6 +72,7 @@ export default class LineChart extends React.Component {
         d3Axis.rangePoints([0, length], 0);
         break;
       case 'linear':
+        d3Axis = linear();
         d3Axis.domain(domainRange ?
           this.calcDefaultDomain(domainRange, type)
           :
@@ -87,22 +81,25 @@ export default class LineChart extends React.Component {
         d3Axis.range(scale === 'x' ? [0, length] : [length, 0]);
         break;
       case 'time':
+        d3Axis = time.scale();
         d3Axis.domain(domainRange ?
           this.calcDefaultDomain(domainRange, type)
           :
-          this.findLargestExtent(data, this.getValueFunction(scale, type)));
+          this.findLargestExtent(data, this.getValueFunction(scale, type))
+        );
         d3Axis.range(scale === 'x' ? [0, length] : [length, 0]);
         break;
       default:
         break;
     }
+    return d3Axis;
   }
 
   findLargestExtent(data, value) {
     let low;
     let high;
-    data.map((dataElelment) => {
-      const calcDomainRange = extent(dataElelment, value);
+    data.map((dataElement) => {
+      const calcDomainRange = extent(dataElement, value);
       low = low < calcDomainRange[0] ? low : calcDomainRange[0];
       high = high > calcDomainRange[1] ? high : calcDomainRange[1];
     });
@@ -125,7 +122,7 @@ export default class LineChart extends React.Component {
   }
 
   render() {
-    const {data, xType, yType, style, axes, axisLabels, xDomainRange, xTicks, yTicks} = this.props;
+    const {data, xType, yType, style, axes, axisLabels, xDomainRange, xTicks, yTicks, interpolate, grid} = this.props;
     let {margin, yDomainRange} = this.props;
     let {width, height} = this.props;
     margin = margin ? margin : this.calcMargin(axes);
@@ -135,35 +132,34 @@ export default class LineChart extends React.Component {
     const yValue = this.getValueFunction('y', yType);
     const xValue = this.getValueFunction('x', xType);
 
-    const x = this.getScale(xType);
-    const y = this.getScale(yType);
-
     yDomainRange = this.calcDefaultDomain(yDomainRange, yType);
-    this.setDomainAndRange('x', x, xDomainRange, data, xType, width);
-    this.setDomainAndRange('y', y, yDomainRange, data, yType, height);
+    const x = this.setDomainAndRange('x', xDomainRange, data, xType, width);
+    const y = this.setDomainAndRange('y', yDomainRange, data, yType, height);
 
-    const linePath = line().x((d) => x(xValue(d))).y((d) => y(yValue(d)));
+    const linePath = svg.line().interpolate(interpolate).x((d) => x(xValue(d))).y((d) => y(yValue(d)));
 
     const svgNode = createElement('svg');
     select(svgNode).attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom);
     const root = select(svgNode).append('g').attr('transform', `translate(${margin.left},${margin.top})`);
 
     if (axes) {
-      const xAxis = svg.axis().scale(x).orient('bottom');// TODO add in ticks .ticks(time.month, 1).tickFormat(format('%B'));
+      const xAxis = svg.axis().scale(x).orient('bottom');
+      if (grid) xAxis.tickSize(-height, 6).tickPadding(12);
       if (xTicks) xAxis.ticks(xTicks);
-      const yAxis = svg.axis().scale(y).orient('left');
-      if (yTicks) yAxis.ticks(yTicks);
       root.append('g')
         .attr('class', 'x axis')
         .attr('transform', `translate(0,${height})`)
         .call(xAxis)
         .append('text')
         .attr('class', 'label')
-        .attr('y', margin.bottom - 4)
+        .attr('y', margin.bottom - 1)
         .attr('x', (width))
         .style('text-anchor', 'end')
         .text(axisLabels.x);
 
+      const yAxis = svg.axis().scale(y).orient('left');
+      if (grid) yAxis.tickSize(-width, 6).tickPadding(12);
+      if (yTicks) yAxis.ticks(yTicks);
       root.append('g')
         .attr('class', 'y axis')
         .call(yAxis)
@@ -201,9 +197,11 @@ LineChart.propTypes = {
   xType: React.PropTypes.string,
   yType: React.PropTypes.string,
   datePattern: React.PropTypes.string,
+  interpolate: React.PropTypes.string,
   style: React.PropTypes.object,
   margin: React.PropTypes.object,
   axes: React.PropTypes.bool,
+  grid: React.PropTypes.bool,
   xDomainRange: React.PropTypes.array,
   yDomainRange: React.PropTypes.array,
   axisLabels: React.PropTypes.object,
@@ -215,6 +213,7 @@ LineChart.defaultProps = {
   width: 200,
   height: 150,
   datePattern: '%d-%b-%y',
+  interpolate: 'linear',
   axes: false,
   xType: 'linear',
   yType: 'linear',
