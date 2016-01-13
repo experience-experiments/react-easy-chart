@@ -225,7 +225,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
             [{key: 'Mon', value: 10}, {key: 'Tue', value: 15}, {key: 'Wed', value: 13}, {key: 'Thu', value: 15}, {key: 'Fri', value: 10}]
           ]}
         />
-        <p>Setting the <b>yType</b> to be <b>time</b></p>
+        <p>Setting the <b>xType</b> to be <b>time</b></p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 <LineChart
@@ -388,6 +388,43 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
             [{key: 10, value: 40}, {key: 20, value: 30}, {key: 30, value: 25}, {key: 40, value: 60}, {key: 50, value: 22}, {key: 60, value: 9}]
           ]}
         />
+        <h3>Tick display format</h3>
+        <p>If the x or y axis  has an xType/yType of time then a display for the axis can be overridden by setting the tickTimeDisplayFormat.</p>
+        <p>The options are very flexible and can be seen here <a href="https://github.com/mbostock/d3/wiki/Time-Formatting">Time Formatting</a></p>
+        <pre>
+        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+<LineChart
+  axisLabels={{x: 'Total Revenue', y: 'January'}}
+  margin={{top: 10, right: 30, bottom: 50, left: 70}}
+  yType={'time'}
+  axes
+  interpolate={'cardinal'}
+  tickTimeDisplayFormat={'%a'}
+  width={500}
+  height={500}
+  data={[
+    [{key: 10, value: '1-Jan-15'}, {key: 20, value: '10-Jan-15'}, {key: 40, value: '21-Jan-15'}, {key: 80, value: '31-Jan-15'}],
+    [{key: 0, value: '1-Jan-15'}, {key: 15, value: '10-Jan-15'}, {key: 20, value: '21-Jan-15'}, {key: 25, value: '31-Jan-15'}]
+  ]}
+/>
+        `)}}
+        />
+        </pre>
+        <LineChart
+          axisLabels={{x: 'Total Revenue', y: 'January'}}
+          margin={{top: 10, right: 30, bottom: 50, left: 70}}
+          yType={'time'}
+          axes
+          interpolate={'cardinal'}
+          tickTimeDisplayFormat={'%a'}
+          width={500}
+          height={500}
+          data={[
+            [{key: 10, value: '1-Jan-15'}, {key: 20, value: '10-Jan-15'}, {key: 40, value: '21-Jan-15'}, {key: 80, value: '31-Jan-15'}],
+            [{key: 0, value: '1-Jan-15'}, {key: 15, value: '10-Jan-15'}, {key: 20, value: '21-Jan-15'}, {key: 25, value: '31-Jan-15'}]
+          ]}
+        />
+
         <h3>Setting the tick values</h3>
         <p>The number of ticks on the x and y axis can be set by passing in a number to xTicks or yTicks.
         This can make the axis easier to read.</p>
