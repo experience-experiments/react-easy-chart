@@ -84,6 +84,7 @@ export default class LineChart extends React.Component {
   constructor(props) {
     super(props);
     this.parseDate = format(props.datePattern).parse;
+    this.uid = Math.floor(Math.random() * new Date().getTime());
   }
 
   getValueFunction(scale, type) {
@@ -234,11 +235,9 @@ export default class LineChart extends React.Component {
         .attr('d', linePath);
     });
 
-    const uid = Math.floor(Math.random() * new Date().getTime());
-
     return (
-      <div className={`line-chart${uid}`}>
-        <Style scopeSelector={`.line-chart${uid}`} rules={merge({}, defaultStyle, style)}/>
+      <div className={`line-chart${this.uid}`}>
+        <Style scopeSelector={`.line-chart${this.uid}`} rules={merge({}, defaultStyle, style)}/>
         {svgNode.toReact()}
       </div>
     );
