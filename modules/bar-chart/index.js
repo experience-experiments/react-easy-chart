@@ -10,7 +10,7 @@ import merge from 'lodash.merge';
 const defaultStyle = {
   '.bar': {
     fill: 'blue',
-    transition: 'all 0.5s ease-in'
+    transition: 'height 0.5s ease-in, y 0.5s ease-in'
   },
   '.bar:hover': {
     opacity: 0.5
@@ -151,7 +151,6 @@ export default class BarChart extends React.Component {
         xAxis.tickFormat(time.format(tickTimeDisplayFormat));
       }
       if (xTickNumber) xAxis.ticks(xTickNumber);
-      if (grid) xAxis.tickSize(-height, 6).tickPadding(12);
       root.append('g')
         .attr('class', 'x axis')
         .attr('transform', 'translate(0,' + height + ')')
