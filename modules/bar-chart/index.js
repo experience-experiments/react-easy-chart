@@ -47,6 +47,49 @@ let parseDate = null;
 
 export default class BarChart extends React.Component {
 
+  static get propTypes() {
+    return {
+      data: React.PropTypes.array.isRequired,
+      width: React.PropTypes.number,
+      height: React.PropTypes.number,
+      margin: React.PropTypes.object,
+      mouseOverHandler: React.PropTypes.func,
+      mouseOutHandler: React.PropTypes.func,
+      mouseMoveHandler: React.PropTypes.func,
+      clickHandler: React.PropTypes.func,
+      style: React.PropTypes.object,
+      colorBars: React.PropTypes.bool,
+      axes: React.PropTypes.bool,
+      grid: React.PropTypes.bool,
+      axisLabels: React.PropTypes.object,
+      xType: React.PropTypes.string,
+      yType: React.PropTypes.string,
+      xDomainRange: React.PropTypes.array,
+      yDomainRange: React.PropTypes.array,
+      datePattern: React.PropTypes.string,
+      tickTimeDisplayFormat: React.PropTypes.string,
+      barWidth: React.PropTypes.number,
+      xTickNumber: React.PropTypes.number,
+      yTickNumber: React.PropTypes.number
+    };
+  }
+
+  static get defaultProps() {
+    return {
+      width: 400,
+      height: 200,
+      barWidth: 10,
+      xType: 'text',
+      yType: 'linear',
+      mouseOverHandler: () => {},
+      mouseOutHandler: () => {},
+      mouseMoveHandler: () => {},
+      clickHandler: () => {},
+      datePattern: '%d-%b-%y',
+      axisLabels: {x: 'x axis', y: 'y axis'}
+    };
+  }
+
   setDomainAndRange(axesType, domainRange, data, type, length) {
     const dataIndex = axesType === 'x' ? 'x' : 'y';
     const barPadding = (length / data.length) > 40 ? 0.02 : 0.04;
@@ -221,42 +264,3 @@ export default class BarChart extends React.Component {
     );
   }
 }
-
-BarChart.propTypes = {
-  data: React.PropTypes.array.isRequired,
-  width: React.PropTypes.number,
-  height: React.PropTypes.number,
-  margin: React.PropTypes.object,
-  mouseOverHandler: React.PropTypes.func,
-  mouseOutHandler: React.PropTypes.func,
-  mouseMoveHandler: React.PropTypes.func,
-  clickHandler: React.PropTypes.func,
-  style: React.PropTypes.object,
-  colorBars: React.PropTypes.bool,
-  axes: React.PropTypes.bool,
-  grid: React.PropTypes.bool,
-  axisLabels: React.PropTypes.object,
-  xType: React.PropTypes.string,
-  yType: React.PropTypes.string,
-  xDomainRange: React.PropTypes.array,
-  yDomainRange: React.PropTypes.array,
-  datePattern: React.PropTypes.string,
-  tickTimeDisplayFormat: React.PropTypes.string,
-  barWidth: React.PropTypes.number,
-  xTickNumber: React.PropTypes.number,
-  yTickNumber: React.PropTypes.number
-};
-
-BarChart.defaultProps = {
-  width: 400,
-  height: 200,
-  barWidth: 10,
-  xType: 'text',
-  yType: 'linear',
-  mouseOverHandler: () => {},
-  mouseOutHandler: () => {},
-  mouseMoveHandler: () => {},
-  clickHandler: () => {},
-  datePattern: '%d-%b-%y',
-  axisLabels: {x: 'x axis', y: 'y axis'}
-};

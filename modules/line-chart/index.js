@@ -46,6 +46,40 @@ const defaultStyle = {
 
 export default class LineChart extends React.Component {
 
+  static get propTypes() {
+    return {
+      data: React.PropTypes.array.isRequired,
+      width: React.PropTypes.number,
+      height: React.PropTypes.number,
+      xType: React.PropTypes.string,
+      yType: React.PropTypes.string,
+      datePattern: React.PropTypes.string,
+      interpolate: React.PropTypes.string,
+      style: React.PropTypes.object,
+      margin: React.PropTypes.object,
+      axes: React.PropTypes.bool,
+      grid: React.PropTypes.bool,
+      xDomainRange: React.PropTypes.array,
+      yDomainRange: React.PropTypes.array,
+      axisLabels: React.PropTypes.object,
+      yTicks: React.PropTypes.number,
+      xTicks: React.PropTypes.number
+    };
+  }
+
+  static get defaultProps() {
+    return {
+      width: 200,
+      height: 150,
+      datePattern: '%d-%b-%y',
+      interpolate: 'linear',
+      axes: false,
+      xType: 'linear',
+      yType: 'linear',
+      axisLabels: {x: 'x axis', y: 'y axis'}
+    };
+  }
+
   getValueFunction(scale, type) {
     const dataIndex = scale === 'x' ? 'key' : 'value';
     switch (type) {
@@ -189,33 +223,3 @@ export default class LineChart extends React.Component {
     );
   }
 }
-
-LineChart.propTypes = {
-  data: React.PropTypes.array.isRequired,
-  width: React.PropTypes.number,
-  height: React.PropTypes.number,
-  xType: React.PropTypes.string,
-  yType: React.PropTypes.string,
-  datePattern: React.PropTypes.string,
-  interpolate: React.PropTypes.string,
-  style: React.PropTypes.object,
-  margin: React.PropTypes.object,
-  axes: React.PropTypes.bool,
-  grid: React.PropTypes.bool,
-  xDomainRange: React.PropTypes.array,
-  yDomainRange: React.PropTypes.array,
-  axisLabels: React.PropTypes.object,
-  yTicks: React.PropTypes.number,
-  xTicks: React.PropTypes.number
-};
-
-LineChart.defaultProps = {
-  width: 200,
-  height: 150,
-  datePattern: '%d-%b-%y',
-  interpolate: 'linear',
-  axes: false,
-  xType: 'linear',
-  yType: 'linear',
-  axisLabels: {x: 'x axis', y: 'y axis'}
-};
