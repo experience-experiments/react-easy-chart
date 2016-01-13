@@ -9,7 +9,8 @@ import merge from 'lodash.merge';
 
 const defaultStyle = {
   '.bar': {
-    fill: 'blue'
+    fill: 'blue',
+    transition: 'all 0.5s ease-in'
   },
   '.bar:hover': {
     opacity: 0.5
@@ -31,6 +32,14 @@ const defaultStyle = {
   '.tick line': {
     stroke: 'lightgrey',
     opacity: '0.7'
+  },
+  '.example-appear': {
+    opacity: 0.01
+  },
+  '.example-appear.example-appear-active': {
+    opacity: 1,
+    fill: 'red',
+    transition: 'all 1s ease-in'
   }
 };
 const colorScale = scale.category20();
@@ -175,7 +184,8 @@ export default class BarChart extends React.Component {
     data.map(() => {
       root.selectAll('.bar')
           .data(data)
-          .enter().append('rect')
+          .enter()
+          .append('rect')
           .attr('class', 'bar')
           .style('fill', (d, i) => this.defineColor(i, d, colorBars))
           .attr('x', (d) => {
@@ -194,8 +204,8 @@ export default class BarChart extends React.Component {
                 return barWidth;
             }
           })
-          .attr('y', (d) => y(d.y))
-          .attr('height', (d) => height - y(d.y))
+          .style('y', (d) => y(d.y))
+          .style('height', (d) => height - y(d.y))
           .on('mouseover', (d) => mouseOverHandler(d, d3LastEvent))
           .on('mouseout', (d) => mouseOutHandler(d, d3LastEvent))
           .on('mousemove', () => mouseMoveHandler(d3LastEvent))

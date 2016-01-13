@@ -25,7 +25,7 @@ export default class BarChartContainer extends React.Component {
     }
 
     turnOnRandomData() {
-      this.setState({randomDataIntervalId: setInterval(this.updateData.bind(this), 500)});
+      this.setState({randomDataIntervalId: setInterval(this.updateData.bind(this), 1000)});
     }
 
     turnOffRandomData() {
@@ -396,16 +396,12 @@ mouseOutHandler() {
   axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
   axes
   colorBars
-  barWidth={20}
-  xTickNumber={5}
   yTickNumber={5}
-  xType={'time'}
   mouseOverHandler={this.mouseOverHandler.bind(this)}
   mouseOutHandler={this.mouseOutHandler.bind(this)}
   mouseMoveHandler={this.mouseMoveHandler.bind(this)}
-  xDomainRange={['1-Jan-15', '20-Jan-15']}
   yDomainRange={[0, 50]}
-  data={[{x: '10-Jan-15', y: 20}, {x: '12-Jan-15', y: 10}, {x: '15-Jan-15', y: 33}]}
+  data={[{x: 'A', y: 20}, {x: 'B', y: 10}, {x: 'C', y: 33}, {x: 'D', y: 20}, {x: 'E', y: 50}]}
 />
           `)}}
           />
@@ -414,16 +410,12 @@ mouseOutHandler() {
             axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
             axes
             colorBars
-            barWidth={20}
-            xTickNumber={5}
             yTickNumber={5}
-            xType={'time'}
             mouseOverHandler={this.mouseOverHandler.bind(this)}
             mouseOutHandler={this.mouseOutHandler.bind(this)}
             mouseMoveHandler={this.mouseMoveHandler.bind(this)}
-            xDomainRange={['1-Jan-15', '20-Jan-15']}
             yDomainRange={[0, 50]}
-            data={[{x: '10-Jan-15', y: 20}, {x: '12-Jan-15', y: 10}, {x: '15-Jan-15', y: 33}]}
+            data={[{x: 'A', y: 20}, {x: 'B', y: 10}, {x: 'C', y: 33}, {x: 'D', y: 20}, {x: 'E', y: 50}]}
           />
 
         <h3>Click Handler</h3>
@@ -436,11 +428,8 @@ mouseOutHandler() {
     axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
     axes
     colorBars
-    barWidth={20}
-    xTickNumber={5}
     yTickNumber={5}
-    xType={'time'}
-    data={[{x: '10-Jan-15', y: 20}, {x: '12-Jan-15', y: 10}, {x: '15-Jan-15', y: 33}]}
+    data={[{x: 'A', y: 20}, {x: 'B', y: 10}, {x: 'C', y: 33}, {x: 'D', y: 20}, {x: 'E', y: 50}]}
     clickHandler={(d) => this.setState({dataDisplay: \`The value on the \${d.x} is \${d.y}\`})}
   />
   </div>
@@ -458,11 +447,8 @@ mouseOutHandler() {
             axes
             colorBars
             grid
-            barWidth={20}
-            xTickNumber={5}
             yTickNumber={5}
-            xType={'time'}
-            data={[{x: '10-Jan-15', y: 20}, {x: '12-Jan-15', y: 10}, {x: '15-Jan-15', y: 33}]}
+            data={[{x: 'A', y: 20}, {x: 'B', y: 10}, {x: 'C', y: 33}, {x: 'D', y: 20}, {x: 'E', y: 50}]}
             clickHandler={(d) => this.setState({dataDisplay: `The value on the ${d.x} is ${d.y}`})}
           />
           </div>
@@ -470,11 +456,29 @@ mouseOutHandler() {
             {this.state.dataDisplay ? this.state.dataDisplay : 'Click on a bar to show the value'}
           </div>
         </div>
-        {
-          this.state.randomDataIntervalId ? <input type="button" value="Stop random data" onClick={this.turnOffRandomData.bind(this)}></input>
-          :
-          <input type="button" value="Start random data" onClick={this.turnOnRandomData.bind(this)}></input>
-        }
+
+        <h3>Updating the data</h3>
+        <p>By selecting the button below to start the random data you can see a simulation of the performance if a data feed is passed in.
+         React provides the functionality to only update the elements of the dom when required so should just change the line attributes.
+          The data is passed in as a
+         react param only and as soon as that data changes the chart will reflect that change automatically.</p>
+         {
+           this.state.randomDataIntervalId ? <input type="button" value="Stop random data" onClick={this.turnOffRandomData.bind(this)}></input>
+           :
+           <input type="button" value="Start random data" onClick={this.turnOnRandomData.bind(this)}></input>
+         }
+         <BarChart
+           axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+           axes
+           colorBars
+           grid
+           width={600}
+           height={400}
+           xTickNumber={5}
+           yTickNumber={5}
+           yDomainRange={[0, 100]}
+           data={this.data}
+         />
         <br/>
         <br/>
         <br/>
