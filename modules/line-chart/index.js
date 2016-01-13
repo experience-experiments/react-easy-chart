@@ -44,8 +44,8 @@ const defaultStyle = {
   }
 };
 
-export default class LineChart extends React.Component {
 
+export default class LineChart extends React.Component {
   static get propTypes() {
     return {
       data: React.PropTypes.array.isRequired,
@@ -62,6 +62,7 @@ export default class LineChart extends React.Component {
       xDomainRange: React.PropTypes.array,
       yDomainRange: React.PropTypes.array,
       axisLabels: React.PropTypes.object,
+      tickTimeDisplayFormat: React.PropTypes.string,
       yTicks: React.PropTypes.number,
       xTicks: React.PropTypes.number
     };
@@ -76,23 +77,27 @@ export default class LineChart extends React.Component {
       axes: false,
       xType: 'linear',
       yType: 'linear',
-      axisLabels: {x: 'x axis', y: 'y axis'}
+      axisLabels: {x: '', y: ''}
     };
   }
 
+  constructor(props) {
+    super(props);
+    this.parseDate = format(props.datePattern).parse;
+  }
+
   getValueFunction(scale, type) {
-    const dataIndex = scale === 'x' ? 'key' : 'value';
+    const dataIndex = scale === 'x' ? 'x' : 'y';
     switch (type) {
       case 'time':
-        const parseDate = format(this.props.datePattern).parse;
-        return (d) => parseDate(d[dataIndex]);
+        return (d) => this.parseDate(d[dataIndex]);
       default:
         return (d) => d[dataIndex];
     }
   }
 
   setDomainAndRange(scale, domainRange, data, type, length) {
-    const dataIndex = scale === 'x' ? 'key' : 'value';
+    const dataIndex = scale === 'x' ? 'x' : 'y';
     let d3Axis;
     switch (type) {
       case 'text':
@@ -129,11 +134,11 @@ export default class LineChart extends React.Component {
     return d3Axis;
   }
 
-  findLargestExtent(data, value) {
+  findLargestExtent(data, y) {
     let low;
     let high;
     data.map((dataElement) => {
-      const calcDomainRange = extent(dataElement, value);
+      const calcDomainRange = extent(dataElement, y);
       low = low < calcDomainRange[0] ? low : calcDomainRange[0];
       high = high > calcDomainRange[1] ? high : calcDomainRange[1];
     });
@@ -144,19 +149,29 @@ export default class LineChart extends React.Component {
     if (!domainRange) return null;
     switch (type) {
       case 'time':
-        const parseDate = format(this.props.datePattern).parse;
-        return [parseDate(domainRange[0]), parseDate(domainRange[1])];
+        return [this.parseDate(domainRange[0]), this.parseDate(domainRange[1])];
       default:
         return domainRange;
     }
   }
 
   calcMargin(axes) {
-    return axes ? {top: 10, right: 20, bottom: 30, left: 50} : {top: 0, right: 0, bottom: 0, left: 0};
+    return axes ? {top: 10, right: 20, bottom: 50, left: 50} : {top: 0, right: 0, bottom: 0, left: 0};
   }
 
   render() {
-    const {data, xType, yType, style, axes, axisLabels, xDomainRange, xTicks, yTicks, interpolate, grid} = this.props;
+    const {data,
+      xType,
+      yType,
+      style,
+      axes,
+      axisLabels,
+      xDomainRange,
+      xTicks,
+      yTicks,
+      interpolate,
+      grid,
+      tickTimeDisplayFormat} = this.props;
     let {margin, yDomainRange} = this.props;
     let {width, height} = this.props;
     margin = margin ? margin : this.calcMargin(axes);
@@ -178,6 +193,9 @@ export default class LineChart extends React.Component {
 
     if (axes) {
       const xAxis = svg.axis().scale(x).orient('bottom');
+      if (xType === 'time' && tickTimeDisplayFormat) {
+        xAxis.tickFormat(time.format(tickTimeDisplayFormat));
+      }
       if (grid) xAxis.tickSize(-height, 6).tickPadding(12);
       if (xTicks) xAxis.ticks(xTicks);
       root.append('g')
@@ -186,12 +204,15 @@ export default class LineChart extends React.Component {
         .call(xAxis)
         .append('text')
         .attr('class', 'label')
-        .attr('y', margin.bottom - 1)
+        .attr('y', margin.bottom - 3)
         .attr('x', (width))
         .style('text-anchor', 'end')
         .text(axisLabels.x);
 
       const yAxis = svg.axis().scale(y).orient('left');
+      if (yType === 'time' && tickTimeDisplayFormat) {
+        yAxis.tickFormat(time.format(tickTimeDisplayFormat));
+      }
       if (grid) yAxis.tickSize(-width, 6).tickPadding(12);
       if (yTicks) yAxis.ticks(yTicks);
       root.append('g')
