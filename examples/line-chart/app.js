@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 import {escapeHTML} from '../util';
+import ToolTip from '../ToolTip';
 import {LineChart} from 'rc-d3';
 import moment from 'moment';
 import {format} from 'd3-time-format';
@@ -10,11 +11,34 @@ class LineChartContainer extends React.Component {
       super(props);
       // Generate multiple lines of data
       this.data = [this.generateData(), this.generateData(), this.generateData(), this.generateData()];
-      this.state = {};
+      this.state = {showToolTip: false};
     }
 
     getRandomArbitrary(min, max) {
       return Math.random() * (max - min) + min;
+    }
+
+    mouseOverHandler(d, e) {
+      this.setState({
+        showToolTip: true,
+        top: `${e.screenY - 10}px`,
+        left: `${e.screenX + 10}px`,
+        y: d.y,
+        x: d.x});
+    }
+
+    mouseMoveHandler(e) {
+      if (this.state.showToolTip) {
+        this.setState({top: `${e.y - 10}px`, left: `${e.x + 10}px`});
+      }
+    }
+
+    mouseOutHandler() {
+      this.setState({showToolTip: false});
+    }
+
+    clickHandler(d) {
+      this.setState({dataDisplay: `The amount selected is ${d.y}`});
     }
 
     generateData() {
@@ -512,6 +536,103 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
           ]}
         />
 
+        <h3>Data Points</h3>
+        <p>Data points can be added to the line chart by simply passing a dataPoints boolean.</p>
+        <pre>
+        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+<LineChart
+  axes
+  dataPoints
+  xDomainRange={[0, 100]}
+  yDomainRange={[0, 100]}
+  width={500}
+  height={250}
+  interpolate={'cardinal'}
+  data={[
+    [{x: 10, y: 25}, {x: 20, y: 10}, {x: 30, y: 25}, {x: 40, y: 10}, {x: 50, y: 12}, {x: 60, y: 25}],
+    [{x: 10, y: 40}, {x: 20, y: 30}, {x: 30, y: 25}, {x: 40, y: 60}, {x: 50, y: 22}, {x: 60, y: 9}]
+  ]}
+/>
+        `)}}
+        />
+        </pre>
+        <LineChart
+          axes
+          dataPoints
+          xDomainRange={[0, 100]}
+          yDomainRange={[0, 100]}
+          width={500}
+          height={250}
+          interpolate={'cardinal'}
+          data={[
+            [{x: 10, y: 25}, {x: 20, y: 10}, {x: 30, y: 25}, {x: 40, y: 10}, {x: 50, y: 12}, {x: 60, y: 25}],
+            [{x: 10, y: 40}, {x: 20, y: 30}, {x: 30, y: 25}, {x: 40, y: 60}, {x: 50, y: 22}, {x: 60, y: 9}]
+          ]}
+        />
+
+        <h3>mouseOverHandler, mouseOverHandler, mouseMoveHandler</h3>
+        <p>The chart will send out a mouseOver event, mouseMove and mouseOut event from the dataPoints (see above). The dataPoints will need to be set. This can be used by your react application in anyway you would require.
+         The event handlers provides the mouse event and the point data. The mouse event can for instance provide the x and y coordinates which can be used for a tool tip.
+          The data is related to the point currently moused over.</p>
+          <pre>
+          <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+mouseOverHandler(d, e) {
+  this.setState({
+    showToolTip: true,
+    top: \`\${e.screenY - 10}px\`,
+    left: \`\${e.screenX + 10}px\`,
+    y: d.y,
+    x: d.x});
+}
+
+mouseMoveHandler(e) {
+  if (this.state.showToolTip) {
+    this.setState({top: \`\${e.y - 10}px\`, left: \`\${e.x + 10}px\`});
+  }
+}
+
+mouseOutHandler() {
+  this.setState({showToolTip: false});
+}
+
+{this.state.showToolTip ? <ToolTip top={this.state.top} left={this.state.left}>The value of x is {this.state.x} and the value of y is {this.state.y}</ToolTip> : null}
+
+<LineChart
+  axes
+  dataPoints
+  xDomainRange={[0, 100]}
+  yDomainRange={[0, 100]}
+  mouseOverHandler={this.mouseOverHandler.bind(this)}
+  mouseOutHandler={this.mouseOutHandler.bind(this)}
+  mouseMoveHandler={this.mouseMoveHandler.bind(this)}
+  width={700}
+  height={350}
+  interpolate={'cardinal'}
+  data={[
+    [{x: 10, y: 25}, {x: 20, y: 10}, {x: 30, y: 25}, {x: 40, y: 10}, {x: 50, y: 12}, {x: 60, y: 25}],
+    [{x: 10, y: 40}, {x: 20, y: 30}, {x: 30, y: 25}, {x: 40, y: 60}, {x: 50, y: 22}, {x: 60, y: 9}]
+  ]}
+/>
+          `)}}
+          />
+        </pre>
+        <LineChart
+          axes
+          dataPoints
+          xDomainRange={[0, 100]}
+          yDomainRange={[0, 100]}
+          mouseOverHandler={this.mouseOverHandler.bind(this)}
+          mouseOutHandler={this.mouseOutHandler.bind(this)}
+          mouseMoveHandler={this.mouseMoveHandler.bind(this)}
+          width={700}
+          height={350}
+          interpolate={'cardinal'}
+          data={[
+            [{x: 10, y: 25}, {x: 20, y: 10}, {x: 30, y: 25}, {x: 40, y: 10}, {x: 50, y: 12}, {x: 60, y: 25}],
+            [{x: 10, y: 40}, {x: 20, y: 30}, {x: 30, y: 25}, {x: 40, y: 60}, {x: 50, y: 22}, {x: 60, y: 9}]
+          ]}
+        />
+
         <h3>Updating the data</h3>
         <p>By selecting the button below to start the random data you can see a simulation of the performance if a data feed is passed in.
         React provides the functionality to only update the elements of the dom when required so should just change the line attributes.
@@ -558,8 +679,10 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
             stroke: 'green'
           }}}
         />
+
         <br/>
         <br/>
+        {this.state.showToolTip ? <ToolTip top={this.state.top} left={this.state.left}>The value of x is {this.state.x} and the value of y is {this.state.y}</ToolTip> : null}
         </div>
       );
     }
