@@ -135,6 +135,10 @@ export default class LineChart extends React.Component {
     return d3Axis;
   }
 
+  getHeight(height, margin) {
+    return this.props.height - margin.top - margin.bottom;
+  }
+
   findLargestExtent(data, y) {
     let low;
     let high;
@@ -168,24 +172,21 @@ export default class LineChart extends React.Component {
       axes,
       axisLabels,
       xDomainRange,
+      yDomainRange,
       xTicks,
       yTicks,
       interpolate,
       grid,
       tickTimeDisplayFormat} = this.props;
-    let {margin, yDomainRange} = this.props;
-    let {width, height} = this.props;
-    margin = margin ? margin : this.calcMargin(axes);
-    width = width - (margin.left + margin.right);
-    height = height - (margin.top + margin.bottom);
+    const margin = this.props.margin ? this.props.margin : this.calcMargin(axes);
+    const width = this.props.width - margin.left - margin.right;
+    const height = this.props.height - margin.top - margin.bottom;
+
+    const x = this.setDomainAndRange('x', xDomainRange, data, xType, width);
+    const y = this.setDomainAndRange('y', yDomainRange, data, yType, this.getHeight(height, margin));
 
     const yValue = this.getValueFunction('y', yType);
     const xValue = this.getValueFunction('x', xType);
-
-    yDomainRange = this.calcDefaultDomain(yDomainRange, yType);
-    const x = this.setDomainAndRange('x', xDomainRange, data, xType, width);
-    const y = this.setDomainAndRange('y', yDomainRange, data, yType, height);
-
     const linePath = svg.line().interpolate(interpolate).x((d) => x(xValue(d))).y((d) => y(yValue(d)));
 
     const svgNode = createElement('svg');
