@@ -19,15 +19,15 @@ class LineChartContainer extends React.Component {
 
     generateData() {
       const data = [];
-      const keys = [];
+      const xs = [];
 
       let date = moment('2015-1-1 00:00', 'YYYY-MM-DD HH:mm');
       for (let i = 1; i <= 12; i++) {
-        keys.push(date.format('D-MMM-YY HH:mm'));
+        xs.push(date.format('D-MMM-YY HH:mm'));
         date = date.add(1, 'hour');
       }
-      keys.map((key) => {
-        data.push({key: key, value: this.getRandomArbitrary(0, 100)});
+      xs.map((x) => {
+        data.push({x: x, y: this.getRandomArbitrary(0, 100)});
       });
       return data;
     }
@@ -45,13 +45,13 @@ class LineChartContainer extends React.Component {
       const parseDate = format('%d-%b-%y %H:%M').parse;
       this.data.map((data) => {
         data.shift();
-        let value = this.getRandomArbitrary(
-          data[data.length - 1].value - 20,
-           data[data.length - 1].value + 20);
-        if (value < 0 || value > 100) value = data[data.length - 1].value;
-        const date = moment(parseDate(data[data.length - 1].key));
+        let y = this.getRandomArbitrary(
+          data[data.length - 1].y - 20,
+           data[data.length - 1].y + 20);
+        if (y < 0 || y > 100) y = data[data.length - 1].y;
+        const date = moment(parseDate(data[data.length - 1].x));
         date.add(1, 'hour');
-        data.push({key: date.format('D-MMM-YY HH:mm'), value: value});
+        data.push({x: date.format('D-MMM-YY HH:mm'), y: y});
       });
 
       this.forceUpdate();
@@ -64,45 +64,45 @@ class LineChartContainer extends React.Component {
         <p>At the most basic the line chart can just take a single data file supplied in a JSON format and will render a
          simple line chart.</p>
         <p>The format of the data is an array of arrays which allows multiple lines to be generated.
-        The key field represents the x axis and the value the y axis. This is to unify the data accross R2-D3 charts.</p>
+        The x field represents the x axis and the y the y axis. This is to unify the data accross R2-D3 charts.</p>
 
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 <LineChart
-  data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}]]}/>
+  data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}]]}/>
         `)}}
         />
         </pre>
 
         <LineChart
-          data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}]]}
+          data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}]]}
         />
         <p>If a second line is needed then this is easily added by adding a new data array to the existing array. The number of lines drawn is infinite but only coloured up to 4 lines.</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 <LineChart
-  data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1, value: 10}, {key: 2, value: 12}, {key: 3, value: 4}]]}/>
+  data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]]}/>
         `)}}
         />
         </pre>
         <LineChart
-          data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1, value: 10}, {key: 2, value: 12}, {key: 3, value: 4}]]}
+          data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]]}
         />
         <h3>Height and Width</h3>
-        <p>The height and width can be easily set by passing in a numeric value in as a prop.</p>
+        <p>The height and width can be easily set by passing in a numeric y in as a prop.</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 <LineChart
 width={50}
 height={50}
-data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1, value: 10}, {key: 2, value: 12}, {key: 3, value: 4}]]}/>
+data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]]}/>
         `)}}
         />
         </pre>
         <LineChart
           width={50}
           height={50}
-          data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1, value: 10}, {key: 2, value: 12}, {key: 3, value: 4}]]}
+          data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]]}
         />
 
         <h3>Margin</h3>
@@ -114,7 +114,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
 margin={{top: 0, right: 0, bottom: 30, left: 100}}
 width={250}
 height={250}
-data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1, value: 10}, {key: 2, value: 12}, {key: 3, value: 4}]]}/>
+data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]]}/>
         `)}}
         />
         </pre>
@@ -122,7 +122,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
           margin={{top: 0, right: 0, bottom: 30, left: 100}}
           width={350}
           height={250}
-          data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1, value: 10}, {key: 2, value: 12}, {key: 3, value: 4}]]}
+          data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]]}
         />
 
         <h3>Axes</h3>
@@ -133,7 +133,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
   axes
   width={250}
   height={250}
-  data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1, value: 10}, {key: 2, value: 12}, {key: 3, value: 4}]]}/>
+  data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]]}/>
         `)}}
         />
         </pre>
@@ -141,11 +141,11 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
           axes
           width={350}
           height={250}
-          data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1, value: 10}, {key: 2, value: 12}, {key: 3, value: 4}]]}
+          data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]]}
         />
 
         <h3>Axes labels</h3>
-        <p>The axes labels can be overridden by simply passing <b>axisLabels</b> object with both a x and y value.</p>
+        <p>The axes labels can be overridden by simply passing <b>axisLabels</b> object with both a x and y y.</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 <LineChart
@@ -154,7 +154,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
   axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
   width={250}
   height={250}
-  data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1, value: 10}, {key: 2, value: 12}, {key: 3, value: 4}]]}/>
+  data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]]}/>
         `)}}
         />
         </pre>
@@ -164,7 +164,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
           axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
           width={350}
           height={250}
-          data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1, value: 10}, {key: 2, value: 12}, {key: 3, value: 4}]]}
+          data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]]}
         />
 
         <h3>Interpolate (Making the lines smooth)</h3>
@@ -179,7 +179,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
   width={250}
   interpolate={'cardinal'}
   height={250}
-  data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1, value: 10}, {key: 2, value: 12}, {key: 3, value: 4}]]}/>
+  data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]]}/>
         `)}}
         />
         </pre>
@@ -190,14 +190,14 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
           axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
           width={350}
           height={250}
-          data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1, value: 10}, {key: 2, value: 12}, {key: 3, value: 4}]]}
+          data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]]}
         />
 
         <h3>xType / yType</h3>
         <p>The data passed associated to the particular axes can be in numeric, date (the default
            format is for example 1-Jan-15 but can be overridden)
          or textual formats (used for labelling). </p>
-        <p>For the example below the data for the key is text and so the <b>xType</b> needs to be changed to <b>text</b>.</p>
+        <p>For the example below the data for the x is text and so the <b>xType</b> needs to be changed to <b>text</b>.</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 <LineChart
@@ -207,8 +207,8 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
   height={250}
   interpolate={'cardinal'}
   data={[
-    [{key: 'Mon', value: 20}, {key: 'Tue', value: 10}, {key: 'Wed', value: 33}, {key: 'Thu', value: 45}, {key: 'Fri', value: 15}],
-    [{key: 'Mon', value: 10}, {key: 'Tue', value: 15}, {key: 'Wed', value: 13}, {key: 'Thu', value: 15}, {key: 'Fri', value: 10}]
+    [{x: 'Mon', y: 20}, {x: 'Tue', y: 10}, {x: 'Wed', y: 33}, {x: 'Thu', y: 45}, {x: 'Fri', y: 15}],
+    [{x: 'Mon', y: 10}, {x: 'Tue', y: 15}, {x: 'Wed', y: 13}, {x: 'Thu', y: 15}, {x: 'Fri', y: 10}]
   ]}
 />
         `)}}
@@ -221,11 +221,11 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
           width={350}
           height={250}
           data={[
-            [{key: 'Mon', value: 20}, {key: 'Tue', value: 10}, {key: 'Wed', value: 33}, {key: 'Thu', value: 45}, {key: 'Fri', value: 15}],
-            [{key: 'Mon', value: 10}, {key: 'Tue', value: 15}, {key: 'Wed', value: 13}, {key: 'Thu', value: 15}, {key: 'Fri', value: 10}]
+            [{x: 'Mon', y: 20}, {x: 'Tue', y: 10}, {x: 'Wed', y: 33}, {x: 'Thu', y: 45}, {x: 'Fri', y: 15}],
+            [{x: 'Mon', y: 10}, {x: 'Tue', y: 15}, {x: 'Wed', y: 13}, {x: 'Thu', y: 15}, {x: 'Fri', y: 10}]
           ]}
         />
-        <p>Setting the <b>yType</b> to be <b>time</b></p>
+        <p>Setting the <b>xType</b> to be <b>time</b></p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 <LineChart
@@ -235,8 +235,8 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
   width={750}
   height={250}
   data={[
-    [{key: '1-Jan-15', value: 20}, {key: '1-Feb-15', value: 10}, {key: '1-Mar-15', value: 33}, {key: '1-Apr-15', value: 45}, {key: '1-May-15', value: 15}],
-    [{key: '1-Jan-15', value: 10}, {key: '1-Feb-15', value: 15}, {key: '1-Mar-15', value: 13}, {key: '1-Apr-15', value: 15}, {key: '1-May-15', value: 10}]
+    [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
+    [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
   ]}
 />
         `)}}
@@ -249,8 +249,8 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
           width={750}
           height={250}
           data={[
-            [{key: '1-Jan-15', value: 20}, {key: '1-Feb-15', value: 10}, {key: '1-Mar-15', value: 33}, {key: '1-Apr-15', value: 45}, {key: '1-May-15', value: 15}],
-            [{key: '1-Jan-15', value: 10}, {key: '1-Feb-15', value: 15}, {key: '1-Mar-15', value: 13}, {key: '1-Apr-15', value: 15}, {key: '1-May-15', value: 10}]
+            [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
+            [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
           ]}
         />
 
@@ -267,7 +267,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
   width={350}
   height={250}
   data={[
-    [{key: 'Mon', value: 'Less'}, {key: 'Tue', value: 'Middle'}, {key: 'Wed', value: 'Middle'}, {key: 'Thu', value: 'Less'}, {key: 'Fri', value: 'Middle'}]
+    [{x: 'Mon', y: 'Less'}, {x: 'Tue', y: 'Middle'}, {x: 'Wed', y: 'Middle'}, {x: 'Thu', y: 'Less'}, {x: 'Fri', y: 'Middle'}]
   ]}
 />
         `)}}
@@ -284,7 +284,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
           height={250}
           yDomainRange={['Allot', 'Perfect', 'Little']}
           data={[
-            [{key: 'Mon', value: 'Little'}, {key: 'Tue', value: 'Perfect'}, {key: 'Wed', value: 'Allot'}, {key: 'Thu', value: 'Little'}, {key: 'Fri', value: 'Perfect'}]
+            [{x: 'Mon', y: 'Little'}, {x: 'Tue', y: 'Perfect'}, {x: 'Wed', y: 'Allot'}, {x: 'Thu', y: 'Little'}, {x: 'Fri', y: 'Perfect'}]
           ]}
         />
         <p>Setting the <b>yType</b> to be <b>time</b></p>
@@ -298,8 +298,8 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
   width={500}
   height={500}
   data={[
-    [{key: 10, value: '1-Jan-15'}, {key: 20, value: '10-Jan-15'}, {key: 40, value: '21-Jan-15'}, {key: 80, value: '31-Jan-15'}],
-    [{key: 0, value: '1-Jan-15'}, {key: 15, value: '10-Jan-15'}, {key: 20, value: '21-Jan-15'}, {key: 25, value: '31-Jan-15'}]
+    [{x: 10, y: '1-Jan-15'}, {x: 20, y: '10-Jan-15'}, {x: 40, y: '21-Jan-15'}, {x: 80, y: '31-Jan-15'}],
+    [{x: 0, y: '1-Jan-15'}, {x: 15, y: '10-Jan-15'}, {x: 20, y: '21-Jan-15'}, {x: 25, y: '31-Jan-15'}]
   ]}
 />
         `)}}
@@ -314,8 +314,8 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
           width={500}
           height={500}
           data={[
-            [{key: 10, value: '1-Jan-15'}, {key: 20, value: '10-Jan-15'}, {key: 40, value: '21-Jan-15'}, {key: 80, value: '31-Jan-15'}],
-            [{key: 0, value: '1-Jan-15'}, {key: 15, value: '10-Jan-15'}, {key: 20, value: '21-Jan-15'}, {key: 25, value: '31-Jan-15'}]
+            [{x: 10, y: '1-Jan-15'}, {x: 20, y: '10-Jan-15'}, {x: 40, y: '21-Jan-15'}, {x: 80, y: '31-Jan-15'}],
+            [{x: 0, y: '1-Jan-15'}, {x: 15, y: '10-Jan-15'}, {x: 20, y: '21-Jan-15'}, {x: 25, y: '31-Jan-15'}]
           ]}
         />
 
@@ -332,8 +332,8 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
   width={500}
   height={500}
   data={[
-    [{key: 10, value: '1-Jan-15'}, {key: 20, value: '10-Jan-15'}, {key: 40, value: '21-Jan-15'}, {key: 80, value: '31-Jan-15'}],
-    [{key: 0, value: '1-Jan-15'}, {key: 15, value: '10-Jan-15'}, {key: 20, value: '21-Jan-15'}, {key: 25, value: '31-Jan-15'}]
+    [{x: 10, y: '1-Jan-15'}, {x: 20, y: '10-Jan-15'}, {x: 40, y: '21-Jan-15'}, {x: 80, y: '31-Jan-15'}],
+    [{x: 0, y: '1-Jan-15'}, {x: 15, y: '10-Jan-15'}, {x: 20, y: '21-Jan-15'}, {x: 25, y: '31-Jan-15'}]
   ]}
 />
         `)}}
@@ -349,13 +349,13 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
           width={500}
           height={500}
           data={[
-            [{key: 10, value: '1-Jan-15'}, {key: 20, value: '10-Jan-15'}, {key: 40, value: '21-Jan-15'}, {key: 80, value: '31-Jan-15'}],
-            [{key: 0, value: '1-Jan-15'}, {key: 15, value: '10-Jan-15'}, {key: 20, value: '21-Jan-15'}, {key: 25, value: '31-Jan-15'}]
+            [{x: 10, y: '1-Jan-15'}, {x: 20, y: '10-Jan-15'}, {x: 40, y: '21-Jan-15'}, {x: 80, y: '31-Jan-15'}],
+            [{x: 0, y: '1-Jan-15'}, {x: 15, y: '10-Jan-15'}, {x: 20, y: '21-Jan-15'}, {x: 25, y: '31-Jan-15'}]
           ]}
         />
 
         <h3>range yDomainRange, xDomainRange</h3>
-        <p>By default the axis ranges are automatically calculated based on the smallest and the largest values.</p>
+        <p>By default the axis ranges are automatically calculated based on the smallest and the largest ys.</p>
         <p>The range can be fixed by passing an array param of 2 numbers for the particular axis.
         The first number is the bottom of the range the second is the higher point of the range.</p>
         <pre>
@@ -369,8 +369,8 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
   height={250}
   interpolate={'cardinal'}
   data={[
-    [{key: 10, value: 25}, {key: 20, value: 10}, {key: 30, value: 25}, {key: 40, value: 10}, {key: 50, value: 12}, {key: 60, value: 4}],
-    [{key: 10, value: 40}, {key: 20, value: 30}, {key: 30, value: 25}, {key: 40, value: 60}, {key: 50, value: 22}, {key: 60, value: 9}]
+    [{x: 10, y: 25}, {x: 20, y: 10}, {x: 30, y: 25}, {x: 40, y: 10}, {x: 50, y: 12}, {x: 60, y: 4}],
+    [{x: 10, y: 40}, {x: 20, y: 30}, {x: 30, y: 25}, {x: 40, y: 60}, {x: 50, y: 22}, {x: 60, y: 9}]
   ]}
 />
         `)}}
@@ -384,11 +384,48 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
           height={250}
           interpolate={'cardinal'}
           data={[
-            [{key: 10, value: 25}, {key: 20, value: 10}, {key: 30, value: 25}, {key: 40, value: 10}, {key: 50, value: 12}, {key: 60, value: 25}],
-            [{key: 10, value: 40}, {key: 20, value: 30}, {key: 30, value: 25}, {key: 40, value: 60}, {key: 50, value: 22}, {key: 60, value: 9}]
+            [{x: 10, y: 25}, {x: 20, y: 10}, {x: 30, y: 25}, {x: 40, y: 10}, {x: 50, y: 12}, {x: 60, y: 25}],
+            [{x: 10, y: 40}, {x: 20, y: 30}, {x: 30, y: 25}, {x: 40, y: 60}, {x: 50, y: 22}, {x: 60, y: 9}]
           ]}
         />
-        <h3>Setting the tick values</h3>
+        <h3>Tick display format</h3>
+        <p>If the x or y axis  has an xType/yType of time then a display for the axis can be overridden by setting the tickTimeDisplayFormat.</p>
+        <p>The options are very flexible and can be seen here <a href="https://github.com/mbostock/d3/wiki/Time-Formatting">Time Formatting</a></p>
+        <pre>
+        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+<LineChart
+  axisLabels={{x: 'Total Revenue', y: 'January'}}
+  margin={{top: 10, right: 30, bottom: 50, left: 70}}
+  yType={'time'}
+  axes
+  interpolate={'cardinal'}
+  tickTimeDisplayFormat={'%a'}
+  width={500}
+  height={500}
+  data={[
+    [{x: 10, y: '1-Jan-15'}, {x: 20, y: '10-Jan-15'}, {x: 40, y: '21-Jan-15'}, {x: 80, y: '31-Jan-15'}],
+    [{x: 0, y: '1-Jan-15'}, {x: 15, y: '10-Jan-15'}, {x: 20, y: '21-Jan-15'}, {x: 25, y: '31-Jan-15'}]
+  ]}
+/>
+        `)}}
+        />
+        </pre>
+        <LineChart
+          axisLabels={{x: 'Total Revenue', y: 'January'}}
+          margin={{top: 10, right: 30, bottom: 50, left: 70}}
+          yType={'time'}
+          axes
+          interpolate={'cardinal'}
+          tickTimeDisplayFormat={'%a'}
+          width={500}
+          height={500}
+          data={[
+            [{x: 10, y: '1-Jan-15'}, {x: 20, y: '10-Jan-15'}, {x: 40, y: '21-Jan-15'}, {x: 80, y: '31-Jan-15'}],
+            [{x: 0, y: '1-Jan-15'}, {x: 15, y: '10-Jan-15'}, {x: 20, y: '21-Jan-15'}, {x: 25, y: '31-Jan-15'}]
+          ]}
+        />
+
+        <h3>Setting the tick ys</h3>
         <p>The number of ticks on the x and y axis can be set by passing in a number to xTicks or yTicks.
         This can make the axis easier to read.</p>
         <pre>
@@ -403,8 +440,8 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
   height={250}
   interpolate={'cardinal'}
   data={[
-    [{key: 10, value: 25}, {key: 20, value: 10}, {key: 30, value: 25}, {key: 40, value: 10}, {key: 50, value: 12}, {key: 60, value: 25}],
-    [{key: 10, value: 40}, {key: 20, value: 30}, {key: 30, value: 25}, {key: 40, value: 60}, {key: 50, value: 22}, {key: 60, value: 9}]
+    [{x: 10, y: 25}, {x: 20, y: 10}, {x: 30, y: 25}, {x: 40, y: 10}, {x: 50, y: 12}, {x: 60, y: 25}],
+    [{x: 10, y: 40}, {x: 20, y: 30}, {x: 30, y: 25}, {x: 40, y: 60}, {x: 50, y: 22}, {x: 60, y: 9}]
   ]}
 />
         `)}}
@@ -420,8 +457,8 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
           height={250}
           interpolate={'cardinal'}
           data={[
-            [{key: 10, value: 25}, {key: 20, value: 10}, {key: 30, value: 25}, {key: 40, value: 10}, {key: 50, value: 12}, {key: 60, value: 25}],
-            [{key: 10, value: 40}, {key: 20, value: 30}, {key: 30, value: 25}, {key: 40, value: 60}, {key: 50, value: 22}, {key: 60, value: 9}]
+            [{x: 10, y: 25}, {x: 20, y: 10}, {x: 30, y: 25}, {x: 40, y: 10}, {x: 50, y: 12}, {x: 60, y: 25}],
+            [{x: 10, y: 40}, {x: 20, y: 30}, {x: 30, y: 25}, {x: 40, y: 60}, {x: 50, y: 22}, {x: 60, y: 9}]
           ]}
         />
 
@@ -447,8 +484,8 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
   height={250}
   interpolate={'cardinal'}
   data={[
-    [{key: 10, value: 25}, {key: 20, value: 10}, {key: 30, value: 25}, {key: 40, value: 10}, {key: 50, value: 12}, {key: 60, value: 4}],
-    [{key: 10, value: 40}, {key: 20, value: 30}, {key: 30, value: 25}, {key: 40, value: 60}, {key: 50, value: 22}, {key: 60, value: 9}]
+    [{x: 10, y: 25}, {x: 20, y: 10}, {x: 30, y: 25}, {x: 40, y: 10}, {x: 50, y: 12}, {x: 60, y: 4}],
+    [{x: 10, y: 40}, {x: 20, y: 30}, {x: 30, y: 25}, {x: 40, y: 60}, {x: 50, y: 22}, {x: 60, y: 9}]
   ]}
 />
         `)}}
@@ -470,8 +507,8 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
           height={250}
           interpolate={'cardinal'}
           data={[
-            [{key: 10, value: 25}, {key: 20, value: 10}, {key: 30, value: 25}, {key: 40, value: 10}, {key: 50, value: 12}, {key: 60, value: 25}],
-            [{key: 10, value: 40}, {key: 20, value: 30}, {key: 30, value: 25}, {key: 40, value: 60}, {key: 50, value: 22}, {key: 60, value: 9}]
+            [{x: 10, y: 25}, {x: 20, y: 10}, {x: 30, y: 25}, {x: 40, y: 10}, {x: 50, y: 12}, {x: 60, y: 25}],
+            [{x: 10, y: 40}, {x: 20, y: 30}, {x: 30, y: 25}, {x: 40, y: 60}, {x: 50, y: 22}, {x: 60, y: 9}]
           ]}
         />
 
@@ -487,7 +524,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
   xType={'time'}
   width={800}
   height={400}
-  axisLabels={{x: 'Hour', y: 'Value'}}
+  axisLabels={{x: 'Hour', y: 'Percentage'}}
   interpolate={'cardinal'}
   yDomainRange={[0, 100]}
   axes
@@ -513,7 +550,7 @@ data={[[{key: 1, value: 20}, {key: 2, value: 10}, {key: 3, value: 25}], [{key: 1
           height={400}
           interpolate={'cardinal'}
           yDomainRange={[0, 100]}
-          axisLabels={{x: 'Hour', y: 'Value'}}
+          axisLabels={{x: 'Hour', y: 'Percentage'}}
           axes
           grid
           style={{'.line0':
