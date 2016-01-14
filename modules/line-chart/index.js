@@ -289,7 +289,7 @@ export default class LineChart extends React.Component {
           .on('mouseover', () => mouseOverHandler(dotData, d3LastEvent))
           .on('mouseout', () => mouseOutHandler(dotData, d3LastEvent))
           .on('mousemove', () => mouseMoveHandler(d3LastEvent))
-          .on('click', (d) => clickHandler(d, d3LastEvent));
+          .on('click', () => clickHandler(dotData, d3LastEvent));
         });
       }
     });

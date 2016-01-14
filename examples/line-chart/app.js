@@ -449,7 +449,7 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
           ]}
         />
 
-        <h3>Setting the tick ys</h3>
+        <h3>Setting the tick numbers</h3>
         <p>The number of ticks on the x and y axis can be set by passing in a number to xTicks or yTicks.
         This can make the axis easier to read.</p>
         <pre>
@@ -600,6 +600,7 @@ mouseOutHandler() {
 <LineChart
   axes
   dataPoints
+  grid
   xDomainRange={[0, 100]}
   yDomainRange={[0, 100]}
   mouseOverHandler={this.mouseOverHandler.bind(this)}
@@ -619,6 +620,7 @@ mouseOutHandler() {
         <LineChart
           axes
           dataPoints
+          grid
           xDomainRange={[0, 100]}
           yDomainRange={[0, 100]}
           mouseOverHandler={this.mouseOverHandler.bind(this)}
@@ -632,6 +634,32 @@ mouseOutHandler() {
             [{x: 10, y: 40}, {x: 20, y: 30}, {x: 30, y: 25}, {x: 40, y: 60}, {x: 50, y: 22}, {x: 60, y: 9}]
           ]}
         />
+
+        <h3>Click Handler</h3>
+        <p>The chart will send out a clickHandler event from the dataPoints (see above). The dataPoints will need to be set. This can be used by your react application in anyway you would require.
+         The event handler provides the point data.</p>
+         <div>
+           <div style={{display: 'inline-block'}}>
+           <LineChart
+             axes
+             dataPoints
+             grid
+             xDomainRange={[0, 100]}
+             yDomainRange={[0, 100]}
+             clickHandler={(d) => this.setState({dataDisplay: `The value of x is ${d.x} and y is ${d.y}`})}
+             width={500}
+             height={350}
+             interpolate={'cardinal'}
+             data={[
+               [{x: 10, y: 25}, {x: 20, y: 10}, {x: 30, y: 25}, {x: 40, y: 10}, {x: 50, y: 12}, {x: 60, y: 25}],
+               [{x: 10, y: 40}, {x: 20, y: 30}, {x: 30, y: 25}, {x: 40, y: 60}, {x: 50, y: 22}, {x: 60, y: 9}]
+             ]}
+           />
+           </div>
+           <div style={{display: 'inline-block', verticalAlign: 'top', paddingLeft: '20px'}}>
+             {this.state.dataDisplay ? this.state.dataDisplay : 'Click on a point to show the value'}
+           </div>
+         </div>
 
         <h3>Updating the data</h3>
         <p>By selecting the button below to start the random data you can see a simulation of the performance if a data feed is passed in.
