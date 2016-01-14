@@ -2,7 +2,7 @@ import React from 'react';
 import {createElement} from 'react-faux-dom';
 import {linear, ordinal} from 'd3-scale';
 import {extent} from 'd3-array';
-import {select, svg, time} from 'd3';
+import {select, svg, time, event as d3LastEvent} from 'd3';
 import {Style} from 'radium';
 import merge from 'lodash.merge';
 import {format} from 'd3-time-format';
@@ -12,14 +12,30 @@ const defaultStyle = {
     fill: 'none',
     strokeWidth: 1.5
   },
+  '.dot': {
+    fill: '',
+    strokeWidth: 0
+  },
+  '.dot0': {
+    fill: 'steelblue'
+  },
   '.line0': {
     stroke: 'steelblue'
+  },
+  '.dot1': {
+    fill: 'orange'
   },
   '.line1': {
     stroke: 'orange'
   },
+  '.dot2': {
+    fill: 'red'
+  },
   '.line2': {
     stroke: 'red'
+  },
+  '.dot3': {
+    fill: 'darkblue'
   },
   '.line3': {
     stroke: 'darkblue'
@@ -64,7 +80,12 @@ export default class LineChart extends React.Component {
       axisLabels: React.PropTypes.object,
       tickTimeDisplayFormat: React.PropTypes.string,
       yTicks: React.PropTypes.number,
-      xTicks: React.PropTypes.number
+      xTicks: React.PropTypes.number,
+      dataPoints: React.PropTypes.bool,
+      mouseOverHandler: React.PropTypes.func,
+      mouseOutHandler: React.PropTypes.func,
+      mouseMoveHandler: React.PropTypes.func,
+      clickHandler: React.PropTypes.func
     };
   }
 
@@ -77,7 +98,11 @@ export default class LineChart extends React.Component {
       axes: false,
       xType: 'linear',
       yType: 'linear',
-      axisLabels: {x: '', y: ''}
+      axisLabels: {x: '', y: ''},
+      mouseOverHandler: () => {},
+      mouseOutHandler: () => {},
+      mouseMoveHandler: () => {},
+      clickHandler: () => {}
     };
   }
 
@@ -161,7 +186,7 @@ export default class LineChart extends React.Component {
   }
 
   calcMargin(axes) {
-    return axes ? {top: 10, right: 20, bottom: 50, left: 50} : {top: 0, right: 0, bottom: 0, left: 0};
+    return axes ? {top: 10, right: 20, bottom: 50, left: 50} : {top: 3, right: 3, bottom: 3, left: 3};
   }
 
   render() {
@@ -177,7 +202,12 @@ export default class LineChart extends React.Component {
       yTicks,
       interpolate,
       grid,
-      tickTimeDisplayFormat} = this.props;
+      tickTimeDisplayFormat,
+      mouseOverHandler,
+      mouseOutHandler,
+      mouseMoveHandler,
+      clickHandler,
+      dataPoints} = this.props;
     const margin = this.props.margin ? this.props.margin : this.calcMargin(axes);
     const width = this.props.width - margin.left - margin.right;
     const height = this.props.height - margin.top - margin.bottom;
@@ -234,6 +264,34 @@ export default class LineChart extends React.Component {
         .datum(dataElelment)
         .attr('class', `line line${i}`)
         .attr('d', linePath);
+      if (dataPoints) {
+        dataElelment.map((dotData) => {
+          root
+          .append('circle')
+          .attr('r', 4)
+          .attr('class', `dot dot${i}`)
+          .attr('cx', () => {
+            switch (xType) {
+              case ('time'):
+                return x(this.parseDate(dotData.x));
+              default:
+                return x(dotData.x);
+            }
+          })
+          .attr('cy', () => {
+            switch (yType) {
+              case ('time'):
+                return y(this.parseDate(dotData.y));
+              default:
+                return y(dotData.y);
+            }
+          })
+          .on('mouseover', () => mouseOverHandler(dotData, d3LastEvent))
+          .on('mouseout', () => mouseOutHandler(dotData, d3LastEvent))
+          .on('mousemove', () => mouseMoveHandler(d3LastEvent))
+          .on('click', () => clickHandler(dotData, d3LastEvent));
+        });
+      }
     });
 
     return (
