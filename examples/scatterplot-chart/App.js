@@ -114,61 +114,61 @@ const bigDataZ = [
     'type': 'One',
     'x': 1,
     'y': 5,
-    'z': 10
+    'z': 500
   },
   {
-    'type': 'Two',
+    'type': 'One',
     'x': 3,
     'y': 1,
-    'z': 20
+    'z': 100
   },
   {
-    'type': 'Three',
+    'type': 'One',
     'x': 0,
     'y': 6,
-    'z': 30
+    'z': 600
   },
   {
-    'type': 'Four',
+    'type': 'One',
     'x': 5,
     'y': 2,
-    'z': 40
+    'z': 200
   },
   {
-    'type': 'Five',
+    'type': 'One',
     'x': 4,
     'y': 4,
-    'z': 50
+    'z': 400
   },
   {
-    'type': 'Six',
+    'type': 'One',
     'x': 5,
     'y': 9,
-    'z': 60
+    'z': 900
   },
   {
-    'type': 'Seven',
+    'type': 'One',
     'x': 9,
     'y': 1,
-    'z': 70
+    'z': 100
   },
   {
-    'type': 'Eight',
+    'type': 'One',
     'x': 5,
     'y': 6,
-    'z': 80
+    'z': 600
   },
   {
-    'type': 'Nine',
+    'type': 'One',
     'x': 3,
     'y': 9,
-    'z': 90
+    'z': 900
   },
   {
-    'type': 'Ten',
+    'type': 'One',
     'x': 7,
     'y': 9,
-    'z': 100
+    'z': 900
   }
 ];
 
@@ -602,6 +602,86 @@ const data = [
           <Legend data={bigData} />
         </div>
         <h3>3rd data type</h3>
+        <p>It's also possible to pass in a third variable (z). This variable is a number and is used to scale the radius of the dot</p>
+        <pre>
+        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+const data = [
+  {
+    'type': 'One',
+    'x': 1,
+    'y': 5,
+    'z': 500
+  },
+  {
+    'type': 'One',
+    'x': 3,
+    'y': 1,
+    'z': 100
+  },
+  {
+    'type': 'One',
+    'x': 0,
+    'y': 6,
+    'z': 600
+  },
+  {
+    'type': 'One',
+    'x': 5,
+    'y': 2,
+    'z': 200
+  },
+  {
+    'type': 'One',
+    'x': 4,
+    'y': 4,
+    'z': 400
+  },
+  {
+    'type': 'One',
+    'x': 5,
+    'y': 9,
+    'z': 900
+  },
+  {
+    'type': 'One',
+    'x': 9,
+    'y': 1,
+    'z': 100
+  },
+  {
+    'type': 'One',
+    'x': 5,
+    'y': 6,
+    'z': 600
+  },
+  {
+    'type': 'One',
+    'x': 3,
+    'y': 9,
+    'z': 900
+  },
+  {
+    'type': 'One',
+    'x': 7,
+    'y': 9,
+    'z': 900
+  }
+];
+
+<ScatterplotChart
+  data={bigDataZ}
+  axes
+  axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+  width={480}
+  height={270}
+  grid
+  mouseOverHandler={this.mouseOverHandler.bind(this)}
+  mouseOutHandler={this.mouseOutHandler.bind(this)}
+  mouseMoveHandler={this.mouseMoveHandler.bind(this)}
+/>
+        `)}}
+        />
+        </pre>
         <ScatterplotChart
           data={bigDataZ}
           axes
@@ -612,7 +692,6 @@ const data = [
           mouseOverHandler={this.mouseOverHandler.bind(this)}
           mouseOutHandler={this.mouseOutHandler.bind(this)}
           mouseMoveHandler={this.mouseMoveHandler.bind(this)}
-          clickHandler={(d) => this.setState({dataDisplay: `The x value id ${d.x} and the y value is ${d.y}`})}
         />
         <br />
         <br />

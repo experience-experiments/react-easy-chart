@@ -113,7 +113,12 @@ export default class ScatterplotChart extends React.Component {
       const mn = range[0];
       const mx = range[1];
       const p = ((dataItem.z - mn) / (mx - mn));
-      return (dotRadius + (dotRadius * p));
+      const minRad = 5;
+      const maxRad = 20;
+      const rad = minRad + ((maxRad - minRad) * p);
+      return rad;
+      /*
+      return (dotRadius + (dotRadius * p));*/
     }
     return dotRadius;
   }
