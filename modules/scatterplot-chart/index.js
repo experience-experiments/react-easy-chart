@@ -1,7 +1,7 @@
 import React from 'react';
 import d3 from 'd3';
 import {linear, ordinal} from 'd3-scale';
-import {time} from 'd3';
+import {event as d3LastEvent, min, max, time} from 'd3';
 import {format} from 'd3-time-format';
 import {extent} from 'd3-array';
 import { createElement } from 'react-faux-dom';
@@ -36,6 +36,8 @@ const defaultStyle = {
   }
 };
 
+let parseDate = null;
+
 export default class ScatterplotChart extends React.Component {
   constructor(props) {
     super(props);
@@ -53,47 +55,44 @@ export default class ScatterplotChart extends React.Component {
     }
   }
 
-  getValueFunction(scale, type) {
-    const dataIndex = scale === 'x' ? 'key' : 'value';
-    switch (type) {
-      case 'time':
-        const parseDate = format(this.props.datePattern).parse;
-        return (d) => parseDate(d[dataIndex]);
-      default:
-        return (d) => d[dataIndex];
-    }
-  }
-
-  setDomainAndRange(scale, d3Axis, domainRange, data, type, length) {
-    const dataIndex = scale === 'x' ? 'x' : 'y';
+  setDomainAndRange(axesType, domainRange, data, type, length) {
+    const dataIndex = axesType === 'x' ? 'x' : 'y';
+    let d3Axis;
     switch (type) {
       case 'text':
-        d3Axis.domain(domainRange ?
-          this.calcDefaultDomain(domainRange, type)
-          :
-          data.map((d) => d[dataIndex])
-        );
-
-        d3Axis.rangePoints([0, length], 0);
+        d3Axis = ordinal();
+        d3Axis.domain(data.map((d) => d[dataIndex]), 1);
+        d3Axis.rangePoints([0, length], 1);
         break;
       case 'linear':
-        d3Axis.domain(domainRange ?
-          this.calcDefaultDomain(domainRange, type)
-          :
-          this.findLargestExtent(data, this.getValueFunction(scale, type))
-        );
-        d3Axis.range(scale === 'x' ? [0, length] : [length, 0]);
+        let minAmount = min(data, (d) => d[dataIndex]);
+        const maxAmount = max(data, (d) => d[dataIndex]);
+        d3Axis = linear();
+        if (domainRange) {
+          d3Axis.domain(this.calcDefaultDomain(domainRange, type));
+        } else {
+          // set initial domain
+          d3Axis.domain([minAmount, maxAmount]);
+          // calculate 1 tick offset
+          const ticks = d3Axis.ticks();
+          minAmount = minAmount - (ticks[1] - ticks[0]);
+          d3Axis.domain([minAmount, maxAmount]);
+        }
+        d3Axis.range(axesType === 'x' ? [0, length] : [length, 0]);
         break;
       case 'time':
-        d3Axis.domain(domainRange ?
-          this.calcDefaultDomain(domainRange, type)
-          :
-          this.findLargestExtent(data, this.getValueFunction(scale, type)));
-        d3Axis.range(scale === 'x' ? [0, length] : [length, 0]);
+        d3Axis = time.scale();
+        if (domainRange) {
+          d3Axis.domain(this.calcDefaultDomain(domainRange));
+        } else {
+          d3Axis.domain(extent(data, (d) => parseDate(d[dataIndex])));
+        }
+        d3Axis.range(axesType === 'x' ? [0, length] : [length, 0], 1);
         break;
       default:
         break;
     }
+    return d3Axis;
   }
 
   getDataConfig(type) {
@@ -108,17 +107,27 @@ export default class ScatterplotChart extends React.Component {
     return typeof configItem !== 'undefined' ? configItem.color : this.color(data.type);
   }
 
+  getRadius(data, dataItem, dotRadius) {
+    if (typeof data[0].z !== 'undefined') {
+      const range = extent(data, (d) => d.z);
+      const mn = range[0];
+      const mx = range[1];
+      const p = ((dataItem.z - mn) / (mx - mn));
+      return (dotRadius + (dotRadius * p));
+    }
+    return dotRadius;
+  }
+
   getStroke(data) {
     const configItem = this.getDataConfig(data.type);
     return typeof configItem !== 'undefined' ? configItem.stroke : 'none';
   }
 
   calcDefaultDomain(domainRange, type) {
-    if (!domainRange) return null;
     switch (type) {
       case 'time':
-        const parseDate = format(this.props.datePattern).parse;
-        return [parseDate(domainRange[0]), parseDate(domainRange[1])];
+        const arr = [parseDate(domainRange[0]), parseDate(domainRange[1])];
+        return arr;
       default:
         return domainRange;
     }
@@ -137,49 +146,60 @@ export default class ScatterplotChart extends React.Component {
 
   calcMargin(axes, spacer) {
     return axes ?
-    {top: 20, right: 20, bottom: 30, left: 40} :
+    {top: 24, right: 24, bottom: 24, left: 48} :
     {top: spacer, right: spacer, bottom: spacer, left: spacer};
   }
 
   render() {
-    const {axes, axisLabels, data, dotRadius, grid, style, xDomainRange, xTicks, yTicks, xType, yType} = this.props;
-    let {width, height, margin, yDomainRange} = this.props;
+    const {
+      axes,
+      axisLabels,
+      clickHandler,
+      data,
+      dotRadius,
+      grid,
+      mouseOverHandler,
+      mouseOutHandler,
+      mouseMoveHandler,
+      style,
+      tickTimeDisplayFormat,
+      xTickNumber,
+      xTicks,
+      yTicks,
+      xType,
+      yType
+      } = this.props;
+    let {width, height, margin, xDomainRange, yDomainRange} = this.props;
+
+    parseDate = format(this.props.datePattern).parse;
 
     margin = margin ? margin : this.calcMargin(axes, dotRadius * 2);
+
     width = width - (margin.left + margin.right);
-    height = height - (margin.top + margin.bottom + dotRadius);
-    /*
-    const x = d3.scale.linear().range([0, width]);
-    const y = d3.scale.linear().range([height, 0]);
-    */
-    const x = this.getScale(xType);
-    const y = this.getScale(yType);
+    height = height - (margin.top + margin.bottom + (dotRadius * 2));
 
-    yDomainRange = this.calcDefaultDomain(yDomainRange, yType);
-    this.setDomainAndRange('x', x, xDomainRange, data, xType, width);
-    this.setDomainAndRange('y', y, yDomainRange, data, yType, height);
+    yDomainRange = yDomainRange ? this.calcDefaultDomain(yDomainRange, yType) : null;
+    xDomainRange = xDomainRange ? this.calcDefaultDomain(xDomainRange, xType) : null;
 
+    const x = this.setDomainAndRange('x', xDomainRange, data, xType, width, dotRadius);
+    const y = this.setDomainAndRange('y', yDomainRange, data, yType, height, dotRadius);
+    const axisMargin = 18;
 
     const node = createElement('svg');
-
     const svg = d3.select(node)
       .attr('width', width + margin.left + margin.right)
-      .attr('height', height + margin.top + margin.bottom)
+      .attr('height', height + margin.top + margin.bottom + axisMargin + 6)
       .append('g')
       .attr('transform', `translate(${margin.left}, ${margin.top})`);
-
-    data.forEach((d) => {
-      d.y = +d.y;
-      d.x = +d.x;
-    });
-
-    x.domain(d3.extent(data, (d) => { return d.x; })).nice();
-    y.domain(d3.extent(data, (d) => { return d.y; })).nice();
 
     if (axes) {
       const xAxis = d3.svg.axis()
         .scale(x)
         .orient('bottom');
+      if (xType === 'time' && tickTimeDisplayFormat) {
+        xAxis.tickFormat(time.format(tickTimeDisplayFormat));
+      }
+      if (xTickNumber) xAxis.ticks(xTickNumber);
 
       const yAxis = d3.svg.axis()
         .scale(y)
@@ -197,7 +217,7 @@ export default class ScatterplotChart extends React.Component {
         .append('text')
         .attr('class', 'label')
         .attr('x', width)
-        .attr('y', -6)
+        .attr('y', margin.bottom + axisMargin)
         .style('text-anchor', 'end')
         .text(axisLabels.x);
 
@@ -207,7 +227,7 @@ export default class ScatterplotChart extends React.Component {
         .append('text')
         .attr('class', 'label')
         .attr('transform', 'rotate(-90)')
-        .attr('y', 6)
+        .attr('y', -margin.left)
         .attr('dy', '.71em')
         .style('text-anchor', 'end')
         .text(axisLabels.y);
@@ -217,33 +237,22 @@ export default class ScatterplotChart extends React.Component {
       .data(data)
       .enter().append('circle')
       .attr('class', 'dot')
-      .attr('r', dotRadius)
-      .attr('cx', (d) => { return x(d.x); })
+      .attr('r', (d) => this.getRadius(data, d, dotRadius))
+      .attr('cx', (d) => {
+        switch (xType) {
+          case ('time'):
+            return x(parseDate(d.x));
+          default:
+            return x(d.x);
+        }
+      })
       .attr('cy', (d) => { return y(d.y); })
       .style('fill', (d) => this.getFill(d))
-      .style('stroke', (d) => this.getStroke(d));
-    /*
-    if (useLegend) {
-      const legend = svg.selectAll('.legend')
-        .data(this.color.domain())
-        .enter()
-        .append('g')
-        .attr('class', 'legend')
-        .attr('transform', (d, i) => { return `translate(0, ${i * 20})`; });
-
-      legend.append('rect')
-        .attr('x', width - 18)
-        .attr('width', 18)
-        .attr('height', 18)
-        .style('fill', this.color);
-
-      legend.append('text')
-        .attr('x', width - 24)
-        .attr('y', 9)
-        .attr('dy', '.35em')
-        .style('text-anchor', 'end')
-        .text((d) => d);
-    }*/
+      .style('stroke', (d) => this.getStroke(d))
+      .on('mouseover', (d) => mouseOverHandler(d, d3LastEvent))
+      .on('mouseout', (d) => mouseOutHandler(d, d3LastEvent))
+      .on('mousemove', () => mouseMoveHandler(d3LastEvent))
+      .on('click', (d) => clickHandler(d, d3LastEvent));
 
     const uid = Math.floor(Math.random() * new Date().getTime());
 
@@ -259,6 +268,7 @@ export default class ScatterplotChart extends React.Component {
 ScatterplotChart.propTypes = {
   axes: React.PropTypes.bool,
   axisLabels: React.PropTypes.object,
+  clickHandler: React.PropTypes.func,
   config: React.PropTypes.array,
   data: React.PropTypes.array.isRequired,
   datePattern: React.PropTypes.string,
@@ -267,10 +277,16 @@ ScatterplotChart.propTypes = {
   height: React.PropTypes.number,
   useLegend: React.PropTypes.bool,
   margin: React.PropTypes.object,
+  mouseOverHandler: React.PropTypes.func,
+  mouseOutHandler: React.PropTypes.func,
+  mouseMoveHandler: React.PropTypes.func,
   style: React.PropTypes.object,
+  tickTimeDisplayFormat: React.PropTypes.string,
   width: React.PropTypes.number,
   xDomainRange: React.PropTypes.array,
   yDomainRange: React.PropTypes.array,
+  xTickNumber: React.PropTypes.number,
+  yTickNumber: React.PropTypes.number,
   yTicks: React.PropTypes.number,
   xTicks: React.PropTypes.number,
   xType: React.PropTypes.string,
