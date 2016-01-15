@@ -9,8 +9,6 @@ import {format} from 'd3-time-format';
 
 const defaultStyle = {
   '.area': {
-    fill: 'steelblue',
-    opacity: 0.6,
     stroke: 'black',
     strokeWidth: 0
   },
@@ -18,29 +16,12 @@ const defaultStyle = {
     fill: '',
     strokeWidth: 0
   },
-  '.dot0': {
-    fill: 'steelblue'
+  'circle': {
+    r: 4
   },
-  '.area0': {
-    fill: 'steelblue'
-  },
-  '.dot1': {
-    fill: 'orange'
-  },
-  '.area1': {
-    fill: 'orange'
-  },
-  '.dot2': {
-    fill: 'red'
-  },
-  '.area2': {
-    fill: 'red'
-  },
-  '.dot3': {
-    fill: 'darkblue'
-  },
-  '.area3': {
-    fill: 'darkblue'
+  'circle:hover': {
+    r: 8,
+    opacity: 0.6
   },
   '.axis': {
     font: '10px arial'
@@ -225,6 +206,26 @@ export default class AreaChart extends React.Component {
     select(svgNode).attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom);
     const root = select(svgNode).append('g').attr('transform', `translate(${margin.left},${margin.top})`);
 
+    const areaColors = ['darkblue', 'steelblue', 'orange', 'yellow', 'red'];
+    areaColors.map((fillColor, i) => {
+      const gradient = select(svgNode).append('defs')
+        .append('linearGradient')
+        .attr('id', `gradient${i}`)
+        .attr('x1', '0%')
+        .attr('x2', '0%')
+        .attr('y1', '0%')
+        .attr('y2', '100%');
+
+      defaultStyle[`.dot${i}`] = {fill: fillColor};
+      defaultStyle[`.area${i}`] = {fill: fillColor};
+      gradient.append('stop')
+        .attr('offset', '0%')
+        .attr('style', `stop-color:${fillColor};stop-opacity:0.8`);
+
+      gradient.append('stop')
+        .attr('offset', '100%')
+        .attr('style', `stop-color:${fillColor};stop-opacity:0.2`);
+    });
     if (axes) {
       const xAxis = svg.axis().scale(x).orient('bottom');
       if (xType === 'time' && tickTimeDisplayFormat) {
@@ -264,15 +265,14 @@ export default class AreaChart extends React.Component {
     data.map((dataElelment, i) => {
       root.append('path')
         .datum(dataElelment)
-        .attr('class', `area area${i}`)
-        .attr('d', area);
+        .attr('d', area)
+        .style('fill', `url(#gradient${i})`);
     });
     if (dataPoints) {
       data.map((dataElelment, i) => {
         dataElelment.map((dotData) => {
           root
           .append('circle')
-          .attr('r', 4)
           .attr('class', `dot dot${i}`)
           .attr('cx', () => {
             switch (xType) {
