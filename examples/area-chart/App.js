@@ -204,7 +204,7 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
           data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]]}
         />
 
-        <h3>Interpolate (Making the Areas smooth)</h3>
+        <h3>Interpolate (making the Areas smooth)</h3>
         <p>The Areas drawn can be set to be interpolated by passing in an interpolated param. By default this is set to linear.
         We can though override this for instance to make a cardinal Area. The options that can be chosen can be found <a href="https://github.com/mbostock/d3/wiki/SVG-Shapes">here</a> under the interpolate section.</p>
         <pre>
@@ -734,7 +734,7 @@ mouseOutHandler() {
 
         <h3>Fluid Example</h3>
         <p>Because the width and height of the chart can be passed in by a param then changes to the size of a window or container can change the chart dynamically.
-        If you shrink your browser window width you will see the chart change in a fluid manor.</p>
+        If you shrink your browser window width you will see the chart change in a fluid manor. You can also introduce basic break points such as removing the axes if below 700px width.</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 constructor(props) {
@@ -753,27 +753,27 @@ componentWillUnmount() {
 handleResize() {
   this.setState({windowWidth: window.innerWidth - 100});
 }
-  <AreaChart
-    xType={'time'}
-    axes
-    xTicks={5}
-    yTicks={3}
-    grid
-    width={this.state.windowWidth}
-    height={this.state.windowWidth / 2}
-    tickTimeDisplayFormat={'%d %m'}
-    interpolate={'cardinal'}
-    data={[
-      [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
-      [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
-    ]}
-  />
+<AreaChart
+  xType={'time'}
+  axes={this.state.windowWidth > 700 ? true : false}
+  xTicks={5}
+  yTicks={3}
+  grid
+  width={this.state.windowWidth}
+  height={this.state.windowWidth / 2}
+  tickTimeDisplayFormat={'%d %m'}
+  interpolate={'cardinal'}
+  data={[
+    [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
+    [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
+  ]}
+/>
         `)}}
         />
         </pre>
         <AreaChart
           xType={'time'}
-          axes
+          axes={this.state.windowWidth > 700 ? true : false}
           xTicks={5}
           yTicks={3}
           grid

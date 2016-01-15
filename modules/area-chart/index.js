@@ -188,7 +188,7 @@ export default class AreaChart extends React.Component {
   }
 
   calcMargin(axes) {
-    return axes ? {top: 10, right: 20, bottom: 50, left: 50} : {top: 3, right: 3, bottom: 3, left: 3};
+    return axes ? {top: 20, right: 20, bottom: 50, left: 50} : {top: 5, right: 5, bottom: 5, left: 5};
   }
 
   render() {
