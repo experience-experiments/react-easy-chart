@@ -24,7 +24,7 @@ export function getRandomId() {
 
 export function calcMargin(axes, margin) {
   if (margin) return margin;
-  return axes ? {top: 50, right: 50, bottom: 50, left: 50} : {top: 5, right: 5, bottom: 5, left: 5};
+  return axes ? {top: 20, right: 20, bottom: 50, left: 50} : {top: 0, right: 0, bottom: 0, left: 0};
 }
 
 export function findLargestExtent(data, valueFunction) {

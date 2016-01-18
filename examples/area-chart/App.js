@@ -126,7 +126,7 @@ class AreaChartContainer extends React.Component {
           data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]]}
         />
         <h3>Height and Width</h3>
-        <p>The height and width can be easily set by passing in a numeric y in as a prop.</p>
+        <p>The height and width can be easily set by passing in a numeric value in as a prop.</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 <AreaChart
@@ -148,7 +148,7 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 <AreaChart
-margin={{top: 0, right: 0, bottom: 30, left: 100}}
+margin={{top: 30, right: 30, bottom: 30, left: 30}}
 width={250}
 height={250}
 data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]]}/>
@@ -156,7 +156,7 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
         />
         </pre>
         <AreaChart
-          margin={{top: 0, right: 0, bottom: 30, left: 100}}
+          margin={{top: 30, right: 30, bottom: 30, left: 30}}
           width={350}
           height={250}
           data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]]}
@@ -182,7 +182,7 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
         />
 
         <h3>Axes labels</h3>
-        <p>The axes labels can be overridden by simply passing <b>axisLabels</b> object with both a x and y y.</p>
+        <p>The axes labels can be overridden by simply passing <b>axisLabels</b> object with both a x and y value.</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 <AreaChart
@@ -722,7 +722,7 @@ mouseOutHandler() {
 
         <h3>Fluid Example</h3>
         <p>Because the width and height of the chart can be passed in by a param then changes to the size of a window or container can change the chart dynamically.
-        If you shrink your browser window width you will see the chart change in a fluid manor. You can also introduce basic break points such as removing the axes if below 700px width.</p>
+        If you shrink your browser window width you will see the chart change in a fluid manor. You can also introduce basic break points such as removing the axes if below a certain width width.</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 constructor(props) {
@@ -743,12 +743,12 @@ handleResize() {
 }
 <AreaChart
   xType={'time'}
-  axes={this.state.windowWidth > 700 ? true : false}
+  axes={(this.state.windowWidth / 3) > 400 ? true : false}
   xTicks={5}
   yTicks={3}
   grid
-  width={this.state.windowWidth}
-  height={this.state.windowWidth / 2}
+  width={this.state.windowWidth / 3}
+  height={this.state.windowWidth / 6}
   tickTimeDisplayFormat={'%d %m'}
   interpolate={'cardinal'}
   data={[
@@ -759,14 +759,15 @@ handleResize() {
         `)}}
         />
         </pre>
+        <div style={{display: 'inline-block'}}>
         <AreaChart
           xType={'time'}
-          axes={this.state.windowWidth > 700 ? true : false}
+          axes={(this.state.windowWidth / 3) > 400 ? true : false}
           xTicks={5}
           yTicks={3}
           grid
-          width={this.state.windowWidth}
-          height={this.state.windowWidth / 2}
+          width={this.state.windowWidth / 3}
+          height={this.state.windowWidth / 6}
           tickTimeDisplayFormat={'%d %m'}
           interpolate={'cardinal'}
           data={[
@@ -774,6 +775,41 @@ handleResize() {
             [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
           ]}
         />
+        </div>
+        <div style={{display: 'inline-block', padding: '0 10px'}}>
+        <AreaChart
+          xType={'time'}
+          axes={(this.state.windowWidth / 3) > 400 ? true : false}
+          xTicks={5}
+          yTicks={3}
+          grid
+          width={this.state.windowWidth / 3}
+          height={this.state.windowWidth / 6}
+          tickTimeDisplayFormat={'%d %m'}
+          interpolate={'cardinal'}
+          data={[
+            [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
+            [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
+          ]}
+        />
+        </div>
+        <div style={{display: 'inline-block'}}>
+        <AreaChart
+          xType={'time'}
+          axes={(this.state.windowWidth / 3) > 400 ? true : false}
+          xTicks={5}
+          yTicks={3}
+          grid
+          width={this.state.windowWidth / 3}
+          height={this.state.windowWidth / 6}
+          tickTimeDisplayFormat={'%d %m'}
+          interpolate={'cardinal'}
+          data={[
+            [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
+            [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
+          ]}
+        />
+        </div>
         <br/>
         {this.state.showToolTip ? <ToolTip top={this.state.top} left={this.state.left}>The value of x is {this.state.x} and the value of y is {this.state.y}</ToolTip> : null}
         </div>
