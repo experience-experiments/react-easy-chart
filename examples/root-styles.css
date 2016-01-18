@@ -22,14 +22,16 @@ pre {
   max-height: 600px;
 }
 
-a {
-  text-decoration: none;
-}
-
 h2 {
     font-size: 40px;
     font-weight: 400;
     margin-bottom: 5px;
+}
+
+svg {
+    margin: auto;
+    display: block;
+    border: dotted 2px lightgray;
 }
 
 .container {

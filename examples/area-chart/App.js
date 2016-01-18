@@ -2,20 +2,33 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import {escapeHTML} from '../util';
 import ToolTip from '../ToolTip';
-import {LineChart} from 'rc-d3';
+import {AreaChart} from 'rc-d3';
 import moment from 'moment';
 import {format} from 'd3-time-format';
 
-class LineChartContainer extends React.Component {
+class AreaChartContainer extends React.Component {
     constructor(props) {
       super(props);
-      // Generate multiple lines of data
+      // Generate multiple Areas of data
       this.data = [this.generateData(), this.generateData(), this.generateData(), this.generateData()];
-      this.state = {showToolTip: false};
+      const initialWidth = window.innerWidth > 0 ? window.innerWidth : 500;
+      this.state = {showToolTip: false, windowWidth: initialWidth - 100};
+    }
+
+    componentDidMount() {
+      window.addEventListener('resize', this.handleResize.bind(this));
+    }
+
+    componentWillUnmount() {
+      window.removeEventListener('resize', this.handleResize);
     }
 
     getRandomArbitrary(min, max) {
       return Math.random() * (max - min) + min;
+    }
+
+    handleResize() {
+      this.setState({windowWidth: window.innerWidth - 100});
     }
 
     mouseOverHandler(d, e) {
@@ -57,7 +70,7 @@ class LineChartContainer extends React.Component {
     }
 
     turnOnRandomData() {
-      this.setState({randomDataIntervalId: setInterval(this.updateData.bind(this), 200)});
+      this.setState({randomDataIntervalId: setInterval(this.updateData.bind(this), 400)});
     }
 
     turnOffRandomData() {
@@ -83,47 +96,47 @@ class LineChartContainer extends React.Component {
 
     render() {
       return (<div>
-        <h2>The R2-D3 Line chart</h2>
+        <h2>The R2-D3 Area chart </h2>
         <h3>Data</h3>
-        <p>At the most basic the line chart can just take a single data file supplied in a JSON format and will render a
-         simple line chart.</p>
-        <p>The format of the data is an array of arrays which allows multiple lines to be generated.
+        <p>At the most basic the Area chart can just take a single data file supplied in a JSON format and will render a
+         simple Area chart.</p>
+        <p>The format of the data is an array of arrays which allows multiple Areas to be generated.
         The x field represents the x axis and the y the y axis. This is to unify the data accross R2-D3 charts.</p>
 
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
-<LineChart
+<AreaChart
   data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}]]}/>
         `)}}
         />
         </pre>
 
-        <LineChart
+        <AreaChart
           data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}]]}
         />
-        <p>If a second line is needed then this is easily added by adding a new data array to the existing array. The number of lines drawn is infinite but only coloured up to 4 lines.</p>
+        <p>If a second Area is needed then this is easily added by adding a new data array to the existing array. The number of Areas drawn is infinite but only coloured up to 4 Areas.</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
-<LineChart
+<AreaChart
   data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]]}/>
         `)}}
         />
         </pre>
-        <LineChart
+        <AreaChart
           data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]]}
         />
         <h3>Height and Width</h3>
-        <p>The height and width can be easily set by passing in a numeric y in as a prop.</p>
+        <p>The height and width can be easily set by passing in a numeric value in as a prop.</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
-<LineChart
+<AreaChart
 width={50}
 height={50}
 data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]]}/>
         `)}}
         />
         </pre>
-        <LineChart
+        <AreaChart
           width={50}
           height={50}
           data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]]}
@@ -134,16 +147,16 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
         <p>This can be particulary useful if a label is cut off.</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
-<LineChart
-margin={{top: 0, right: 0, bottom: 30, left: 100}}
+<AreaChart
+margin={{top: 30, right: 30, bottom: 30, left: 30}}
 width={250}
 height={250}
 data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]]}/>
         `)}}
         />
         </pre>
-        <LineChart
-          margin={{top: 0, right: 0, bottom: 30, left: 100}}
+        <AreaChart
+          margin={{top: 30, right: 30, bottom: 30, left: 30}}
           width={350}
           height={250}
           data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]]}
@@ -153,7 +166,7 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
         <p>The axes can be turned on by simply passing a boolean flag to true for <b>axes</b>.</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
-<LineChart
+<AreaChart
   axes
   width={250}
   height={250}
@@ -161,7 +174,7 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
         `)}}
         />
         </pre>
-        <LineChart
+        <AreaChart
           axes
           width={350}
           height={250}
@@ -169,10 +182,10 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
         />
 
         <h3>Axes labels</h3>
-        <p>The axes labels can be overridden by simply passing <b>axisLabels</b> object with both a x and y y.</p>
+        <p>The axes labels can be overridden by simply passing <b>axisLabels</b> object with both a x and y value.</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
-<LineChart
+<AreaChart
   axes
   margin={{top: 10, right: 10, bottom: 50, left: 50}}
   axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
@@ -182,7 +195,7 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
         `)}}
         />
         </pre>
-        <LineChart
+        <AreaChart
           axes
           margin={{top: 10, right: 10, bottom: 50, left: 50}}
           axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
@@ -191,12 +204,12 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
           data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]]}
         />
 
-        <h3>Interpolate (Making the lines smooth)</h3>
-        <p>The Lines drawn can be set to be interpolated by passing in an interpolated param. By default this is set to linear.
-        We can though override this for instance to make a cardinal line. The options that can be chosen can be found <a href="https://github.com/mbostock/d3/wiki/SVG-Shapes">here</a> under the interpolate section.</p>
+        <h3>Interpolate (making the Areas smooth)</h3>
+        <p>The Areas drawn can be set to be interpolated by passing in an interpolated param. By default this is set to linear.
+        We can though override this for instance to make a cardinal Area. The options that can be chosen can be found <a href="https://github.com/mbostock/d3/wiki/SVG-Shapes">here</a> under the interpolate section.</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
-<LineChart
+<AreaChart
   axes
   margin={{top: 10, right: 10, bottom: 50, left: 50}}
   axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
@@ -207,7 +220,7 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
         `)}}
         />
         </pre>
-        <LineChart
+        <AreaChart
           interpolate={'cardinal'}
           axes
           margin={{top: 10, right: 10, bottom: 50, left: 50}}
@@ -224,7 +237,7 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
         <p>For the example below the data for the x is text and so the <b>xType</b> needs to be changed to <b>text</b>.</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
-<LineChart
+<AreaChart
   xType={'text'}
   axes
   width={350}
@@ -238,7 +251,7 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
         `)}}
         />
         </pre>
-        <LineChart
+        <AreaChart
           xType={'text'}
           axes
           interpolate={'cardinal'}
@@ -252,7 +265,7 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
         <p>Setting the <b>xType</b> to be <b>time</b></p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
-<LineChart
+<AreaChart
   xType={'time'}
   axes
   interpolate={'cardinal'}
@@ -266,7 +279,7 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
         `)}}
         />
         </pre>
-        <LineChart
+        <AreaChart
           xType={'time'}
           axes
           interpolate={'cardinal'}
@@ -281,7 +294,7 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
         <p>Setting the <b>yType</b> to be <b>text</b>. (The yDomainRange has also been set to keep the range order.)</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
-<LineChart
+<AreaChart
   yType={'text'}
   xType={'text'}
   axes
@@ -297,7 +310,7 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
         `)}}
         />
         </pre>
-        <LineChart
+        <AreaChart
           yType={'text'}
           xType={'text'}
           axisLabels={{x: 'Day', y: 'How much did I eat'}}
@@ -311,85 +324,51 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
             [{x: 'Mon', y: 'Little'}, {x: 'Tue', y: 'Perfect'}, {x: 'Wed', y: 'Allot'}, {x: 'Thu', y: 'Little'}, {x: 'Fri', y: 'Perfect'}]
           ]}
         />
-        <p>Setting the <b>yType</b> to be <b>time</b></p>
-        <pre>
-        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
-<LineChart
-  axisLabels={{x: 'Total Revenue', y: 'January'}}
-  margin={{top: 10, right: 30, bottom: 50, left: 70}}
-  yType={'time'}
-  axes
-  width={500}
-  height={500}
-  data={[
-    [{x: 10, y: '1-Jan-15'}, {x: 20, y: '10-Jan-15'}, {x: 40, y: '21-Jan-15'}, {x: 80, y: '31-Jan-15'}],
-    [{x: 0, y: '1-Jan-15'}, {x: 15, y: '10-Jan-15'}, {x: 20, y: '21-Jan-15'}, {x: 25, y: '31-Jan-15'}]
-  ]}
-/>
-        `)}}
-        />
-        </pre>
-        <LineChart
-          axisLabels={{x: 'Total Revenue', y: 'January'}}
-          margin={{top: 10, right: 30, bottom: 50, left: 70}}
-          yType={'time'}
-          interpolate={'cardinal'}
-          axes
-          width={500}
-          height={500}
-          data={[
-            [{x: 10, y: '1-Jan-15'}, {x: 20, y: '10-Jan-15'}, {x: 40, y: '21-Jan-15'}, {x: 80, y: '31-Jan-15'}],
-            [{x: 0, y: '1-Jan-15'}, {x: 15, y: '10-Jan-15'}, {x: 20, y: '21-Jan-15'}, {x: 25, y: '31-Jan-15'}]
-          ]}
-        />
 
         <h3>Grid</h3>
         <p>A grid can be added to the graph by just passing in a boolean.</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
-<LineChart
-  axisLabels={{x: 'Total Revenue', y: 'January'}}
-  margin={{top: 10, right: 30, bottom: 50, left: 70}}
-  yType={'time'}
+<AreaChart
+  xType={'time'}
   axes
   grid
-  width={500}
-  height={500}
+  interpolate={'cardinal'}
+  width={750}
+  height={250}
   data={[
-    [{x: 10, y: '1-Jan-15'}, {x: 20, y: '10-Jan-15'}, {x: 40, y: '21-Jan-15'}, {x: 80, y: '31-Jan-15'}],
-    [{x: 0, y: '1-Jan-15'}, {x: 15, y: '10-Jan-15'}, {x: 20, y: '21-Jan-15'}, {x: 25, y: '31-Jan-15'}]
+    [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
+    [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
   ]}
 />
         `)}}
         />
         </pre>
-        <LineChart
-          axisLabels={{x: 'Total Revenue', y: 'January'}}
-          margin={{top: 10, right: 30, bottom: 50, left: 70}}
-          yType={'time'}
-          interpolate={'cardinal'}
+        <AreaChart
+          xType={'time'}
           axes
           grid
-          width={500}
-          height={500}
+          interpolate={'cardinal'}
+          width={750}
+          height={250}
           data={[
-            [{x: 10, y: '1-Jan-15'}, {x: 20, y: '10-Jan-15'}, {x: 40, y: '21-Jan-15'}, {x: 80, y: '31-Jan-15'}],
-            [{x: 0, y: '1-Jan-15'}, {x: 15, y: '10-Jan-15'}, {x: 20, y: '21-Jan-15'}, {x: 25, y: '31-Jan-15'}]
+            [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
+            [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
           ]}
         />
 
         <h3>range yDomainRange, xDomainRange</h3>
-        <p>By default the axis ranges are automatically calculated based on the smallest and the largest ys.</p>
+        <p>By default the axis ranges are automatically calculated based on the smallest and the largest x and y values.</p>
         <p>The range can be fixed by passing an array param of 2 numbers for the particular axis.
         The first number is the bottom of the range the second is the higher point of the range.</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
-<LineChart
+<AreaChart
   axes
   xDomainRange={[0, 100]}
   yDomainRange={[0, 100]}
   margin={{top: 0, right: 0, bottom: 100, left: 100}}
-  width={250}
+  width={750}
   height={250}
   interpolate={'cardinal'}
   data={[
@@ -400,11 +379,11 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
         `)}}
         />
         </pre>
-        <LineChart
+        <AreaChart
           axes
           xDomainRange={[0, 100]}
           yDomainRange={[0, 100]}
-          width={500}
+          width={750}
           height={250}
           interpolate={'cardinal'}
           data={[
@@ -417,35 +396,33 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
         <p>The options are very flexible and can be seen here <a href="https://github.com/mbostock/d3/wiki/Time-Formatting">Time Formatting</a></p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
-<LineChart
-  axisLabels={{x: 'Total Revenue', y: 'January'}}
-  margin={{top: 10, right: 30, bottom: 50, left: 70}}
-  yType={'time'}
+<AreaChart
+  xType={'time'}
   axes
+  grid
+  tickTimeDisplayFormat={'%d %m'}
   interpolate={'cardinal'}
-  tickTimeDisplayFormat={'%a'}
-  width={500}
-  height={500}
+  width={750}
+  height={250}
   data={[
-    [{x: 10, y: '1-Jan-15'}, {x: 20, y: '10-Jan-15'}, {x: 40, y: '21-Jan-15'}, {x: 80, y: '31-Jan-15'}],
-    [{x: 0, y: '1-Jan-15'}, {x: 15, y: '10-Jan-15'}, {x: 20, y: '21-Jan-15'}, {x: 25, y: '31-Jan-15'}]
+    [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
+    [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
   ]}
 />
         `)}}
         />
         </pre>
-        <LineChart
-          axisLabels={{x: 'Total Revenue', y: 'January'}}
-          margin={{top: 10, right: 30, bottom: 50, left: 70}}
-          yType={'time'}
+        <AreaChart
+          xType={'time'}
           axes
+          grid
+          tickTimeDisplayFormat={'%d %m'}
           interpolate={'cardinal'}
-          tickTimeDisplayFormat={'%a'}
-          width={500}
-          height={500}
+          width={750}
+          height={250}
           data={[
-            [{x: 10, y: '1-Jan-15'}, {x: 20, y: '10-Jan-15'}, {x: 40, y: '21-Jan-15'}, {x: 80, y: '31-Jan-15'}],
-            [{x: 0, y: '1-Jan-15'}, {x: 15, y: '10-Jan-15'}, {x: 20, y: '21-Jan-15'}, {x: 25, y: '31-Jan-15'}]
+            [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
+            [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
           ]}
         />
 
@@ -454,119 +431,77 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
         This can make the axis easier to read.</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
-<LineChart
+<AreaChart
+  xType={'time'}
   axes
   xTicks={5}
-  yTicks={5}
-  xDomainRange={[0, 100]}
-  yDomainRange={[0, 100]}
-  width={500}
-  height={250}
+  yTicks={3}
+  grid
+  tickTimeDisplayFormat={'%d %m'}
   interpolate={'cardinal'}
+  width={750}
+  height={250}
   data={[
-    [{x: 10, y: 25}, {x: 20, y: 10}, {x: 30, y: 25}, {x: 40, y: 10}, {x: 50, y: 12}, {x: 60, y: 25}],
-    [{x: 10, y: 40}, {x: 20, y: 30}, {x: 30, y: 25}, {x: 40, y: 60}, {x: 50, y: 22}, {x: 60, y: 9}]
+    [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
+    [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
   ]}
 />
         `)}}
         />
         </pre>
-        <LineChart
+        <AreaChart
+          xType={'time'}
           axes
           xTicks={5}
-          yTicks={5}
-          xDomainRange={[0, 100]}
-          yDomainRange={[0, 100]}
-          width={500}
-          height={250}
+          yTicks={3}
+          grid
+          tickTimeDisplayFormat={'%d %m'}
           interpolate={'cardinal'}
-          data={[
-            [{x: 10, y: 25}, {x: 20, y: 10}, {x: 30, y: 25}, {x: 40, y: 10}, {x: 50, y: 12}, {x: 60, y: 25}],
-            [{x: 10, y: 40}, {x: 20, y: 30}, {x: 30, y: 25}, {x: 40, y: 60}, {x: 50, y: 22}, {x: 60, y: 9}]
-          ]}
-        />
-
-        <h3>style</h3>
-        <p>The styles can be overridden easily either partially or globally. To allow this we use Radium.</p>
-        <p>The following example would be to change the color of a the line.</p>
-        <pre>
-        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
-<LineChart
-  axes
-  xDomainRange={[0, 100]}
-  yDomainRange={[100, 0]}
-  style={{
-    '.line0': {
-      stroke: 'red'
-    },
-    '.line1': {
-      stroke: 'purple'
-    }
-  }}
-  margin={{top: 0, right: 0, bottom: 100, left: 100}}
-  width={250}
-  height={250}
-  interpolate={'cardinal'}
-  data={[
-    [{x: 10, y: 25}, {x: 20, y: 10}, {x: 30, y: 25}, {x: 40, y: 10}, {x: 50, y: 12}, {x: 60, y: 4}],
-    [{x: 10, y: 40}, {x: 20, y: 30}, {x: 30, y: 25}, {x: 40, y: 60}, {x: 50, y: 22}, {x: 60, y: 9}]
-  ]}
-/>
-        `)}}
-        />
-        </pre>
-        <LineChart
-          axes
-          xDomainRange={[0, 100]}
-          yDomainRange={[0, 100]}
-          style={{
-            '.line0': {
-              stroke: 'red'
-            },
-            '.line1': {
-              stroke: 'purple'
-            }
-          }}
-          width={500}
+          width={750}
           height={250}
-          interpolate={'cardinal'}
           data={[
-            [{x: 10, y: 25}, {x: 20, y: 10}, {x: 30, y: 25}, {x: 40, y: 10}, {x: 50, y: 12}, {x: 60, y: 25}],
-            [{x: 10, y: 40}, {x: 20, y: 30}, {x: 30, y: 25}, {x: 40, y: 60}, {x: 50, y: 22}, {x: 60, y: 9}]
+            [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
+            [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
           ]}
         />
 
         <h3>Data Points</h3>
-        <p>Data points can be added to the line chart by simply passing a dataPoints boolean.</p>
+        <p>Data points can be added to the Area chart by simply passing a dataPoints boolean.</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
-<LineChart
+<AreaChart
+  xType={'time'}
   axes
   dataPoints
-  xDomainRange={[0, 100]}
-  yDomainRange={[0, 100]}
-  width={500}
-  height={250}
+  xTicks={5}
+  yTicks={3}
+  grid
+  tickTimeDisplayFormat={'%d %m'}
   interpolate={'cardinal'}
+  width={750}
+  height={250}
   data={[
-    [{x: 10, y: 25}, {x: 20, y: 10}, {x: 30, y: 25}, {x: 40, y: 10}, {x: 50, y: 12}, {x: 60, y: 25}],
-    [{x: 10, y: 40}, {x: 20, y: 30}, {x: 30, y: 25}, {x: 40, y: 60}, {x: 50, y: 22}, {x: 60, y: 9}]
+    [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
+    [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
   ]}
 />
         `)}}
         />
         </pre>
-        <LineChart
+        <AreaChart
+          xType={'time'}
           axes
           dataPoints
-          xDomainRange={[0, 100]}
-          yDomainRange={[0, 100]}
-          width={500}
-          height={250}
+          xTicks={5}
+          yTicks={3}
+          grid
+          tickTimeDisplayFormat={'%d %m'}
           interpolate={'cardinal'}
+          width={750}
+          height={250}
           data={[
-            [{x: 10, y: 25}, {x: 20, y: 10}, {x: 30, y: 25}, {x: 40, y: 10}, {x: 50, y: 12}, {x: 60, y: 25}],
-            [{x: 10, y: 40}, {x: 20, y: 30}, {x: 30, y: 25}, {x: 40, y: 60}, {x: 50, y: 22}, {x: 60, y: 9}]
+            [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
+            [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
           ]}
         />
 
@@ -597,62 +532,96 @@ mouseOutHandler() {
 
 {this.state.showToolTip ? <ToolTip top={this.state.top} left={this.state.left}>The value of x is {this.state.x} and the value of y is {this.state.y}</ToolTip> : null}
 
-<LineChart
+<AreaChart
+  xType={'time'}
   axes
   dataPoints
+  xTicks={5}
+  yTicks={3}
   grid
-  xDomainRange={[0, 100]}
-  yDomainRange={[0, 100]}
   mouseOverHandler={this.mouseOverHandler.bind(this)}
   mouseOutHandler={this.mouseOutHandler.bind(this)}
   mouseMoveHandler={this.mouseMoveHandler.bind(this)}
-  width={700}
-  height={350}
+  tickTimeDisplayFormat={'%d %m'}
   interpolate={'cardinal'}
+  width={750}
+  height={250}
   data={[
-    [{x: 10, y: 25}, {x: 20, y: 10}, {x: 30, y: 25}, {x: 40, y: 10}, {x: 50, y: 12}, {x: 60, y: 25}],
-    [{x: 10, y: 40}, {x: 20, y: 30}, {x: 30, y: 25}, {x: 40, y: 60}, {x: 50, y: 22}, {x: 60, y: 9}]
+    [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
+    [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
   ]}
-/>
-          `)}}
+/>          `)}}
           />
         </pre>
-        <LineChart
+        <AreaChart
+          xType={'time'}
           axes
           dataPoints
+          xTicks={5}
+          yTicks={3}
           grid
-          xDomainRange={[0, 100]}
-          yDomainRange={[0, 100]}
           mouseOverHandler={this.mouseOverHandler.bind(this)}
           mouseOutHandler={this.mouseOutHandler.bind(this)}
           mouseMoveHandler={this.mouseMoveHandler.bind(this)}
-          width={700}
-          height={350}
+          tickTimeDisplayFormat={'%d %m'}
           interpolate={'cardinal'}
+          width={750}
+          height={250}
           data={[
-            [{x: 10, y: 25}, {x: 20, y: 10}, {x: 30, y: 25}, {x: 40, y: 10}, {x: 50, y: 12}, {x: 60, y: 25}],
-            [{x: 10, y: 40}, {x: 20, y: 30}, {x: 30, y: 25}, {x: 40, y: 60}, {x: 50, y: 22}, {x: 60, y: 9}]
+            [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
+            [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
           ]}
         />
 
         <h3>Click Handler</h3>
         <p>The chart will send out a clickHandler event from the dataPoints (see above). The dataPoints will need to be set. This can be used by your react application in anyway you would require.
          The event handler provides the point data.</p>
+         <pre>
+         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+<div>
+ <div style={{display: 'inline-block'}}>
+ <AreaChart
+   xType={'time'}
+   axes
+   dataPoints
+   xTicks={5}
+   yTicks={3}
+   grid
+   clickHandler={(d) => this.setState({dataDisplay: \`The value of x is \${d.x} and y is \${d.y}\`})}
+   tickTimeDisplayFormat={'%d %m'}
+   interpolate={'cardinal'}
+   width={750}
+   height={250}
+   data={[
+     [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
+     [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
+   ]}
+ />
+ </div>
+ <div style={{display: 'inline-block', verticalAlign: 'top', paddingLeft: '20px'}}>
+   {this.state.dataDisplay ? this.state.dataDisplay : 'Click on a point to show the value'}
+ </div>
+</div>
+        `)}}
+         />
+         </pre>
          <div>
            <div style={{display: 'inline-block'}}>
-           <LineChart
+           <AreaChart
+             xType={'time'}
              axes
              dataPoints
+             xTicks={5}
+             yTicks={3}
              grid
-             xDomainRange={[0, 100]}
-             yDomainRange={[0, 100]}
              clickHandler={(d) => this.setState({dataDisplay: `The value of x is ${d.x} and y is ${d.y}`})}
-             width={500}
-             height={350}
+             tickTimeDisplayFormat={'%d %m'}
              interpolate={'cardinal'}
+             width={750}
+             height={250}
              data={[
-               [{x: 10, y: 25}, {x: 20, y: 10}, {x: 30, y: 25}, {x: 40, y: 10}, {x: 50, y: 12}, {x: 60, y: 25}],
-               [{x: 10, y: 40}, {x: 20, y: 30}, {x: 30, y: 25}, {x: 40, y: 60}, {x: 50, y: 22}, {x: 60, y: 9}]
+               [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
+               [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
              ]}
            />
            </div>
@@ -661,13 +630,56 @@ mouseOutHandler() {
            </div>
          </div>
 
+         <h3>areaColors</h3>
+         <p>The colours of the areas can be overridden easily. To do this we can pass in a areaColor array as a prop.</p>
+         <p>The following example would be to change the color of the first Area.</p>
+         <pre>
+         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+ <AreaChart
+   xType={'time'}
+   axes
+   xTicks={5}
+   yTicks={3}
+   dataPoints
+   grid
+   areaColors={['black', 'purple']}
+   tickTimeDisplayFormat={'%d %m'}
+   interpolate={'cardinal'}
+   width={750}
+   height={250}
+   data={[
+     [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
+     [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
+   ]}
+ />
+         `)}}
+         />
+         </pre>
+        <AreaChart
+          xType={'time'}
+          axes
+          xTicks={5}
+          yTicks={3}
+          dataPoints
+          grid
+          areaColors={['black', 'purple']}
+          tickTimeDisplayFormat={'%d %M'}
+          interpolate={'cardinal'}
+          width={750}
+          height={250}
+          data={[
+             [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
+             [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
+          ]}
+        />
+
         <h3>Updating the data</h3>
         <p>By selecting the button below to start the random data you can see a simulation of the performance if a data feed is passed in.
-        React provides the functionality to only update the elements of the dom when required so should just change the line attributes.
+        React provides the functionality to only update the elements of the dom when required so should just change the Area attributes.
         The data is passed in as a react param only and as soon as that data changes the chart will reflect that change automatically.</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
-<LineChart
+<AreaChart
   data={this.data} // this is generated randomly and updated randomly within a range of -20 to + 20
   datePattern={'%d-%b-%y %H:%M'}
   xType={'time'}
@@ -678,7 +690,7 @@ mouseOutHandler() {
   yDomainRange={[0, 100]}
   axes
   grid
-  style={{'.line0':
+  style={{'.Area0':
   {
     stroke: 'green'
   }}}
@@ -691,7 +703,7 @@ mouseOutHandler() {
           :
           <input type="button" value="Start random data" onClick={this.turnOnRandomData.bind(this)}></input>
         }
-        <LineChart
+        <AreaChart
           data={this.data}
           datePattern={'%d-%b-%y %H:%M'}
           xType={'time'}
@@ -702,13 +714,102 @@ mouseOutHandler() {
           axisLabels={{x: 'Hour', y: 'Percentage'}}
           axes
           grid
-          style={{'.line0':
+          style={{'.Area0':
           {
             stroke: 'green'
           }}}
         />
 
-        <br/>
+        <h3>Fluid Example</h3>
+        <p>Because the width and height of the chart can be passed in by a param then changes to the size of a window or container can change the chart dynamically.
+        If you shrink your browser window width you will see the chart change in a fluid manor. You can also introduce basic break points such as removing the axes if below a certain width width.</p>
+        <pre>
+        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+constructor(props) {
+  const initialWidth = window.innerWidth > 0 ? window.innerWidth : 500;
+  this.state = {showToolTip: false, windowWidth: initialWidth - 100};
+}
+
+componentDidMount() {
+  window.addEventListener('resize', this.handleResize.bind(this));
+}
+
+componentWillUnmount() {
+  window.removeEventListener('resize', this.handleResize);
+}
+
+handleResize() {
+  this.setState({windowWidth: window.innerWidth - 100});
+}
+<AreaChart
+  xType={'time'}
+  axes={(this.state.windowWidth / 3) > 400 ? true : false}
+  xTicks={5}
+  yTicks={3}
+  grid
+  width={this.state.windowWidth / 3}
+  height={this.state.windowWidth / 6}
+  tickTimeDisplayFormat={'%d %m'}
+  interpolate={'cardinal'}
+  data={[
+    [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
+    [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
+  ]}
+/>
+        `)}}
+        />
+        </pre>
+        <div style={{display: 'inline-block'}}>
+        <AreaChart
+          xType={'time'}
+          axes={(this.state.windowWidth / 3) > 400 ? true : false}
+          xTicks={5}
+          yTicks={3}
+          grid
+          width={this.state.windowWidth / 3}
+          height={this.state.windowWidth / 6}
+          tickTimeDisplayFormat={'%d %m'}
+          interpolate={'cardinal'}
+          data={[
+            [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
+            [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
+          ]}
+        />
+        </div>
+        <div style={{display: 'inline-block', padding: '0 10px'}}>
+        <AreaChart
+          xType={'time'}
+          axes={(this.state.windowWidth / 3) > 400 ? true : false}
+          xTicks={5}
+          yTicks={3}
+          grid
+          width={this.state.windowWidth / 3}
+          height={this.state.windowWidth / 6}
+          tickTimeDisplayFormat={'%d %m'}
+          interpolate={'cardinal'}
+          data={[
+            [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
+            [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
+          ]}
+        />
+        </div>
+        <div style={{display: 'inline-block'}}>
+        <AreaChart
+          xType={'time'}
+          axes={(this.state.windowWidth / 3) > 400 ? true : false}
+          xTicks={5}
+          yTicks={3}
+          grid
+          width={this.state.windowWidth / 3}
+          height={this.state.windowWidth / 6}
+          tickTimeDisplayFormat={'%d %m'}
+          interpolate={'cardinal'}
+          data={[
+            [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
+            [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
+          ]}
+        />
+        </div>
         <br/>
         {this.state.showToolTip ? <ToolTip top={this.state.top} left={this.state.left}>The value of x is {this.state.x} and the value of y is {this.state.y}</ToolTip> : null}
         </div>
@@ -717,4 +818,4 @@ mouseOutHandler() {
 }
 
 
-ReactDom.render(<LineChartContainer/>, document.getElementById('root'));
+ReactDom.render(<AreaChartContainer/>, document.getElementById('root'));

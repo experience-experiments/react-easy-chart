@@ -1,7 +1,6 @@
 import React from 'react';
-import d3 from 'd3';
 import {linear, ordinal} from 'd3-scale';
-import {event as d3LastEvent, min, max, time} from 'd3';
+import {event as d3LastEvent, min, max, scale, select, svg, time} from 'd3';
 import {format} from 'd3-time-format';
 import {extent} from 'd3-array';
 import { createElement } from 'react-faux-dom';
@@ -41,7 +40,7 @@ let parseDate = null;
 export default class ScatterplotChart extends React.Component {
   constructor(props) {
     super(props);
-    this.color = d3.scale.category10();
+    this.color = scale.category20();
   }
 
   getScale(type) {
@@ -191,14 +190,14 @@ export default class ScatterplotChart extends React.Component {
     const axisMargin = 18;
 
     const node = createElement('svg');
-    const svg = d3.select(node)
+    const chart = select(node)
       .attr('width', width + margin.left + margin.right)
       .attr('height', height + margin.top + margin.bottom + axisMargin + 6)
       .append('g')
       .attr('transform', `translate(${margin.left}, ${margin.top})`);
 
     if (axes) {
-      const xAxis = d3.svg.axis()
+      const xAxis = svg.axis()
         .scale(x)
         .orient('bottom');
       if (xType === 'time' && tickTimeDisplayFormat) {
@@ -206,7 +205,7 @@ export default class ScatterplotChart extends React.Component {
       }
       if (xTickNumber) xAxis.ticks(xTickNumber);
 
-      const yAxis = d3.svg.axis()
+      const yAxis = svg.axis()
         .scale(y)
         .orient('left');
 
@@ -215,7 +214,7 @@ export default class ScatterplotChart extends React.Component {
       if (xTicks) xAxis.ticks(xTicks);
       if (yTicks) yAxis.ticks(yTicks);
 
-      svg.append('g')
+      chart.append('g')
         .attr('class', 'x axis')
         .attr('transform', `translate(0, ${height})`)
         .call(xAxis)
@@ -226,7 +225,7 @@ export default class ScatterplotChart extends React.Component {
         .style('text-anchor', 'end')
         .text(axisLabels.x);
 
-      svg.append('g')
+      chart.append('g')
         .attr('class', 'y axis')
         .call(yAxis)
         .append('text')
@@ -238,7 +237,7 @@ export default class ScatterplotChart extends React.Component {
         .text(axisLabels.y);
     }
 
-    svg.selectAll('.dot')
+    chart.selectAll('.dot')
       .data(data)
       .enter().append('circle')
       .attr('class', 'dot')
