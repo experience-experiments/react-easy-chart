@@ -31,6 +31,7 @@ h2 {
 svg {
     margin: auto;
     display: block;
+    border: dotted 2px lightgray;
 }
 
 .container {
