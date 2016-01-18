@@ -2,7 +2,7 @@
 import {should as chaiShould, expect} from 'chai';
 import React from 'react';
 import TestUtils from 'react/lib/ReactTestUtils';
-import {LineChart} from 'rc-d3';
+import {LineChart} from 'react-easy-chart';
 
 const should = chaiShould();
 const testDataBasic = [[

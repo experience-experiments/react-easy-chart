@@ -1,5 +1,5 @@
 {
-  "name": "rc-d3",
+  "name": "react-easy-chart",
   "version": "0.0.1",
   "description": "React component implementations of Mike Bostok's D3 visualisation library.",
   "main": "lib/index.js",
@@ -11,13 +11,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rma-consulting/rc-d3.git"
+    "url": "git+https://github.com/rma-consulting/react-easy-chart.git"
   },
   "license": "BSD-3-Clause",
   "bugs": {
-    "url": "https://github.com/rma-consulting/rc-d3/issues"
+    "url": "https://github.com/rma-consulting/react-easy-chart/issues"
   },
-  "homepage": "https://github.com/rma-consulting/rc-d3#readme",
+  "homepage": "https://github.com/rma-consulting/react-easy-chart#readme",
   "devDependencies": {
     "babel-cli": "^6.3.17",
     "babel-core": "^6.3.21",

@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import BarChart from 'rc-d3/bar-chart';
+import BarChart from 'react-easy-chart/bar-chart';
 import ToolTip from '../ToolTip';
 import {escapeHTML} from '../util';
 
