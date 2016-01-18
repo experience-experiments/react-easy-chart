@@ -465,61 +465,6 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
           ]}
         />
 
-        <h3>style</h3>
-        <p>The styles can be overridden easily either partially or globally. To allow this we use Radium.</p>
-        <p>The following example would be to change the color of a the Area.</p>
-        <pre>
-        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
-<AreaChart
-  xType={'time'}
-  axes
-  xTicks={5}
-  style={{
-    '.area0': {
-      fill: 'red'
-    },
-    '.area1': {
-      fill: 'purple'
-    }
-  }}
-  yTicks={3}
-  grid
-  tickTimeDisplayFormat={'%d %m'}
-  interpolate={'cardinal'}
-  width={750}
-  height={250}
-  data={[
-    [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
-    [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
-  ]}
-/>
-        `)}}
-        />
-        </pre>
-        <AreaChart
-          xType={'time'}
-          axes
-          xTicks={5}
-          style={{
-            '.area0': {
-              fill: 'red'
-            },
-            '.area1': {
-              fill: 'purple'
-            }
-          }}
-          yTicks={3}
-          grid
-          tickTimeDisplayFormat={'%d %m'}
-          interpolate={'cardinal'}
-          width={750}
-          height={250}
-          data={[
-            [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
-            [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
-          ]}
-        />
-
         <h3>Data Points</h3>
         <p>Data points can be added to the Area chart by simply passing a dataPoints boolean.</p>
         <pre>
@@ -684,6 +629,49 @@ mouseOutHandler() {
              {this.state.dataDisplay ? this.state.dataDisplay : 'Click on a point to show the value'}
            </div>
          </div>
+
+         <h3>areaColors</h3>
+         <p>The colours of the areas can be overridden easily. To do this we can pass in a areaColor array as a prop.</p>
+         <p>The following example would be to change the color of the first Area.</p>
+         <pre>
+         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+ <AreaChart
+   xType={'time'}
+   axes
+   xTicks={5}
+   yTicks={3}
+   dataPoints
+   grid
+   areaColors={['black', 'purple']}
+   tickTimeDisplayFormat={'%d %m'}
+   interpolate={'cardinal'}
+   width={750}
+   height={250}
+   data={[
+     [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
+     [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
+   ]}
+ />
+         `)}}
+         />
+         </pre>
+        <AreaChart
+          xType={'time'}
+          axes
+          xTicks={5}
+          yTicks={3}
+          dataPoints
+          grid
+          areaColors={['black', 'purple']}
+          tickTimeDisplayFormat={'%d %M'}
+          interpolate={'cardinal'}
+          width={750}
+          height={250}
+          data={[
+             [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
+             [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
+          ]}
+        />
 
         <h3>Updating the data</h3>
         <p>By selecting the button below to start the random data you can see a simulation of the performance if a data feed is passed in.
