@@ -16,6 +16,13 @@ const defaultStyle = {
     fill: '',
     strokeWidth: 0
   },
+  'circle': {
+    'r': 4
+  },
+  'circle:hover': {
+    'r': 8,
+    'opacity': 0.6
+  },
   '.dot0': {
     fill: 'steelblue'
   },
@@ -268,7 +275,6 @@ export default class LineChart extends React.Component {
         dataElelment.map((dotData) => {
           root
           .append('circle')
-          .attr('r', 4)
           .attr('class', `dot dot${i}`)
           .attr('cx', () => {
             switch (xType) {
