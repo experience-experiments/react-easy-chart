@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ToolTip from '../ToolTip';
 import {escapeHTML} from '../util';
-import PieChart from 'rc-d3/pie-chart';
+import PieChart from 'react-easy-chart/pie-chart';
 
 export default class PieChartContainer extends React.Component {
     constructor(props) {
