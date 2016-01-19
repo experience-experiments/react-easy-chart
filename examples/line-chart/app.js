@@ -169,7 +169,7 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
         />
 
         <h3>Axes labels</h3>
-        <p>The axes labels can be overridden by simply passing <b>axisLabels</b> object with both a x and y y.</p>
+        <p>The axisLabels can be overridden by simply passing <b>axisLabels</b> object with both a x and y y.</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 <LineChart

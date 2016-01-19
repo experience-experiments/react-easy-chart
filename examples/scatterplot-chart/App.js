@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ScatterplotChart from 'rc-d3/scatterplot-chart';
+import ScatterplotChart from 'react-easy-chart/scatterplot-chart';
 import ToolTip from '../ToolTip';
 import Legend from '../Legend';
 import {escapeHTML} from '../util';
@@ -195,8 +195,24 @@ export default class ScatterplotContainer extends React.Component {
     super(props);
     this.state = {
       dataDisplay: '',
-      showToolTip: false
+      showToolTip: false,
+      randomDataIntervalId: null
     };
+    this.data = this.generateData();
+  }
+
+  getRandomArbitrary(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+
+  generateData() {
+    const data = [];
+    const keys = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+
+    keys.map((key) => {
+      data.push({type: key, x: this.getRandomArbitrary(1, 1000), y: this.getRandomArbitrary(1, 1000)});
+    });
+    return data;
   }
 
   mouseOverHandler(d, e) {
@@ -220,6 +236,20 @@ export default class ScatterplotContainer extends React.Component {
 
   clickHandler(d) {
     this.setState({dataDisplay: `The amount selected is ${d.y}`});
+  }
+
+  turnOnRandomData() {
+    this.setState({randomDataIntervalId: setInterval(this.updateData.bind(this), 500)});
+  }
+
+  turnOffRandomData() {
+    clearInterval(this.state.randomDataIntervalId);
+    this.setState({randomDataIntervalId: null});
+  }
+
+  updateData() {
+    this.data = this.generateData();
+    this.forceUpdate();
   }
 
   render() {
@@ -318,7 +348,7 @@ const data = [
        </pre>
        <ScatterplotChart data={bigData} margin={{top: 10, right: 10, bottom: 30, left: 100}} />
        <h3>Axes</h3>
-       <p>The axes can be turned on by simply passing a boolean flag to true for axes.</p>
+       <p>The axes can be turned on by simply passing a boolean flag to true for <strong>axes</strong>.</p>
        <pre>
        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
   <ScatterplotChart
@@ -331,7 +361,7 @@ const data = [
        </pre>
        <ScatterplotChart data={bigData} axes width={480} height={270} />
        <h3>Axes labels</h3>
-       <p>The axes labels can be passed in for the x and y value.</p>
+       <p>The axes labels (<strong>axisLabels</strong>) can be passed in for the x and y value.</p>
        <pre>
        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
  <ScatterplotChart
@@ -351,7 +381,7 @@ const data = [
          height={270}
        />
        <h3>Dot radius</h3>
-       <p>The default size of the dot can be changed via the dotRadius parameter</p>
+       <p>The default size of the dot can be changed via the <strong>dotRadius</strong> parameter</p>
        <pre>
        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
  <ScatterplotChart
@@ -373,7 +403,12 @@ const data = [
          height={270}
        />
        <h3>Config</h3>
-       <p>The config property allows for greater control over the look and feel.</p>
+       <p>The <strong>config</strong> property allows for greater control over the look and feel.</p>
+       <ul>
+         <li><strong>type</strong>: a reference to the type value in the data object</li>
+         <li><strong>color</strong>: dot color as a hex value</li>
+         <li><strong>stroke</strong>: stroke color as a hex value</li>
+       </ul>
        <p>The following example changes the default color for types 'One', 'Two' and 'Three' and adds a stroke</p>
        <pre>
        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
@@ -431,8 +466,13 @@ const data = [
           height={270}
           grid
         />
-      <h3>xType &amp; yType</h3>
-      <p>Text example</p>
+      <h3>Axis type</h3>
+      <p>The data passed associated to the particular axes can be in numeric, date (the default format is for example 1-Jan-15 but can be overridden) or textual formats (used for labelling).</p>
+      <p>For the example below the data for the x is text and so the <strong>xType</strong> needs to be changed to <strong>text</strong>.</p>
+      <ul>
+        <li><strong>xType</strong></li>
+        <li><strong>yType</strong></li>
+      </ul>
       <pre>
       <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 const data = [
@@ -481,8 +521,10 @@ const data = [
           grid
           xType="text"
         />
-        <h3>Time example</h3>
-        <p>Time example with xdomain range</p>
+        <h3>Domain Range</h3>
+        <p>By default the axis ranges are automatically calculated based on the smallest and the largest values</p>
+        <p>The range can be fixed by passing an array param of 2 value for the particular axis. The first number is the bottom of the range the second is the higher point of the range.</p>
+        <p>The following example sets the <strong>xType</strong> to time then passes a date range to <strong>xDomainRange</strong></p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
   const data = [
@@ -692,6 +734,23 @@ const data = [
           mouseOverHandler={this.mouseOverHandler.bind(this)}
           mouseOutHandler={this.mouseOutHandler.bind(this)}
           mouseMoveHandler={this.mouseMoveHandler.bind(this)}
+        />
+        <h3>Generate data</h3>
+          <p>By selecting the button below to start the random data you can see a simulation of the performance if a data feed is passed in.
+          React provides the functionality to only update the elements of the dom when required so will just change the path attributes.
+          The data is passed in as a react param only and as soon as that data changes the chart will reflect that change automatically.</p>
+          <br/>
+          {
+            this.state.randomDataIntervalId ? <input type="button" value="Stop random data" onClick={this.turnOffRandomData.bind(this)}></input>
+            :
+            <input type="button" value="Start random data" onClick={this.turnOnRandomData.bind(this)}></input>
+          }
+        <ScatterplotChart
+          data={this.data}
+          axes
+          axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+          width={480}
+          height={270}
         />
         <br />
         <br />

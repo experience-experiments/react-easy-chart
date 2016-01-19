@@ -27,7 +27,8 @@ const defaultStyle = {
     display: 'none'
   },
   '.dot': {
-    stroke: '#000'
+    stroke: '#000',
+    opacity: 0.85
   },
   '.tick line': {
     stroke: 'lightgrey',
@@ -116,8 +117,6 @@ export default class ScatterplotChart extends React.Component {
       const maxRad = 20;
       const rad = minRad + ((maxRad - minRad) * p);
       return rad;
-      /*
-      return (dotRadius + (dotRadius * p));*/
     }
     return dotRadius;
   }
@@ -231,7 +230,7 @@ export default class ScatterplotChart extends React.Component {
         .append('text')
         .attr('class', 'label')
         .attr('transform', 'rotate(-90)')
-        .attr('y', -margin.left)
+        .attr('y', -margin.left + 2)
         .attr('dy', '.71em')
         .style('text-anchor', 'end')
         .text(axisLabels.y);
