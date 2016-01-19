@@ -7,7 +7,8 @@
     "test": "karma start",
     "eslint": "eslint ./modules/ ./examples/",
     "start": "npm run eslint && node examples/server.js",
-    "build": "rimraf lib && babel ./modules -d lib"
+    "build": "rimraf lib && babel ./modules -d lib",
+    "docbuild": "cp -rf examples/ docs/examples/ && cd docs/examples && webpack -p --config wepack.config.prod.js"
   },
   "repository": {
     "type": "git",
