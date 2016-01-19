@@ -1,4 +1,6 @@
 import {extent} from 'd3-array';
+import {linear, ordinal} from 'd3-scale';
+import {time} from 'd3';
 
 export function reduce(x) {
   let rVal = x;
@@ -46,4 +48,42 @@ export function calcDefaultDomain(domainRange, type, dateParser) {
     default:
       return domainRange;
   }
+}
+
+export function setLineDomainAndRange(scale, domainRange, data, type, length, parseDate) {
+  const dataIndex = scale === 'x' ? 'x' : 'y';
+  let d3Axis;
+  switch (type) {
+    case 'text':
+      d3Axis = ordinal();
+      d3Axis.domain(domainRange ?
+        calcDefaultDomain(domainRange, type, parseDate)
+        :
+        data[0].map((d) => d[dataIndex])
+      );
+
+      d3Axis.rangePoints([0, length], 0);
+      break;
+    case 'linear':
+      d3Axis = linear();
+      d3Axis.domain(domainRange ?
+        calcDefaultDomain(domainRange, type, parseDate)
+        :
+        findLargestExtent(data, getValueFunction(scale, type, parseDate))
+      );
+      d3Axis.range(scale === 'x' ? [0, length] : [length, 0]);
+      break;
+    case 'time':
+      d3Axis = time.scale();
+      d3Axis.domain(domainRange ?
+        calcDefaultDomain(domainRange, type, parseDate)
+        :
+        findLargestExtent(data, getValueFunction(scale, type, parseDate))
+      );
+      d3Axis.range(scale === 'x' ? [0, length] : [length, 0]);
+      break;
+    default:
+      break;
+  }
+  return d3Axis;
 }

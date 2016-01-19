@@ -1,7 +1,6 @@
 import React from 'react';
 import {createElement} from 'react-faux-dom';
-import {linear, ordinal} from 'd3-scale';
-import {reduce, calcMargin, getValueFunction, getRandomId, findLargestExtent, calcDefaultDomain} from '../shared';
+import {reduce, calcMargin, getValueFunction, getRandomId, setLineDomainAndRange} from '../shared';
 import {select, svg, time, event as d3LastEvent} from 'd3';
 import {Style} from 'radium';
 import merge from 'lodash.merge';
@@ -119,44 +118,6 @@ export default class LineChart extends React.Component {
     this.uid = getRandomId();
   }
 
-  setDomainAndRange(scale, domainRange, data, type, length) {
-    const dataIndex = scale === 'x' ? 'x' : 'y';
-    let d3Axis;
-    switch (type) {
-      case 'text':
-        d3Axis = ordinal();
-        d3Axis.domain(domainRange ?
-          calcDefaultDomain(domainRange, type, this.parseDate)
-          :
-          data[0].map((d) => d[dataIndex])
-        );
-
-        d3Axis.rangePoints([0, length], 0);
-        break;
-      case 'linear':
-        d3Axis = linear();
-        d3Axis.domain(domainRange ?
-          calcDefaultDomain(domainRange, type, this.parseDate)
-          :
-          findLargestExtent(data, getValueFunction(scale, type, this.parseDate))
-        );
-        d3Axis.range(scale === 'x' ? [0, length] : [length, 0]);
-        break;
-      case 'time':
-        d3Axis = time.scale();
-        d3Axis.domain(domainRange ?
-          calcDefaultDomain(domainRange, type, this.parseDate)
-          :
-          findLargestExtent(data, getValueFunction(scale, type, this.parseDate))
-        );
-        d3Axis.range(scale === 'x' ? [0, length] : [length, 0]);
-        break;
-      default:
-        break;
-    }
-    return d3Axis;
-  }
-
   render() {
     const {data,
       xType,
@@ -180,8 +141,8 @@ export default class LineChart extends React.Component {
     const width = reduce(this.props.width, margin.left, margin.right);
     const height = reduce(this.props.height, margin.top, margin.bottom);
 
-    const x = this.setDomainAndRange('x', xDomainRange, data, xType, width);
-    const y = this.setDomainAndRange('y', yDomainRange, data, yType, height);
+    const x = setLineDomainAndRange('x', xDomainRange, data, xType, width, this.parseDate);
+    const y = setLineDomainAndRange('y', yDomainRange, data, yType, height, this.parseDate);
 
     const yValue = getValueFunction('y', yType, this.parseDate);
     const xValue = getValueFunction('x', xType, this.parseDate);
