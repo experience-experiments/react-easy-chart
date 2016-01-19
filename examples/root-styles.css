@@ -57,3 +57,24 @@ svg {
   position: absolute;
   top: 200px;
 }
+
+.component-docs {
+  padding-left: 300px;
+  background-color: #f5f5f5;
+}
+
+.aside-menu {
+  background-color: #333;
+  color: white;
+  position: fixed;
+  height: 100%;
+  width: 300px;
+  top: 0;
+  left: 0;
+}
+
+.docs-content {
+  background-color: white;
+  max-width: 960px;
+  padding: 30px;
+}
