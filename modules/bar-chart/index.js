@@ -1,6 +1,7 @@
 import React from 'react';
 import { ordinal, linear } from 'd3-scale';
 import { event as d3LastEvent, select, time, svg, scale, max} from 'd3';
+import {reduce, calcMargin, calcDefaultDomain} from '../shared';
 import {extent} from 'd3-array';
 import {format} from 'd3-time-format';
 import { createElement } from 'react-faux-dom';
@@ -108,7 +109,7 @@ export default class BarChart extends React.Component {
       case 'linear':
         d3Axis = linear();
         d3Axis.domain(domainRange ?
-          this.calcDefaultDomain(domainRange, type)
+          calcDefaultDomain(domainRange, type, this.parseDate)
           :
           [0, max(data, (d) => d[dataIndex])]
         );
@@ -117,7 +118,7 @@ export default class BarChart extends React.Component {
       case 'time':
         d3Axis = time.scale();
         d3Axis.domain(domainRange ?
-          this.calcDefaultDomain(domainRange, type)
+          calcDefaultDomain(domainRange, type, this.parseDate)
           :
           extent(data, (d) => this.parseDate(d[dataIndex]))
         );
@@ -127,19 +128,6 @@ export default class BarChart extends React.Component {
         break;
     }
     return d3Axis;
-  }
-
-  calcMargin(axes) {
-    return axes ? {top: 10, right: 20, bottom: 50, left: 50} : {top: 0, right: 0, bottom: 0, left: 0};
-  }
-
-  calcDefaultDomain(domainRange, type) {
-    switch (type) {
-      case 'time':
-        return [this.parseDate(domainRange[0]), this.parseDate(domainRange[1])];
-      default:
-        return domainRange;
-    }
   }
 
   defineColor(i, d, colorBars) {
@@ -168,9 +156,9 @@ export default class BarChart extends React.Component {
       grid,
       xDomainRange,
       yDomainRange} = this.props;
-    const margin = this.props.margin ? this.props.margin : this.calcMargin(axes);
-    const width = this.props.width - margin.left - margin.right;
-    const height = this.props.height - margin.top - margin.bottom;
+    const margin = calcMargin(axes, this.props.margin);
+    const width = reduce(this.props.width, margin.left, margin.right);
+    const height = reduce(this.props.height, margin.top, margin.bottom);
 
     const x = this.setScaleDomainRange('x', xDomainRange, data, xType, width);
     const y = this.setScaleDomainRange('y', yDomainRange, data, yType, height);
