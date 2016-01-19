@@ -96,7 +96,7 @@ class LineChartContainer extends React.Component {
 
     render() {
       return (<div>
-        <h2>The R2-D3 Line chart</h2>
+        <h2>The React Easy Line chart</h2>
         <h3>Data</h3>
         <p>At the most basic the line chart can just take a single data file supplied in a JSON format and will render a
          simple line chart.</p>
@@ -720,6 +720,8 @@ mouseOutHandler() {
             stroke: 'green'
           }}}
         />
+
+
         <h3>Fluid</h3>
         <p>Because the width and height of the chart can be passed in by a param then changes to the size of a window or container can change the chart dynamically.
         If you shrink your browser window width you will see the charts below change in a fluid manor. You can also introduce basic break points such as removing the axes if below a certain width.</p>

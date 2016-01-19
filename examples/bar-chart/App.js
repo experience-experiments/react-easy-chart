@@ -8,11 +8,104 @@ export default class BarChartContainer extends React.Component {
     constructor(props) {
       super(props);
       this.data = this.generateData();
-      this.state = {showToolTip: false};
+      const initialWidth = window.innerWidth > 0 ? window.innerWidth : 500;
+      this.state = {showToolTip: false, windowWidth: initialWidth - 100};
+      this.defaultData = [{
+        'x': 'A',
+        'y': 46
+      },
+      {
+        'x': 'B',
+        'y': 49
+      },
+      {
+        'x': 'C',
+        'y': 6
+      },
+      {
+        'x': 'D',
+        'y': 6
+      },
+      {
+        'x': 'E',
+        'y': 20
+      },
+      {
+        'x': 'F',
+        'y': 51
+      },
+      {
+        'x': 'G',
+        'y': 75
+      },
+      {
+        'x': 'H',
+        'y': 35
+      },
+      {
+        'x': 'I',
+        'y': 95
+      },
+      {
+        'x': 'J',
+        'y': 61
+      },
+      {
+        'x': 'K',
+        'y': 95
+      },
+      {
+        'x': 'L',
+        'y': 60
+      },
+      {
+        'x': 'M',
+        'y': 59
+      },
+      {
+        'x': 'N',
+        'y': 24
+      },
+      {
+        'x': 'O',
+        'y': 88
+      },
+      {
+        'x': 'P',
+        'y': 45
+      },
+      {
+        'x': 'Q',
+        'y': 30
+      },
+      {
+        'x': 'R',
+        'y': 59
+      },
+      {
+        'x': 'S',
+        'y': 34
+      },
+      {
+        'x': 'T',
+        'y': 18
+      }];
+    }
+
+    componentDidMount() {
+      window.addEventListener('resize', this.handleResize.bind(this));
+    }
+
+    componentWillUnmount() {
+      window.removeEventListener('resize', this.handleResize);
     }
 
     getRandomArbitrary(min, max) {
       return Math.random() * (max - min) + min;
+    }
+
+    handleResize() {
+      this.setState({windowWidth: window.innerWidth - 100});
     }
 
     generateData() {
@@ -68,7 +161,7 @@ export default class BarChartContainer extends React.Component {
 
     render() {
       return (<div>
-        <h2>The R2-D3 Bar chart</h2>
+        <h2>The React Easy Bar Chart</h2>
         <h3>Data</h3>
         <p>At the most basic the Bar chart can just take a single data file supplied in a JSON format and will render a
          simple Bar chart.</p>
@@ -92,18 +185,25 @@ export default class BarChartContainer extends React.Component {
          <code dangerouslySetInnerHTML={{__html: escapeHTML(`
  <BarChart
    height={150}
-   width={150}
-   data={[{x: 'A', y: 20}, {x: 'B', y: 30}, {x: 'C', y: 40},
-    {x: 'D', y: 20}, {x: 'E', y: 40}, {x: 'F', y: 25}, {x: 'G', y: 5}]}
+   width={350}
+   data={[
+    {
+      'x': 'A',
+      'y': 46
+    },
+    {
+      'x': 'B',
+      'y': 26
+    }....
+  ]}
  />
          `)}}
          />
          </pre>
-
         <BarChart
           height={150}
-          width={150}
-          data={[{x: 'A', y: 20}, {x: 'B', y: 30}, {x: 'C', y: 40}, {x: 'D', y: 20}, {x: 'E', y: 40}, {x: 'F', y: 25}, {x: 'G', y: 5}]}
+          width={650}
+          data={this.defaultData}
         />
 
         <h3>ColorBars</h3>
@@ -112,8 +212,18 @@ export default class BarChartContainer extends React.Component {
          <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 <BarChart
  colorBars
- data={[{x: 'A', y: 20}, {x: 'B', y: 30}, {x: 'C', y: 40},
-  {x: 'D', y: 20}, {x: 'E', y: 40}, {x: 'F', y: 25}, {x: 'G', y: 5}]}
+ height={150}
+ width={650}
+ data={[
+  {
+    'x': 'A',
+    'y': 46
+  },
+  {
+    'x': 'B',
+    'y': 26
+  }....
+]}
 />
          `)}}
          />
@@ -121,17 +231,48 @@ export default class BarChartContainer extends React.Component {
 
         <BarChart
           colorBars
-          data={[{x: 'A', y: 20}, {x: 'B', y: 30}, {x: 'C', y: 40}, {x: 'D', y: 20}, {x: 'E', y: 40}, {x: 'F', y: 25}, {x: 'G', y: 5}]}
+          height={150}
+          width={650}
+          data={this.defaultData}
         />
 
+        <h3>Margin</h3>
+        <p>The Margin can be overridden by passing in a margin object. The margin object must define the following: top, right, bottom and left</p>
+        <p>This can be particulary useful if a label is cut off.</p>
+        <pre>
+        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+<BarChart
+  colorBars
+  height={150}
+  width={650}
+  data={this.defaultData}
+  margin={{top: 0, right: 0, bottom: 30, left: 100}}
+/>
+        `)}}
+        />
+        </pre>
+
+        <BarChart
+          colorBars
+          height={150}
+          width={650}
+          data={this.defaultData}
+          margin={{top: 0, right: 0, bottom: 30, left: 100}}
+        />
 
         <h3>Overriding Bar colors</h3>
         <p>A single bar or number of bars can be colored by adding a color prop to the relevent data item.</p>
          <pre>
          <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 <BarChart
-data={[{x: 'A', y: 20}, {x: 'B', y: 30}, {x: 'C', y: 40},
- {x: 'D', y: 20}, {x: 'E', y: 40}, {x: 'F', y: 25}, {x: 'G', y: 5, color: 'orange'}]}
+ data={[
+   {x: 'A', y: 20},
+    {x: 'B', y: 30, color: '#f00'},
+     {x: 'C', y: 40},
+      {x: 'D', y: 20},
+       {x: 'E', y: 40},
+        {x: 'F', y: 25},
+         {x: 'G', y: 5, color: 'orange'}]}
 />
          `)}}
          />
@@ -147,16 +288,26 @@ data={[{x: 'A', y: 20}, {x: 'B', y: 30}, {x: 'C', y: 40},
          <code dangerouslySetInnerHTML={{__html: escapeHTML(`
  <BarChart
    axes
-   data={[{x: 'A', y: 20}, {x: 'B', y: 30, color: '#f00'}, {x: 'C', y: 40},
-    {x: 'D', y: 20}, {x: 'E', y: 40}, {x: 'F', y: 25}, {x: 'G', y: 5, color: 'orange'}]}
+   height={250}
+   width={650}
+   data={[
+    {
+      'x': 'A',
+      'y': 46
+    },
+    {
+      'x': 'B',
+      'y': 26
+    }....
  />
          `)}}
          />
          </pre>
         <BarChart
+          height={250}
+          width={650}
           axes
-          data={[{x: 'A', y: 20}, {x: 'B', y: 30, color: '#f00'}, {x: 'C', y: 40},
-           {x: 'D', y: 20}, {x: 'E', y: 40}, {x: 'F', y: 25}, {x: 'G', y: 5, color: 'orange'}]}
+          data={this.defaultData}
         />
 
         <h3>Axes Labels</h3>
@@ -166,8 +317,15 @@ data={[{x: 'A', y: 20}, {x: 'B', y: 30}, {x: 'C', y: 40},
 <BarChart
   axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
   axes
-  data={[{x: 'A', y: 20}, {x: 'B', y: 30, color: '#f00'}, {x: 'C', y: 40},
-    {x: 'D', y: 20}, {x: 'E', y: 40}, {x: 'F', y: 25}, {x: 'G', y: 5, color: 'orange'}]}
+  data={[
+   {
+     'x': 'A',
+     'y': 46
+   },
+   {
+     'x': 'B',
+     'y': 26
+   }....
 />
          `)}}
          />
@@ -175,8 +333,9 @@ data={[{x: 'A', y: 20}, {x: 'B', y: 30}, {x: 'C', y: 40},
         <BarChart
           axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
           axes
-          data={[{x: 'A', y: 20}, {x: 'B', y: 30, color: '#f00'}, {x: 'C', y: 40},
-           {x: 'D', y: 20}, {x: 'E', y: 40}, {x: 'F', y: 25}, {x: 'G', y: 5, color: 'orange'}]}
+          height={250}
+          width={650}
+          data={this.defaultData}
         />
 
         <h3>xType / yType</h3>
@@ -188,6 +347,8 @@ data={[{x: 'A', y: 20}, {x: 'B', y: 30}, {x: 'C', y: 40},
 <BarChart
   axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
   axes
+  height={250}
+  width={650}
   xType={'linear'}
   data={[{x: 10, y: 20}, {x: 12, y: 20}, {x: 30, y: 30, color: '#f00'}, {x: 40, y: 40}]}
 />
@@ -197,6 +358,8 @@ data={[{x: 'A', y: 20}, {x: 'B', y: 30}, {x: 'C', y: 40},
         <BarChart
           axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
           axes
+          height={250}
+          width={650}
           xType={'linear'}
           data={[{x: 10, y: 20}, {x: 12, y: 20}, {x: 30, y: 30, color: '#f00'}, {x: 40, y: 40}]}
         />
@@ -207,6 +370,8 @@ data={[{x: 'A', y: 20}, {x: 'B', y: 30}, {x: 'C', y: 40},
 <BarChart
   axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
   axes
+  height={250}
+  width={650}
   colorBars
   xType={'time'}
   data={[{x: '1-Jan-15', y: 20}, {x: '2-Jan-15', y: 10}, {x: '3-Jan-15', y: 33}]}
@@ -217,10 +382,13 @@ data={[{x: 'A', y: 20}, {x: 'B', y: 30}, {x: 'C', y: 40},
         <BarChart
           axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
           axes
+          height={250}
+          width={650}
           colorBars
           xType={'time'}
           data={[{x: '1-Jan-15', y: 20}, {x: '2-Jan-15', y: 10}, {x: '3-Jan-15', y: 33}]}
         />
+
         <h3>Date Pattern</h3>
         <p>The datePattern can be overridden to allow any textual representation of the date to be parsed.</p>
         <p>The datePattern is passed in as a string param and uses for example <b>%d-%b-%y</b> to pass a value such as 15-Jan-15.
@@ -230,9 +398,10 @@ data={[{x: 'A', y: 20}, {x: 'B', y: 30}, {x: 'C', y: 40},
  <BarChart
    axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
    axes
+   height={250}
+   width={650}
    datePattern="%d-%b-%y %H:%M"
    colorBars
-   barWidth={20}
    xType={'time'}
    data={[{x: '1-Jan-15 13:00', y: 20}, {x: '1-Jan-15 14:00', y: 10}, {x: '1-Jan-15 15:00', y: 33}]}
  />
@@ -242,22 +411,26 @@ data={[{x: 'A', y: 20}, {x: 'B', y: 30}, {x: 'C', y: 40},
          <BarChart
            axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
            axes
+           height={250}
+           width={650}
            datePattern="%d-%b-%y %H:%M"
            colorBars
-           barWidth={20}
            xType={'time'}
            data={[{x: '1-Jan-15 13:00', y: 20}, {x: '1-Jan-15 14:00', y: 10}, {x: '1-Jan-15 15:00', y: 33}]}
          />
 
         <h3>Bar Width</h3>
-        <p>The bar width can also be overridden. The default is 10px.</p>
+        <p>The bar width can also be overridden. The default is 10px. This will only affect linear or time based x axis.</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 <BarChart
   axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
   axes
+  height={250}
+  width={650}
+  margin={{top: 50, right: 100, bottom: 50, left: 100}}
   colorBars
-  barWidth={20}
+  barWidth={40}
   xType={'time'}
   data={[{x: '1-Jan-15', y: 20}, {x: '2-Jan-15', y: 10}, {x: '3-Jan-15', y: 33}]}
 />
@@ -267,8 +440,11 @@ data={[{x: 'A', y: 20}, {x: 'B', y: 30}, {x: 'C', y: 40},
         <BarChart
           axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
           axes
+          height={250}
+          width={650}
+          margin={{top: 50, right: 100, bottom: 50, left: 100}}
           colorBars
-          barWidth={20}
+          barWidth={40}
           xType={'time'}
           data={[{x: '1-Jan-15', y: 20}, {x: '2-Jan-15', y: 10}, {x: '3-Jan-15', y: 33}]}
         />
@@ -283,8 +459,8 @@ data={[{x: 'A', y: 20}, {x: 'B', y: 30}, {x: 'C', y: 40},
   axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
   axes
   colorBars
-  width={700}
-  height={300}
+  height={250}
+  width={650}
   barWidth={20}
   xType={'time'}
   xDomainRange={['5-Jan-15', '18-Jan-15']}
@@ -298,8 +474,8 @@ data={[{x: 'A', y: 20}, {x: 'B', y: 30}, {x: 'C', y: 40},
           axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
           axes
           colorBars
-          width={500}
-          height={300}
+          height={250}
+          width={650}
           barWidth={20}
           xType={'time'}
           xDomainRange={['5-Jan-15', '18-Jan-15']}
@@ -316,6 +492,8 @@ data={[{x: 'A', y: 20}, {x: 'B', y: 30}, {x: 'C', y: 40},
   axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
   axes
   colorBars
+  height={250}
+  width={650}
   barWidth={20}
   xType={'time'}
   tickTimeDisplayFormat={'%a'}
@@ -329,6 +507,8 @@ data={[{x: 'A', y: 20}, {x: 'B', y: 30}, {x: 'C', y: 40},
           axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
           axes
           colorBars
+          height={250}
+          width={650}
           barWidth={20}
           xType={'time'}
           tickTimeDisplayFormat={'%a'}
@@ -344,6 +524,8 @@ data={[{x: 'A', y: 20}, {x: 'B', y: 30}, {x: 'C', y: 40},
   axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
   axes
   colorBars
+  height={250}
+  width={650}
   barWidth={20}
   xTickNumber={5}
   yTickNumber={3}
@@ -358,6 +540,8 @@ data={[{x: 'A', y: 20}, {x: 'B', y: 30}, {x: 'C', y: 40},
           axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
           axes
           colorBars
+          height={250}
+          width={650}
           barWidth={20}
           xTickNumber={5}
           yTickNumber={3}
@@ -375,28 +559,31 @@ data={[{x: 'A', y: 20}, {x: 'B', y: 30}, {x: 'C', y: 40},
   axes
   grid
   colorBars
-  barWidth={20}
-  xTickNumber={5}
-  yTickNumber={3}
-  xType={'time'}
-  xDomainRange={['1-Jan-15', '20-Jan-15']}
-  data={[{x: '10-Jan-15', y: 20}, {x: '12-Jan-15', y: 10}, {x: '15-Jan-15', y: 33}]}
+  height={250}
+  width={650}
+  data={[
+   {
+     'x': 'A',
+     'y': 46
+   },
+   {
+     'x': 'B',
+     'y': 26
+   }....
+  ]}
 />
         `)}}
         />
         </pre>
-<BarChart
-  axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
-  axes
-  grid
-  colorBars
-  barWidth={20}
-  xTickNumber={5}
-  yTickNumber={3}
-  xType={'time'}
-  xDomainRange={['1-Jan-15', '20-Jan-15']}
-  data={[{x: '10-Jan-15', y: 20}, {x: '12-Jan-15', y: 10}, {x: '15-Jan-15', y: 33}]}
-/>
+        <BarChart
+          axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+          axes
+          grid
+          colorBars
+          height={250}
+          width={650}
+          data={this.defaultData}
+        />
 
 
         <h3>mouseOverHandler, mouseOverHandler, mouseMoveHandler</h3>
@@ -427,13 +614,24 @@ mouseOutHandler() {
 <BarChart
   axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
   axes
+  grid
   colorBars
-  yTickNumber={5}
+  height={250}
+  width={650}
+  data={[
+   {
+     'x': 'A',
+     'y': 46
+   },
+   {
+     'x': 'B',
+     'y': 26
+   }....
+  ]}
   mouseOverHandler={this.mouseOverHandler.bind(this)}
   mouseOutHandler={this.mouseOutHandler.bind(this)}
   mouseMoveHandler={this.mouseMoveHandler.bind(this)}
-  yDomainRange={[0, 50]}
-  data={[{x: 'A', y: 20}, {x: 'B', y: 10}, {x: 'C', y: 33}, {x: 'D', y: 20}, {x: 'E', y: 50}]}
+  yDomainRange={[0, 100]}
 />
           `)}}
           />
@@ -441,13 +639,15 @@ mouseOutHandler() {
           <BarChart
             axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
             axes
+            grid
             colorBars
-            yTickNumber={5}
+            height={250}
+            width={650}
+            data={this.defaultData}
             mouseOverHandler={this.mouseOverHandler.bind(this)}
             mouseOutHandler={this.mouseOutHandler.bind(this)}
             mouseMoveHandler={this.mouseMoveHandler.bind(this)}
-            yDomainRange={[0, 50]}
-            data={[{x: 'A', y: 20}, {x: 'B', y: 10}, {x: 'C', y: 33}, {x: 'D', y: 20}, {x: 'E', y: 50}]}
+            yDomainRange={[0, 100]}
           />
 
         <h3>Click Handler</h3>
@@ -459,10 +659,22 @@ mouseOutHandler() {
   <BarChart
     axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
     axes
+    grid
     colorBars
-    yTickNumber={5}
-    data={[{x: 'A', y: 20}, {x: 'B', y: 10}, {x: 'C', y: 33}, {x: 'D', y: 20}, {x: 'E', y: 50}]}
+    height={250}
+    width={650}
+    data={[
+     {
+       'x': 'A',
+       'y': 46
+     },
+     {
+       'x': 'B',
+       'y': 26
+     }....
+    ]}
     clickHandler={(d) => this.setState({dataDisplay: \`The value on the \${d.x} is \${d.y}\`})}
+    yDomainRange={[0, 100]}
   />
   </div>
   <div style={{display: 'inline-block', verticalAlign: 'top', paddingLeft: '20px'}}>
@@ -477,11 +689,13 @@ mouseOutHandler() {
           <BarChart
             axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
             axes
-            colorBars
             grid
-            yTickNumber={5}
-            data={[{x: 'A', y: 20}, {x: 'B', y: 10}, {x: 'C', y: 33}, {x: 'D', y: 20}, {x: 'E', y: 50}]}
+            colorBars
+            height={250}
+            width={650}
+            data={this.defaultData}
             clickHandler={(d) => this.setState({dataDisplay: `The value on the ${d.x} is ${d.y}`})}
+            yDomainRange={[0, 100]}
           />
           </div>
           <div style={{display: 'inline-block', verticalAlign: 'top', paddingLeft: '20px'}}>
@@ -504,13 +718,111 @@ mouseOutHandler() {
            axes
            colorBars
            grid
-           width={600}
-           height={400}
+           height={250}
+           width={650}
            xTickNumber={5}
            yTickNumber={5}
            yDomainRange={[0, 100]}
            data={this.data}
          />
+
+         <h3>Fluid</h3>
+         <p>Because the width and height of the chart can be passed in by a param then changes to the size of a window or container can change the chart dynamically.
+         If you shrink your browser window width you will see the charts below change in a fluid manor. You can also introduce basic break points such as removing the axes if below a certain width.</p>
+         <pre>
+         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+ <div style={{display: 'inline-block'}}>
+ <h4>2013</h4>
+ <BarChart
+   axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+   axes={(this.state.windowWidth / 3) > 400 ? true : false}
+   colorBars
+   grid
+   width={this.state.windowWidth / 3}
+   height={this.state.windowWidth / 6}
+   xTickNumber={5}
+   yTickNumber={5}
+   yDomainRange={[0, 100]}
+   data={this.defaultData}
+ />
+ </div>
+ <div style={{display: 'inline-block', padding: '0 10px'}}>
+ <h4>2014</h4>
+ <BarChart
+   axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+   axes={(this.state.windowWidth / 3) > 400 ? true : false}
+   colorBars
+   grid
+   width={this.state.windowWidth / 3}
+   height={this.state.windowWidth / 6}
+   xTickNumber={5}
+   yTickNumber={5}
+   yDomainRange={[0, 100]}
+   data={this.defaultData}
+ />
+ </div>
+ <div style={{display: 'inline-block'}}>
+ <h4>2015</h4>
+ <BarChart
+   axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+   axes={(this.state.windowWidth / 3) > 400 ? true : false}
+   colorBars
+   grid
+   width={this.state.windowWidth / 3}
+   height={this.state.windowWidth / 6}
+   xTickNumber={5}
+   yTickNumber={5}
+   yDomainRange={[0, 100]}
+   data={this.defaultData}
+ />
+</div>`)}}
+         />
+         </pre>
+         <div style={{display: 'inline-block'}}>
+         <h4>2013</h4>
+         <BarChart
+           axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+           axes={(this.state.windowWidth / 3) > 400 ? true : false}
+           colorBars
+           grid
+           width={this.state.windowWidth / 3}
+           height={this.state.windowWidth / 6}
+           xTickNumber={5}
+           yTickNumber={5}
+           yDomainRange={[0, 100]}
+           data={this.defaultData}
+         />
+         </div>
+         <div style={{display: 'inline-block', padding: '0 10px'}}>
+         <h4>2014</h4>
+         <BarChart
+           axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+           axes={(this.state.windowWidth / 3) > 400 ? true : false}
+           colorBars
+           grid
+           width={this.state.windowWidth / 3}
+           height={this.state.windowWidth / 6}
+           xTickNumber={5}
+           yTickNumber={5}
+           yDomainRange={[0, 100]}
+           data={this.defaultData}
+         />
+         </div>
+         <div style={{display: 'inline-block'}}>
+         <h4>2015</h4>
+         <BarChart
+           axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+           axes={(this.state.windowWidth / 3) > 400 ? true : false}
+           colorBars
+           grid
+           width={this.state.windowWidth / 3}
+           height={this.state.windowWidth / 6}
+           xTickNumber={5}
+           yTickNumber={5}
+           yDomainRange={[0, 100]}
+           data={this.defaultData}
+         />
+        </div>
         <br/>
         <br/>
         <br/>

@@ -96,7 +96,7 @@ class AreaChartContainer extends React.Component {
 
     render() {
       return (<div>
-        <h2>The R2-D3 Area chart </h2>
+        <h2>The React Easy Area chart </h2>
         <h3>Data</h3>
         <p>At the most basic the Area chart can just take a single data file supplied in a JSON format and will render a
          simple Area chart.</p>

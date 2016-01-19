@@ -19,6 +19,35 @@ const defaultStyles = {
 
 export default class PieChart extends React.Component {
 
+  static get propTypes() {
+    return {
+      data: React.PropTypes.array.isRequired,
+      innerHoleSize: React.PropTypes.number,
+      size: React.PropTypes.number,
+      padding: React.PropTypes.number,
+      labels: React.PropTypes.bool,
+      styles: React.PropTypes.object,
+      mouseOverHandler: React.PropTypes.func,
+      mouseOutHandler: React.PropTypes.func,
+      mouseMoveHandler: React.PropTypes.func,
+      clickHandler: React.PropTypes.func
+    };
+  }
+
+  static get defaultProps() {
+    return {
+      size: 200,
+      innerHoleSize: 0,
+      padding: 2,
+      labels: false,
+      styles: {},
+      mouseOverHandler: () => {},
+      mouseOutHandler: () => {},
+      mouseMoveHandler: () => {},
+      clickHandler: () => {}
+    };
+  }
+
   render() {
     const {
       mouseOverHandler,
@@ -78,27 +107,3 @@ export default class PieChart extends React.Component {
     );
   }
 }
-
-PieChart.propTypes = {
-  data: React.PropTypes.array.isRequired,
-  innerHoleSize: React.PropTypes.number,
-  size: React.PropTypes.number,
-  padding: React.PropTypes.number,
-  labels: React.PropTypes.bool,
-  styles: React.PropTypes.object,
-  mouseOverHandler: React.PropTypes.func,
-  mouseOutHandler: React.PropTypes.func,
-  mouseMoveHandler: React.PropTypes.func,
-  clickHandler: React.PropTypes.func
-};
-
-PieChart.defaultProps = {
-  size: 200,
-  innerHoleSize: 0,
-  padding: 2,
-  styles: {},
-  mouseOverHandler: () => {},
-  mouseOutHandler: () => {},
-  mouseMoveHandler: () => {},
-  clickHandler: () => {}
-};
