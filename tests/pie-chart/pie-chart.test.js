@@ -2,7 +2,7 @@
 import {should as chaiShould, expect} from 'chai';
 import React from 'react';
 import TestUtils from 'react/lib/ReactTestUtils';
-import {PieChart} from 'rc-d3';
+import {PieChart} from 'react-easy-chart';
 
 const should = chaiShould();
 

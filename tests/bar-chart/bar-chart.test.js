@@ -3,7 +3,7 @@ import chai, {should as chaiShould, expect} from 'chai';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react/lib/ReactTestUtils';
-import {BarChart} from 'rc-d3';
+import {BarChart} from 'react-easy-chart';
 import spies from 'chai-spies';
 
 const should = chaiShould();

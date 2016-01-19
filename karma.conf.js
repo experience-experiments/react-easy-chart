@@ -14,7 +14,7 @@ module.exports = (config) => {
     webpack: {
       resolve: {
         alias: {
-          'rc-d3': path.join(__dirname, 'modules')
+          'react-easy-chart': path.join(__dirname, 'modules')
         }
       },
       module: {

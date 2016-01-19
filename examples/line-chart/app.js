@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import {escapeHTML} from '../util';
 import ToolTip from '../ToolTip';
-import {LineChart} from 'rc-d3';
+import {LineChart} from 'react-easy-chart';
 import moment from 'moment';
 import {format} from 'd3-time-format';
 
