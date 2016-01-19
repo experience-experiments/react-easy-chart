@@ -26,22 +26,27 @@ describe('BarChart component', () => {
   });
 
   it('should have default values for optional properties', () => {
-    const chart = TestUtils.renderIntoDocument(<BarChart data={testData}/>);
+    const chart = TestUtils.renderIntoDocument(
+      <BarChart data={testData}
+        axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+        margin={{top: 0, right: 0, bottom: 0, left: 0}}
+      />
+    );
     chart.should.have.property('props');
     chart.props.data.should.have.length(3);
 
     // margin test
-    expect(chart.props).to.have.deep.property('margin.top', 10);
+    expect(chart.props).to.have.deep.property('margin.top', 0);
 
     // width and height
-    expect(chart.props).to.have.property('width', 960);
-    expect(chart.props).to.have.property('height', 500);
+    expect(chart.props).to.have.property('width', 400);
+    expect(chart.props).to.have.property('height', 200);
 
     // axes test
-    expect(chart.props).to.have.property('axes', true);
+    expect(chart.props).to.have.property('axes', false);
 
     // axes labels
-    expect(chart.props).to.have.deep.property('axisLabels.x', 'x axis');
+    expect(chart.props).to.have.deep.property('axisLabels.x', 'My x Axis');
   });
 
   it('should render an svg and 3 bars', () => {
@@ -52,13 +57,10 @@ describe('BarChart component', () => {
     const svg = vdom.props.children[1];
     expect(svg.type).to.equal('svg');
     const g = svg.props.children[0];
-    expect(g.props.transform).to.equal('translate(40,20)');
-    expect(g.props.children[0].type).to.not.equal('rect');
-    expect(g.props.children[1].type).to.not.equal('rect');
+    expect(g.props.transform).to.equal('translate(0,0)');
+    expect(g.props.children[0].type).to.equal('rect');
+    expect(g.props.children[1].type).to.equal('rect');
     expect(g.props.children[2].type).to.equal('rect');
-    expect(g.props.children[3].type).to.equal('rect');
-    expect(g.props.children[4].type).to.equal('rect');
-    expect(g.props.children[5].type).to.not.equal('rect');
   });
 
   it('should support clickHandler on bar', () => {
@@ -66,7 +68,7 @@ describe('BarChart component', () => {
     const chart = TestUtils.renderIntoDocument(<BarChart data={testData} clickHandler={spy}/>);
     const domRoot = ReactDOM.findDOMNode(chart);
     const svgNode = domRoot.childNodes[1];
-    const barNode = svgNode.childNodes[0].childNodes[3];
+    const barNode = svgNode.childNodes[0].childNodes[1];
     TestUtils.Simulate.click(barNode);
     expect(spy).to.have.been.called();
   });
@@ -83,7 +85,7 @@ describe('BarChart component', () => {
       />);
     const domRoot = ReactDOM.findDOMNode(chart);
     const svgNode = domRoot.childNodes[1];
-    const barNode = svgNode.childNodes[0].childNodes[3];
+    const barNode = svgNode.childNodes[0].childNodes[1];
 
     TestUtils.SimulateNative.mouseOver(barNode);
     expect(mouseOverSpy).to.have.been.called();

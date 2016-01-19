@@ -79,6 +79,7 @@ export default class BarChart extends React.Component {
       width: 400,
       height: 200,
       barWidth: 10,
+      axes: false,
       xType: 'text',
       yType: 'linear',
       mouseOverHandler: () => {},
