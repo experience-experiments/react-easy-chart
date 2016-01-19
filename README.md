@@ -44,7 +44,7 @@ Scatter chart:
 
 
 ## Documentation
-Each of the charts have had extensive documentation produced for them with working examples. These can be found here TODO ADD LINK
+Each of the charts have had extensive documentation produced for them with working examples. These can be found here [http://rma-consulting.github.io/react-easy-chart](here)
 
 ## Contributing
 We welcome pull requests and forks of the current graph implementations. If you are able to follow the API we have set out and are developing a chart we currently do not have we would love to add to our existing library.
