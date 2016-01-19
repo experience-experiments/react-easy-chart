@@ -31,7 +31,7 @@ describe('BarChart component', () => {
     chart.props.data.should.have.length(3);
 
     // margin test
-    expect(chart.props).to.have.deep.property('margin.top', 20);
+    expect(chart.props).to.have.deep.property('margin.top', 10);
 
     // width and height
     expect(chart.props).to.have.property('width', 960);

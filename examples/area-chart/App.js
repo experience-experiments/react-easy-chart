@@ -720,9 +720,9 @@ mouseOutHandler() {
           }}}
         />
 
-        <h3>Fluid Example</h3>
+        <h3>Fluid</h3>
         <p>Because the width and height of the chart can be passed in by a param then changes to the size of a window or container can change the chart dynamically.
-        If you shrink your browser window width you will see the chart change in a fluid manor. You can also introduce basic break points such as removing the axes if below a certain width width.</p>
+        If you shrink your browser window width you will see the charts below change in a fluid manor. You can also introduce basic break points such as removing the axes if below a certain width.</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 constructor(props) {
@@ -760,6 +760,7 @@ handleResize() {
         />
         </pre>
         <div style={{display: 'inline-block'}}>
+        <h4>2013</h4>
         <AreaChart
           xType={'time'}
           axes={(this.state.windowWidth / 3) > 400 ? true : false}
@@ -771,12 +772,13 @@ handleResize() {
           tickTimeDisplayFormat={'%d %m'}
           interpolate={'cardinal'}
           data={[
-            [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
-            [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
+            [{x: '1-Jan-13', y: 8}, {x: '1-Feb-13', y: 17}, {x: '1-Mar-13', y: 17}, {x: '1-Apr-13', y: 25}, {x: '1-May-13', y: 20}],
+            [{x: '1-Jan-13', y: 5}, {x: '1-Feb-13', y: 13}, {x: '1-Mar-13', y: 10}, {x: '1-Apr-13', y: 25}, {x: '1-May-13', y: 30}]
           ]}
         />
         </div>
         <div style={{display: 'inline-block', padding: '0 10px'}}>
+        <h4>2014</h4>
         <AreaChart
           xType={'time'}
           axes={(this.state.windowWidth / 3) > 400 ? true : false}
@@ -788,12 +790,13 @@ handleResize() {
           tickTimeDisplayFormat={'%d %m'}
           interpolate={'cardinal'}
           data={[
-            [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
-            [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
+            [{x: '1-Jan-14', y: 20}, {x: '1-Feb-14', y: 10}, {x: '1-Mar-14', y: 33}, {x: '1-Apr-14', y: 45}, {x: '1-May-14', y: 14}],
+            [{x: '1-Jan-14', y: 7}, {x: '1-Feb-14', y: 88}, {x: '1-Mar-14', y: 10}, {x: '1-Apr-14', y: 15}, {x: '1-May-14', y: 55}]
           ]}
         />
         </div>
         <div style={{display: 'inline-block'}}>
+        <h4>2015</h4>
         <AreaChart
           xType={'time'}
           axes={(this.state.windowWidth / 3) > 400 ? true : false}

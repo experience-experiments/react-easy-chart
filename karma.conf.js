@@ -1,5 +1,10 @@
 /* eslint-env node */
 const path = require('path');
+var browsers = ['Chrome'];
+
+if (process.env.NODE_ENV === 'test') {
+  browsers = ['PhantomJS'];
+}
 
 module.exports = (config) => {
   config.set({
@@ -27,8 +32,8 @@ module.exports = (config) => {
     webpackServer: {
       noInfo: true
     },
-    browsers: ['Chrome'],
-    singleRun: false,
+    browsers: browsers,
+    singleRun: true,
     reporters: ['progress'],
     plugins: [
       require('karma-mocha'),
@@ -36,6 +41,7 @@ module.exports = (config) => {
       require('karma-webpack'),
       require('karma-sourcemap-loader'),
       require('karma-chrome-launcher'),
+      require('karma-phantomjs-launcher'),
       require('karma-phantomjs-shim')
     ]
   });

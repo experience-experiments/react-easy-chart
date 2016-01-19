@@ -4,7 +4,8 @@
   "description": "React component implementations of Mike Bostok's D3 visualisation library.",
   "main": "lib/index.js",
   "scripts": {
-    "test": "karma start",
+    "test": "NODE_ENV='test' karma start",
+    "dev-test": "karma start --no-single-run --auto-watch",
     "eslint": "eslint ./modules/ ./examples/",
     "start": "npm run eslint && node examples/server.js",
     "build": "rimraf lib && babel ./modules -d lib"
