@@ -9,7 +9,7 @@
     "eslint": "eslint ./modules/ ./examples/",
     "start": "npm run eslint && node examples/server.js",
     "build": "rimraf lib && babel ./modules -d lib",
-    "docbuild": "cp -rf examples/ docs/examples/ && cd docs/examples && NODE_ENV=production webpack -p --config webpack.config.prod.js"
+    "docbuild": "cp -rf examples/ docs/temp/ && cd docs/temp && NODE_ENV=production webpack -p --config webpack.config.prod.js"
   },
   "repository": {
     "type": "git",
@@ -29,6 +29,7 @@
     "babel-preset-react": "^6.3.13",
     "chai": "^3.4.1",
     "chai-spies": "^0.7.1",
+    "copy-webpack-plugin": "^0.3.3",
     "eslint": "^1.10.3",
     "eslint-loader": "^1.1.1",
     "eslint-plugin-react": "^3.11.3",

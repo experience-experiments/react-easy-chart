@@ -1,22 +1,22 @@
 /*eslint-disable*/
-var fs = require('fs')
-var path = require('path')
-var webpack = require('webpack')
+var fs = require('fs');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
+var path = require('path');
+var webpack = require('webpack');
 
 module.exports = {
-  devtool: 'source-map',
   cache: true,
   debug: true,
 
   entry: fs.readdirSync(__dirname).reduce(function (entries, dir) {
-    if (fs.statSync(path.join(__dirname, dir)).isDirectory())
-      entries[dir] = path.join(__dirname, dir, 'app.js')
-
+    if (fs.statSync(path.join(__dirname, dir)).isDirectory() && dir !== 'images') {
+      entries[dir] = path.join(__dirname, dir, 'app.js');
+    }
     return entries
   }, {}),
 
   output: {
-    path: path.join(__dirname, 'dist'),
+    path: path.resolve(__dirname, '..', 'lib'),
     filename: '[name].js'
   },
 
@@ -33,7 +33,13 @@ module.exports = {
   },
 
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
+    new CopyWebpackPlugin([{
+      from: path.join(__dirname, '/root-styles.css'),
+      to: path.resolve(__dirname, '..', '/root-styles.css')
+    },{
+      from: path.join(__dirname, 'images'),
+      to: path.resolve(__dirname, '..', '/images')
+    }]),
     new webpack.NoErrorsPlugin(),
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     new webpack.DefinePlugin({
@@ -43,7 +49,7 @@ module.exports = {
       }
     }),
     new webpack.optimize.UglifyJsPlugin({minimize: true}),
-    new webpack.optimize.CommonsChunkPlugin('shared.js')
+    new webpack.optimize.CommonsChunkPlugin('shared_commons.js')
   ]
 
 
