@@ -8,7 +8,8 @@
     "dev-test": "karma start --no-single-run --auto-watch",
     "eslint": "eslint ./modules/ ./examples/",
     "start": "npm run eslint && node examples/server.js",
-    "build": "rimraf lib && babel ./modules -d lib"
+    "build": "rimraf lib && babel ./modules -d lib",
+    "docbuild": "cp -rf examples/ docs/examples/ && cd docs/examples && NODE_ENV=production webpack -p --config webpack.config.prod.js"
   },
   "repository": {
     "type": "git",
