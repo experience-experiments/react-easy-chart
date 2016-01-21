@@ -11,11 +11,24 @@ class LineChartContainer extends React.Component {
       super(props);
       // Generate multiple lines of data
       this.data = [this.generateData(), this.generateData(), this.generateData(), this.generateData()];
-      this.state = {showToolTip: false};
+      const initialWidth = window.innerWidth > 0 ? window.innerWidth : 500;
+      this.state = {showToolTip: false, windowWidth: initialWidth - 100};
+    }
+
+    componentDidMount() {
+      window.addEventListener('resize', this.handleResize.bind(this));
+    }
+
+    componentWillUnmount() {
+      window.removeEventListener('resize', this.handleResize);
     }
 
     getRandomArbitrary(min, max) {
       return Math.random() * (max - min) + min;
+    }
+
+    handleResize() {
+      this.setState({windowWidth: window.innerWidth - 100});
     }
 
     mouseOverHandler(d, e) {
@@ -83,7 +96,7 @@ class LineChartContainer extends React.Component {
 
     render() {
       return (<div>
-        <h2>The R2-D3 Line chart</h2>
+        <h2>The React Easy Line chart</h2>
         <h3>Data</h3>
         <p>At the most basic the line chart can just take a single data file supplied in a JSON format and will render a
          simple line chart.</p>
@@ -707,6 +720,101 @@ mouseOutHandler() {
             stroke: 'green'
           }}}
         />
+
+
+        <h3>Fluid</h3>
+        <p>Because the width and height of the chart can be passed in by a param then changes to the size of a window or container can change the chart dynamically.
+        If you shrink your browser window width you will see the charts below change in a fluid manor. You can also introduce basic break points such as removing the axes if below a certain width.</p>
+        <pre>
+        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+constructor(props) {
+  const initialWidth = window.innerWidth > 0 ? window.innerWidth : 500;
+  this.state = {showToolTip: false, windowWidth: initialWidth - 100};
+}
+
+componentDidMount() {
+  window.addEventListener('resize', this.handleResize.bind(this));
+}
+
+componentWillUnmount() {
+  window.removeEventListener('resize', this.handleResize);
+}
+
+handleResize() {
+  this.setState({windowWidth: window.innerWidth - 100});
+}
+<LineChart
+  xType={'time'}
+  axes={(this.state.windowWidth / 3) > 400 ? true : false}
+  xTicks={5}
+  yTicks={3}
+  grid
+  width={this.state.windowWidth / 3}
+  height={this.state.windowWidth / 6}
+  tickTimeDisplayFormat={'%d %m'}
+  interpolate={'cardinal'}
+  data={[
+    [{x: '1-Jan-13', y: 8}, {x: '1-Feb-13', y: 17}, {x: '1-Mar-13', y: 17}, {x: '1-Apr-13', y: 25}, {x: '1-May-13', y: 20}],
+    [{x: '1-Jan-13', y: 5}, {x: '1-Feb-13', y: 13}, {x: '1-Mar-13', y: 10}, {x: '1-Apr-13', y: 25}, {x: '1-May-13', y: 30}]
+  ]}
+/>
+          `)}}
+        />
+        </pre>
+        <div style={{display: 'inline-block'}}>
+        <h4>2013</h4>
+        <LineChart
+          xType={'time'}
+          axes={(this.state.windowWidth / 3) > 400 ? true : false}
+          xTicks={5}
+          yTicks={3}
+          grid
+          width={this.state.windowWidth / 3}
+          height={this.state.windowWidth / 6}
+          tickTimeDisplayFormat={'%d %m'}
+          interpolate={'cardinal'}
+          data={[
+            [{x: '1-Jan-13', y: 8}, {x: '1-Feb-13', y: 17}, {x: '1-Mar-13', y: 17}, {x: '1-Apr-13', y: 25}, {x: '1-May-13', y: 20}],
+            [{x: '1-Jan-13', y: 5}, {x: '1-Feb-13', y: 13}, {x: '1-Mar-13', y: 10}, {x: '1-Apr-13', y: 25}, {x: '1-May-13', y: 30}]
+          ]}
+        />
+        </div>
+        <div style={{display: 'inline-block', padding: '0 10px'}}>
+        <h4>2014</h4>
+        <LineChart
+          xType={'time'}
+          axes={(this.state.windowWidth / 3) > 400 ? true : false}
+          xTicks={5}
+          yTicks={3}
+          grid
+          width={this.state.windowWidth / 3}
+          height={this.state.windowWidth / 6}
+          tickTimeDisplayFormat={'%d %m'}
+          interpolate={'cardinal'}
+          data={[
+            [{x: '1-Jan-14', y: 20}, {x: '1-Feb-14', y: 10}, {x: '1-Mar-14', y: 33}, {x: '1-Apr-14', y: 45}, {x: '1-May-14', y: 14}],
+            [{x: '1-Jan-14', y: 7}, {x: '1-Feb-14', y: 88}, {x: '1-Mar-14', y: 10}, {x: '1-Apr-14', y: 15}, {x: '1-May-14', y: 55}]
+          ]}
+        />
+        </div>
+        <div style={{display: 'inline-block'}}>
+        <h4>2015</h4>
+        <LineChart
+          xType={'time'}
+          axes={(this.state.windowWidth / 3) > 400 ? true : false}
+          xTicks={5}
+          yTicks={3}
+          grid
+          width={this.state.windowWidth / 3}
+          height={this.state.windowWidth / 6}
+          tickTimeDisplayFormat={'%d %m'}
+          interpolate={'cardinal'}
+          data={[
+            [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
+            [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
+          ]}
+        />
+          </div>
 
         <br/>
         <br/>

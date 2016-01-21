@@ -4,7 +4,8 @@
   "description": "React component implementations of Mike Bostok's D3 visualisation library.",
   "main": "lib/index.js",
   "scripts": {
-    "test": "karma start",
+    "test": "NODE_ENV='test' karma start",
+    "dev-test": "karma start --no-single-run --auto-watch",
     "eslint": "eslint ./modules/ ./examples/",
     "start": "npm run eslint && node examples/server.js",
     "build": "rimraf lib && babel ./modules -d lib",
@@ -40,7 +41,7 @@
     "karma-phantomjs-shim": "^1.1.2",
     "karma-sourcemap-loader": "^0.3.6",
     "karma-webpack": "^1.7.0",
-    "lodash.merge": "^3.3.2",
+    "lodash.merge": "^4.0.1",
     "mocha": "^2.3.4",
     "moment": "^2.11.1",
     "open": "0.0.5",

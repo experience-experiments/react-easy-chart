@@ -44,13 +44,13 @@ Scatter chart:
 
 
 ## Documentation
-Each of the charts have had extensive documentation produced for them with working examples. These can be found here TODO ADD LINK
+Each of the charts have had extensive documentation produced for them with working examples. These can be found  [here](http://rma-consulting.github.io/react-easy-chart)
 
 ## Contributing
 We welcome pull requests and forks of the current graph implementations. If you are able to follow the API we have set out and are developing a chart we currently do not have we would love to add to our existing library.
 
 ## Background and Motivation
-The project started by trying to optimize D3 charts for React. After some reading and trial and error we came across this blog post http://oli.me.uk/2015/09/09/d3-within-react-the-right-way/
+The project started by trying to optimize D3 charts for React. After some reading and trial and error we came across this blog post [http://oli.me.uk/2015/09/09/d3-within-react-the-right-way/](http://oli.me.uk/2015/09/09/d3-within-react-the-right-way/)
 Oliver provided us with a solution that can utilize the react shadow DOM by creating a faux DOM to attach the SVG elements to. This is in our opinion the best current solution.
 
 The complexity of developing D3 based graphs intermittently often means that even experienced JavaScript developers can take days getting back up to speed for making the most simple of Graphs. The React Easy Chart Library is flexible and robust enough to avoid needing to remember D3 syntax when simple graphs are required.   
