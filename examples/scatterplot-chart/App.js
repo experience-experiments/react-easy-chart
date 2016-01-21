@@ -196,13 +196,16 @@ export default class ScatterplotContainer extends React.Component {
     this.state = {
       dataDisplay: '',
       showToolTip: false,
-      randomDataIntervalId: null
+      randomDataIntervalId: null,
+      windowWidth: 400,
+      componentWidth: 300
     };
     this.data = this.generateData();
   }
 
   componentDidMount() {
     window.addEventListener('resize', this.handleResize.bind(this));
+    this.handleResize();
   }
 
   componentWillUnmount() {
@@ -224,7 +227,10 @@ export default class ScatterplotContainer extends React.Component {
   }
 
   handleResize() {
-    this.setState({windowWidth: window.innerWidth - 100});
+    this.setState({
+      windowWidth: window.innerWidth - 100,
+      componentWidth: this.refs.component.offsetWidth
+    });
   }
 
   mouseOverHandler(d, e) {
@@ -264,23 +270,43 @@ export default class ScatterplotContainer extends React.Component {
     this.forceUpdate();
   }
 
+  toggleState() {
+    this.setState({
+      active: !this.state.active
+    });
+  }
+
   render() {
+    const cn = this.state.active ? 'menu active' : 'menu';
     return (
       <div className="component-docs">
-        <aside className="aside-menu">
-          <nav>
+        <aside id="menu" className={cn}>
+          <h1 className="menu__header">Scatterplot<br />Chart</h1>
+          <a id="menuToggle" className="menu__toggle" aria-hidden="true" href="#" onClick={this.toggleState.bind(this)}>
+            <span>Toggle menu</span>
+          </a>
+          <nav className="menu__nav">
             <ul>
-              <li>List item one</li>
-              <li>List item two</li>
-              <li>List item three</li>
-              <li>List item four</li>
-              <li>List item five</li>
+              <li><a>Introduction</a></li>
+              <li><a>List item two</a></li>
+              <li><a>List item three</a></li>
+              <li><a>List item four</a></li>
+              <li><a>List item five</a></li>
             </ul>
           </nav>
         </aside>
-        <div className="docs-content">
-          <h2>The R2-D3 scatterplot chart</h2>
-          <h3>Data</h3>
+        <div className="content">
+          <h1>Scatterplot chart</h1>
+          <div ref="component">
+            <ScatterplotChart
+              data={this.data}
+              axes={(this.state.componentWidth) > 400 ? true : false}
+              axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+              width={this.state.componentWidth}
+              height={this.state.componentWidth / 2}
+            />
+          </div>
+          <h2>Introduction</h2>
           <p>At the most basic the scatterplot chart can just take a single data file supplied in a JSON format and will render a
            simple scatterplot chart.</p>
           <p>The format of the data is an array of objects, with each object representing a single data item to be plotted.</p>
@@ -798,10 +824,10 @@ export default class ScatterplotContainer extends React.Component {
           <p>Because the width and height of the chart can be passed in by a param then changes to the size of a window or container can change the chart dynamically. If you shrink your browser window width you will see the chart change in a fluid manor. You can also introduce basic break points such as removing the axes if below a certain width width.</p>
           <ScatterplotChart
             data={this.data}
-            axes={(this.state.windowWidth) > 400 ? true : false}
+            axes={(this.state.componentWidth) > 400 ? true : false}
             axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
-            width={this.state.windowWidth}
-            height={this.state.windowWidth / 2}
+            width={this.state.componentWidth}
+            height={this.state.componentWidth / 2}
           />
           <br />
           <br />
