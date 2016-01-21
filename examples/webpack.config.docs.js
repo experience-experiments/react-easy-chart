@@ -15,9 +15,11 @@ module.exports = {
     return entries
   }, {}),
 
+  // entry: path.join(__dirname, 'area-chart', 'test.js'),
+
   output: {
-    path: path.resolve(__dirname, '..', 'lib'),
-    filename: '[name].js'
+    path: path.resolve(__dirname),
+    filename: path.join('../','lib', '/[name].js')
   },
 
   module: {
@@ -34,11 +36,14 @@ module.exports = {
 
   plugins: [
     new CopyWebpackPlugin([{
-      from: path.join(__dirname, '/root-styles.css'),
-      to: path.resolve(__dirname, '..', '/root-styles.css')
+      from: path.join(__dirname, 'root-styles.css'),
+      to: path.join('..', '/root-styles.css')
     },{
       from: path.join(__dirname, 'images'),
-      to: path.resolve(__dirname, '..', '/images')
+      to: path.join('..', '/images')
+    },{
+      from: path.join(__dirname, 'index.html'),
+      to: path.join('..', '/index.html')
     }]),
     new webpack.NoErrorsPlugin(),
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
@@ -49,7 +54,7 @@ module.exports = {
       }
     }),
     new webpack.optimize.UglifyJsPlugin({minimize: true}),
-    new webpack.optimize.CommonsChunkPlugin('shared_commons.js')
+    new webpack.optimize.CommonsChunkPlugin(path.join('../','lib', '/shared_commons.js'))
   ]
 
 

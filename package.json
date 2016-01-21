@@ -9,7 +9,7 @@
     "eslint": "eslint ./modules/ ./examples/",
     "start": "npm run eslint && node examples/server.js",
     "build": "rimraf lib && babel ./modules -d lib",
-    "docbuild": "cp -rf examples/ docs/temp/ && cd docs/temp && NODE_ENV=production webpack -p --config webpack.config.prod.js"
+    "docbuild": "cp -rf examples/ docs/temp/ && cd docs && NODE_ENV=production webpack -p --config temp/webpack.config.docs.js && rm -r temp"
   },
   "repository": {
     "type": "git",
