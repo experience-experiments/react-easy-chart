@@ -8,7 +8,8 @@
     "dev-test": "karma start --no-single-run --auto-watch",
     "eslint": "eslint ./modules/ ./examples/",
     "start": "npm run eslint && node examples/server.js",
-    "build": "rimraf lib && babel ./modules -d lib"
+    "build": "rimraf lib && babel ./modules -d lib",
+    "docbuild": "mkdir -p docs && rm -rf docs/* && cp -rf examples/ docs/temp/ && cd docs && NODE_ENV=production webpack -p --config temp/webpack.config.docs.js && rm -r temp"
   },
   "repository": {
     "type": "git",
@@ -28,10 +29,11 @@
     "babel-preset-react": "^6.3.13",
     "chai": "^3.4.1",
     "chai-spies": "^0.7.1",
-    "d3-time-format": "^0.2.1",
+    "copy-webpack-plugin": "^0.3.3",
     "eslint": "^1.10.3",
     "eslint-loader": "^1.1.1",
     "eslint-plugin-react": "^3.11.3",
+    "html-webpack-plugin": "^2.7.1",
     "karma": "^0.13.15",
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^0.2.2",
@@ -53,6 +55,7 @@
   "dependencies": {
     "d3": "^3.5.12",
     "d3-array": "^0.6.1",
+    "d3-time-format": "^0.2.1",
     "d3-scale": "^0.3.0",
     "d3-shape": "^0.2.2",
     "radium": "^0.15.3",
