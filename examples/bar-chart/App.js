@@ -3,13 +3,18 @@ import ReactDOM from 'react-dom';
 import BarChart from 'react-easy-chart/bar-chart';
 import ToolTip from '../ToolTip';
 import {escapeHTML} from '../util';
+import Scrollspy from 'react-scrollspy';
 
 export default class BarChartContainer extends React.Component {
     constructor(props) {
       super(props);
       this.data = this.generateData();
       const initialWidth = window.innerWidth > 0 ? window.innerWidth : 500;
-      this.state = {showToolTip: false, windowWidth: initialWidth - 100};
+      this.state = {
+        showToolTip: false,
+        windowWidth: initialWidth - 100,
+        componentWidth: 300
+      };
       this.defaultData = [{
         'x': 'A',
         'y': 46
@@ -105,7 +110,10 @@ export default class BarChartContainer extends React.Component {
     }
 
     handleResize() {
-      this.setState({windowWidth: window.innerWidth - 100});
+      this.setState({
+        windowWidth: window.innerWidth - 100,
+        componentWidth: this.refs.component.offsetWidth
+      });
     }
 
     generateData() {
@@ -159,12 +167,87 @@ export default class BarChartContainer extends React.Component {
       this.setState({dataDisplay: `The amount selected is ${d.y}`});
     }
 
+    toggleState() {
+      this.setState({
+        active: !this.state.active
+      });
+    }
+
     render() {
+      const cn = this.state.active ? 'menu active' : 'menu';
       return (<div>
-        <h2>The React Easy Bar Chart</h2>
-        <h3>Data</h3>
-        <p>At the most basic the Bar chart can just take a single data file supplied in a JSON format and will render a
-         simple Bar chart.</p>
+        <aside id="menu" className={cn}>
+          <a id="menuToggle" className="menu__toggle" aria-hidden="true" href="#" onClick={this.toggleState.bind(this)}>
+            <span>Toggle menu</span>
+          </a>
+          <nav className="menu__nav">
+            <Scrollspy
+              items={
+                ['introduction',
+                'data',
+                'heightAndWidth',
+                'colorBars',
+                'margin',
+                'overridingBarColors',
+                'axes',
+                'axesLabels',
+                'axesType',
+                'datePattern',
+                'barWidth',
+                'domainRange',
+                'tickDisplay',
+                'numberOfTicks',
+                'grid',
+                'mouseHandlers',
+                'clickHandler',
+                'updateData',
+                'fluid'
+                ]
+              }
+              currentClassName="active"
+            >
+              <li><a href="#introduction">Introduction</a></li>
+              <li><a href="#data">Data</a></li>
+              <li><a href="#heightAndWidth">Height &amp; Width</a></li>
+              <li><a href="#colorBars">ColorBars</a></li>
+              <li><a href="#margin">Margin</a></li>
+              <li><a href="#overridingBarColors">Overriding bar colors</a></li>
+              <li><a href="#axes">Axes</a></li>
+              <li><a href="#axesLabels">Axes labels</a></li>
+              <li><a href="#axesType">Axes type</a></li>
+              <li><a href="#datePattern">datePattern</a></li>
+              <li><a href="#barWidth">Bar width</a></li>
+              <li><a href="#domainRange">Domain range</a></li>
+              <li><a href="#tickDisplay">Tick display format</a></li>
+              <li><a href="#numberOfTicks">Number of ticks</a></li>
+              <li><a href="#grid">Grid</a></li>
+              <li><a href="#mouseHandlers">Mouse handlers</a></li>
+              <li><a href="#clickHandler">Click handler</a></li>
+              <li><a href="#updateData">Updating the data</a></li>
+              <li><a href="#fluid">Fluid</a></li>
+            </Scrollspy>
+          </nav>
+        </aside>
+        <div className="content">
+        <h1>The React Easy Bar Chart</h1>
+        <div ref="component">
+          <BarChart
+            axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+            axes={(this.state.componentWidth / 3) > 400 ? true : false}
+            colorBars
+            grid
+            width={this.state.componentWidth}
+            height={this.state.componentWidth / 2}
+            xTickNumber={5}
+            yTickNumber={5}
+            yDomainRange={[0, 100]}
+            data={this.defaultData}
+          />
+        </div>
+        <h2 id="introduction">Introduction</h2>
+        <p>Introduction text here</p>
+        <h2 id="data">Data</h2>
+        <p>At the most basic the Bar chart can just take a single data file supplied in a JSON format and will render a simple Bar chart.</p>
          <pre>
          <code dangerouslySetInnerHTML={{__html: escapeHTML(`
  <BarChart
@@ -179,7 +262,7 @@ export default class BarChartContainer extends React.Component {
           data={[{x: 'A', y: 20}, {x: 'B', y: 30}, {x: 'C', y: 40}, {x: 'D', y: 20}, {x: 'E', y: 40}, {x: 'F', y: 25}, {x: 'G', y: 5}]}
         />
 
-        <h3>Height and Width</h3>
+      <h2 id="heightAndWidth">Height and Width</h2>
         <p>The height and width can be easily set by passing in a numeric y in as a prop.</p>
          <pre>
          <code dangerouslySetInnerHTML={{__html: escapeHTML(`
@@ -206,7 +289,7 @@ export default class BarChartContainer extends React.Component {
           data={this.defaultData}
         />
 
-        <h3>ColorBars</h3>
+        <h2 id="colorBars">ColorBars</h2>
         <p>The bars can be automatically colored by turning on the colorBars boolean.</p>
          <pre>
          <code dangerouslySetInnerHTML={{__html: escapeHTML(`
@@ -236,7 +319,7 @@ export default class BarChartContainer extends React.Component {
           data={this.defaultData}
         />
 
-        <h3>Margin</h3>
+        <h2 id="margin">Margin</h2>
         <p>The Margin can be overridden by passing in a margin object. The margin object must define the following: top, right, bottom and left</p>
         <p>This can be particulary useful if a label is cut off.</p>
         <pre>
@@ -260,7 +343,7 @@ export default class BarChartContainer extends React.Component {
           margin={{top: 0, right: 0, bottom: 30, left: 100}}
         />
 
-        <h3>Overriding Bar colors</h3>
+      <h2 id="overridingBarColors">Overriding Bar colors</h2>
         <p>A single bar or number of bars can be colored by adding a color prop to the relevent data item.</p>
          <pre>
          <code dangerouslySetInnerHTML={{__html: escapeHTML(`
@@ -282,7 +365,7 @@ export default class BarChartContainer extends React.Component {
           data={[{x: 'A', y: 20}, {x: 'B', y: 30, color: '#f00'}, {x: 'C', y: 40}, {x: 'D', y: 20}, {x: 'E', y: 40}, {x: 'F', y: 25}, {x: 'G', y: 5, color: 'orange'}]}
         />
 
-        <h3>Axes</h3>
+      <h2 id="axes">Axes</h2>
         <p>The axes can be turned on by simply passing a boolean flag to true for axes</p>
          <pre>
          <code dangerouslySetInnerHTML={{__html: escapeHTML(`
@@ -310,7 +393,7 @@ export default class BarChartContainer extends React.Component {
           data={this.defaultData}
         />
 
-        <h3>Axes Labels</h3>
+        <h2 id="axesLabels">Axes Labels</h2>
         <p>The axes labels can be overridden by simply passing <b>axisLabels</b> object with both a x and y y.</p>
          <pre>
          <code dangerouslySetInnerHTML={{__html: escapeHTML(`
@@ -338,7 +421,7 @@ export default class BarChartContainer extends React.Component {
           data={this.defaultData}
         />
 
-        <h3>xType / yType</h3>
+      <h2 id="axesType">Axes type</h2>
         <p>The data passed associated to the particular axes can be in numeric, date (the default format is for example 1-Jan-15 but can be overridden) or textual formats (used for labelling).</p>
 
         <p>By default the xType is text (or ordinal in d3) and so allows text labelling. The example below passes 'linear' as the xType and the data x is numeric.</p>
@@ -389,7 +472,7 @@ export default class BarChartContainer extends React.Component {
           data={[{x: '1-Jan-15', y: 20}, {x: '2-Jan-15', y: 10}, {x: '3-Jan-15', y: 33}]}
         />
 
-        <h3>Date Pattern</h3>
+        <h2 id="datePattern">Date Pattern</h2>
         <p>The datePattern can be overridden to allow any textual representation of the date to be parsed.</p>
         <p>The datePattern is passed in as a string param and uses for example <b>%d-%b-%y</b> to pass a value such as 15-Jan-15.
          More information on the d3 patterns can be found <a href="https://github.com/mbostock/d3/wiki/Time-Formatting">here</a></p>
@@ -419,7 +502,7 @@ export default class BarChartContainer extends React.Component {
            data={[{x: '1-Jan-15 13:00', y: 20}, {x: '1-Jan-15 14:00', y: 10}, {x: '1-Jan-15 15:00', y: 33}]}
          />
 
-        <h3>Bar Width</h3>
+        <h2 id="barWidth">Bar Width</h2>
         <p>The bar width can also be overridden. The default is 10px. This will only affect linear or time based x axis.</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
@@ -449,7 +532,7 @@ export default class BarChartContainer extends React.Component {
           data={[{x: '1-Jan-15', y: 20}, {x: '2-Jan-15', y: 10}, {x: '3-Jan-15', y: 33}]}
         />
 
-        <h3>range yDomainRange, xDomainRange</h3>
+      <h2 id="domainRange">Domain range</h2>
         <p>By default the axis ranges are automatically calculated based on the smallest and the largest ys.</p>
         <p>The range can be fixed by passing an array param of 2 numbers for the particular axis.
         The first number is the bottom of the range the second is the higher point of the range.</p>
@@ -483,7 +566,7 @@ export default class BarChartContainer extends React.Component {
           data={[{x: '10-Jan-15', y: 20}, {x: '12-Jan-15', y: 10}, {x: '15-Jan-15', y: 33}]}
         />
 
-        <h3>Tick display format</h3>
+        <h2 id="tickDisplay">Tick display format</h2>
         <p>If the x or y axis  has an xType of time then a display for the axis can be overridden by setting the tickTimeDisplayFormat.</p>
         <p>The options are very flexible and can be seen here <a href="https://github.com/mbostock/d3/wiki/Time-Formatting">Time Formatting</a></p>
         <pre>
@@ -516,7 +599,7 @@ export default class BarChartContainer extends React.Component {
           data={[{x: '10-Jan-15', y: 20}, {x: '12-Jan-15', y: 10}, {x: '15-Jan-15', y: 33}]}
         />
 
-        <h3>Number of ticks</h3>
+        <h2 id="numberOfTicks">Number of ticks</h2>
         <p>The number of ticks of the x and y axis can be overridden by setting the xTickNumber or yTickNumber.</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
@@ -550,7 +633,7 @@ export default class BarChartContainer extends React.Component {
           data={[{x: '10-Jan-15', y: 20}, {x: '12-Jan-15', y: 10}, {x: '15-Jan-15', y: 33}]}
         />
 
-        <h3>Grid</h3>
+        <h2 id="grid">Grid</h2>
         <p>A grid can be added to the graph by just passing in a boolean.</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
@@ -586,7 +669,7 @@ export default class BarChartContainer extends React.Component {
         />
 
 
-        <h3>mouseOverHandler, mouseOverHandler, mouseMoveHandler</h3>
+        <h2 id="mouseHandlers">Mouse handlers</h2>
         <p>The chart will send out a mouseOver event, mouseMove and mouseOut event. This can be used by your react application in anyway you would require.
          The event handlers provides the mouse event and the bar data. The mouse event can for instance provide the x and y coordinates which can be used for a tool tip.
           The data is related to the bar currently moused over.</p>
@@ -650,7 +733,7 @@ mouseOutHandler() {
             yDomainRange={[0, 100]}
           />
 
-        <h3>Click Handler</h3>
+        <h2 id="clickHandler">Click Handler</h2>
         <p>The chart will send out a click event. The event will pass the data and the event. This allows the data to be presented from the clicking of a segment in any way the react developer requires.</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
@@ -703,7 +786,7 @@ mouseOutHandler() {
           </div>
         </div>
 
-        <h3>Updating the data</h3>
+        <h2 id="updateData">Updating the data</h2>
         <p>By selecting the button below to start the random data you can see a simulation of the performance if a data feed is passed in.
          React provides the functionality to only update the elements of the dom when required so should just change the line attributes.
           The data is passed in as a
@@ -726,7 +809,7 @@ mouseOutHandler() {
            data={this.data}
          />
 
-         <h3>Fluid</h3>
+         <h2 id="fluid">Fluid</h2>
          <p>Because the width and height of the chart can be passed in by a param then changes to the size of a window or container can change the chart dynamically.
          If you shrink your browser window width you will see the charts below change in a fluid manor. You can also introduce basic break points such as removing the axes if below a certain width.</p>
          <pre>
@@ -735,99 +818,40 @@ mouseOutHandler() {
  <h4>2013</h4>
  <BarChart
    axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
-   axes={(this.state.windowWidth / 3) > 400 ? true : false}
+   axes={(this.state.componentWidth) > 400 ? true : false}
    colorBars
    grid
-   width={this.state.windowWidth / 3}
-   height={this.state.windowWidth / 6}
+   width={this.state.componentWidth}
+   height={this.state.componentWidth / 2}
    xTickNumber={5}
    yTickNumber={5}
    yDomainRange={[0, 100]}
    data={this.defaultData}
  />
  </div>
- <div style={{display: 'inline-block', padding: '0 10px'}}>
- <h4>2014</h4>
- <BarChart
-   axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
-   axes={(this.state.windowWidth / 3) > 400 ? true : false}
-   colorBars
-   grid
-   width={this.state.windowWidth / 3}
-   height={this.state.windowWidth / 6}
-   xTickNumber={5}
-   yTickNumber={5}
-   yDomainRange={[0, 100]}
-   data={this.defaultData}
- />
- </div>
- <div style={{display: 'inline-block'}}>
- <h4>2015</h4>
- <BarChart
-   axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
-   axes={(this.state.windowWidth / 3) > 400 ? true : false}
-   colorBars
-   grid
-   width={this.state.windowWidth / 3}
-   height={this.state.windowWidth / 6}
-   xTickNumber={5}
-   yTickNumber={5}
-   yDomainRange={[0, 100]}
-   data={this.defaultData}
- />
-</div>`)}}
+`)}}
          />
          </pre>
          <div style={{display: 'inline-block'}}>
          <h4>2013</h4>
          <BarChart
            axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
-           axes={(this.state.windowWidth / 3) > 400 ? true : false}
+           axes={(this.state.componentWidth) > 400 ? true : false}
            colorBars
            grid
-           width={this.state.windowWidth / 3}
-           height={this.state.windowWidth / 6}
+           width={this.state.componentWidth}
+           height={this.state.componentWidth / 2}
            xTickNumber={5}
            yTickNumber={5}
            yDomainRange={[0, 100]}
            data={this.defaultData}
          />
          </div>
-         <div style={{display: 'inline-block', padding: '0 10px'}}>
-         <h4>2014</h4>
-         <BarChart
-           axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
-           axes={(this.state.windowWidth / 3) > 400 ? true : false}
-           colorBars
-           grid
-           width={this.state.windowWidth / 3}
-           height={this.state.windowWidth / 6}
-           xTickNumber={5}
-           yTickNumber={5}
-           yDomainRange={[0, 100]}
-           data={this.defaultData}
-         />
-         </div>
-         <div style={{display: 'inline-block'}}>
-         <h4>2015</h4>
-         <BarChart
-           axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
-           axes={(this.state.windowWidth / 3) > 400 ? true : false}
-           colorBars
-           grid
-           width={this.state.windowWidth / 3}
-           height={this.state.windowWidth / 6}
-           xTickNumber={5}
-           yTickNumber={5}
-           yDomainRange={[0, 100]}
-           data={this.defaultData}
-         />
-        </div>
         <br/>
         <br/>
         <br/>
         {this.state.showToolTip ? <ToolTip top={this.state.top} left={this.state.left}>The value on the {this.state.x} is {this.state.y}</ToolTip> : null}
-        </div>
+      </div></div>
       );
     }
 }
