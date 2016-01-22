@@ -1,6 +1,7 @@
 /*eslint-disable*/
 var fs = require('fs');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 var path = require('path');
 var webpack = require('webpack');
 
@@ -35,6 +36,36 @@ module.exports = {
   },
 
   plugins: [
+    new HtmlWebpackPlugin({
+      title: 'Area Chart',
+      template: path.join(__dirname, 'document_template.html'),
+      filename: path.join('..', 'area-chart/index.html'),
+      excludeChunks: ['bar-chart', 'line-chart', 'pie-chart', 'scatterplot-chart']
+    }),
+    new HtmlWebpackPlugin({
+      title: 'Bar Chart',
+      template: path.join(__dirname, 'document_template.html'),
+      filename: path.join('..', 'bar-chart/index.html'),
+      excludeChunks: ['area-chart', 'line-chart', 'pie-chart', 'scatterplot-chart']
+    }),
+    new HtmlWebpackPlugin({
+      title: 'Line Chart',
+      template: path.join(__dirname, 'document_template.html'),
+      filename: path.join('..', 'line-chart/index.html'),
+      excludeChunks: ['area-chart', 'bar-chart', 'pie-chart', 'scatterplot-chart']
+    }),
+    new HtmlWebpackPlugin({
+      title: 'Pie Chart',
+      template: path.join(__dirname, 'document_template.html'),
+      filename: path.join('..', 'pie-chart/index.html'),
+      excludeChunks: ['area-chart', 'line-chart', 'bar-chart', 'scatterplot-chart']
+    }),
+    new HtmlWebpackPlugin({
+      title: 'Scatter Plot Chart',
+      template: path.join(__dirname, 'document_template.html'),
+      filename: path.join('..', 'scatterplot-chart/index.html'),
+      excludeChunks: ['area-chart', 'line-chart', 'pie-chart', 'bar-chart']
+    }),
     new CopyWebpackPlugin([{
       from: path.join(__dirname, 'root-styles.css'),
       to: path.join('..', '/root-styles.css')
@@ -51,7 +82,8 @@ module.exports = {
       'process.env': {
         // This has effect on the react lib size
         'NODE_ENV': JSON.stringify('production'),
-      }
+      },
+      'target': 'docs'
     }),
     new webpack.optimize.UglifyJsPlugin({minimize: true}),
     new webpack.optimize.CommonsChunkPlugin(path.join('../','lib', '/shared_commons.js'))
