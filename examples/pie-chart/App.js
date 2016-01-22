@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ToolTip from '../ToolTip';
 import {escapeHTML} from '../util';
-import PieChart from 'rc-d3/pie-chart';
+import PieChart from 'react-easy-chart/pie-chart';
 
 export default class PieChartContainer extends React.Component {
     constructor(props) {
@@ -76,7 +76,7 @@ export default class PieChartContainer extends React.Component {
     render() {
       return (<div>
         {this.state.showToolTip ? <ToolTip top={this.state.top} left={this.state.left}>The value of {this.state.key} is {this.state.value}</ToolTip> : null}
-        <h2>The R2-D3 Pie chart</h2>
+        <h2>The React Easy Pie chart</h2>
         <h3>data</h3>
         <p>At the most basic the Pie chart can just take a single data file supplied in a JSON format and will render a
          simple Pie chart. This is a single array of JavaScript objects with a key and value.</p>

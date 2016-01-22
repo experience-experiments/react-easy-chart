@@ -2,7 +2,7 @@
 import {should as chaiShould, expect} from 'chai';
 import React from 'react';
 import TestUtils from 'react/lib/ReactTestUtils';
-import {PieChart} from 'rc-d3';
+import {PieChart} from 'react-easy-chart';
 
 const should = chaiShould();
 
@@ -37,17 +37,17 @@ describe('PieChart component', () => {
     // Data
     chart.props.data.should.have.length(2);
 
-    // Height
-    expect(chart.props).to.have.property('height', 200);
+    // size
+    expect(chart.props).to.have.property('size', 200);
 
     // innerHoleHeight
-    expect(chart.props).to.have.property('innerHoleHeight', 0);
+    expect(chart.props).to.have.property('innerHoleSize', 0);
 
     // padding
     expect(chart.props).to.have.property('padding', 2);
 
     // hasLabels: false,
-    expect(chart.props).to.have.property('hasLabels', false);
+    expect(chart.props).to.have.property('labels', false);
   });
 
   it('should render an svg and 2 arcs', () => {
