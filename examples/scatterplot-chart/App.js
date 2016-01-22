@@ -280,7 +280,7 @@ export default class ScatterplotContainer extends React.Component {
   render() {
     const cn = this.state.active ? 'menu active' : 'menu';
     return (
-      <div className="component-docs">
+      <div>
         <aside id="menu" className={cn}>
           <h1 className="menu__header">Scatterplot<br />Chart</h1>
           <a id="menuToggle" className="menu__toggle" aria-hidden="true" href="#" onClick={this.toggleState.bind(this)}>
