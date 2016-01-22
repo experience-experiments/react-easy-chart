@@ -39,5 +39,4 @@ pids
 
 # Build Folders
 coverage/
-lib
 npm-debug.log*
