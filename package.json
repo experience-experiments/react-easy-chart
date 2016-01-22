@@ -9,7 +9,7 @@
     "eslint": "eslint ./modules/ ./examples/",
     "start": "npm run eslint && node examples/server.js",
     "build": "rimraf lib && babel ./modules -d lib",
-    "docbuild": "cp -rf examples/ docs/temp/ && cd docs && NODE_ENV=production webpack -p --config temp/webpack.config.docs.js && rm -r temp"
+    "docbuild": "mkdir -p docs && rm -rf docs/* && cp -rf examples/ docs/temp/ && cd docs && NODE_ENV=production webpack -p --config temp/webpack.config.docs.js && rm -r temp"
   },
   "repository": {
     "type": "git",
@@ -33,6 +33,7 @@
     "eslint": "^1.10.3",
     "eslint-loader": "^1.1.1",
     "eslint-plugin-react": "^3.11.3",
+    "html-webpack-plugin": "^2.7.1",
     "karma": "^0.13.15",
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^0.2.2",
