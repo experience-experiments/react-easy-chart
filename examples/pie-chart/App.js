@@ -92,6 +92,9 @@ export default class PieChartContainer extends React.Component {
             <span>Toggle menu</span>
           </a>
           <nav className="menu__nav">
+            <ul>
+              <li><a href="../" className="menu__all-charts">&#8592; All charts</a></li>
+            </ul>
             <Scrollspy
               items={
                 ['introduction',

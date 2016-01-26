@@ -219,7 +219,7 @@ export default class ScatterplotContainer extends React.Component {
 
   generateData() {
     const data = [];
-    const keys = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+    const keys = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
 
     keys.map((key) => {
       data.push({type: key, x: this.getRandomArbitrary(1, 1000), y: this.getRandomArbitrary(1, 1000)});
@@ -286,6 +286,9 @@ export default class ScatterplotContainer extends React.Component {
             <span>Toggle menu</span>
           </a>
           <nav className="menu__nav">
+            <ul>
+              <li><a href="../" className="menu__all-charts">&#8592; All charts</a></li>
+            </ul>
             <Scrollspy
               items={
                 ['introduction',
@@ -332,8 +335,7 @@ export default class ScatterplotContainer extends React.Component {
           <div ref="component">
             <ScatterplotChart
               data={this.data}
-              axes={(this.state.componentWidth) > 400 ? true : false}
-              axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+              dotRadius={20}
               width={this.state.componentWidth}
               height={this.state.componentWidth / 2}
             />
