@@ -1,9 +1,6 @@
 /* eslint-env node, mocha */
-import chai, {should as chaiShould, expect} from 'chai';
-import React from 'react';
-import ReactDOM from 'react-dom';
-import TestUtils from 'react/lib/ReactTestUtils';
-import {ScatterplotChart} from 'rc-d3';
+import chai, {should as chaiShould} from 'chai';
+import {ScatterplotChart} from 'react-easy-chart';
 import spies from 'chai-spies';
 
 const should = chaiShould();
