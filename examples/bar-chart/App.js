@@ -249,7 +249,7 @@ export default class BarChartContainer extends React.Component {
           />
         </div>
         <h2 id="introduction">Introduction</h2>
-        <p>Introduction text here</p>
+        <p>A bar chart or bar graph is a chart that presents Grouped data with rectangular bars with lengths proportional to the values that they represent.<sup>(<a href="https://en.wikipedia.org/wiki/Bar_chart">ref</a>)</sup></p>
         <h2 id="data">Data</h2>
         <p>At the most basic the Bar chart can just take a single data file supplied in a JSON format and will render a simple Bar chart.</p>
          <pre>

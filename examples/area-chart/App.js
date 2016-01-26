@@ -184,7 +184,7 @@ class AreaChartContainer extends React.Component {
           />
         </div>
         <h2 id="introduction">Introduction</h2>
-        <p>Introduction text here</p>
+        <p>An area chart or area graph displays graphically quantitive data. It is based on the line chart. The area between axis and line are commonly emphasized with colors, textures and hatchings.<sup>(<a href="https://en.wikipedia.org/wiki/Area_chart">ref</a>)</sup></p>
         <h2 id="data">Data</h2>
         <p>At the most basic the Area chart can just take a single data file supplied in a JSON format and will render a
          simple Area chart.</p>

@@ -5,6 +5,10 @@ img {
   max-width: 100%;
 }
 
+a {
+  color: #2ea3f2;
+}
+
 .header {
   color: white;
   width: 100%;
@@ -47,6 +51,7 @@ img {
 
 .header p {
   margin: 0 auto 2em;
+  max-width: 25em;
 }
 
 .header-nav {
@@ -72,7 +77,6 @@ img {
 
 .container {
   max-width: 60em;
-  margin: 2em auto;
 }
 
 .row {
@@ -80,7 +84,7 @@ img {
   background-color: #f9f9f9;
   border: 1px solid #e0e0e0;
   width: 100%;
-  margin-bottom: 2em;
+  margin-top: -1px;
 }
 
 .row:before,
@@ -113,6 +117,13 @@ img {
 }
 
 @media (min-width: 45em) {
+  .container {
+    margin: 2em auto;
+  }
+  .row {
+    margin-top: 0;
+    margin-bottom: 2em;
+  }
   .m50 {
     width: 50%;
     float: left;

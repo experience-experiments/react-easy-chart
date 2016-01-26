@@ -127,7 +127,7 @@ export default class PieChartContainer extends React.Component {
         <div className="content">
         <h1>The React Easy Pie chart</h1>
         <h2 id="introduction">Introduction</h2>
-        <p>Text for the introduction</p>
+        <p>A pie chart (or a circle chart) is a circular statistical graphic, which is divided into slices to illustrate numerical proportion.<sup>(<a href="https://en.wikipedia.org/wiki/Pie_chart">ref</a>)</sup></p>
         <h2 id="data">data</h2>
         <p>At the most basic the Pie chart can just take a single data file supplied in a JSON format and will render a
          simple Pie chart. This is a single array of JavaScript objects with a key and value.</p>

@@ -341,7 +341,7 @@ export default class ScatterplotContainer extends React.Component {
             />
           </div>
           <h2 id="introduction">Introduction</h2>
-          <p>Some introduction text</p>
+          <p>A scatter plot, scatterplot, or scattergraph is a type of mathematical diagram using Cartesian coordinates to display values for typically two variables for a set of data.<sup>(<a href="https://en.wikipedia.org/wiki/Scatter_plot">ref</a>)</sup></p>
           <h2 id="data">Data</h2>
           <p>At the most basic the scatterplot chart can just take a single data file supplied in a JSON format and will render a
            simple scatterplot chart.</p>

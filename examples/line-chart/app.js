@@ -178,7 +178,7 @@ class LineChartContainer extends React.Component {
           />
         </div>
         <h2 id="introduction">Introduction</h2>
-        <p>Introduction text here</p>
+        <p>A line chart or line graph is a type of chart which displays information as a series of data points called 'markers' connected by straight line segments.<sup>(<a href="https://en.wikipedia.org/wiki/Line_chart">ref</a>)</sup></p>
         <h2 id="data">Data</h2>
         <p>At the most basic the line chart can just take a single data file supplied in a JSON format and will render a
          simple line chart.</p>
