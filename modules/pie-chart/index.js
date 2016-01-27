@@ -63,6 +63,12 @@ export default class PieChart extends React.Component {
     .data(layout.pie().value((d) => d.value)(this.props.data))
     .transition()
     .duration(500)
+    // .attrTween('d', function sweep() {
+    //   var i = interpolate({startAngle: -90*grad, endAngle: -90*grad},{startAngle: -90*grad, endAngle: 90*grad});
+    //   return function(t) {
+    //     return this.arc(i(t));
+    //   };
+    // })
     .attr('d', this.arc);
   }
 
