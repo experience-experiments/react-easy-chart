@@ -40,7 +40,7 @@ export default class PieChartContainer extends React.Component {
     }
 
     turnOnRandomData() {
-      this.setState({randomDataIntervalId: setInterval(this.updateData.bind(this), 500)});
+      this.setState({randomDataIntervalId: setInterval(this.updateData.bind(this), 1000)});
     }
 
     turnOffRandomData() {
