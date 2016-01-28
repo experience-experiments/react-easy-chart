@@ -59,6 +59,7 @@ export default class AreaChart extends React.Component {
       xDomainRange: React.PropTypes.array,
       yDomainRange: React.PropTypes.array,
       areaColors: React.PropTypes.array,
+      noAreaGradient: React.PropTypes.bool,
       axisLabels: React.PropTypes.object,
       tickTimeDisplayFormat: React.PropTypes.string,
       yTicks: React.PropTypes.number,
@@ -116,8 +117,10 @@ export default class AreaChart extends React.Component {
       clickHandler,
       dataPoints,
       areaColors,
+      noAreaGradient,
       yAxisOrientRight} = this.props;
     const margin = calcMargin(axes, this.props.margin, yAxisOrientRight);
+    const defaultColours = ['steelblue', 'orange', 'yellow', 'red'];
     const width = reduce(this.props.width, margin.left, margin.right);
 
     const height = reduce(this.props.height, margin.top, margin.bottom);
@@ -132,24 +135,6 @@ export default class AreaChart extends React.Component {
     const svgNode = createElement('svg');
     select(svgNode).attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom);
     const root = select(svgNode).append('g').attr('transform', `translate(${margin.left},${margin.top})`);
-    areaColors.concat(['steelblue', 'orange', 'yellow', 'red']).map((fillCol, i) => {
-      const gradient = select(svgNode).append('defs')
-        .append('linearGradient')
-        .attr('id', `gradient-${i}-${this.uid}`)
-        .attr('x1', '0%')
-        .attr('x2', '0%')
-        .attr('y1', '0%')
-        .attr('y2', '100%');
-
-      defaultStyle[`.dot${i}`] = {fill: fillCol};
-      gradient.append('stop')
-        .attr('offset', '0%')
-        .attr('style', `stop-color:${fillCol};stop-opacity:0.8`);
-
-      gradient.append('stop')
-        .attr('offset', '100%')
-        .attr('style', `stop-color:${fillCol};stop-opacity:0.2`);
-    });
 
     if (axes) {
       const xAxis = svg.axis().scale(x).orient('bottom');
@@ -189,12 +174,36 @@ export default class AreaChart extends React.Component {
         .style('text-anchor', 'end')
         .text(axisLabels.y);
     }
+
+    areaColors.concat(defaultColours).map((fillCol, i) => {
+      if (!noAreaGradient) {
+        const gradient = select(svgNode).append('defs')
+            .append('linearGradient')
+            .attr('id', `gradient-${i}-${this.uid}`)
+            .attr('x1', '0%')
+            .attr('x2', '0%')
+            .attr('y1', '0%')
+            .attr('y2', '100%');
+
+        defaultStyle[`.dot${i}`] = {fill: fillCol};
+        gradient.append('stop')
+            .attr('offset', '0%')
+            .attr('style', `stop-color:${fillCol};stop-opacity:0.8`);
+
+        gradient.append('stop')
+            .attr('offset', '100%')
+            .attr('style', `stop-color:${fillCol};stop-opacity:0.2`);
+      }
+    });
+
     data.map((dataElelment, i) => {
       root.append('path')
         .datum(dataElelment)
         .attr('d', area)
-        .style('fill', `url(#gradient-${i}-${this.uid})`);
+        .style('fill', noAreaGradient ? defaultColours[i] : `url(#gradient-${i}-${this.uid})`);
     });
+
+
     if (dataPoints) {
       data.map((dataElelment, i) => {
         dataElelment.map((dotData) => {
