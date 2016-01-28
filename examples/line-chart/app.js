@@ -127,6 +127,7 @@ class LineChartContainer extends React.Component {
                 'heightAndWidth',
                 'margin',
                 'axes',
+                'yaxesorientation',
                 'axesAndLabels',
                 'interpolate',
                 'xType',
@@ -144,10 +145,11 @@ class LineChartContainer extends React.Component {
               <li><a href="#heightAndWidth">Height &amp; Width</a></li>
               <li><a href="#margin">Margin</a></li>
               <li><a href="#axes">Axes</a></li>
-              <li><a href="axesAndLabels">Axes and Labels</a></li>
-              <li><a href="interpolate">Interpolate</a></li>
-              <li><a href="xType">xType / yType</a></li>
-              <li><a href="grid">Grid</a></li>
+              <li><a href="#yaxesorientation">Y Axis orientation</a></li>
+              <li><a href="#axesAndLabels">Axes and Labels</a></li>
+              <li><a href="#interpolate">Interpolate</a></li>
+              <li><a href="#xType">xType / yType</a></li>
+              <li><a href="#grid">Grid</a></li>
               <li><a href="#domainRange">Domain range</a></li>
               <li><a href="#tickDisplay">Tick display</a></li>
               <li><a href="#tickAmount">Number of ticks</a></li>
@@ -285,6 +287,29 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
           height={250}
           data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]]}
         />
+
+        <h2 id="yaxesorientation">Y Axis orientation</h2>
+          <p>The Y axis can be placed on the right hand side by passing a boolean flag to true for yAxisOrientRight</p>
+           <pre>
+           <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+<LineChart
+axes
+axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+yAxisOrientRight
+width={450}
+height={250}
+data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]]}/>
+           `)}}
+           />
+           </pre>
+          <LineChart
+            axes
+            axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+            yAxisOrientRight
+            width={350}
+            height={250}
+            data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]]}
+          />
 
         <h2 id="interpolate">Interpolate (Making the lines smooth)</h2>
         <p>The Lines drawn can be set to be interpolated by passing in an interpolated param. By default this is set to linear.

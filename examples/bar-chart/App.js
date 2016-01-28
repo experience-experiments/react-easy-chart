@@ -194,6 +194,7 @@ export default class BarChartContainer extends React.Component {
                 'margin',
                 'overridingBarColors',
                 'axes',
+                'yaxesorientation',
                 'axesLabels',
                 'axesType',
                 'datePattern',
@@ -217,6 +218,7 @@ export default class BarChartContainer extends React.Component {
               <li><a href="#margin">Margin</a></li>
               <li><a href="#overridingBarColors">Overriding bar colors</a></li>
               <li><a href="#axes">Axes</a></li>
+              <li><a href="#yaxesorientation">Y Axis orientation</a></li>
               <li><a href="#axesLabels">Axes labels</a></li>
               <li><a href="#axesType">Axes type</a></li>
               <li><a href="#datePattern">datePattern</a></li>
@@ -425,7 +427,7 @@ export default class BarChartContainer extends React.Component {
           data={this.defaultData}
         />
 
-        <h2 id="axes">Y Axis orientation</h2>
+        <h2 id="yaxesorientation">Y Axis orientation</h2>
           <p>The Y axis can be placed on the right hand side by passing a boolean flag to true for yAxisOrientRight</p>
            <pre>
            <code dangerouslySetInnerHTML={{__html: escapeHTML(`
