@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ToolTip from '../ToolTip';
 import {escapeHTML} from '../util';
-import PieChart from 'react-easy-chart/pie-chart';
+import {PieChart} from 'react-easy-chart';
 import Scrollspy from 'react-scrollspy';
 
 export default class PieChartContainer extends React.Component {

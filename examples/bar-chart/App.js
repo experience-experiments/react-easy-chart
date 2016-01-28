@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import BarChart from 'react-easy-chart/bar-chart';
+import {BarChart} from 'react-easy-chart';
 import ToolTip from '../ToolTip';
 import {escapeHTML} from '../util';
 import Scrollspy from 'react-scrollspy';
