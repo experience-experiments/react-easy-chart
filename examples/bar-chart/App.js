@@ -194,6 +194,7 @@ export default class BarChartContainer extends React.Component {
                 'margin',
                 'overridingBarColors',
                 'axes',
+                'yaxesorientation',
                 'axesLabels',
                 'axesType',
                 'datePattern',
@@ -217,6 +218,7 @@ export default class BarChartContainer extends React.Component {
               <li><a href="#margin">Margin</a></li>
               <li><a href="#overridingBarColors">Overriding bar colors</a></li>
               <li><a href="#axes">Axes</a></li>
+              <li><a href="#yaxesorientation">Y Axis orientation</a></li>
               <li><a href="#axesLabels">Axes labels</a></li>
               <li><a href="#axesType">Axes type</a></li>
               <li><a href="#datePattern">datePattern</a></li>
@@ -424,6 +426,39 @@ export default class BarChartContainer extends React.Component {
           width={650}
           data={this.defaultData}
         />
+
+        <h2 id="yaxesorientation">Y Axis orientation</h2>
+          <p>The Y axis can be placed on the right hand side by passing a boolean flag to true for yAxisOrientRight</p>
+           <pre>
+           <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+      <BarChart
+      axes
+      axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+      yAxisOrientRight
+      height={250}
+      width={650}
+      data={[
+      {
+        'x': 'A',
+        'y': 46
+      },
+      {
+        'x': 'B',
+        'y': 26
+      }....
+      />
+           `)}}
+           />
+           </pre>
+          <BarChart
+            height={250}
+            width={650}
+            axes
+            axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+            yAxisOrientRight
+            data={this.defaultData}
+          />
+
 
       <h2 id="axesType">Axes type</h2>
         <p>The data passed associated to the particular axes can be in numeric, date (the default format is for example 1-Jan-15 but can be overridden) or textual formats (used for labelling).</p>

@@ -296,6 +296,7 @@ export default class ScatterplotContainer extends React.Component {
                 'heightAndWidth',
                 'margin',
                 'axes',
+                'yaxesorientation',
                 'axesLabels',
                 'dotRadius',
                 'config',
@@ -316,6 +317,7 @@ export default class ScatterplotContainer extends React.Component {
               <li><a href="#heightAndWidth">height &amp; Width</a></li>
               <li><a href="#margin">Margin</a></li>
               <li><a href="#axes">Axes</a></li>
+              <li><a href="#yaxesorientation">Y Axis orientation</a></li>
               <li><a href="#axesLabels">Axes labels</a></li>
               <li><a href="#dotRadius">Dot Radius</a></li>
               <li><a href="#config">Config</a></li>
@@ -446,6 +448,30 @@ export default class ScatterplotContainer extends React.Component {
          />
          </pre>
          <ScatterplotChart data={bigData} axes width={480} height={270} />
+
+         <h2 id="yaxesorientation">Y Axis orientation</h2>
+           <p>The Y axis can be placed on the right hand side by passing a boolean flag to true for yAxisOrientRight</p>
+            <pre>
+            <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+  <ScatterplotChart
+    data={bigData}
+    axes
+    yAxisOrientRight
+    axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+    width={480}
+    height={270}
+  />
+            `)}}
+            />
+            </pre>
+            <ScatterplotChart
+              data={bigData}
+              axes
+              yAxisOrientRight
+              axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+              width={480}
+              height={270}
+            />
          <h2 id="axesLabels">Axes labels</h2>
          <p>The axes labels (<strong>axisLabels</strong>) can be passed in for the x and y value.</p>
          <pre>

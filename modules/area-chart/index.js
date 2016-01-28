@@ -64,6 +64,7 @@ export default class AreaChart extends React.Component {
       yTicks: React.PropTypes.number,
       xTicks: React.PropTypes.number,
       dataPoints: React.PropTypes.bool,
+      yAxisOrientRight: React.PropTypes.bool,
       mouseOverHandler: React.PropTypes.func,
       mouseOutHandler: React.PropTypes.func,
       mouseMoveHandler: React.PropTypes.func,
@@ -114,8 +115,9 @@ export default class AreaChart extends React.Component {
       mouseMoveHandler,
       clickHandler,
       dataPoints,
-      areaColors} = this.props;
-    const margin = calcMargin(axes, this.props.margin);
+      areaColors,
+      yAxisOrientRight} = this.props;
+    const margin = calcMargin(axes, this.props.margin, yAxisOrientRight);
     const width = reduce(this.props.width, margin.left, margin.right);
 
     const height = reduce(this.props.height, margin.top, margin.bottom);
@@ -162,12 +164,13 @@ export default class AreaChart extends React.Component {
         .call(xAxis)
         .append('text')
         .attr('class', 'label')
-        .attr('y', margin.bottom - 3)
-        .attr('x', (width))
-        .style('text-anchor', 'end')
+        .attr('y', margin.bottom - 10)
+        .attr('x', yAxisOrientRight ? 0 : width)
+        .style('text-anchor', yAxisOrientRight ? 'start' : 'end')
         .text(axisLabels.x);
 
-      const yAxis = svg.axis().scale(y).orient('left');
+      const yAxis = svg.axis().scale(y)
+        .orient(yAxisOrientRight ? 'right' : 'left');
       if (yType === 'time' && tickTimeDisplayFormat) {
         yAxis.tickFormat(time.format(tickTimeDisplayFormat));
       }
@@ -176,11 +179,12 @@ export default class AreaChart extends React.Component {
       root.append('g')
         .attr('class', 'y axis')
         .call(yAxis)
+        .attr('transform', yAxisOrientRight ? `translate(${width}, 0)` : `translate(0, 0)`)
         .append('text')
         .attr('class', 'label')
         .attr('transform', 'rotate(-90)')
         .attr('x', 0)
-        .attr('y', -margin.left)
+        .attr('y', yAxisOrientRight ? -25 + margin.right : 10 - margin.left)
         .attr('dy', '.9em')
         .style('text-anchor', 'end')
         .text(axisLabels.y);

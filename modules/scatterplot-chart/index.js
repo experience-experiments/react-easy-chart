@@ -39,6 +39,56 @@ const defaultStyle = {
 let parseDate = null;
 
 export default class ScatterplotChart extends React.Component {
+  static get propTypes() {
+    return {
+      axes: React.PropTypes.bool,
+      axisLabels: React.PropTypes.object,
+      clickHandler: React.PropTypes.func,
+      config: React.PropTypes.array,
+      data: React.PropTypes.array.isRequired,
+      datePattern: React.PropTypes.string,
+      yAxisOrientRight: React.PropTypes.bool,
+      dotRadius: React.PropTypes.number,
+      grid: React.PropTypes.bool,
+      height: React.PropTypes.number,
+      useLegend: React.PropTypes.bool,
+      margin: React.PropTypes.object,
+      mouseOverHandler: React.PropTypes.func,
+      mouseOutHandler: React.PropTypes.func,
+      mouseMoveHandler: React.PropTypes.func,
+      style: React.PropTypes.object,
+      tickTimeDisplayFormat: React.PropTypes.string,
+      width: React.PropTypes.number,
+      xDomainRange: React.PropTypes.array,
+      yDomainRange: React.PropTypes.array,
+      xTickNumber: React.PropTypes.number,
+      yTickNumber: React.PropTypes.number,
+      yTicks: React.PropTypes.number,
+      xTicks: React.PropTypes.number,
+      xType: React.PropTypes.string,
+      yType: React.PropTypes.string
+    };
+  }
+
+  static get defaultProps() {
+    return {
+      axes: false,
+      axisLabels: {},
+      clickHandler: () => {},
+      config: [],
+      datePattern: '%d-%b-%y',
+      dotRadius: 5,
+      grid: false,
+      mouseOverHandler: () => {},
+      mouseOutHandler: () => {},
+      mouseMoveHandler: () => {},
+      width: 320,
+      height: 180,
+      xType: 'linear',
+      yType: 'linear'
+    };
+  }
+
   constructor(props) {
     super(props);
     this.color = scale.category20();
@@ -55,7 +105,7 @@ export default class ScatterplotChart extends React.Component {
     }
   }
 
-  setDomainAndRange(axesType, domainRange, data, type, length) {
+  setDomainAndRange(axesType, domainRange, data, type, length, yAxisOrientRight) {
     const dataIndex = axesType === 'x' ? 'x' : 'y';
     let d3Axis;
     switch (type) {
@@ -66,7 +116,7 @@ export default class ScatterplotChart extends React.Component {
         break;
       case 'linear':
         let minAmount = min(data, (d) => d[dataIndex]);
-        const maxAmount = max(data, (d) => d[dataIndex]);
+        let maxAmount = max(data, (d) => d[dataIndex]);
         d3Axis = linear();
         if (domainRange) {
           d3Axis.domain(this.calcDefaultDomain(domainRange, type));
@@ -75,7 +125,8 @@ export default class ScatterplotChart extends React.Component {
           d3Axis.domain([minAmount, maxAmount]);
           // calculate 1 tick offset
           const ticks = d3Axis.ticks();
-          minAmount = minAmount - (ticks[1] - ticks[0]);
+          minAmount = yAxisOrientRight && axesType === 'x' ? minAmount : minAmount - (ticks[1] - ticks[0]);
+          maxAmount = yAxisOrientRight && axesType === 'x' ? maxAmount + (ticks[1] - ticks[0]) : maxAmount;
           d3Axis.domain([minAmount, maxAmount]);
         }
         d3Axis.range(axesType === 'x' ? [0, length] : [length, 0]);
@@ -147,15 +198,20 @@ export default class ScatterplotChart extends React.Component {
     return [low, high];
   }
 
-  calcMargin(axes, spacer) {
-    return axes ?
+  calcMargin(axes, spacer, yAxisOrientRight) {
+    let defaultMargins = axes ?
     {top: 24, right: 24, bottom: 24, left: 48} :
     {top: spacer, right: spacer, bottom: spacer, left: spacer};
+    if (yAxisOrientRight) {
+      defaultMargins = axes ? {top: 24, right: 48, bottom: 24, left: 24} : {top: spacer, right: spacer, bottom: spacer, left: spacer};
+    }
+    return defaultMargins;
   }
 
   render() {
     const {
       axes,
+      yAxisOrientRight,
       axisLabels,
       clickHandler,
       data,
@@ -176,7 +232,7 @@ export default class ScatterplotChart extends React.Component {
 
     parseDate = format(this.props.datePattern).parse;
 
-    margin = margin ? margin : this.calcMargin(axes, dotRadius * 2);
+    margin = margin ? margin : this.calcMargin(axes, dotRadius * 2, yAxisOrientRight);
 
     width = width - (margin.left + margin.right);
     height = height - (margin.top + margin.bottom + (dotRadius * 2));
@@ -184,8 +240,8 @@ export default class ScatterplotChart extends React.Component {
     yDomainRange = yDomainRange ? this.calcDefaultDomain(yDomainRange, yType) : null;
     xDomainRange = xDomainRange ? this.calcDefaultDomain(xDomainRange, xType) : null;
 
-    const x = this.setDomainAndRange('x', xDomainRange, data, xType, width, dotRadius);
-    const y = this.setDomainAndRange('y', yDomainRange, data, yType, height, dotRadius);
+    const x = this.setDomainAndRange('x', xDomainRange, data, xType, width, yAxisOrientRight);
+    const y = this.setDomainAndRange('y', yDomainRange, data, yType, height, yAxisOrientRight);
     const axisMargin = 18;
 
     const node = createElement('svg');
@@ -206,7 +262,7 @@ export default class ScatterplotChart extends React.Component {
 
       const yAxis = svg.axis()
         .scale(y)
-        .orient('left');
+        .orient(yAxisOrientRight ? 'right' : 'left');
 
       if (grid) xAxis.tickSize(-height, 6).tickPadding(12);
       if (grid) yAxis.tickSize(-width, 6).tickPadding(12);
@@ -219,18 +275,19 @@ export default class ScatterplotChart extends React.Component {
         .call(xAxis)
         .append('text')
         .attr('class', 'label')
-        .attr('x', width)
+        .attr('x', yAxisOrientRight ? 0 : width)
         .attr('y', margin.bottom + axisMargin)
-        .style('text-anchor', 'end')
+        .style('text-anchor', yAxisOrientRight ? 'start' : 'end')
         .text(axisLabels.x);
 
       chart.append('g')
         .attr('class', 'y axis')
         .call(yAxis)
+        .attr('transform', yAxisOrientRight ? `translate(${width}, 0)` : `translate(0, 0)`)
         .append('text')
         .attr('class', 'label')
         .attr('transform', 'rotate(-90)')
-        .attr('y', -margin.left + 2)
+        .attr('y', yAxisOrientRight ? -25 + margin.right : 10 - margin.left)
         .attr('dy', '.71em')
         .style('text-anchor', 'end')
         .text(axisLabels.y);
@@ -267,48 +324,3 @@ export default class ScatterplotChart extends React.Component {
     );
   }
 }
-
-ScatterplotChart.propTypes = {
-  axes: React.PropTypes.bool,
-  axisLabels: React.PropTypes.object,
-  clickHandler: React.PropTypes.func,
-  config: React.PropTypes.array,
-  data: React.PropTypes.array.isRequired,
-  datePattern: React.PropTypes.string,
-  dotRadius: React.PropTypes.number,
-  grid: React.PropTypes.bool,
-  height: React.PropTypes.number,
-  useLegend: React.PropTypes.bool,
-  margin: React.PropTypes.object,
-  mouseOverHandler: React.PropTypes.func,
-  mouseOutHandler: React.PropTypes.func,
-  mouseMoveHandler: React.PropTypes.func,
-  style: React.PropTypes.object,
-  tickTimeDisplayFormat: React.PropTypes.string,
-  width: React.PropTypes.number,
-  xDomainRange: React.PropTypes.array,
-  yDomainRange: React.PropTypes.array,
-  xTickNumber: React.PropTypes.number,
-  yTickNumber: React.PropTypes.number,
-  yTicks: React.PropTypes.number,
-  xTicks: React.PropTypes.number,
-  xType: React.PropTypes.string,
-  yType: React.PropTypes.string
-};
-
-ScatterplotChart.defaultProps = {
-  axes: false,
-  axisLabels: {},
-  clickHandler: () => {},
-  config: [],
-  datePattern: '%d-%b-%y',
-  dotRadius: 5,
-  grid: false,
-  mouseOverHandler: () => {},
-  mouseOutHandler: () => {},
-  mouseMoveHandler: () => {},
-  width: 320,
-  height: 180,
-  xType: 'linear',
-  yType: 'linear'
-};
