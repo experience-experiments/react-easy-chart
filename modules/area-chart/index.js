@@ -7,6 +7,10 @@ import merge from 'lodash.merge';
 import {format} from 'd3-time-format';
 
 const defaultStyle = {
+  '.line': {
+    fill: 'none',
+    strokeWidth: 1
+  },
   '.area': {
     stroke: 'black',
     strokeWidth: 0
@@ -120,7 +124,7 @@ export default class AreaChart extends React.Component {
       noAreaGradient,
       yAxisOrientRight} = this.props;
     const margin = calcMargin(axes, this.props.margin, yAxisOrientRight);
-    const defaultColours = ['steelblue', 'orange', 'yellow', 'red'];
+    const defaultColours = areaColors.concat(['steelblue', 'orange', 'yellow', 'red']);
     const width = reduce(this.props.width, margin.left, margin.right);
 
     const height = reduce(this.props.height, margin.top, margin.bottom);
@@ -131,6 +135,7 @@ export default class AreaChart extends React.Component {
     const yValue = getValueFunction('y', yType, this.parseDate);
     const xValue = getValueFunction('x', xType, this.parseDate);
     const area = svg.area().interpolate(interpolate).x((d) => x(xValue(d))).y0(height).y1((d) => y(yValue(d)));
+    const linePath = svg.line().interpolate(interpolate).x((d) => x(xValue(d))).y((d) => y(yValue(d)));
 
     const svgNode = createElement('svg');
     select(svgNode).attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom);
@@ -175,7 +180,7 @@ export default class AreaChart extends React.Component {
         .text(axisLabels.y);
     }
 
-    areaColors.concat(defaultColours).map((fillCol, i) => {
+    defaultColours.map((fillCol, i) => {
       if (!noAreaGradient) {
         const gradient = select(svgNode).append('defs')
             .append('linearGradient')
@@ -199,17 +204,22 @@ export default class AreaChart extends React.Component {
     data.map((dataElelment, i) => {
       root.append('path')
         .datum(dataElelment)
+        .attr('class', 'line')
+        .attr('style', `stroke: ${defaultColours[i]}`)
+        .attr('d', linePath);
+      root.append('path')
+        .datum(dataElelment)
         .attr('d', area)
         .style('fill', noAreaGradient ? defaultColours[i] : `url(#gradient-${i}-${this.uid})`);
     });
 
-
     if (dataPoints) {
       data.map((dataElelment, i) => {
         dataElelment.map((dotData) => {
-          root
-          .append('circle')
-          .attr('class', `dot dot${i}`)
+          root.append('circle')
+          .style('strokeWidth', '2px')
+          .style('stroke', defaultColours[i])
+          .style('fill', 'white')
           .attr('cx', () => {
             switch (xType) {
               case ('time'):
@@ -233,7 +243,6 @@ export default class AreaChart extends React.Component {
         });
       });
     }
-
     return (
       <div className={`area-chart${this.uid}`}>
         <Style scopeSelector={`.area-chart${this.uid}`} rules={merge({}, defaultStyle, style)}/>
