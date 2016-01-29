@@ -132,6 +132,7 @@ class AreaChartContainer extends React.Component {
                 'interpolate',
                 'axisType',
                 'grid',
+                'verticalGrid',
                 'domainRange',
                 'tickDisplay',
                 'tickAmount',
@@ -156,6 +157,7 @@ class AreaChartContainer extends React.Component {
               <li><a href="#interpolate">Interpolate</a></li>
               <li><a href="#axisType">Axis type</a></li>
               <li><a href="#grid">Grid</a></li>
+              <li><a href="#verticalGrid">Vertical Grid</a></li>
               <li><a href="#domainRange">Domain range</a></li>
               <li><a href="#tickDisplay">Tick display</a></li>
               <li><a href="#tickAmount">Number of ticks</a></li>
@@ -463,6 +465,40 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
           xType={'time'}
           axes
           grid
+          interpolate={'cardinal'}
+          width={750}
+          height={250}
+          data={[
+            [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
+            [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
+          ]}
+        />
+
+        <h2 id="verticalGrid">Vertical Grid</h2>
+        <p>A vertical grid can be added to the graph by just passing in a boolean for verticalGrid.</p>
+        <pre>
+        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+<AreaChart
+  xType={'time'}
+  axes
+  grid
+  verticalGrid
+  interpolate={'cardinal'}
+  width={750}
+  height={250}
+  data={[
+    [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
+    [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
+  ]}
+/>
+        `)}}
+        />
+        </pre>
+        <AreaChart
+          xType={'time'}
+          axes
+          grid
+          verticalGrid
           interpolate={'cardinal'}
           width={750}
           height={250}
