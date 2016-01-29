@@ -52,6 +52,7 @@ export default class PieChart extends React.Component {
 
   constructor(props) {
     super(props);
+    this.uid = Math.floor(Math.random() * new Date().getTime());
     this.color = d3.scale.category20();
     this.path = null;
     this.text = null;
@@ -89,13 +90,14 @@ export default class PieChart extends React.Component {
   }
 
   draw() {
-    this.path = d3.select('#pie')
+    this.path = d3.select(`#pie_${this.uid}`)
       .selectAll('path')
       .data(this.pie(this.props.data))
       .enter()
       .append('path')
       .attr('fill', (d, i) => d.data.color ? d.data.color : this.color(i))
       .attr('d', this.getArc())
+      .attr('class', 'chart_lines')
       .on('mouseover', (d) => this.props.mouseOverHandler(d, d3LastEvent))
       .on('mouseout', (d) => this.props.mouseOutHandler(d, d3LastEvent))
       .on('mousemove', () => this.props.mouseMoveHandler(d3LastEvent))
@@ -103,17 +105,20 @@ export default class PieChart extends React.Component {
       .each((d) => {
         this.current.push(d);
       });
-    this.text = d3.select('#labels')
-      .selectAll('text')
-      .data(this.pie(this.props.data))
-      .enter()
-      .append('text')
-      .attr('transform', (d) => `translate(${this.getLabelArc().centroid(d)})`)
-      .attr('dy', '.35em')
-      .text((d) => d.data.key)
-      .each((d) => {
-        this.currentTxt.push(d);
-      });
+    if (this.props.labels) {
+      this.text = d3.select(`#labels_${this.uid}`)
+        .selectAll('text')
+        .data(this.pie(this.props.data))
+        .enter()
+        .append('text')
+        .attr('transform', (d) => `translate(${this.getLabelArc().centroid(d)})`)
+        .attr('dy', '.35em')
+        .attr('class', 'chart_text')
+        .text((d) => d.data.key)
+        .each((d) => {
+          this.currentTxt.push(d);
+        });
+    }
   }
 
   update() {
@@ -122,11 +127,13 @@ export default class PieChart extends React.Component {
       .transition()
       .duration(750)
       .attrTween('d', this.tween.bind(this));
-    this.text
-      .data(this.pie(this.props.data))
-      .transition()
-      .duration(750)
-      .attr('transform', (d) => `translate(${this.getLabelArc().centroid(d)})`);
+    if (this.props.labels) {
+      this.text
+        .data(this.pie(this.props.data))
+        .transition()
+        .duration(750)
+        .attr('transform', (d) => `translate(${this.getLabelArc().centroid(d)})`);
+    }
   }
 
   tween(a, index) {
@@ -142,13 +149,13 @@ export default class PieChart extends React.Component {
       .attr('width', this.props.size)
       .attr('height', this.props.size)
       .append('g')
-      .attr('id', 'pie')
+      .attr('id', `pie_${this.uid}`)
       .attr('transform', `translate(${this.getRadius()}, ${this.getRadius()})`);
     d3.select(node)
       .attr('width', this.props.size)
       .attr('height', this.props.size)
       .append('g')
-      .attr('id', 'labels')
+      .attr('id', `labels_${this.uid}`)
       .attr('transform', `translate(${this.getRadius()}, ${this.getRadius()})`);
 
     const uid = Math.floor(Math.random() * new Date().getTime());
