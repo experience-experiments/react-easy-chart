@@ -38,7 +38,7 @@ describe('PieChart component', () => {
     chart.props.data.should.have.length(2);
 
     // size
-    expect(chart.props).to.have.property('size', 200);
+    expect(chart.props).to.have.property('size', 400);
 
     // innerHoleHeight
     expect(chart.props).to.have.property('innerHoleSize', 0);
@@ -50,7 +50,7 @@ describe('PieChart component', () => {
     expect(chart.props).to.have.property('labels', false);
   });
 
-  it('should render an svg and 2 arcs', () => {
+  it('should render an svg', () => {
     const shallowRenderer = TestUtils.createRenderer();
     shallowRenderer.render(<PieChart data={testData}/>);
     const vdom = shallowRenderer.getRenderOutput();
@@ -58,7 +58,6 @@ describe('PieChart component', () => {
     const svg = vdom.props.children[1];
     expect(svg.type).to.equal('svg');
     const g = svg.props.children[0];
-    expect(g.props.transform).to.equal('translate(100, 100)');
-    expect(g.props.children.length).to.equal(2);
+    expect(g.props.transform).to.equal('translate(200, 200)');
   });
 });
