@@ -99,6 +99,7 @@ var BarChart = function (_React$Component) {
         yDomainRange: _react2.default.PropTypes.array,
         datePattern: _react2.default.PropTypes.string,
         tickTimeDisplayFormat: _react2.default.PropTypes.string,
+        yAxisOrientRight: _react2.default.PropTypes.bool,
         barWidth: _react2.default.PropTypes.number,
         xTickNumber: _react2.default.PropTypes.number,
         yTickNumber: _react2.default.PropTypes.number
@@ -197,11 +198,12 @@ var BarChart = function (_React$Component) {
       var tickTimeDisplayFormat = _props.tickTimeDisplayFormat;
       var xTickNumber = _props.xTickNumber;
       var yTickNumber = _props.yTickNumber;
+      var yAxisOrientRight = _props.yAxisOrientRight;
       var grid = _props.grid;
       var xDomainRange = _props.xDomainRange;
       var yDomainRange = _props.yDomainRange;
 
-      var margin = (0, _shared.calcMargin)(axes, this.props.margin);
+      var margin = (0, _shared.calcMargin)(axes, this.props.margin, yAxisOrientRight);
       var width = (0, _shared.reduce)(this.props.width, margin.left, margin.right);
       var height = (0, _shared.reduce)(this.props.height, margin.top, margin.bottom);
 
@@ -218,12 +220,12 @@ var BarChart = function (_React$Component) {
           xAxis.tickFormat(_d.time.format(tickTimeDisplayFormat));
         }
         if (xTickNumber) xAxis.ticks(xTickNumber);
-        root.append('g').attr('class', 'x axis').attr('transform', 'translate(0,' + height + ')').call(xAxis).append('text').attr('class', 'label').attr('y', margin.bottom - 4).attr('x', width).style('text-anchor', 'end').text(axisLabels.x);
+        root.append('g').attr('class', 'x axis').attr('transform', 'translate(0,' + height + ')').call(xAxis).append('text').attr('class', 'label').attr('y', margin.bottom - 10).attr('x', yAxisOrientRight ? 0 : width).style('text-anchor', yAxisOrientRight ? 'start' : 'end').text(axisLabels.x);
 
-        var yAxis = _d.svg.axis().scale(y).orient('left');
+        var yAxis = _d.svg.axis().scale(y).orient(yAxisOrientRight ? 'right' : 'left');
         if (yTickNumber) yAxis.ticks(yTickNumber);
         if (grid) yAxis.tickSize(-width, 6).tickPadding(12);
-        root.append('g').attr('class', 'y axis').call(yAxis).append('text').attr('class', 'label').attr('transform', 'rotate(-90)').attr('x', 0).attr('y', 0 - margin.left).attr('dy', '.9em').style('text-anchor', 'end').text(axisLabels.y);
+        root.append('g').attr('class', 'y axis').call(yAxis).attr('transform', yAxisOrientRight ? 'translate(' + width + ', 0)' : 'translate(0, 0)').append('text').attr('class', 'label').attr('transform', 'rotate(-90)').attr('x', 0).attr('y', yAxisOrientRight ? -25 + margin.right : 10 - margin.left).attr('dy', '.9em').style('text-anchor', 'end').text(axisLabels.y);
       }
 
       data.map(function () {

@@ -117,6 +117,7 @@ var LineChart = function (_React$Component) {
         yTicks: _react2.default.PropTypes.number,
         xTicks: _react2.default.PropTypes.number,
         dataPoints: _react2.default.PropTypes.bool,
+        yAxisOrientRight: _react2.default.PropTypes.bool,
         mouseOverHandler: _react2.default.PropTypes.func,
         mouseOutHandler: _react2.default.PropTypes.func,
         mouseMoveHandler: _react2.default.PropTypes.func,
@@ -177,8 +178,9 @@ var LineChart = function (_React$Component) {
       var mouseMoveHandler = _props.mouseMoveHandler;
       var clickHandler = _props.clickHandler;
       var dataPoints = _props.dataPoints;
+      var yAxisOrientRight = _props.yAxisOrientRight;
 
-      var margin = (0, _shared.calcMargin)(axes, this.props.margin);
+      var margin = (0, _shared.calcMargin)(axes, this.props.margin, yAxisOrientRight);
       var width = (0, _shared.reduce)(this.props.width, margin.left, margin.right);
       var height = (0, _shared.reduce)(this.props.height, margin.top, margin.bottom);
 
@@ -204,15 +206,15 @@ var LineChart = function (_React$Component) {
         }
         if (grid) xAxis.tickSize(-height, 6).tickPadding(12);
         if (xTicks) xAxis.ticks(xTicks);
-        root.append('g').attr('class', 'x axis').attr('transform', 'translate(0,' + height + ')').call(xAxis).append('text').attr('class', 'label').attr('y', margin.bottom - 3).attr('x', width).style('text-anchor', 'end').text(axisLabels.x);
+        root.append('g').attr('class', 'x axis').attr('transform', 'translate(0,' + height + ')').call(xAxis).append('text').attr('class', 'label').attr('y', margin.bottom - 10).attr('x', yAxisOrientRight ? 0 : width).style('text-anchor', yAxisOrientRight ? 'start' : 'end').text(axisLabels.x);
 
-        var yAxis = _d.svg.axis().scale(y).orient('left');
+        var yAxis = _d.svg.axis().scale(y).orient(yAxisOrientRight ? 'right' : 'left');
         if (yType === 'time' && tickTimeDisplayFormat) {
           yAxis.tickFormat(_d.time.format(tickTimeDisplayFormat));
         }
         if (grid) yAxis.tickSize(-width, 6).tickPadding(12);
         if (yTicks) yAxis.ticks(yTicks);
-        root.append('g').attr('class', 'y axis').call(yAxis).append('text').attr('class', 'label').attr('transform', 'rotate(-90)').attr('x', 0).attr('y', 0 - margin.left).attr('dy', '.9em').style('text-anchor', 'end').text(axisLabels.y);
+        root.append('g').attr('class', 'y axis').call(yAxis).attr('transform', yAxisOrientRight ? 'translate(' + width + ', 0)' : 'translate(0, 0)').append('text').attr('class', 'label').attr('transform', 'rotate(-90)').attr('x', 0).attr('y', yAxisOrientRight ? -25 + margin.right : 10 - margin.left).attr('dy', '.9em').style('text-anchor', 'end').text(axisLabels.y);
       }
       data.map(function (dataElelment, i) {
         root.append('path').datum(dataElelment).attr('class', 'line line' + i).attr('d', linePath);

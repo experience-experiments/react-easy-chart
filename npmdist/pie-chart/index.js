@@ -12,6 +12,8 @@ var _react2 = _interopRequireDefault(_react);
 
 var _d = require('d3');
 
+var _d2 = _interopRequireDefault(_d);
+
 var _reactFauxDom = require('react-faux-dom');
 
 var _radium = require('radium');
@@ -27,6 +29,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+// import { select, selectAll, svg, layout, scale, interpolate} from 'd3';
+// import { select, layout } from 'd3';
 
 var defaultStyles = {
   '.chart_lines': {
@@ -37,78 +41,14 @@ var defaultStyles = {
     fontFamily: 'sans-serif',
     fontSize: '12px',
     textAnchor: 'middle',
-    fill: '#fff'
+    fill: '#000'
   }
 };
 
 var PieChart = function (_React$Component) {
   _inherits(PieChart, _React$Component);
 
-  function PieChart() {
-    _classCallCheck(this, PieChart);
-
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(PieChart).apply(this, arguments));
-  }
-
-  _createClass(PieChart, [{
-    key: 'render',
-    value: function render() {
-      var _props = this.props;
-      var mouseOverHandler = _props.mouseOverHandler;
-      var mouseOutHandler = _props.mouseOutHandler;
-      var mouseMoveHandler = _props.mouseMoveHandler;
-      var clickHandler = _props.clickHandler;
-      var styles = _props.styles;
-      var innerHoleSize = _props.innerHoleSize;
-      var size = _props.size;
-      var padding = _props.padding;
-      var labels = _props.labels;
-
-      var outerRadius = size / 2;
-      var arc = _d.svg.arc().outerRadius(outerRadius - padding).innerRadius(innerHoleSize / 2 - padding);
-
-      var labelArc = _d.svg.arc().outerRadius(outerRadius - padding - 20 * outerRadius / 100).innerRadius(outerRadius - padding - 20 * outerRadius / 100);
-
-      var color = _d.scale.category20();
-      var node = (0, _reactFauxDom.createElement)('svg');
-
-      var svgNode = (0, _d.select)(node).attr('width', size).attr('height', size).append('g').attr('transform', 'translate(' + outerRadius + ', ' + outerRadius + ')');
-
-      var g = svgNode.selectAll('.arc').data(_d.layout.pie().value(function (d) {
-        return d.value;
-      })(this.props.data)).enter().append('g');
-
-      g.append('path').attr('d', arc).attr('class', 'chart_lines').style('fill', function (d, i) {
-        return d.data.color ? d.data.color : color(i);
-      }).on('mouseover', function (d) {
-        return mouseOverHandler(d, _d.event);
-      }).on('mouseout', function (d) {
-        return mouseOutHandler(d, _d.event);
-      }).on('mousemove', function () {
-        return mouseMoveHandler(_d.event);
-      }).on('click', function (d) {
-        return clickHandler(d, _d.event);
-      });
-
-      if (labels) {
-        g.append('text').attr('transform', function (d) {
-          return 'translate(' + labelArc.centroid(d) + ')';
-        }).text(function (d) {
-          return d.data.key;
-        }).attr('class', 'chart_text').on('click', function (d) {
-          return clickHandler(d, _d.event);
-        });
-      }
-      var uid = Math.floor(Math.random() * new Date().getTime());
-
-      return _react2.default.createElement(
-        'div',
-        { className: 'pie_chart' + uid },
-        _react2.default.createElement(_radium.Style, { scopeSelector: '.pie_chart' + uid, rules: (0, _lodash2.default)({}, defaultStyles, styles) }),
-        node.toReact()
-      );
-    }
-  }], [{
+  _createClass(PieChart, null, [{
     key: 'propTypes',
     get: function get() {
       return {
@@ -128,7 +68,7 @@ var PieChart = function (_React$Component) {
     key: 'defaultProps',
     get: function get() {
       return {
-        size: 200,
+        size: 400,
         innerHoleSize: 0,
         padding: 2,
         labels: false,
@@ -138,6 +78,126 @@ var PieChart = function (_React$Component) {
         mouseMoveHandler: function mouseMoveHandler() {},
         clickHandler: function clickHandler() {}
       };
+    }
+  }]);
+
+  function PieChart(props) {
+    _classCallCheck(this, PieChart);
+
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(PieChart).call(this, props));
+
+    _this.uid = Math.floor(Math.random() * new Date().getTime());
+    _this.color = _d2.default.scale.category20();
+    _this.path = null;
+    _this.text = null;
+    _this.pie = _d2.default.layout.pie().value(function (d) {
+      return d.value;
+    }).sort(null);
+    _this.current = [];
+    _this.currentTxt = [];
+    return _this;
+  }
+
+  _createClass(PieChart, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.draw();
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+      this.update();
+    }
+  }, {
+    key: 'getArc',
+    value: function getArc() {
+      return _d2.default.svg.arc().innerRadius(this.getInnerRadius() - this.props.padding).outerRadius(this.getRadius() - this.props.padding);
+    }
+  }, {
+    key: 'getLabelArc',
+    value: function getLabelArc() {
+      return _d2.default.svg.arc().outerRadius(this.getRadius() - this.props.padding - 20 * this.getRadius() / 100).innerRadius(this.getRadius() - this.props.padding - 20 * this.getRadius() / 100);
+    }
+  }, {
+    key: 'getRadius',
+    value: function getRadius() {
+      return this.props.size * 0.5;
+    }
+  }, {
+    key: 'getInnerRadius',
+    value: function getInnerRadius() {
+      return this.props.innerHoleSize * 0.5;
+    }
+  }, {
+    key: 'draw',
+    value: function draw() {
+      var _this2 = this;
+
+      this.path = _d2.default.select('#pie_' + this.uid).selectAll('path').data(this.pie(this.props.data)).enter().append('path').attr('fill', function (d, i) {
+        return d.data.color ? d.data.color : _this2.color(i);
+      }).attr('d', this.getArc()).attr('class', 'chart_lines').on('mouseover', function (d) {
+        return _this2.props.mouseOverHandler(d, _d.event);
+      }).on('mouseout', function (d) {
+        return _this2.props.mouseOutHandler(d, _d.event);
+      }).on('mousemove', function () {
+        return _this2.props.mouseMoveHandler(_d.event);
+      }).on('click', function (d) {
+        return _this2.props.clickHandler(d, _d.event);
+      }).each(function (d) {
+        _this2.current.push(d);
+      });
+      if (this.props.labels) {
+        this.text = _d2.default.select('#labels_' + this.uid).selectAll('text').data(this.pie(this.props.data)).enter().append('text').attr('transform', function (d) {
+          return 'translate(' + _this2.getLabelArc().centroid(d) + ')';
+        }).attr('dy', '.35em').attr('class', 'chart_text').text(function (d) {
+          return d.data.key;
+        }).each(function (d) {
+          _this2.currentTxt.push(d);
+        });
+      }
+    }
+  }, {
+    key: 'update',
+    value: function update() {
+      var _this3 = this;
+
+      this.path.data(this.pie(this.props.data)).transition().duration(750).attrTween('d', this.tween.bind(this));
+      if (this.props.labels) {
+        this.text.data(this.pie(this.props.data)).transition().duration(750).attr('transform', function (d) {
+          return 'translate(' + _this3.getLabelArc().centroid(d) + ')';
+        });
+      }
+    }
+  }, {
+    key: 'tween',
+    value: function tween(a, index) {
+      var _this4 = this;
+
+      var cur = this.current[index];
+      var i = _d2.default.interpolate(cur, a);
+      this.current[index] = a;
+      return function (t) {
+        return _this4.getArc()(i(t));
+      };
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var node = (0, _reactFauxDom.createElement)('svg');
+      _d2.default.select(node).attr('width', this.props.size).attr('height', this.props.size).append('g').attr('id', 'pie_' + this.uid).attr('transform', 'translate(' + this.getRadius() + ', ' + this.getRadius() + ')');
+      _d2.default.select(node).attr('width', this.props.size).attr('height', this.props.size).append('g').attr('id', 'labels_' + this.uid).attr('transform', 'translate(' + this.getRadius() + ', ' + this.getRadius() + ')');
+
+      var uid = Math.floor(Math.random() * new Date().getTime());
+
+      return _react2.default.createElement(
+        'div',
+        { className: 'pie_chart' + uid },
+        _react2.default.createElement(_radium.Style, {
+          scopeSelector: '.pie_chart' + uid,
+          rules: (0, _lodash2.default)({}, defaultStyles, this.props.styles)
+        }),
+        node.toReact()
+      );
     }
   }]);
 

@@ -68,6 +68,60 @@ var parseDate = null;
 var ScatterplotChart = function (_React$Component) {
   _inherits(ScatterplotChart, _React$Component);
 
+  _createClass(ScatterplotChart, null, [{
+    key: 'propTypes',
+    get: function get() {
+      return {
+        axes: _react2.default.PropTypes.bool,
+        axisLabels: _react2.default.PropTypes.object,
+        clickHandler: _react2.default.PropTypes.func,
+        config: _react2.default.PropTypes.array,
+        data: _react2.default.PropTypes.array.isRequired,
+        datePattern: _react2.default.PropTypes.string,
+        yAxisOrientRight: _react2.default.PropTypes.bool,
+        dotRadius: _react2.default.PropTypes.number,
+        grid: _react2.default.PropTypes.bool,
+        height: _react2.default.PropTypes.number,
+        useLegend: _react2.default.PropTypes.bool,
+        margin: _react2.default.PropTypes.object,
+        mouseOverHandler: _react2.default.PropTypes.func,
+        mouseOutHandler: _react2.default.PropTypes.func,
+        mouseMoveHandler: _react2.default.PropTypes.func,
+        style: _react2.default.PropTypes.object,
+        tickTimeDisplayFormat: _react2.default.PropTypes.string,
+        width: _react2.default.PropTypes.number,
+        xDomainRange: _react2.default.PropTypes.array,
+        yDomainRange: _react2.default.PropTypes.array,
+        xTickNumber: _react2.default.PropTypes.number,
+        yTickNumber: _react2.default.PropTypes.number,
+        yTicks: _react2.default.PropTypes.number,
+        xTicks: _react2.default.PropTypes.number,
+        xType: _react2.default.PropTypes.string,
+        yType: _react2.default.PropTypes.string
+      };
+    }
+  }, {
+    key: 'defaultProps',
+    get: function get() {
+      return {
+        axes: false,
+        axisLabels: {},
+        clickHandler: function clickHandler() {},
+        config: [],
+        datePattern: '%d-%b-%y',
+        dotRadius: 5,
+        grid: false,
+        mouseOverHandler: function mouseOverHandler() {},
+        mouseOutHandler: function mouseOutHandler() {},
+        mouseMoveHandler: function mouseMoveHandler() {},
+        width: 320,
+        height: 180,
+        xType: 'linear',
+        yType: 'linear'
+      };
+    }
+  }]);
+
   function ScatterplotChart(props) {
     _classCallCheck(this, ScatterplotChart);
 
@@ -91,7 +145,7 @@ var ScatterplotChart = function (_React$Component) {
     }
   }, {
     key: 'setDomainAndRange',
-    value: function setDomainAndRange(axesType, domainRange, data, type, length) {
+    value: function setDomainAndRange(axesType, domainRange, data, type, length, yAxisOrientRight) {
       var dataIndex = axesType === 'x' ? 'x' : 'y';
       var d3Axis = undefined;
       switch (type) {
@@ -117,7 +171,8 @@ var ScatterplotChart = function (_React$Component) {
             d3Axis.domain([minAmount, maxAmount]);
             // calculate 1 tick offset
             var ticks = d3Axis.ticks();
-            minAmount = minAmount - (ticks[1] - ticks[0]);
+            minAmount = yAxisOrientRight && axesType === 'x' ? minAmount : minAmount - (ticks[1] - ticks[0]);
+            maxAmount = yAxisOrientRight && axesType === 'x' ? maxAmount + (ticks[1] - ticks[0]) : maxAmount;
             d3Axis.domain([minAmount, maxAmount]);
           }
           d3Axis.range(axesType === 'x' ? [0, length] : [length, 0]);
@@ -200,8 +255,12 @@ var ScatterplotChart = function (_React$Component) {
     }
   }, {
     key: 'calcMargin',
-    value: function calcMargin(axes, spacer) {
-      return axes ? { top: 24, right: 24, bottom: 24, left: 48 } : { top: spacer, right: spacer, bottom: spacer, left: spacer };
+    value: function calcMargin(axes, spacer, yAxisOrientRight) {
+      var defaultMargins = axes ? { top: 24, right: 24, bottom: 24, left: 48 } : { top: spacer, right: spacer, bottom: spacer, left: spacer };
+      if (yAxisOrientRight) {
+        defaultMargins = axes ? { top: 24, right: 48, bottom: 24, left: 24 } : { top: spacer, right: spacer, bottom: spacer, left: spacer };
+      }
+      return defaultMargins;
     }
   }, {
     key: 'render',
@@ -210,6 +269,7 @@ var ScatterplotChart = function (_React$Component) {
 
       var _props = this.props;
       var axes = _props.axes;
+      var yAxisOrientRight = _props.yAxisOrientRight;
       var axisLabels = _props.axisLabels;
       var clickHandler = _props.clickHandler;
       var data = _props.data;
@@ -234,7 +294,7 @@ var ScatterplotChart = function (_React$Component) {
 
       parseDate = (0, _d3TimeFormat.format)(this.props.datePattern).parse;
 
-      margin = margin ? margin : this.calcMargin(axes, dotRadius * 2);
+      margin = margin ? margin : this.calcMargin(axes, dotRadius * 2, yAxisOrientRight);
 
       width = width - (margin.left + margin.right);
       height = height - (margin.top + margin.bottom + dotRadius * 2);
@@ -242,8 +302,8 @@ var ScatterplotChart = function (_React$Component) {
       yDomainRange = yDomainRange ? this.calcDefaultDomain(yDomainRange, yType) : null;
       xDomainRange = xDomainRange ? this.calcDefaultDomain(xDomainRange, xType) : null;
 
-      var x = this.setDomainAndRange('x', xDomainRange, data, xType, width, dotRadius);
-      var y = this.setDomainAndRange('y', yDomainRange, data, yType, height, dotRadius);
+      var x = this.setDomainAndRange('x', xDomainRange, data, xType, width, yAxisOrientRight);
+      var y = this.setDomainAndRange('y', yDomainRange, data, yType, height, yAxisOrientRight);
       var axisMargin = 18;
 
       var node = (0, _reactFauxDom.createElement)('svg');
@@ -256,16 +316,16 @@ var ScatterplotChart = function (_React$Component) {
         }
         if (xTickNumber) xAxis.ticks(xTickNumber);
 
-        var yAxis = _d.svg.axis().scale(y).orient('left');
+        var yAxis = _d.svg.axis().scale(y).orient(yAxisOrientRight ? 'right' : 'left');
 
         if (grid) xAxis.tickSize(-height, 6).tickPadding(12);
         if (grid) yAxis.tickSize(-width, 6).tickPadding(12);
         if (xTicks) xAxis.ticks(xTicks);
         if (yTicks) yAxis.ticks(yTicks);
 
-        chart.append('g').attr('class', 'x axis').attr('transform', 'translate(0, ' + height + ')').call(xAxis).append('text').attr('class', 'label').attr('x', width).attr('y', margin.bottom + axisMargin).style('text-anchor', 'end').text(axisLabels.x);
+        chart.append('g').attr('class', 'x axis').attr('transform', 'translate(0, ' + height + ')').call(xAxis).append('text').attr('class', 'label').attr('x', yAxisOrientRight ? 0 : width).attr('y', margin.bottom + axisMargin).style('text-anchor', yAxisOrientRight ? 'start' : 'end').text(axisLabels.x);
 
-        chart.append('g').attr('class', 'y axis').call(yAxis).append('text').attr('class', 'label').attr('transform', 'rotate(-90)').attr('y', -margin.left + 2).attr('dy', '.71em').style('text-anchor', 'end').text(axisLabels.y);
+        chart.append('g').attr('class', 'y axis').call(yAxis).attr('transform', yAxisOrientRight ? 'translate(' + width + ', 0)' : 'translate(0, 0)').append('text').attr('class', 'label').attr('transform', 'rotate(-90)').attr('y', yAxisOrientRight ? -25 + margin.right : 10 - margin.left).attr('dy', '.71em').style('text-anchor', 'end').text(axisLabels.y);
       }
 
       chart.selectAll('.dot').data(data).enter().append('circle').attr('class', 'dot').attr('r', function (d) {
@@ -308,50 +368,5 @@ var ScatterplotChart = function (_React$Component) {
 }(_react2.default.Component);
 
 exports.default = ScatterplotChart;
-
-ScatterplotChart.propTypes = {
-  axes: _react2.default.PropTypes.bool,
-  axisLabels: _react2.default.PropTypes.object,
-  clickHandler: _react2.default.PropTypes.func,
-  config: _react2.default.PropTypes.array,
-  data: _react2.default.PropTypes.array.isRequired,
-  datePattern: _react2.default.PropTypes.string,
-  dotRadius: _react2.default.PropTypes.number,
-  grid: _react2.default.PropTypes.bool,
-  height: _react2.default.PropTypes.number,
-  useLegend: _react2.default.PropTypes.bool,
-  margin: _react2.default.PropTypes.object,
-  mouseOverHandler: _react2.default.PropTypes.func,
-  mouseOutHandler: _react2.default.PropTypes.func,
-  mouseMoveHandler: _react2.default.PropTypes.func,
-  style: _react2.default.PropTypes.object,
-  tickTimeDisplayFormat: _react2.default.PropTypes.string,
-  width: _react2.default.PropTypes.number,
-  xDomainRange: _react2.default.PropTypes.array,
-  yDomainRange: _react2.default.PropTypes.array,
-  xTickNumber: _react2.default.PropTypes.number,
-  yTickNumber: _react2.default.PropTypes.number,
-  yTicks: _react2.default.PropTypes.number,
-  xTicks: _react2.default.PropTypes.number,
-  xType: _react2.default.PropTypes.string,
-  yType: _react2.default.PropTypes.string
-};
-
-ScatterplotChart.defaultProps = {
-  axes: false,
-  axisLabels: {},
-  clickHandler: function clickHandler() {},
-  config: [],
-  datePattern: '%d-%b-%y',
-  dotRadius: 5,
-  grid: false,
-  mouseOverHandler: function mouseOverHandler() {},
-  mouseOutHandler: function mouseOutHandler() {},
-  mouseMoveHandler: function mouseMoveHandler() {},
-  width: 320,
-  height: 180,
-  xType: 'linear',
-  yType: 'linear'
-};
 module.exports = exports['default'];
 //# sourceMappingURL=index.js.map
