@@ -29,14 +29,12 @@ const defaultStyle = {
     r: 2,
     fill: 'lightgrey'
   },
-  '.y circle.tick-circle': {
-    cx: '-5px'
-  },
   '.x circle.tick-circle': {
     cy: '8px'
   },
   '.axis': {
-    font: '10px arial'
+    'font-family': 'dobra-light,Arial,sans-serif',
+    'font-size': '7px'
   },
   '.axis .label': {
     font: '14px arial'
@@ -146,7 +144,7 @@ export default class AreaChart extends React.Component {
       noAreaGradient,
       yAxisOrientRight} = this.props;
     const margin = calcMargin(axes, this.props.margin, yAxisOrientRight);
-    const defaultColours = areaColors.concat(['steelblue', 'orange', 'yellow', 'red']);
+    const defaultColours = areaColors.concat(['#3F4C55', '#E3A51A', '#F4E956', '#AAAC84']);
     const width = reduce(this.props.width, margin.left, margin.right);
 
     const height = reduce(this.props.height, margin.top, margin.bottom);
@@ -163,6 +161,19 @@ export default class AreaChart extends React.Component {
     select(svgNode).attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom);
     const root = select(svgNode).append('g').attr('transform', `translate(${margin.left},${margin.top})`);
 
+    const axisStyles = {
+      '.x circle.tick-circle ': {
+        fill: verticalGrid ? 'none' : 'lightgrey'
+      },
+      '.y circle.tick-circle': {
+        cx: yAxisOrientRight ? '+5px' : '-8px',
+        fill: grid ? 'none' : 'lightgrey'
+      },
+      '.y.axis line': {
+        display: grid ? 'inline' : 'none',
+        stroke: 'lightgrey'
+      }
+    };
     if (axes) {
       const xAxis = svg.axis().scale(x).orient('bottom');
       if (xType === 'time' && tickTimeDisplayFormat) {
@@ -186,7 +197,7 @@ export default class AreaChart extends React.Component {
       if (yType === 'time' && tickTimeDisplayFormat) {
         yAxis.tickFormat(time.format(tickTimeDisplayFormat));
       }
-      if (grid) yAxis.tickSize(-width, 6).tickPadding(12);
+      if (grid) { yAxis.tickSize(-width, 6).tickPadding(12); } else { yAxis.tickPadding(10); }
       if (yTicks) yAxis.ticks(yTicks);
       root.append('g')
         .attr('class', 'y axis')
@@ -196,7 +207,7 @@ export default class AreaChart extends React.Component {
         .attr('class', 'label')
         .attr('transform', 'rotate(-90)')
         .attr('x', 0)
-        .attr('y', yAxisOrientRight ? -25 + margin.right : 10 - margin.left)
+        .attr('y', yAxisOrientRight ? -20 + margin.right : 0 - margin.left)
         .attr('dy', '.9em')
         .style('text-anchor', 'end')
         .text(axisLabels.y);
@@ -209,17 +220,17 @@ export default class AreaChart extends React.Component {
             .attr('id', `gradient-${i}-${this.uid}`)
             .attr('x1', '0%')
             .attr('x2', '0%')
-            .attr('y1', '0%')
-            .attr('y2', '100%');
+            .attr('y1', '20%')
+            .attr('y2', '80%');
 
         defaultStyle[`.dot${i}`] = {fill: fillCol};
         gradient.append('stop')
             .attr('offset', '0%')
-            .attr('style', `stop-color:${fillCol};stop-opacity:0.8`);
+            .attr('style', `stop-color:${fillCol};stop-opacity:0.6`);
 
         gradient.append('stop')
             .attr('offset', '100%')
-            .attr('style', `stop-color:${fillCol};stop-opacity:0.2`);
+            .attr('style', `stop-color:${fillCol};stop-opacity:0.4`);
       }
     });
 
@@ -268,7 +279,7 @@ export default class AreaChart extends React.Component {
     }
     return (
       <div ref={this.uid} className={`area-chart${this.uid}`}>
-        <Style scopeSelector={`.area-chart${this.uid}`} rules={merge({}, defaultStyle, style)}/>
+        <Style scopeSelector={`.area-chart${this.uid}`} rules={merge({}, defaultStyle, style, axisStyles)}/>
         {svgNode.toReact()}
       </div>
     );
