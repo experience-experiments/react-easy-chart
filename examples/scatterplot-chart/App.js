@@ -219,7 +219,7 @@ export default class ScatterplotContainer extends React.Component {
 
   generateData() {
     const data = [];
-    const keys = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+    const keys = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
 
     keys.map((key) => {
       data.push({type: key, x: this.getRandomArbitrary(1, 1000), y: this.getRandomArbitrary(1, 1000)});
@@ -286,6 +286,9 @@ export default class ScatterplotContainer extends React.Component {
             <span>Toggle menu</span>
           </a>
           <nav className="menu__nav">
+            <ul>
+              <li><a href="../" className="menu__all-charts">&#8592; All charts</a></li>
+            </ul>
             <Scrollspy
               items={
                 ['introduction',
@@ -293,6 +296,7 @@ export default class ScatterplotContainer extends React.Component {
                 'heightAndWidth',
                 'margin',
                 'axes',
+                'yaxesorientation',
                 'axesLabels',
                 'dotRadius',
                 'config',
@@ -313,6 +317,7 @@ export default class ScatterplotContainer extends React.Component {
               <li><a href="#heightAndWidth">height &amp; Width</a></li>
               <li><a href="#margin">Margin</a></li>
               <li><a href="#axes">Axes</a></li>
+              <li><a href="#yaxesorientation">Y Axis orientation</a></li>
               <li><a href="#axesLabels">Axes labels</a></li>
               <li><a href="#dotRadius">Dot Radius</a></li>
               <li><a href="#config">Config</a></li>
@@ -332,14 +337,13 @@ export default class ScatterplotContainer extends React.Component {
           <div ref="component">
             <ScatterplotChart
               data={this.data}
-              axes={(this.state.componentWidth) > 400 ? true : false}
-              axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+              dotRadius={20}
               width={this.state.componentWidth}
               height={this.state.componentWidth / 2}
             />
           </div>
           <h2 id="introduction">Introduction</h2>
-          <p>Some introduction text</p>
+          <p>A scatter plot, scatterplot, or scattergraph is a type of mathematical diagram using Cartesian coordinates to display values for typically two variables for a set of data.<sup>(<a href="https://en.wikipedia.org/wiki/Scatter_plot">ref</a>)</sup></p>
           <h2 id="data">Data</h2>
           <p>At the most basic the scatterplot chart can just take a single data file supplied in a JSON format and will render a
            simple scatterplot chart.</p>
@@ -444,6 +448,30 @@ export default class ScatterplotContainer extends React.Component {
          />
          </pre>
          <ScatterplotChart data={bigData} axes width={480} height={270} />
+
+         <h2 id="yaxesorientation">Y Axis orientation</h2>
+           <p>The Y axis can be placed on the right hand side by passing a boolean flag to true for yAxisOrientRight</p>
+            <pre>
+            <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+  <ScatterplotChart
+    data={bigData}
+    axes
+    yAxisOrientRight
+    axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+    width={480}
+    height={270}
+  />
+            `)}}
+            />
+            </pre>
+            <ScatterplotChart
+              data={bigData}
+              axes
+              yAxisOrientRight
+              axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+              width={480}
+              height={270}
+            />
          <h2 id="axesLabels">Axes labels</h2>
          <p>The axes labels (<strong>axisLabels</strong>) can be passed in for the x and y value.</p>
          <pre>

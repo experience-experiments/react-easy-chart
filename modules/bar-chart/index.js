@@ -68,6 +68,7 @@ export default class BarChart extends React.Component {
       yDomainRange: React.PropTypes.array,
       datePattern: React.PropTypes.string,
       tickTimeDisplayFormat: React.PropTypes.string,
+      yAxisOrientRight: React.PropTypes.bool,
       barWidth: React.PropTypes.number,
       xTickNumber: React.PropTypes.number,
       yTickNumber: React.PropTypes.number
@@ -154,10 +155,11 @@ export default class BarChart extends React.Component {
       tickTimeDisplayFormat,
       xTickNumber,
       yTickNumber,
+      yAxisOrientRight,
       grid,
       xDomainRange,
       yDomainRange} = this.props;
-    const margin = calcMargin(axes, this.props.margin);
+    const margin = calcMargin(axes, this.props.margin, yAxisOrientRight);
     const width = reduce(this.props.width, margin.left, margin.right);
     const height = reduce(this.props.height, margin.top, margin.bottom);
 
@@ -182,24 +184,25 @@ export default class BarChart extends React.Component {
         .call(xAxis)
         .append('text')
         .attr('class', 'label')
-        .attr('y', margin.bottom - 4)
-        .attr('x', (width))
-        .style('text-anchor', 'end')
+        .attr('y', margin.bottom - 10)
+        .attr('x', yAxisOrientRight ? 0 : width)
+        .style('text-anchor', yAxisOrientRight ? 'start' : 'end')
         .text(axisLabels.x);
 
       const yAxis = svg.axis()
           .scale(y)
-          .orient('left');
+          .orient(yAxisOrientRight ? 'right' : 'left');
       if (yTickNumber) yAxis.ticks(yTickNumber);
       if (grid) yAxis.tickSize(-width, 6).tickPadding(12);
       root.append('g')
         .attr('class', 'y axis')
         .call(yAxis)
+        .attr('transform', yAxisOrientRight ? `translate(${width}, 0)` : `translate(0, 0)`)
         .append('text')
         .attr('class', 'label')
         .attr('transform', 'rotate(-90)')
         .attr('x', 0)
-        .attr('y', 0 - margin.left)
+        .attr('y', yAxisOrientRight ? -25 + margin.right : 10 - margin.left)
         .attr('dy', '.9em')
         .style('text-anchor', 'end')
         .text(axisLabels.y);

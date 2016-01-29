@@ -24,9 +24,13 @@ export function getRandomId() {
   return Math.floor(Math.random() * new Date().getTime());
 }
 
-export function calcMargin(axes, margin) {
+export function calcMargin(axes, margin, yAxisOrientRight) {
   if (margin) return margin;
-  return axes ? {top: 20, right: 20, bottom: 50, left: 50} : {top: 0, right: 0, bottom: 0, left: 0};
+  let defaultMargins = axes ? {top: 20, right: 20, bottom: 50, left: 50} : {top: 0, right: 0, bottom: 0, left: 0};
+  if (yAxisOrientRight) {
+    defaultMargins = axes ? {top: 20, right: 50, bottom: 50, left: 20} : {top: 0, right: 0, bottom: 0, left: 0};
+  }
+  return defaultMargins;
 }
 
 export function findLargestExtent(data, valueFunction) {
