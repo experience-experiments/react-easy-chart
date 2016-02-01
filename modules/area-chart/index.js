@@ -34,7 +34,7 @@ const defaultStyle = {
   },
   '.axis': {
     'font-family': 'dobra-light,Arial,sans-serif',
-    'font-size': '7px'
+    'font-size': '9px'
   },
   '.axis .label': {
     font: '14px arial'
