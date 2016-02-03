@@ -199,7 +199,7 @@ export default class ScatterplotContainer extends React.Component {
       showToolTip: false,
       randomDataIntervalId: null,
       windowWidth: 400,
-      componentWidth: 300
+      componentWidth: 1000
     };
     this.data = this.generateData();
   }
@@ -334,7 +334,7 @@ export default class ScatterplotContainer extends React.Component {
         </aside>
         <div className="content">
           <h1>Scatterplot chart</h1>
-          <div ref="component">
+          <div ref="component" style={{border: '1px solid red'}}>
             <ScatterplotChart
               data={this.data}
               dotRadius={20}
@@ -877,8 +877,10 @@ export default class ScatterplotContainer extends React.Component {
             }
           <ScatterplotChart
             data={this.data}
+            grid
             axes
             axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+            margin={{top: 10, right: 10, bottom: 30, left: 60}}
             width={480}
             height={270}
           />
@@ -886,8 +888,10 @@ export default class ScatterplotContainer extends React.Component {
           <p>Because the width and height of the chart can be passed in by a param then changes to the size of a window or container can change the chart dynamically. If you shrink your browser window width you will see the chart change in a fluid manor. You can also introduce basic break points such as removing the axes if below a certain width width.</p>
           <ScatterplotChart
             data={this.data}
+            grid
             axes={(this.state.componentWidth) > 400 ? true : false}
             axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+            margin={{top: 10, right: 10, bottom: 30, left: 60}}
             width={this.state.componentWidth}
             height={this.state.componentWidth / 2}
           />
