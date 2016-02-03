@@ -334,7 +334,7 @@ export default class ScatterplotContainer extends React.Component {
         </aside>
         <div className="content">
           <h1>Scatterplot chart</h1>
-          <div ref="component" style={{border: '1px solid red'}}>
+          <div ref="component">
             <ScatterplotChart
               data={this.data}
               dotRadius={20}
