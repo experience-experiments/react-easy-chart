@@ -1,18 +1,31 @@
 /* eslint-env node, mocha */
-import chai, {should as chaiShould, expect} from 'chai';
+import {should as chaiShould, expect} from 'chai';
 import React from 'react';
 import TestUtils from 'react/lib/ReactTestUtils';
 import {Legend} from 'react-easy-chart';
-import spies from 'chai-spies';
+import {scale} from 'd3';
 
 const should = chaiShould();
-chai.use(spies);
 
 const pieData = [
   {key: 'Cats', value: 100},
   {key: 'Dogs', value: 200},
   {key: 'Other', value: 50}
 ];
+
+const pieDataCustom = [
+  {key: 'Cats', value: 100, color: 'teal'},
+  {key: 'Dogs', value: 200, color: 'thistle'},
+  {key: 'Other', value: 50, color: 'tomato'}
+];
+
+const config = [
+  {color: 'teal'},
+  {color: 'thistle'},
+  {color: 'tomato'}
+];
+
+const colors = scale.category20().range();
 
 describe('Legend component', () => {
   it('Should be defined', () => {
@@ -26,7 +39,7 @@ describe('Legend component', () => {
   });
 
   it(`Should render an unordered list with correct number of list items and
-  show the correct label for each item`, () => {
+  show the correct label and color for each item`, () => {
     const shallowRenderer = TestUtils.createRenderer();
     shallowRenderer.render(<Legend data={pieData} dataId={'key'} />);
     const vDom = shallowRenderer.getRenderOutput();
@@ -37,8 +50,34 @@ describe('Legend component', () => {
     pieData.map(
       (item, index) => {
         const li = ul.props.children[index];
+        const iconColor = li.props.children[0].props.style.backgroundColor;
         const label = li.props.children[1];
+        // test icon color
+        expect(iconColor).to.equal(colors[index]);
+        // test label text
         expect(label).to.equal(pieData[index].key);
+      }
+    );
+  });
+
+  it('Should set li class prop to horizontal if horizontal is true', () => {
+    const shallowRenderer = TestUtils.createRenderer();
+    shallowRenderer.render(<Legend data={pieData} dataId={'key'} horizontal />);
+    const vDom = shallowRenderer.getRenderOutput();
+    const li = vDom.props.children[1].props.children[0];
+    expect(li.props.className).to.equal('horizontal');
+  });
+
+  it('Should render custom icon colors if a config is provided', () => {
+    const shallowRenderer = TestUtils.createRenderer();
+    shallowRenderer.render(<Legend data={pieDataCustom} dataId={'key'} config={config} />);
+    const vDom = shallowRenderer.getRenderOutput();
+    const ul = vDom.props.children[1];
+    config.map(
+      (item, index) => {
+        const li = ul.props.children[index];
+        const iconColor = li.props.children[0].props.style.backgroundColor;
+        expect(iconColor).to.equal(config[index].color);
       }
     );
   });
