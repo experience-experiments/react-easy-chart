@@ -1,7 +1,6 @@
 import React from 'react';
 import {linear, ordinal} from 'd3-scale';
-// import {event as d3LastEvent, min, max, scale, select, svg, time} from 'd3';
-import {min, max, scale, select, svg, time} from 'd3';
+import {event as d3LastEvent, min, max, scale, select, svg, time} from 'd3';
 import {format} from 'd3-time-format';
 import {extent} from 'd3-array';
 import { createElement } from 'react-faux-dom';
@@ -260,9 +259,7 @@ export default class ScatterplotChart extends React.Component {
   }
 
   getDataConfig(type) {
-    const index = this.props.config.findIndex((item) => {
-      return item.type === type;
-    });
+    const index = this.props.config.findIndex((item) => item.type === type);
     return this.props.config[index];
   }
 
@@ -345,11 +342,11 @@ export default class ScatterplotChart extends React.Component {
       })
       .attr('cy', (d) => { return this.y(d.y); })
       .style('fill', (d) => this.getFill(d))
-      .style('stroke', (d) => this.getStroke(d));
-      // .on('mouseover', (d) => mouseOverHandler(d, d3LastEvent))
-      // .on('mouseout', (d) => mouseOutHandler(d, d3LastEvent))
-      // .on('mousemove', () => mouseMoveHandler(d3LastEvent))
-      // .on('click', (d) => clickHandler(d, d3LastEvent));
+      .style('stroke', (d) => this.getStroke(d))
+      .on('mouseover', (d) => this.props.mouseOverHandler(d, d3LastEvent))
+      .on('mouseout', (d) => this.props.mouseOutHandler(d, d3LastEvent))
+      .on('mousemove', () => this.props.mouseMoveHandler(d3LastEvent))
+      .on('click', (d) => this.props.clickHandler(d, d3LastEvent));
   }
 
   updateAxisX() {
