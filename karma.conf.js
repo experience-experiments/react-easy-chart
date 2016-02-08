@@ -9,7 +9,7 @@ if (process.env.NODE_ENV === 'test') {
 module.exports = (config) => {
   config.set({
     basePath: '.',
-    frameworks: ['mocha', 'chai', 'phantomjs-shim', 'es6-shim'],
+    frameworks: ['mocha', 'chai', 'es6-shim'],
     files: [
       './tests/index.js'
     ],
@@ -42,7 +42,6 @@ module.exports = (config) => {
       require('karma-sourcemap-loader'),
       require('karma-chrome-launcher'),
       require('karma-phantomjs-launcher'),
-      require('karma-phantomjs-shim'),
       require('karma-es6-shim')
     ]
   });
