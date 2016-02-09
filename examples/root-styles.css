@@ -13,7 +13,7 @@ a {
   color: white;
   width: 100%;
   text-align: center;
-  background-image:linear-gradient(#2ea3f2, #003142);
+  background-image:linear-gradient(#667178, #1e313c);
 }
 
 .grid {
@@ -55,7 +55,7 @@ a {
 }
 
 .header-nav {
-  background-color: #003142;
+  background-color: #1e313c;
 }
 
 .header-nav ul {
