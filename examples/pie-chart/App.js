@@ -5,6 +5,17 @@ import {escapeHTML} from '../util';
 import {PieChart} from 'react-easy-chart';
 import Scrollspy from 'react-scrollspy';
 
+const brandColors = {
+  greyBlueOne: '#1e313c',
+  greyBlueTwo: '#3f4c55',
+  greyBlueThree: '#667178',
+  yellow: '#f4e956',
+  orange: '#e3a51a',
+  green: '#aaac84',
+  lightGreen: '#dce7c5',
+  lightGrey: '#e4e8ec'
+};
+
 export default class PieChartContainer extends React.Component {
     constructor(props) {
       super(props);
@@ -32,9 +43,21 @@ export default class PieChartContainer extends React.Component {
     generateData() {
       const data = [];
       const keys = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
-
-      keys.map((key) => {
-        data.push({key: key, value: this.getRandomArbitrary(1, 1000)});
+      const colors = [
+        '#1e313c',
+        '#3f4c55',
+        '#667178',
+        '#f4e956',
+        '#e3a51a',
+        '#aaac84',
+        '#dce7c5'
+      ];
+      keys.map((key, index) => {
+        data.push({
+          key: key,
+          value: this.getRandomArbitrary(1, 1000),
+          color: colors[index]
+        });
       });
 
       return data;
@@ -145,13 +168,21 @@ export default class PieChartContainer extends React.Component {
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 <PieChart
-  data={[{key: 'A', value: 100, color: '#ff0000'}, {key: 'B', value: 200, color: 'green'}, {key: 'C', value: 50, color: 'grey'}]}
+  data={[
+    {key: 'A', value: 100, color: '#1e313c'},
+    {key: 'B', value: 200, color: '#3f4c55'},
+    {key: 'C', value: 50, color: '#667178'}
+  ]}
 />
        `)}}
         />
         </pre>
        <PieChart
-         data={[{key: 'A', value: 100, color: '#ff0000'}, {key: 'B', value: 200, color: 'green'}, {key: 'C', value: 50, color: 'grey'}]}
+         data={[
+           {key: 'A', value: 100, color: brandColors.greyBlueOne},
+           {key: 'B', value: 200, color: brandColors.greyBlueTwo},
+           {key: 'C', value: 50, color: brandColors.greyBlueThree}
+         ]}
        />
 
        <h2 id="size">Size</h2>
@@ -159,15 +190,23 @@ export default class PieChartContainer extends React.Component {
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 <PieChart
-  size={50}
-  data={[{key: 'A', value: 100, color: '#ff0000'}, {key: 'B', value: 200, color: 'green'}, {key: 'C', value: 50, color: 'grey'}]}
+  size={100}
+  data={[
+    {key: 'A', value: 100, color: '#1e313c'},
+    {key: 'B', value: 200, color: '#3f4c55'},
+    {key: 'C', value: 50, color: '#667178'}
+  ]}
 />
 `)}}
         />
        </pre>
        <PieChart
-         size={50}
-         data={[{key: 'A', value: 100, color: '#ff0000'}, {key: 'B', value: 200, color: 'green'}, {key: 'C', value: 50, color: 'grey'}]}
+         size={100}
+         data={[
+           {key: 'A', value: 100, color: brandColors.greyBlueOne},
+           {key: 'B', value: 200, color: brandColors.greyBlueTwo},
+           {key: 'C', value: 50, color: brandColors.greyBlueThree}
+         ]}
        />
 
        <h2 id="donut">donut</h2>
@@ -175,17 +214,25 @@ export default class PieChartContainer extends React.Component {
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 <PieChart
-  size={150}
-  innerHoleSize={120}
-  data={[{key: 'A', value: 100, color: '#ff0000'}, {key: 'B', value: 200, color: 'green'}, {key: 'C', value: 50, color: 'grey'}]}
+  size={400}
+  innerHoleSize={200}
+  data={[
+    {key: 'A', value: 100, color: '#1e313c'},
+    {key: 'B', value: 200, color: '#3f4c55'},
+    {key: 'C', value: 50, color: '#667178'}
+  ]}
 />
        `)}}
         />
        </pre>
        <PieChart
-         size={150}
-         innerHoleSize={120}
-         data={[{key: 'A', value: 100, color: '#ff0000'}, {key: 'B', value: 200, color: 'green'}, {key: 'C', value: 50, color: 'grey'}]}
+         size={400}
+         innerHoleSize={200}
+         data={[
+           {key: 'A', value: 100, color: brandColors.greyBlueOne},
+           {key: 'B', value: 200, color: brandColors.greyBlueTwo},
+           {key: 'C', value: 50, color: brandColors.greyBlueThree}
+         ]}
        />
 
        <h2 id="padding">padding</h2>
@@ -194,30 +241,58 @@ export default class PieChartContainer extends React.Component {
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 <PieChart
   padding={50}
-  data={[{key: 'A', value: 100, color: '#ff0000'}, {key: 'B', value: 200, color: 'green'}, {key: 'C', value: 50, color: 'grey'}]}
+  data={[
+    {key: 'A', value: 100, color: '#1e313c'},
+    {key: 'B', value: 200, color: '#3f4c55'},
+    {key: 'C', value: 50, color: '#667178'}
+  ]}
 />
        `)}}
         />
        </pre>
        <PieChart
          padding={50}
-         data={[{key: 'A', value: 100, color: '#ff0000'}, {key: 'B', value: 200, color: 'green'}, {key: 'C', value: 50, color: 'grey'}]}
+         data={[
+           {key: 'A', value: 100, color: brandColors.greyBlueOne},
+           {key: 'B', value: 200, color: brandColors.greyBlueTwo},
+           {key: 'C', value: 50, color: brandColors.greyBlueThree}
+         ]}
        />
 
        <h2 id="labels">labels</h2>
-       <p>Labels can be added by passing in a labels boolean prop. The labels will be the key value passed in with the data.</p>
+       <p>Labels can be added by passing in a labels boolean prop. The labels will be the key value passed in with the data. The example below passes a custom style object to set the text colour to white</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 <PieChart
   labels
-  data={[{key: 'A', value: 100, color: '#ff0000'}, {key: 'B', value: 200, color: 'green'}, {key: 'C', value: 50, color: 'grey'}]}
+  data={[
+    {key: 'A', value: 100, color: '#1e313c'},
+    {key: 'B', value: 200, color: '#3f4c55'},
+    {key: 'C', value: 50, color: '#667178'}
+  ]}
+  styles={{
+    '.chart_text': {
+      fontSize: '1em',
+      fill: '#fff'
+    }
+  }}
 />
        `)}}
         />
        </pre>
        <PieChart
          labels
-         data={[{key: 'A', value: 100, color: '#ff0000'}, {key: 'B', value: 200, color: 'green'}, {key: 'C', value: 50, color: 'grey'}]}
+         data={[
+           {key: 'A', value: 100, color: brandColors.greyBlueOne},
+           {key: 'B', value: 200, color: brandColors.greyBlueTwo},
+           {key: 'C', value: 50, color: brandColors.greyBlueThree}
+         ]}
+         styles={{
+           '.chart_text': {
+             fontSize: '1em',
+             fill: '#fff'
+           }
+         }}
        />
 
        <h2 id="style">style</h2>
@@ -232,12 +307,14 @@ export default class PieChartContainer extends React.Component {
     },
     '.chart_text': {
       fontFamily: 'serif',
-      fontSize: '15px',
-      textAnchor: 'middle',
-      fill: '#000'
+      fontSize: '1.25em',
+      fill: '#fff'
     }
   }}
-  data={[{key: 'A', value: 100, color: 'teal'}, {key: 'B', value: 200, color: 'thistle'}, {key: 'C', value: 50, color: 'tomato'}]}
+  data={[
+    {key: 'A', value: 100, color: '#1e313c'},
+    {key: 'B', value: 200, color: '#3f4c55'},
+    {key: 'C', value: 50, color: '#667178'}
 />      `)}}
        />
        </pre>
@@ -249,12 +326,15 @@ export default class PieChartContainer extends React.Component {
            },
            '.chart_text': {
              fontFamily: 'serif',
-             fontSize: '15px',
-             textAnchor: 'middle',
-             fill: '#000'
+             fontSize: '1.25em',
+             fill: '#fff'
            }
          }}
-         data={[{key: 'A', value: 100, color: 'teal'}, {key: 'B', value: 200, color: 'thistle'}, {key: 'C', value: 50, color: 'tomato'}]}
+         data={[
+           {key: 'A', value: 100, color: brandColors.greyBlueOne},
+           {key: 'B', value: 200, color: brandColors.greyBlueTwo},
+           {key: 'C', value: 50, color: brandColors.greyBlueThree}
+         ]}
        />
 
 
@@ -286,11 +366,15 @@ mouseOutHandler() {
 {this.state.showToolTip ? <ToolTip top={this.state.top} left={this.state.left}>The value of {this.state.key} is {this.state.value}</ToolTip> : null}
 
 <PieChart
- data={[{key: 'A', value: 100, color: '#ff0000'}, {key: 'B', value: 200, color: 'green'}, {key: 'C', value: 50, color: 'grey'}]}
+ data={[
+   {key: 'A', value: 100, color: '#1e313c'},
+   {key: 'B', value: 200, color: '#3f4c55'},
+   {key: 'C', value: 50, color: '#667178'}
+ ]}
+ innerHoleSize={200}
  mouseOverHandler={this.mouseOverHandler.bind(this)}
  mouseOutHandler={this.mouseOutHandler.bind(this)}
  mouseMoveHandler={this.mouseMoveHandler.bind(this)}
- size={200}
  padding={10}
  styles={this.styles}
 />
@@ -298,11 +382,15 @@ mouseOutHandler() {
        />
        </pre>
        <PieChart
-         data={[{key: 'A', value: 100, color: '#ff0000'}, {key: 'B', value: 200, color: 'green'}, {key: 'C', value: 50, color: 'grey'}]}
+         data={[
+           {key: 'A', value: 100, color: '#1e313c'},
+           {key: 'B', value: 200, color: '#3f4c55'},
+           {key: 'C', value: 50, color: '#667178'}
+         ]}
+         innerHoleSize={200}
          mouseOverHandler={this.mouseOverHandler.bind(this)}
          mouseOutHandler={this.mouseOutHandler.bind(this)}
          mouseMoveHandler={this.mouseMoveHandler.bind(this)}
-         size={200}
          padding={10}
          styles={this.styles}
        />
@@ -313,13 +401,21 @@ mouseOutHandler() {
        <pre>
        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
  <div>
-   <div style={{display: 'inline-block'}}>
+   <div>
      <PieChart
-       data={[{key: 'A', value: 100, color: '#ff0000'}, {key: 'B', value: 200, color: 'green'}, {key: 'C', value: 50, color: 'grey'}]}
-       clickHandler={(d) => this.setState({dataDisplay: \`The value of \${d.data.key} is \${d.value}\`})}
+       data={[
+         {key: 'A', value: 100, color: '#1e313c'},
+         {key: 'B', value: 200, color: '#3f4c55'},
+         {key: 'C', value: 50, color: '#667178'}
+       ]}
+       clickHandler={
+         (d) => this.setState({
+           dataDisplay: \`The value of \${d.data.key} is \${d.value}\`
+         })
+       }
      />
    </div>
-   <div style={{display: 'inline-block', verticalAlign: 'top'}}>
+   <div>
    {this.state.dataDisplay ? this.state.dataDisplay : 'Click on a segment to show the value'}
    </div>
  </div>
@@ -327,13 +423,21 @@ mouseOutHandler() {
        />
        </pre>
        <div>
-         <div style={{display: 'inline-block'}}>
+         <div>
            <PieChart
-             data={[{key: 'A', value: 100, color: '#ff0000'}, {key: 'B', value: 200, color: 'green'}, {key: 'C', value: 50, color: 'grey'}]}
-             clickHandler={(d) => this.setState({dataDisplay: `The value of ${d.data.key} is ${d.value}`})}
+             data={[
+               {key: 'A', value: 100, color: brandColors.greyBlueOne},
+               {key: 'B', value: 200, color: brandColors.greyBlueTwo},
+               {key: 'C', value: 50, color: brandColors.greyBlueThree}
+             ]}
+             clickHandler={
+               (d) => this.setState({
+                 dataDisplay: `The value of ${d.data.key} is ${d.value}`
+               })
+             }
            />
          </div>
-         <div style={{display: 'inline-block', verticalAlign: 'top'}}>
+         <div>
          {this.state.dataDisplay ? this.state.dataDisplay : 'Click on a segment to show the value'}
          </div>
        </div>
@@ -360,6 +464,15 @@ mouseOutHandler() {
       <PieChart
         labels
         data={this.data}
+        styles={{
+          '.chart_lines': {
+            strokeWidth: 0
+          },
+          '.chart_text': {
+            fontSize: '1em',
+            fill: '#fff'
+          }
+        }}
       />
   </div></div>
       );
