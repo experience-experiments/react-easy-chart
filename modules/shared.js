@@ -1,6 +1,55 @@
 import {extent} from 'd3-array';
 import {linear, ordinal} from 'd3-scale';
-import {time} from 'd3';
+import {time, select} from 'd3';
+
+export const defaultStyle = {
+  '.line': {
+    fill: 'none',
+    strokeWidth: 1
+  },
+  '.area': {
+    stroke: 'black',
+    strokeWidth: 0
+  },
+  '.dot': {
+    strokeWidth: 0
+  },
+  'circle.data-point': {
+    r: 4
+  },
+  'circle.data-point:hover': {
+    r: 8,
+    opacity: 0.6
+  },
+  'circle.tick-circle': {
+    r: 2,
+    fill: 'lightgrey'
+  },
+  '.x circle.tick-circle': {
+    cy: '8px'
+  },
+  '.axis': {
+    'font-family': 'dobra-light,Arial,sans-serif',
+    'font-size': '9px'
+  },
+  '.axis .label': {
+    font: '14px arial'
+  },
+  '.axis path,.axis line': {
+    fill: 'none',
+    strokeWidth: 1,
+    'shape-rendering': 'crispEdges'
+  },
+  'x.axis path': {
+    display: 'none',
+    stroke: 'lightgrey'
+  },
+  '.tick line': {
+    stroke: 'lightgrey',
+    strokeWidth: 1,
+    opacity: '0.7'
+  }
+};
 
 export function reduce(x) {
   let rVal = x;
@@ -18,6 +67,31 @@ export function getValueFunction(scale, type, dateParser) {
     default:
       return (d) => d[dataIndex];
   }
+}
+
+export function createCircularTicks(containerElement) {
+  select(containerElement).select('svg').selectAll('.tick-circle').remove();
+  const ticks = select(containerElement).select('svg').selectAll('.tick');
+  function circleAppender() {
+    select(this).append('circle').attr('class', 'tick-circle');
+  }
+  ticks.each(circleAppender);
+}
+
+export function getAxisStyles(grid, verticalGrid, yAxisOrientRight) {
+  return {
+    '.x circle.tick-circle ': {
+      fill: verticalGrid ? 'none' : 'lightgrey'
+    },
+    '.y circle.tick-circle': {
+      cx: yAxisOrientRight ? '+5px' : '-8px',
+      fill: grid ? 'none' : 'lightgrey'
+    },
+    '.y.axis line': {
+      display: grid ? 'inline' : 'none',
+      stroke: 'lightgrey'
+    }
+  };
 }
 
 export function getRandomId() {

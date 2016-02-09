@@ -16,7 +16,7 @@ class AreaChartContainer extends React.Component {
       this.state = {
         showToolTip: false,
         windowWidth: initialWidth - 100,
-        componentWidth: 300
+        componentWidth: 200
       };
     }
 
@@ -939,17 +939,17 @@ handleResize() {
 }
 <AreaChart
   xType={'time'}
-  axes={(this.state.windowWidth / 3) > 400 ? true : false}
+  axes={(this.state.componentWidth) > 800 ? true : false}
   xTicks={5}
   yTicks={3}
   grid
-  width={this.state.windowWidth / 3}
-  height={this.state.windowWidth / 6}
+  width={this.state.componentWidth}
+  height={this.state.componentWidth / 2}
   tickTimeDisplayFormat={'%d %m'}
   interpolate={'cardinal'}
   data={[
-    [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
-    [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
+    [{x: '1-Jan-13', y: 8}, {x: '1-Feb-13', y: 17}, {x: '1-Mar-13', y: 17}, {x: '1-Apr-13', y: 25}, {x: '1-May-13', y: 20}],
+    [{x: '1-Jan-13', y: 5}, {x: '1-Feb-13', y: 13}, {x: '1-Mar-13', y: 10}, {x: '1-Apr-13', y: 25}, {x: '1-May-13', y: 30}]
   ]}
 />
         `)}}
@@ -959,53 +959,17 @@ handleResize() {
         <h4>2013</h4>
         <AreaChart
           xType={'time'}
-          axes={(this.state.windowWidth / 3) > 400 ? true : false}
+          axes={(this.state.componentWidth) > 800 ? true : false}
           xTicks={5}
           yTicks={3}
           grid
-          width={this.state.windowWidth / 3}
-          height={this.state.windowWidth / 6}
+          width={this.state.componentWidth}
+          height={this.state.componentWidth / 2}
           tickTimeDisplayFormat={'%d %m'}
           interpolate={'cardinal'}
           data={[
             [{x: '1-Jan-13', y: 8}, {x: '1-Feb-13', y: 17}, {x: '1-Mar-13', y: 17}, {x: '1-Apr-13', y: 25}, {x: '1-May-13', y: 20}],
             [{x: '1-Jan-13', y: 5}, {x: '1-Feb-13', y: 13}, {x: '1-Mar-13', y: 10}, {x: '1-Apr-13', y: 25}, {x: '1-May-13', y: 30}]
-          ]}
-        />
-        </div>
-        <div style={{display: 'inline-block', padding: '0 10px'}}>
-        <h4>2014</h4>
-        <AreaChart
-          xType={'time'}
-          axes={(this.state.windowWidth / 3) > 400 ? true : false}
-          xTicks={5}
-          yTicks={3}
-          grid
-          width={this.state.windowWidth / 3}
-          height={this.state.windowWidth / 6}
-          tickTimeDisplayFormat={'%d %m'}
-          interpolate={'cardinal'}
-          data={[
-            [{x: '1-Jan-14', y: 20}, {x: '1-Feb-14', y: 10}, {x: '1-Mar-14', y: 33}, {x: '1-Apr-14', y: 45}, {x: '1-May-14', y: 14}],
-            [{x: '1-Jan-14', y: 7}, {x: '1-Feb-14', y: 88}, {x: '1-Mar-14', y: 10}, {x: '1-Apr-14', y: 15}, {x: '1-May-14', y: 55}]
-          ]}
-        />
-        </div>
-        <div style={{display: 'inline-block'}}>
-        <h4>2015</h4>
-        <AreaChart
-          xType={'time'}
-          axes={(this.state.windowWidth / 3) > 400 ? true : false}
-          xTicks={5}
-          yTicks={3}
-          grid
-          width={this.state.windowWidth / 3}
-          height={this.state.windowWidth / 6}
-          tickTimeDisplayFormat={'%d %m'}
-          interpolate={'cardinal'}
-          data={[
-            [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
-            [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
           ]}
         />
         </div>

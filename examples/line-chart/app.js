@@ -132,10 +132,11 @@ class LineChartContainer extends React.Component {
                 'interpolate',
                 'xType',
                 'grid',
+                'verticalGrid',
                 'domainRange',
                 'tickDisplay',
                 'tickAmount',
-                'style',
+                'lineColors',
                 'dataPoints', 'mouseHandlers', 'clickHandler', 'updateData']
               }
               currentClassName="active"
@@ -150,10 +151,11 @@ class LineChartContainer extends React.Component {
               <li><a href="#interpolate">Interpolate</a></li>
               <li><a href="#xType">xType / yType</a></li>
               <li><a href="#grid">Grid</a></li>
+              <li><a href="#verticalGrid">Vertical Grid</a></li>
               <li><a href="#domainRange">Domain range</a></li>
               <li><a href="#tickDisplay">Tick display</a></li>
               <li><a href="#tickAmount">Number of ticks</a></li>
-              <li><a href="#style">Style</a></li>
+              <li><a href="#lineColors">lineColors</a></li>
               <li><a href="#dataPoints">Data points</a></li>
               <li><a href="#mouseHandlers">Mouse handlers</a></li>
               <li><a href="#mouseHandlers">Click handler</a></li>
@@ -498,6 +500,40 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
           ]}
         />
 
+        <h2 id="verticalGrid">Vertical Grid</h2>
+        <p>A vertical grid can be added to the graph by just passing in a boolean for verticalGrid.</p>
+        <pre>
+        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+<LineChart
+  xType={'time'}
+  axes
+  grid
+  verticalGrid
+  interpolate={'cardinal'}
+  width={750}
+  height={250}
+  data={[
+        [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
+        [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
+  ]}
+/>`)}}
+        />
+        </pre>
+        <LineChart
+          xType={'time'}
+          axes
+          grid
+          verticalGrid
+          interpolate={'cardinal'}
+          width={750}
+          height={250}
+          data={[
+            [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
+            [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
+          ]}
+        />
+
+
       <h2 id="domainRange">Domain range</h2>
         <p>By default the axis ranges are automatically calculated based on the smallest and the largest ys.</p>
         <p>The range can be fixed by passing an array param of 2 numbers for the particular axis.
@@ -606,53 +642,39 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
           ]}
         />
 
-        <h2 id="style">Style</h2>
-        <p>The styles can be overridden easily either partially or globally. To allow this we use Radium.</p>
-        <p>The following example would be to change the color of a the line.</p>
+        <h2 id="lineColors">Line Colors</h2>
+        <p>The colours of the lines can be overridden easily. To do this we can pass in a lineColors array as a prop.</p>
+        <p>The following example would be to change the color of the 2 lines.</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 <LineChart
+  xType={'time'}
   axes
-  xDomainRange={[0, 100]}
-  yDomainRange={[100, 0]}
-  style={{
-    '.line0': {
-      stroke: 'red'
-    },
-    '.line1': {
-      stroke: 'purple'
-    }
-  }}
-  margin={{top: 0, right: 0, bottom: 100, left: 100}}
-  width={250}
-  height={250}
+  grid
+  verticalGrid
   interpolate={'cardinal'}
+  lineColors={['pink', 'cyan']}
+  width={750}
+  height={250}
   data={[
-    [{x: 10, y: 25}, {x: 20, y: 10}, {x: 30, y: 25}, {x: 40, y: 10}, {x: 50, y: 12}, {x: 60, y: 4}],
-    [{x: 10, y: 40}, {x: 20, y: 30}, {x: 30, y: 25}, {x: 40, y: 60}, {x: 50, y: 22}, {x: 60, y: 9}]
+    [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
+    [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
   ]}
-/>
-        `)}}
+/>`)}}
         />
         </pre>
         <LineChart
+          xType={'time'}
           axes
-          xDomainRange={[0, 100]}
-          yDomainRange={[0, 100]}
-          style={{
-            '.line0': {
-              stroke: 'red'
-            },
-            '.line1': {
-              stroke: 'purple'
-            }
-          }}
-          width={500}
-          height={250}
+          grid
+          verticalGrid
           interpolate={'cardinal'}
+          lineColors={['pink', 'cyan']}
+          width={750}
+          height={250}
           data={[
-            [{x: 10, y: 25}, {x: 20, y: 10}, {x: 30, y: 25}, {x: 40, y: 10}, {x: 50, y: 12}, {x: 60, y: 25}],
-            [{x: 10, y: 40}, {x: 20, y: 30}, {x: 30, y: 25}, {x: 40, y: 60}, {x: 50, y: 22}, {x: 60, y: 9}]
+            [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
+            [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
           ]}
         />
 
