@@ -1,6 +1,7 @@
 /* eslint-env node, mocha */
 import {should as chaiShould, expect} from 'chai';
 import React from 'react';
+import ReactDOM from 'react-dom';
 import TestUtils from 'react/lib/ReactTestUtils';
 import {PieChart} from 'react-easy-chart';
 
@@ -59,5 +60,14 @@ describe('PieChart component', () => {
     expect(svg.type).to.equal('svg');
     const g = svg.props.children[0];
     expect(g.props.transform).to.equal('translate(200, 200)');
+  });
+
+  it('Should render the correct number of segments', () => {
+    document.body.appendChild(document.createElement('div'));
+    const chart = ReactDOM.render(<PieChart data={testData} />, document.getElementsByTagName('div')[0]);
+    const chartDom = ReactDOM.findDOMNode(chart);
+    const svgNode = chartDom.childNodes[1];
+    const g = svgNode.childNodes[0];
+    expect(g.childNodes.length).to.equal(testData.length);
   });
 });
