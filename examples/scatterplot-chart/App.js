@@ -176,17 +176,42 @@ const bigDataZ = [
 const config = [
   {
     type: 'One',
-    color: '#ff0000',
-    stroke: 'blue'
+    color: '#1e313c',
+    stroke: 'black'
   },
   {
     type: 'Two',
-    color: '#00ff00',
-    stroke: 'blue'
+    color: '#3f4c55',
+    stroke: 'black'
   },
   {
     type: 'Three',
-    color: '#ffffff',
+    color: '#667178',
+    stroke: 'black'
+  },
+  {
+    type: 'Four',
+    color: '#f4e956',
+    stroke: 'black'
+  },
+  {
+    type: 'Five',
+    color: '#e3a51a',
+    stroke: 'black'
+  },
+  {
+    type: 'Six',
+    color: '#aaac84',
+    stroke: 'black'
+  },
+  {
+    type: 'Seven',
+    color: '#dce7c5',
+    stroke: 'black'
+  },
+  {
+    type: 'Eight',
+    color: '#e4e8ec',
     stroke: 'black'
   }
 ];
