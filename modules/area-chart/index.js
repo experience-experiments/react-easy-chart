@@ -1,60 +1,10 @@
 import React from 'react';
 import {createElement} from 'react-faux-dom';
-import {reduce, getValueFunction, getRandomId, calcMargin, setLineDomainAndRange} from '../shared';
+import {reduce, getValueFunction, getRandomId, calcMargin, setLineDomainAndRange, defaultStyle, getAxisStyles, createCircularTicks} from '../shared';
 import {select, svg, time, event as d3LastEvent} from 'd3';
 import {Style} from 'radium';
 import merge from 'lodash.merge';
 import {format} from 'd3-time-format';
-
-const defaultStyle = {
-  '.line': {
-    fill: 'none',
-    strokeWidth: 1
-  },
-  '.area': {
-    stroke: 'black',
-    strokeWidth: 0
-  },
-  '.dot': {
-    strokeWidth: 0
-  },
-  'circle.data-point': {
-    r: 4
-  },
-  'circle.data-point:hover': {
-    r: 8,
-    opacity: 0.6
-  },
-  'circle.tick-circle': {
-    r: 2,
-    fill: 'lightgrey'
-  },
-  '.x circle.tick-circle': {
-    cy: '8px'
-  },
-  '.axis': {
-    'font-family': 'dobra-light,Arial,sans-serif',
-    'font-size': '9px'
-  },
-  '.axis .label': {
-    font: '14px arial'
-  },
-  '.axis path,.axis line': {
-    fill: 'none',
-    strokeWidth: 1,
-    'shape-rendering': 'crispEdges'
-  },
-  'x.axis path': {
-    display: 'none',
-    stroke: 'lightgrey'
-  },
-  '.tick line': {
-    stroke: 'lightgrey',
-    strokeWidth: 1,
-    opacity: '0.7'
-  }
-};
-
 
 export default class AreaChart extends React.Component {
   static get propTypes() {
@@ -113,11 +63,13 @@ export default class AreaChart extends React.Component {
   }
 
   componentDidMount() {
-    const ticks = select(this.refs[this.uid]).select('svg').selectAll('.tick');
-    function circleAppender() {
-      select(this).append('circle').attr('class', 'tick-circle');
+    createCircularTicks(this.refs[this.uid]);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.width !== prevProps.width) {
+      createCircularTicks(this.refs[this.uid]);
     }
-    ticks.each(circleAppender);
   }
 
   render() {
@@ -161,25 +113,12 @@ export default class AreaChart extends React.Component {
     select(svgNode).attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom);
     const root = select(svgNode).append('g').attr('transform', `translate(${margin.left},${margin.top})`);
 
-    const axisStyles = {
-      '.x circle.tick-circle ': {
-        fill: verticalGrid ? 'none' : 'lightgrey'
-      },
-      '.y circle.tick-circle': {
-        cx: yAxisOrientRight ? '+5px' : '-8px',
-        fill: grid ? 'none' : 'lightgrey'
-      },
-      '.y.axis line': {
-        display: grid ? 'inline' : 'none',
-        stroke: 'lightgrey'
-      }
-    };
     if (axes) {
       const xAxis = svg.axis().scale(x).orient('bottom');
       if (xType === 'time' && tickTimeDisplayFormat) {
         xAxis.tickFormat(time.format(tickTimeDisplayFormat));
       }
-      if (verticalGrid) { xAxis.tickSize(-height, 6).tickPadding(15); } else { xAxis.tickSize(0).tickPadding(15);}
+      if (grid && verticalGrid) { xAxis.tickSize(-height, 6).tickPadding(15); } else { xAxis.tickSize(0).tickPadding(15);}
       if (xTicks) xAxis.ticks(xTicks);
       root.append('g')
         .attr('class', 'x axis')
@@ -279,7 +218,7 @@ export default class AreaChart extends React.Component {
     }
     return (
       <div ref={this.uid} className={`area-chart${this.uid}`}>
-        <Style scopeSelector={`.area-chart${this.uid}`} rules={merge({}, defaultStyle, style, axisStyles)}/>
+        <Style scopeSelector={`.area-chart${this.uid}`} rules={merge({}, defaultStyle, style, getAxisStyles(grid, verticalGrid, yAxisOrientRight))}/>
         {svgNode.toReact()}
       </div>
     );
