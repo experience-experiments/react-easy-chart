@@ -1,71 +1,10 @@
 import React from 'react';
 import {createElement} from 'react-faux-dom';
-import {reduce, calcMargin, getValueFunction, getRandomId, setLineDomainAndRange} from '../shared';
+import {reduce, calcMargin, getValueFunction, getRandomId, setLineDomainAndRange, defaultStyle, getAxisStyles, createCircularTicks, rmaColorPalet} from '../shared';
 import {select, svg, time, event as d3LastEvent} from 'd3';
 import {Style} from 'radium';
 import merge from 'lodash.merge';
 import {format} from 'd3-time-format';
-
-const defaultStyle = {
-  '.line': {
-    fill: 'none',
-    strokeWidth: 1.5
-  },
-  '.dot': {
-    fill: '',
-    strokeWidth: 0
-  },
-  'circle': {
-    'r': 4
-  },
-  'circle:hover': {
-    'r': 8,
-    'opacity': 0.6
-  },
-  '.dot0': {
-    fill: 'steelblue'
-  },
-  '.line0': {
-    stroke: 'steelblue'
-  },
-  '.dot1': {
-    fill: 'orange'
-  },
-  '.line1': {
-    stroke: 'orange'
-  },
-  '.dot2': {
-    fill: 'red'
-  },
-  '.line2': {
-    stroke: 'red'
-  },
-  '.dot3': {
-    fill: 'darkblue'
-  },
-  '.line3': {
-    stroke: 'darkblue'
-  },
-  '.axis': {
-    font: '10px arial'
-  },
-  '.axis .label': {
-    font: '14px arial'
-  },
-  '.axis path,.axis line': {
-    fill: 'none',
-    stroke: '#000',
-    'shape-rendering': 'crispEdges'
-  },
-  'x.axis path': {
-    display: 'none'
-  },
-  '.tick line': {
-    stroke: 'lightgrey',
-    opacity: '0.7'
-  }
-};
-
 
 export default class LineChart extends React.Component {
   static get propTypes() {
@@ -81,6 +20,7 @@ export default class LineChart extends React.Component {
       margin: React.PropTypes.object,
       axes: React.PropTypes.bool,
       grid: React.PropTypes.bool,
+      verticalGrid: React.PropTypes.bool,
       xDomainRange: React.PropTypes.array,
       yDomainRange: React.PropTypes.array,
       axisLabels: React.PropTypes.object,
@@ -88,6 +28,7 @@ export default class LineChart extends React.Component {
       yTicks: React.PropTypes.number,
       xTicks: React.PropTypes.number,
       dataPoints: React.PropTypes.bool,
+      lineColors: React.PropTypes.array,
       yAxisOrientRight: React.PropTypes.bool,
       mouseOverHandler: React.PropTypes.func,
       mouseOutHandler: React.PropTypes.func,
@@ -105,6 +46,7 @@ export default class LineChart extends React.Component {
       axes: false,
       xType: 'linear',
       yType: 'linear',
+      lineColors: [],
       axisLabels: {x: '', y: ''},
       mouseOverHandler: () => {},
       mouseOutHandler: () => {},
@@ -117,6 +59,16 @@ export default class LineChart extends React.Component {
     super(props);
     this.parseDate = format(props.datePattern).parse;
     this.uid = getRandomId();
+  }
+
+  componentDidMount() {
+    createCircularTicks(this.refs[this.uid]);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.width !== prevProps.width) {
+      createCircularTicks(this.refs[this.uid]);
+    }
   }
 
   render() {
@@ -132,14 +84,17 @@ export default class LineChart extends React.Component {
       yTicks,
       interpolate,
       grid,
+      verticalGrid,
       tickTimeDisplayFormat,
       mouseOverHandler,
       mouseOutHandler,
       mouseMoveHandler,
       clickHandler,
       dataPoints,
+      lineColors,
       yAxisOrientRight} = this.props;
     const margin = calcMargin(axes, this.props.margin, yAxisOrientRight);
+    const defaultColours = lineColors.concat(rmaColorPalet);
     const width = reduce(this.props.width, margin.left, margin.right);
     const height = reduce(this.props.height, margin.top, margin.bottom);
 
@@ -159,7 +114,7 @@ export default class LineChart extends React.Component {
       if (xType === 'time' && tickTimeDisplayFormat) {
         xAxis.tickFormat(time.format(tickTimeDisplayFormat));
       }
-      if (grid) xAxis.tickSize(-height, 6).tickPadding(12);
+      if (grid && verticalGrid) { xAxis.tickSize(-height, 6).tickPadding(15); } else { xAxis.tickSize(0).tickPadding(15);}
       if (xTicks) xAxis.ticks(xTicks);
       root.append('g')
         .attr('class', 'x axis')
@@ -177,7 +132,7 @@ export default class LineChart extends React.Component {
       if (yType === 'time' && tickTimeDisplayFormat) {
         yAxis.tickFormat(time.format(tickTimeDisplayFormat));
       }
-      if (grid) yAxis.tickSize(-width, 6).tickPadding(12);
+      if (grid) { yAxis.tickSize(-width, 6).tickPadding(12); } else { yAxis.tickPadding(10); }
       if (yTicks) yAxis.ticks(yTicks);
       root.append('g')
         .attr('class', 'y axis')
@@ -187,21 +142,28 @@ export default class LineChart extends React.Component {
         .attr('class', 'label')
         .attr('transform', 'rotate(-90)')
         .attr('x', 0)
-        .attr('y', yAxisOrientRight ? -25 + margin.right : 10 - margin.left)
+        .attr('y', yAxisOrientRight ? -20 + margin.right : 0 - margin.left)
         .attr('dy', '.9em')
         .style('text-anchor', 'end')
         .text(axisLabels.y);
     }
+
     data.map((dataElelment, i) => {
       root.append('path')
         .datum(dataElelment)
-        .attr('class', `line line${i}`)
+        .attr('class', `line`)
+        .attr('style', `stroke: ${defaultColours[i]}`)
         .attr('d', linePath);
-      if (dataPoints) {
+    });
+
+    if (dataPoints) {
+      data.map((dataElelment, i) => {
         dataElelment.map((dotData) => {
-          root
-          .append('circle')
-          .attr('class', `dot dot${i}`)
+          root.append('circle')
+          .attr('class', 'data-point')
+          .style('strokeWidth', '2px')
+          .style('stroke', defaultColours[i])
+          .style('fill', 'white')
           .attr('cx', () => {
             switch (xType) {
               case ('time'):
@@ -223,12 +185,13 @@ export default class LineChart extends React.Component {
           .on('mousemove', () => mouseMoveHandler(d3LastEvent))
           .on('click', () => clickHandler(dotData, d3LastEvent));
         });
-      }
-    });
+      });
+    }
+
 
     return (
-      <div className={`line-chart${this.uid}`}>
-        <Style scopeSelector={`.line-chart${this.uid}`} rules={merge({}, defaultStyle, style)}/>
+      <div ref={this.uid} className={`line-chart${this.uid}`}>
+        <Style scopeSelector={`.line-chart${this.uid}`} rules={merge({}, defaultStyle, style, getAxisStyles(grid, verticalGrid, yAxisOrientRight))}/>
         {svgNode.toReact()}
       </div>
     );

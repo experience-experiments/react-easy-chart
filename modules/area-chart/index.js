@@ -1,6 +1,6 @@
 import React from 'react';
 import {createElement} from 'react-faux-dom';
-import {reduce, getValueFunction, getRandomId, calcMargin, setLineDomainAndRange, defaultStyle, getAxisStyles, createCircularTicks} from '../shared';
+import {reduce, getValueFunction, getRandomId, calcMargin, setLineDomainAndRange, defaultStyle, getAxisStyles, createCircularTicks, rmaColorPalet} from '../shared';
 import {select, svg, time, event as d3LastEvent} from 'd3';
 import {Style} from 'radium';
 import merge from 'lodash.merge';
@@ -96,7 +96,7 @@ export default class AreaChart extends React.Component {
       noAreaGradient,
       yAxisOrientRight} = this.props;
     const margin = calcMargin(axes, this.props.margin, yAxisOrientRight);
-    const defaultColours = areaColors.concat(['#3F4C55', '#E3A51A', '#F4E956', '#AAAC84']);
+    const defaultColours = areaColors.concat(rmaColorPalet);
     const width = reduce(this.props.width, margin.left, margin.right);
 
     const height = reduce(this.props.height, margin.top, margin.bottom);

@@ -874,12 +874,12 @@ handleResize() {
 }
 <LineChart
   xType={'time'}
-  axes={(this.state.windowWidth / 3) > 400 ? true : false}
+  axes={(this.state.componentWidth) > 600 ? true : false}
   xTicks={5}
   yTicks={3}
   grid
-  width={this.state.windowWidth / 3}
-  height={this.state.windowWidth / 6}
+  width={this.state.componentWidth}
+  height={this.state.componentWidth / 2}
   tickTimeDisplayFormat={'%d %m'}
   interpolate={'cardinal'}
   data={[
@@ -894,7 +894,7 @@ handleResize() {
         <h4>2013</h4>
         <LineChart
           xType={'time'}
-          axes={(this.state.componentWidth) > 400 ? true : false}
+          axes={(this.state.componentWidth) > 600 ? true : false}
           xTicks={5}
           yTicks={3}
           grid
