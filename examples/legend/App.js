@@ -13,9 +13,9 @@ const pieData = [
 ];
 
 const pieDataCustom = [
-  {key: 'Cats', value: 100, color: 'teal'},
-  {key: 'Dogs', value: 200, color: 'thistle'},
-  {key: 'Other', value: 50, color: 'tomato'}
+  {key: 'Cats', value: 100, color: '#1e313c'},
+  {key: 'Dogs', value: 200, color: '#3f4c55'},
+  {key: 'Other', value: 50, color: '#667178'}
 ];
 
 const config = [

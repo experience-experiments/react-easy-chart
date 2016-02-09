@@ -464,6 +464,7 @@ mouseOutHandler() {
       <PieChart
         labels
         data={this.data}
+        padding={10}
         styles={{
           '.chart_lines': {
             strokeWidth: 0
