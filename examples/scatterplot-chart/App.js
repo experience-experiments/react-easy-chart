@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ScatterplotChart from 'react-easy-chart/scatterplot-chart';
+import {ScatterplotChart} from 'react-easy-chart';
 import ToolTip from '../ToolTip';
 import Legend from '../Legend';
 import {escapeHTML} from '../util';
@@ -326,6 +326,7 @@ export default class ScatterplotContainer extends React.Component {
                 'dotRadius',
                 'config',
                 'grid',
+                'verticalGrid',
                 'axisType',
                 'domainRange',
                 'mouseEvents',
@@ -347,6 +348,7 @@ export default class ScatterplotContainer extends React.Component {
               <li><a href="#dotRadius">Dot Radius</a></li>
               <li><a href="#config">Config</a></li>
               <li><a href="#grid">Grid</a></li>
+              <li><a href="#verticalGrid">Vertical Grid</a></li>
               <li><a href="#axisType">Axis type</a></li>
               <li><a href="#domainRange">Domain range</a></li>
               <li><a href="#mouseEvents">Mouse events</a></li>
@@ -578,6 +580,7 @@ export default class ScatterplotContainer extends React.Component {
            height={270}
            config={config}
          />
+
           <h2 id="grid">Grid</h2>
           <p>Apply a background grid with the grid boolean property</p>
           <pre>
@@ -603,6 +606,35 @@ export default class ScatterplotContainer extends React.Component {
             height={270}
             grid
           />
+
+        <h2 id="verticalGrid">Vertical Grid</h2>
+        <p>A vertical grid can be added to the graph by just passing in a boolean for verticalGrid.</p>
+        <pre>
+        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+<ScatterplotChart
+  data={data}
+  axes
+  verticalGrid
+  axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+  dotRadius={10}
+  width={480}
+  height={270}
+  grid
+/>
+        `)}}
+        />
+        </pre>
+        <ScatterplotChart
+          data={bigData}
+          axes
+          verticalGrid
+          axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+          dotRadius={6}
+          width={480}
+          height={270}
+          grid
+        />
+
         <h2 id="axisType">Axis type</h2>
         <p>The data passed associated to the particular axes can be in numeric, date (the default format is for example 1-Jan-15 but can be overridden) or textual formats (used for labelling).</p>
         <p>For the example below the data for the x is text and so the <strong>xType</strong> needs to be changed to <strong>text</strong>.</p>
