@@ -221,7 +221,7 @@ export default class BarChartContainer extends React.Component {
               <li><a href="#yaxesorientation">Y Axis orientation</a></li>
               <li><a href="#axesLabels">Axes labels</a></li>
               <li><a href="#axesType">Axes type</a></li>
-              <li><a href="#datePattern">datePattern</a></li>
+              <li><a href="#datePattern">Date Pattern</a></li>
               <li><a href="#barWidth">Bar width</a></li>
               <li><a href="#domainRange">Domain range</a></li>
               <li><a href="#tickDisplay">Tick display format</a></li>

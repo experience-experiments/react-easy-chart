@@ -13,15 +13,15 @@ const pieData = [
 ];
 
 const pieDataCustom = [
-  {key: 'Cats', value: 100, color: '#1e313c'},
-  {key: 'Dogs', value: 200, color: '#3f4c55'},
-  {key: 'Other', value: 50, color: '#667178'}
+  {key: 'Cats', value: 100, color: '#aaac84'},
+  {key: 'Dogs', value: 200, color: '#dce7c5'},
+  {key: 'Other', value: 50, color: '#e3a51a'}
 ];
 
 const config = [
-  {color: 'teal'},
-  {color: 'thistle'},
-  {color: 'tomato'}
+  {color: '#aaac84'},
+  {color: '#dce7c5'},
+  {color: '#e3a51a'}
 ];
 
 const customStyle = {
@@ -194,15 +194,15 @@ const pieData = [
             <pre>
             <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 const pieDataCustom = [
-  {key: 'Cats', value: 100, color: 'teal'},
-  {key: 'Dogs', value: 200, color: 'thistle'},
-  {key: 'Other', value: 50, color: 'tomato'}
+  {key: 'Cats', value: 100, color: '#aaac84'},
+  {key: 'Dogs', value: 200, color: '#dce7c5'},
+  {key: 'Other', value: 50, color: '#e3a51a'}
 ];
 
 const config = [
-  {color: 'teal'},
-  {color: 'thistle'},
-  {color: 'tomato'}
+  {color: '#aaac84'},
+  {color: '#dce7c5'},
+  {color: '#e3a51a'}
 ];
 
 <PieChart data={pieDataCustom} size={300} />
