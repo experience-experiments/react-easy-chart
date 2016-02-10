@@ -14,7 +14,8 @@ export const defaultStyle = {
     strokeWidth: 0
   },
   '.dot': {
-    strokeWidth: 0
+    strokeWidth: 0,
+    opacity: 0.85
   },
   'circle.data-point': {
     r: 4

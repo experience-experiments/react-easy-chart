@@ -6,36 +6,7 @@ import {extent} from 'd3-array';
 import { createElement } from 'react-faux-dom';
 import {Style} from 'radium';
 import merge from 'lodash.merge';
-import {calcDefaultDomain} from '../shared';
-
-const defaultStyle = {
-  '.line': {
-    fill: 'none',
-    strokeWidth: 1.5
-  },
-  '.axis': {
-    font: '10px arial'
-  },
-  '.axis .label': {
-    font: '14px arial'
-  },
-  '.axis path,.axis line': {
-    fill: 'none',
-    stroke: '#000',
-    'shape-rendering': 'crispEdges'
-  },
-  'x.axis path': {
-    display: 'none'
-  },
-  '.dot': {
-    stroke: '#000',
-    opacity: 0.85
-  },
-  '.tick line': {
-    stroke: 'lightgrey',
-    opacity: '0.7'
-  }
-};
+import {calcDefaultDomain, defaultStyle, getAxisStyles, createCircularTicks} from '../shared';
 
 let parseDate = null;
 const axisMargin = 18;
@@ -51,6 +22,7 @@ export default class ScatterplotChart extends React.Component {
       datePattern: React.PropTypes.string,
       yAxisOrientRight: React.PropTypes.bool,
       dotRadius: React.PropTypes.number,
+      verticalGrid: React.PropTypes.bool,
       grid: React.PropTypes.bool,
       height: React.PropTypes.number,
       useLegend: React.PropTypes.bool,
@@ -127,6 +99,7 @@ export default class ScatterplotChart extends React.Component {
     this.drawAxisX();
     this.drawAxisY();
     this.drawChart();
+    createCircularTicks(this.refs[this.uid]);
   }
 
   componentDidUpdate() {
@@ -138,6 +111,7 @@ export default class ScatterplotChart extends React.Component {
     this.updateAxisX();
     this.updateAxisY();
     this.updateChart();
+    createCircularTicks(this.refs[this.uid]);
   }
 
   setMargin() {
@@ -194,7 +168,9 @@ export default class ScatterplotChart extends React.Component {
       this.xAxis.tickFormat(time.format(this.props.tickTimeDisplayFormat));
     }
     if (this.props.xTickNumber) this.xAxis.ticks(this.props.xTickNumber);
-    if (this.props.grid) this.xAxis.tickSize(-this.innerHeight, 6).tickPadding(12);
+
+    if (this.props.grid && this.props.verticalGrid) { this.xAxis.tickSize(-this.height, 6).tickPadding(15); } else { this.xAxis.tickSize(0).tickPadding(15);}
+
     if (this.props.xTicks) this.xAxis.ticks(this.props.xTicks);
   }
 
@@ -202,7 +178,7 @@ export default class ScatterplotChart extends React.Component {
     this.yAxis = svg.axis()
       .scale(this.y)
       .orient(this.props.yAxisOrientRight ? 'right' : 'left');
-    if (this.props.grid) this.yAxis.tickSize(-this.innerWidth, 6).tickPadding(12);
+    if (this.props.grid) { this.yAxis.tickSize(-this.innerWidth, 6).tickPadding(12); } else { this.yAxis.tickPadding(10); }
     if (this.props.yTicks) this.yAxis.ticks(this.props.yTicks);
   }
 
@@ -416,8 +392,8 @@ export default class ScatterplotChart extends React.Component {
     const uid = Math.floor(Math.random() * new Date().getTime());
 
     return (
-      <div className={`scatterplot_chart${uid}`}>
-        <Style scopeSelector={`.scatterplot_chart${uid}`} rules={merge({}, defaultStyle, this.props.style)}/>
+      <div ref={this.uid} className={`scatterplot_chart${uid}`}>
+        <Style scopeSelector={`.scatterplot_chart${uid}`} rules={merge({}, defaultStyle, this.props.style, getAxisStyles(this.props.grid, this.props.verticalGrid, this.props.yAxisOrientRight))}/>
         {node.toReact()}
       </div>
     );
