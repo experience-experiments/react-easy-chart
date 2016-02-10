@@ -32,55 +32,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var defaultStyle = {
-  '.line': {
-    fill: 'none',
-    strokeWidth: 1
-  },
-  '.area': {
-    stroke: 'black',
-    strokeWidth: 0
-  },
-  '.dot': {
-    strokeWidth: 0
-  },
-  'circle.data-point': {
-    r: 4
-  },
-  'circle.data-point:hover': {
-    r: 8,
-    opacity: 0.6
-  },
-  'circle.tick-circle': {
-    r: 2,
-    fill: 'lightgrey'
-  },
-  '.x circle.tick-circle': {
-    cy: '8px'
-  },
-  '.axis': {
-    'font-family': 'dobra-light,Arial,sans-serif',
-    'font-size': '7px'
-  },
-  '.axis .label': {
-    font: '14px arial'
-  },
-  '.axis path,.axis line': {
-    fill: 'none',
-    strokeWidth: 1,
-    'shape-rendering': 'crispEdges'
-  },
-  'x.axis path': {
-    display: 'none',
-    stroke: 'lightgrey'
-  },
-  '.tick line': {
-    stroke: 'lightgrey',
-    strokeWidth: 1,
-    opacity: '0.7'
-  }
-};
-
 var AreaChart = function (_React$Component) {
   _inherits(AreaChart, _React$Component);
 
@@ -150,11 +101,14 @@ var AreaChart = function (_React$Component) {
   _createClass(AreaChart, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      var ticks = (0, _d.select)(this.refs[this.uid]).select('svg').selectAll('.tick');
-      function circleAppender() {
-        (0, _d.select)(this).append('circle').attr('class', 'tick-circle');
+      (0, _shared.createCircularTicks)(this.refs[this.uid]);
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps) {
+      if (this.props.width !== prevProps.width) {
+        (0, _shared.createCircularTicks)(this.refs[this.uid]);
       }
-      ticks.each(circleAppender);
     }
   }, {
     key: 'render',
@@ -186,7 +140,7 @@ var AreaChart = function (_React$Component) {
       var yAxisOrientRight = _props.yAxisOrientRight;
 
       var margin = (0, _shared.calcMargin)(axes, this.props.margin, yAxisOrientRight);
-      var defaultColours = areaColors.concat(['#3F4C55', '#E3A51A', '#F4E956', '#AAAC84']);
+      var defaultColours = areaColors.concat(_shared.rmaColorPalet);
       var width = (0, _shared.reduce)(this.props.width, margin.left, margin.right);
 
       var height = (0, _shared.reduce)(this.props.height, margin.top, margin.bottom);
@@ -211,25 +165,12 @@ var AreaChart = function (_React$Component) {
       (0, _d.select)(svgNode).attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom);
       var root = (0, _d.select)(svgNode).append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-      var axisStyles = {
-        '.x circle.tick-circle ': {
-          fill: verticalGrid ? 'none' : 'lightgrey'
-        },
-        '.y circle.tick-circle': {
-          cx: yAxisOrientRight ? '+5px' : '-8px',
-          fill: grid ? 'none' : 'lightgrey'
-        },
-        '.y.axis line': {
-          display: grid ? 'inline' : 'none',
-          stroke: 'lightgrey'
-        }
-      };
       if (axes) {
         var xAxis = _d.svg.axis().scale(x).orient('bottom');
         if (xType === 'time' && tickTimeDisplayFormat) {
           xAxis.tickFormat(_d.time.format(tickTimeDisplayFormat));
         }
-        if (verticalGrid) {
+        if (grid && verticalGrid) {
           xAxis.tickSize(-height, 6).tickPadding(15);
         } else {
           xAxis.tickSize(0).tickPadding(15);
@@ -254,7 +195,7 @@ var AreaChart = function (_React$Component) {
         if (!noAreaGradient) {
           var gradient = (0, _d.select)(svgNode).append('defs').append('linearGradient').attr('id', 'gradient-' + i + '-' + _this2.uid).attr('x1', '0%').attr('x2', '0%').attr('y1', '20%').attr('y2', '80%');
 
-          defaultStyle['.dot' + i] = { fill: fillCol };
+          _shared.defaultStyle['.dot' + i] = { fill: fillCol };
           gradient.append('stop').attr('offset', '0%').attr('style', 'stop-color:' + fillCol + ';stop-opacity:0.6');
 
           gradient.append('stop').attr('offset', '100%').attr('style', 'stop-color:' + fillCol + ';stop-opacity:0.4');
@@ -298,7 +239,7 @@ var AreaChart = function (_React$Component) {
       return _react2.default.createElement(
         'div',
         { ref: this.uid, className: 'area-chart' + this.uid },
-        _react2.default.createElement(_radium.Style, { scopeSelector: '.area-chart' + this.uid, rules: (0, _lodash2.default)({}, defaultStyle, style, axisStyles) }),
+        _react2.default.createElement(_radium.Style, { scopeSelector: '.area-chart' + this.uid, rules: (0, _lodash2.default)({}, _shared.defaultStyle, style, (0, _shared.getAxisStyles)(grid, verticalGrid, yAxisOrientRight)) }),
         svgNode.toReact()
       );
     }

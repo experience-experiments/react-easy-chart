@@ -3,8 +3,11 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.defaultStyle = exports.rmaColorPalet = undefined;
 exports.reduce = reduce;
 exports.getValueFunction = getValueFunction;
+exports.createCircularTicks = createCircularTicks;
+exports.getAxisStyles = getAxisStyles;
 exports.getRandomId = getRandomId;
 exports.calcMargin = calcMargin;
 exports.findLargestExtent = findLargestExtent;
@@ -16,6 +19,58 @@ var _d3Array = require('d3-array');
 var _d3Scale = require('d3-scale');
 
 var _d = require('d3');
+
+var rmaColorPalet = exports.rmaColorPalet = ['#3F4C55', '#E3A51A', '#F4E956', '#AAAC84'];
+
+var defaultStyle = exports.defaultStyle = {
+  '.line': {
+    fill: 'none',
+    strokeWidth: 1
+  },
+  '.area': {
+    stroke: 'black',
+    strokeWidth: 0
+  },
+  '.dot': {
+    strokeWidth: 0,
+    opacity: 0.85
+  },
+  'circle.data-point': {
+    r: 4
+  },
+  'circle.data-point:hover': {
+    r: 8,
+    opacity: 0.6
+  },
+  'circle.tick-circle': {
+    r: 2,
+    fill: 'lightgrey'
+  },
+  '.x circle.tick-circle': {
+    cy: '8px'
+  },
+  '.axis': {
+    'font-family': 'dobra-light,Arial,sans-serif',
+    'font-size': '9px'
+  },
+  '.axis .label': {
+    font: '14px arial'
+  },
+  '.axis path,.axis line': {
+    fill: 'none',
+    strokeWidth: 1,
+    'shape-rendering': 'crispEdges'
+  },
+  'x.axis path': {
+    display: 'none',
+    stroke: 'lightgrey'
+  },
+  '.tick line': {
+    stroke: 'lightgrey',
+    strokeWidth: 1,
+    opacity: '0.7'
+  }
+};
 
 function reduce(x) {
   var rVal = x;
@@ -37,6 +92,31 @@ function getValueFunction(scale, type, dateParser) {
         return d[dataIndex];
       };
   }
+}
+
+function createCircularTicks(containerElement) {
+  (0, _d.select)(containerElement).select('svg').selectAll('.tick-circle').remove();
+  var ticks = (0, _d.select)(containerElement).select('svg').selectAll('.tick');
+  function circleAppender() {
+    (0, _d.select)(this).append('circle').attr('class', 'tick-circle');
+  }
+  ticks.each(circleAppender);
+}
+
+function getAxisStyles(grid, verticalGrid, yAxisOrientRight) {
+  return {
+    '.x circle.tick-circle ': {
+      fill: verticalGrid ? 'none' : 'lightgrey'
+    },
+    '.y circle.tick-circle': {
+      cx: yAxisOrientRight ? '+5px' : '-8px',
+      fill: grid ? 'none' : 'lightgrey'
+    },
+    '.y.axis line': {
+      display: grid ? 'inline' : 'none',
+      stroke: 'lightgrey'
+    }
+  };
 }
 
 function getRandomId() {

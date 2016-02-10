@@ -32,66 +32,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var defaultStyle = {
-  '.line': {
-    fill: 'none',
-    strokeWidth: 1.5
-  },
-  '.dot': {
-    fill: '',
-    strokeWidth: 0
-  },
-  'circle': {
-    'r': 4
-  },
-  'circle:hover': {
-    'r': 8,
-    'opacity': 0.6
-  },
-  '.dot0': {
-    fill: 'steelblue'
-  },
-  '.line0': {
-    stroke: 'steelblue'
-  },
-  '.dot1': {
-    fill: 'orange'
-  },
-  '.line1': {
-    stroke: 'orange'
-  },
-  '.dot2': {
-    fill: 'red'
-  },
-  '.line2': {
-    stroke: 'red'
-  },
-  '.dot3': {
-    fill: 'darkblue'
-  },
-  '.line3': {
-    stroke: 'darkblue'
-  },
-  '.axis': {
-    font: '10px arial'
-  },
-  '.axis .label': {
-    font: '14px arial'
-  },
-  '.axis path,.axis line': {
-    fill: 'none',
-    stroke: '#000',
-    'shape-rendering': 'crispEdges'
-  },
-  'x.axis path': {
-    display: 'none'
-  },
-  '.tick line': {
-    stroke: 'lightgrey',
-    opacity: '0.7'
-  }
-};
-
 var LineChart = function (_React$Component) {
   _inherits(LineChart, _React$Component);
 
@@ -110,6 +50,7 @@ var LineChart = function (_React$Component) {
         margin: _react2.default.PropTypes.object,
         axes: _react2.default.PropTypes.bool,
         grid: _react2.default.PropTypes.bool,
+        verticalGrid: _react2.default.PropTypes.bool,
         xDomainRange: _react2.default.PropTypes.array,
         yDomainRange: _react2.default.PropTypes.array,
         axisLabels: _react2.default.PropTypes.object,
@@ -117,6 +58,7 @@ var LineChart = function (_React$Component) {
         yTicks: _react2.default.PropTypes.number,
         xTicks: _react2.default.PropTypes.number,
         dataPoints: _react2.default.PropTypes.bool,
+        lineColors: _react2.default.PropTypes.array,
         yAxisOrientRight: _react2.default.PropTypes.bool,
         mouseOverHandler: _react2.default.PropTypes.func,
         mouseOutHandler: _react2.default.PropTypes.func,
@@ -135,6 +77,7 @@ var LineChart = function (_React$Component) {
         axes: false,
         xType: 'linear',
         yType: 'linear',
+        lineColors: [],
         axisLabels: { x: '', y: '' },
         mouseOverHandler: function mouseOverHandler() {},
         mouseOutHandler: function mouseOutHandler() {},
@@ -155,6 +98,18 @@ var LineChart = function (_React$Component) {
   }
 
   _createClass(LineChart, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      (0, _shared.createCircularTicks)(this.refs[this.uid]);
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps) {
+      if (this.props.width !== prevProps.width) {
+        (0, _shared.createCircularTicks)(this.refs[this.uid]);
+      }
+    }
+  }, {
     key: 'render',
     value: function render() {
       var _this2 = this;
@@ -172,15 +127,18 @@ var LineChart = function (_React$Component) {
       var yTicks = _props.yTicks;
       var interpolate = _props.interpolate;
       var grid = _props.grid;
+      var verticalGrid = _props.verticalGrid;
       var tickTimeDisplayFormat = _props.tickTimeDisplayFormat;
       var mouseOverHandler = _props.mouseOverHandler;
       var mouseOutHandler = _props.mouseOutHandler;
       var mouseMoveHandler = _props.mouseMoveHandler;
       var clickHandler = _props.clickHandler;
       var dataPoints = _props.dataPoints;
+      var lineColors = _props.lineColors;
       var yAxisOrientRight = _props.yAxisOrientRight;
 
       var margin = (0, _shared.calcMargin)(axes, this.props.margin, yAxisOrientRight);
+      var defaultColours = lineColors.concat(_shared.rmaColorPalet);
       var width = (0, _shared.reduce)(this.props.width, margin.left, margin.right);
       var height = (0, _shared.reduce)(this.props.height, margin.top, margin.bottom);
 
@@ -204,7 +162,11 @@ var LineChart = function (_React$Component) {
         if (xType === 'time' && tickTimeDisplayFormat) {
           xAxis.tickFormat(_d.time.format(tickTimeDisplayFormat));
         }
-        if (grid) xAxis.tickSize(-height, 6).tickPadding(12);
+        if (grid && verticalGrid) {
+          xAxis.tickSize(-height, 6).tickPadding(15);
+        } else {
+          xAxis.tickSize(0).tickPadding(15);
+        }
         if (xTicks) xAxis.ticks(xTicks);
         root.append('g').attr('class', 'x axis').attr('transform', 'translate(0,' + height + ')').call(xAxis).append('text').attr('class', 'label').attr('y', margin.bottom - 10).attr('x', yAxisOrientRight ? 0 : width).style('text-anchor', yAxisOrientRight ? 'start' : 'end').text(axisLabels.x);
 
@@ -212,15 +174,23 @@ var LineChart = function (_React$Component) {
         if (yType === 'time' && tickTimeDisplayFormat) {
           yAxis.tickFormat(_d.time.format(tickTimeDisplayFormat));
         }
-        if (grid) yAxis.tickSize(-width, 6).tickPadding(12);
+        if (grid) {
+          yAxis.tickSize(-width, 6).tickPadding(12);
+        } else {
+          yAxis.tickPadding(10);
+        }
         if (yTicks) yAxis.ticks(yTicks);
-        root.append('g').attr('class', 'y axis').call(yAxis).attr('transform', yAxisOrientRight ? 'translate(' + width + ', 0)' : 'translate(0, 0)').append('text').attr('class', 'label').attr('transform', 'rotate(-90)').attr('x', 0).attr('y', yAxisOrientRight ? -25 + margin.right : 10 - margin.left).attr('dy', '.9em').style('text-anchor', 'end').text(axisLabels.y);
+        root.append('g').attr('class', 'y axis').call(yAxis).attr('transform', yAxisOrientRight ? 'translate(' + width + ', 0)' : 'translate(0, 0)').append('text').attr('class', 'label').attr('transform', 'rotate(-90)').attr('x', 0).attr('y', yAxisOrientRight ? -20 + margin.right : 0 - margin.left).attr('dy', '.9em').style('text-anchor', 'end').text(axisLabels.y);
       }
+
       data.map(function (dataElelment, i) {
-        root.append('path').datum(dataElelment).attr('class', 'line line' + i).attr('d', linePath);
-        if (dataPoints) {
+        root.append('path').datum(dataElelment).attr('class', 'line').attr('style', 'stroke: ' + defaultColours[i]).attr('d', linePath);
+      });
+
+      if (dataPoints) {
+        data.map(function (dataElelment, i) {
           dataElelment.map(function (dotData) {
-            root.append('circle').attr('class', 'dot dot' + i).attr('cx', function () {
+            root.append('circle').attr('class', 'data-point').style('strokeWidth', '2px').style('stroke', defaultColours[i]).style('fill', 'white').attr('cx', function () {
               switch (xType) {
                 case 'time':
                   return x(_this2.parseDate(dotData.x));
@@ -244,13 +214,13 @@ var LineChart = function (_React$Component) {
               return clickHandler(dotData, _d.event);
             });
           });
-        }
-      });
+        });
+      }
 
       return _react2.default.createElement(
         'div',
-        { className: 'line-chart' + this.uid },
-        _react2.default.createElement(_radium.Style, { scopeSelector: '.line-chart' + this.uid, rules: (0, _lodash2.default)({}, defaultStyle, style) }),
+        { ref: this.uid, className: 'line-chart' + this.uid },
+        _react2.default.createElement(_radium.Style, { scopeSelector: '.line-chart' + this.uid, rules: (0, _lodash2.default)({}, _shared.defaultStyle, style, (0, _shared.getAxisStyles)(grid, verticalGrid, yAxisOrientRight)) }),
         svgNode.toReact()
       );
     }
