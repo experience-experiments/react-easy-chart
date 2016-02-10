@@ -28,7 +28,7 @@ Area chart:
 
 Bar chart:
 
-`import BarChart from 'react-easy-chart/bar-chart';`
+`import {BarChart} from 'react-easy-chart';`
 
 Line chart:
 
@@ -36,11 +36,15 @@ Line chart:
 
 Pie chart:
 
-`import PieChart from 'react-easy-chart/pie-chart';`
+`import {PieChart} from 'react-easy-chart';`
 
 Scatter chart:
 
-`import ScatterChart from 'react-easy-chart/scatter-chart';`
+`import {ScatterChart} from 'react-easy-chart';`
+
+Chart Legend:
+
+`import {Legend} from 'react-easy-chart';`
 
 
 ## Documentation
