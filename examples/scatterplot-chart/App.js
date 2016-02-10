@@ -216,6 +216,41 @@ const config = [
   }
 ];
 
+const configGen = [
+  {
+    type: 'A',
+    color: '#1e313c'
+  },
+  {
+    type: 'B',
+    color: '#3f4c55'
+  },
+  {
+    type: 'C',
+    color: '#667178'
+  },
+  {
+    type: 'D',
+    color: '#f4e956'
+  },
+  {
+    type: 'E',
+    color: '#e3a51a'
+  },
+  {
+    type: 'F',
+    color: '#aaac84'
+  },
+  {
+    type: 'G',
+    color: '#dce7c5'
+  },
+  {
+    type: 'H',
+    color: '#e4e8ec'
+  }
+];
+
 export default class ScatterplotContainer extends React.Component {
   constructor(props) {
     super(props);
@@ -244,7 +279,7 @@ export default class ScatterplotContainer extends React.Component {
 
   generateData() {
     const data = [];
-    const keys = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+    const keys = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
 
     keys.map((key) => {
       data.push({type: key, x: this.getRandomArbitrary(1, 1000), y: this.getRandomArbitrary(1, 1000)});
@@ -364,6 +399,7 @@ export default class ScatterplotContainer extends React.Component {
           <div ref="component">
             <ScatterplotChart
               data={this.data}
+              config={configGen}
               dotRadius={20}
               width={this.state.componentWidth}
               height={this.state.componentWidth / 2}
