@@ -1,24 +1,9 @@
 import React from 'react';
-// import { select, selectAll, svg, layout, scale, interpolate} from 'd3';
-// import { select, layout } from 'd3';
-import d3 from 'd3';
-import { event as d3LastEvent } from 'd3';
+import { scale, layout, svg, select, event as d3LastEvent, interpolate } from 'd3';
+import {defaultStyle} from '../shared';
 import { createElement } from 'react-faux-dom';
 import { Style } from 'radium';
 import merge from 'lodash.merge';
-
-const defaultStyles = {
-  '.chart_lines': {
-    stroke: '#fff',
-    strokeWidth: 1
-  },
-  '.chart_text': {
-    fontFamily: 'sans-serif',
-    fontSize: '12px',
-    textAnchor: 'middle',
-    fill: '#000'
-  }
-};
 
 export default class PieChart extends React.Component {
   static get propTypes() {
@@ -53,10 +38,10 @@ export default class PieChart extends React.Component {
   constructor(props) {
     super(props);
     this.uid = Math.floor(Math.random() * new Date().getTime());
-    this.color = d3.scale.category20();
+    this.color = scale.category20();
     this.path = null;
     this.text = null;
-    this.pie = d3.layout.pie().value((d) => d.value).sort(null);
+    this.pie = layout.pie().value((d) => d.value).sort(null);
     this.current = [];
     this.currentTxt = [];
   }
@@ -70,13 +55,13 @@ export default class PieChart extends React.Component {
   }
 
   getArc() {
-    return d3.svg.arc()
+    return svg.arc()
     .innerRadius(this.getInnerRadius() - this.props.padding)
     .outerRadius(this.getRadius() - this.props.padding);
   }
 
   getLabelArc() {
-    return d3.svg.arc()
+    return svg.arc()
     .outerRadius(this.getRadius() - this.props.padding - ((20 * this.getRadius()) / 100))
     .innerRadius(this.getRadius() - this.props.padding - ((20 * this.getRadius()) / 100));
   }
@@ -90,14 +75,14 @@ export default class PieChart extends React.Component {
   }
 
   draw() {
-    this.path = d3.select(`#pie_${this.uid}`)
+    this.path = select(`#pie_${this.uid}`)
       .selectAll('path')
       .data(this.pie(this.props.data))
       .enter()
       .append('path')
       .attr('fill', (d, i) => d.data.color ? d.data.color : this.color(i))
       .attr('d', this.getArc())
-      .attr('class', 'chart_lines')
+      .attr('class', 'pie_chart_lines')
       .on('mouseover', (d) => this.props.mouseOverHandler(d, d3LastEvent))
       .on('mouseout', (d) => this.props.mouseOutHandler(d, d3LastEvent))
       .on('mousemove', () => this.props.mouseMoveHandler(d3LastEvent))
@@ -106,14 +91,14 @@ export default class PieChart extends React.Component {
         this.current.push(d);
       });
     if (this.props.labels) {
-      this.text = d3.select(`#labels_${this.uid}`)
+      this.text = select(`#labels_${this.uid}`)
         .selectAll('text')
         .data(this.pie(this.props.data))
         .enter()
         .append('text')
         .attr('transform', (d) => `translate(${this.getLabelArc().centroid(d)})`)
         .attr('dy', '.35em')
-        .attr('class', 'chart_text')
+        .attr('class', 'pie_chart_text')
         .text((d) => d.data.key)
         .each((d) => {
           this.currentTxt.push(d);
@@ -138,20 +123,20 @@ export default class PieChart extends React.Component {
 
   tween(a, index) {
     const cur = this.current[index];
-    const i = d3.interpolate(cur, a);
+    const i = interpolate(cur, a);
     this.current[index] = a;
     return (t) => this.getArc()(i(t));
   }
 
   render() {
     const node = createElement('svg');
-    d3.select(node)
+    select(node)
       .attr('width', this.props.size)
       .attr('height', this.props.size)
       .append('g')
       .attr('id', `pie_${this.uid}`)
       .attr('transform', `translate(${this.getRadius()}, ${this.getRadius()})`);
-    d3.select(node)
+    select(node)
       .attr('width', this.props.size)
       .attr('height', this.props.size)
       .append('g')
@@ -164,7 +149,7 @@ export default class PieChart extends React.Component {
       <div className={`pie_chart${uid}`}>
         <Style
           scopeSelector={`.pie_chart${uid}`}
-          rules={merge({}, defaultStyles, this.props.styles)}
+          rules={merge({}, defaultStyle, this.props.styles)}
         />
         {node.toReact()}
       </div>

@@ -159,8 +159,8 @@ export default class AreaChart extends React.Component {
             .attr('id', `gradient-${i}-${this.uid}`)
             .attr('x1', '0%')
             .attr('x2', '0%')
-            .attr('y1', '20%')
-            .attr('y2', '80%');
+            .attr('y1', '40%')
+            .attr('y2', '100%');
 
         defaultStyle[`.dot${i}`] = {fill: fillCol};
         gradient.append('stop')
@@ -182,6 +182,7 @@ export default class AreaChart extends React.Component {
       root.append('path')
         .datum(dataElelment)
         .attr('d', area)
+        .attr('class', 'area')
         .style('fill', noAreaGradient ? defaultColours[i] : `url(#gradient-${i}-${this.uid})`);
     });
 
