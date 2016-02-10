@@ -169,9 +169,9 @@ export default class PieChartContainer extends React.Component {
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 <PieChart
   data={[
-    {key: 'A', value: 100, color: '#1e313c'},
-    {key: 'B', value: 200, color: '#3f4c55'},
-    {key: 'C', value: 50, color: '#667178'}
+    {key: 'A', value: 100, color: '#aaac84'},
+    {key: 'B', value: 200, color: '#dce7c5'},
+    {key: 'C', value: 50, color: '#e3a51a'}
   ]}
 />
        `)}}
@@ -179,9 +179,9 @@ export default class PieChartContainer extends React.Component {
         </pre>
        <PieChart
          data={[
-           {key: 'A', value: 100, color: brandColors.greyBlueOne},
-           {key: 'B', value: 200, color: brandColors.greyBlueTwo},
-           {key: 'C', value: 50, color: brandColors.greyBlueThree}
+           {key: 'A', value: 100, color: brandColors.green},
+           {key: 'B', value: 200, color: brandColors.lightGreen},
+           {key: 'C', value: 50, color: brandColors.orange}
          ]}
        />
 
@@ -192,9 +192,9 @@ export default class PieChartContainer extends React.Component {
 <PieChart
   size={100}
   data={[
-    {key: 'A', value: 100, color: '#1e313c'},
-    {key: 'B', value: 200, color: '#3f4c55'},
-    {key: 'C', value: 50, color: '#667178'}
+    {key: 'A', value: 100, color: '#aaac84'},
+    {key: 'B', value: 200, color: '#dce7c5'},
+    {key: 'C', value: 50, color: '#e3a51a'}
   ]}
 />
 `)}}
@@ -203,9 +203,9 @@ export default class PieChartContainer extends React.Component {
        <PieChart
          size={100}
          data={[
-           {key: 'A', value: 100, color: brandColors.greyBlueOne},
-           {key: 'B', value: 200, color: brandColors.greyBlueTwo},
-           {key: 'C', value: 50, color: brandColors.greyBlueThree}
+           {key: 'A', value: 100, color: brandColors.green},
+           {key: 'B', value: 200, color: brandColors.lightGreen},
+           {key: 'C', value: 50, color: brandColors.orange}
          ]}
        />
 
@@ -217,9 +217,9 @@ export default class PieChartContainer extends React.Component {
   size={400}
   innerHoleSize={200}
   data={[
-    {key: 'A', value: 100, color: '#1e313c'},
-    {key: 'B', value: 200, color: '#3f4c55'},
-    {key: 'C', value: 50, color: '#667178'}
+    {key: 'A', value: 100, color: '#aaac84'},
+    {key: 'B', value: 200, color: '#dce7c5'},
+    {key: 'C', value: 50, color: '#e3a51a'}
   ]}
 />
        `)}}
@@ -229,9 +229,9 @@ export default class PieChartContainer extends React.Component {
          size={400}
          innerHoleSize={200}
          data={[
-           {key: 'A', value: 100, color: brandColors.greyBlueOne},
-           {key: 'B', value: 200, color: brandColors.greyBlueTwo},
-           {key: 'C', value: 50, color: brandColors.greyBlueThree}
+           {key: 'A', value: 100, color: brandColors.green},
+           {key: 'B', value: 200, color: brandColors.lightGreen},
+           {key: 'C', value: 50, color: brandColors.orange}
          ]}
        />
 
@@ -242,9 +242,9 @@ export default class PieChartContainer extends React.Component {
 <PieChart
   padding={50}
   data={[
-    {key: 'A', value: 100, color: '#1e313c'},
-    {key: 'B', value: 200, color: '#3f4c55'},
-    {key: 'C', value: 50, color: '#667178'}
+    {key: 'A', value: 100, color: '#aaac84'},
+    {key: 'B', value: 200, color: '#dce7c5'},
+    {key: 'C', value: 50, color: '#e3a51a'}
   ]}
 />
        `)}}
@@ -253,9 +253,9 @@ export default class PieChartContainer extends React.Component {
        <PieChart
          padding={50}
          data={[
-           {key: 'A', value: 100, color: brandColors.greyBlueOne},
-           {key: 'B', value: 200, color: brandColors.greyBlueTwo},
-           {key: 'C', value: 50, color: brandColors.greyBlueThree}
+           {key: 'A', value: 100, color: brandColors.green},
+           {key: 'B', value: 200, color: brandColors.lightGreen},
+           {key: 'C', value: 50, color: brandColors.orange}
          ]}
        />
 
@@ -266,9 +266,9 @@ export default class PieChartContainer extends React.Component {
 <PieChart
   labels
   data={[
-    {key: 'A', value: 100, color: '#1e313c'},
-    {key: 'B', value: 200, color: '#3f4c55'},
-    {key: 'C', value: 50, color: '#667178'}
+    {key: 'A', value: 100, color: '#aaac84'},
+    {key: 'B', value: 200, color: '#dce7c5'},
+    {key: 'C', value: 50, color: '#e3a51a'}
   ]}
   styles={{
     '.chart_text': {
@@ -283,9 +283,9 @@ export default class PieChartContainer extends React.Component {
        <PieChart
          labels
          data={[
-           {key: 'A', value: 100, color: brandColors.greyBlueOne},
-           {key: 'B', value: 200, color: brandColors.greyBlueTwo},
-           {key: 'C', value: 50, color: brandColors.greyBlueThree}
+           {key: 'A', value: 100, color: brandColors.green},
+           {key: 'B', value: 200, color: brandColors.lightGreen},
+           {key: 'C', value: 50, color: brandColors.orange}
          ]}
          styles={{
            '.chart_text': {
@@ -308,13 +308,13 @@ export default class PieChartContainer extends React.Component {
     '.chart_text': {
       fontFamily: 'serif',
       fontSize: '1.25em',
-      fill: '#fff'
+      fill: '#333'
     }
   }}
   data={[
-    {key: 'A', value: 100, color: '#1e313c'},
-    {key: 'B', value: 200, color: '#3f4c55'},
-    {key: 'C', value: 50, color: '#667178'}
+    {key: 'A', value: 100, color: '#aaac84'},
+    {key: 'B', value: 200, color: '#dce7c5'},
+    {key: 'C', value: 50, color: '#e3a51a'}
 />      `)}}
        />
        </pre>
@@ -327,13 +327,13 @@ export default class PieChartContainer extends React.Component {
            '.chart_text': {
              fontFamily: 'serif',
              fontSize: '1.25em',
-             fill: '#fff'
+             fill: '#333'
            }
          }}
          data={[
-           {key: 'A', value: 100, color: brandColors.greyBlueOne},
-           {key: 'B', value: 200, color: brandColors.greyBlueTwo},
-           {key: 'C', value: 50, color: brandColors.greyBlueThree}
+           {key: 'A', value: 100, color: brandColors.green},
+           {key: 'B', value: 200, color: brandColors.lightGreen},
+           {key: 'C', value: 50, color: brandColors.orange}
          ]}
        />
 
@@ -367,9 +367,9 @@ mouseOutHandler() {
 
 <PieChart
  data={[
-   {key: 'A', value: 100, color: '#1e313c'},
-   {key: 'B', value: 200, color: '#3f4c55'},
-   {key: 'C', value: 50, color: '#667178'}
+   {key: 'A', value: 100, color: '#aaac84'},
+   {key: 'B', value: 200, color: '#dce7c5'},
+   {key: 'C', value: 50, color: '#e3a51a'}
  ]}
  innerHoleSize={200}
  mouseOverHandler={this.mouseOverHandler.bind(this)}
@@ -383,9 +383,9 @@ mouseOutHandler() {
        </pre>
        <PieChart
          data={[
-           {key: 'A', value: 100, color: '#1e313c'},
-           {key: 'B', value: 200, color: '#3f4c55'},
-           {key: 'C', value: 50, color: '#667178'}
+           {key: 'A', value: 100, color: brandColors.green},
+           {key: 'B', value: 200, color: brandColors.lightGreen},
+           {key: 'C', value: 50, color: brandColors.orange}
          ]}
          innerHoleSize={200}
          mouseOverHandler={this.mouseOverHandler.bind(this)}
@@ -404,9 +404,9 @@ mouseOutHandler() {
    <div>
      <PieChart
        data={[
-         {key: 'A', value: 100, color: '#1e313c'},
-         {key: 'B', value: 200, color: '#3f4c55'},
-         {key: 'C', value: 50, color: '#667178'}
+         {key: 'A', value: 100, color: '#aaac84'},
+         {key: 'B', value: 200, color: '#dce7c5'},
+         {key: 'C', value: 50, color: '#e3a51a'}
        ]}
        clickHandler={
          (d) => this.setState({
@@ -426,9 +426,9 @@ mouseOutHandler() {
          <div>
            <PieChart
              data={[
-               {key: 'A', value: 100, color: brandColors.greyBlueOne},
-               {key: 'B', value: 200, color: brandColors.greyBlueTwo},
-               {key: 'C', value: 50, color: brandColors.greyBlueThree}
+               {key: 'A', value: 100, color: brandColors.green},
+               {key: 'B', value: 200, color: brandColors.lightGreen},
+               {key: 'C', value: 50, color: brandColors.orange}
              ]}
              clickHandler={
                (d) => this.setState({

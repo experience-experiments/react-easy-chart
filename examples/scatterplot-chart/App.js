@@ -340,7 +340,7 @@ export default class ScatterplotContainer extends React.Component {
             >
               <li><a href="#introduction">Introduction</a></li>
               <li><a href="#data">Data</a></li>
-              <li><a href="#heightAndWidth">height &amp; Width</a></li>
+              <li><a href="#heightAndWidth">Height &amp; Width</a></li>
               <li><a href="#margin">Margin</a></li>
               <li><a href="#axes">Axes</a></li>
               <li><a href="#yaxesorientation">Y Axis orientation</a></li>
