@@ -127,8 +127,8 @@ class LineChartContainer extends React.Component {
                 'heightAndWidth',
                 'margin',
                 'axes',
-                'yaxesorientation',
                 'axesAndLabels',
+                'yaxesorientation',
                 'interpolate',
                 'xType',
                 'grid',
@@ -137,7 +137,11 @@ class LineChartContainer extends React.Component {
                 'tickDisplay',
                 'tickAmount',
                 'lineColors',
-                'dataPoints', 'mouseHandlers', 'clickHandler', 'updateData']
+                'dataPoints',
+                'mouseHandlers',
+                'clickHandler',
+                'updateData',
+                'fluid']
               }
               currentClassName="active"
             >
@@ -146,8 +150,8 @@ class LineChartContainer extends React.Component {
               <li><a href="#heightAndWidth">Height &amp; Width</a></li>
               <li><a href="#margin">Margin</a></li>
               <li><a href="#axes">Axes</a></li>
-              <li><a href="#yaxesorientation">Y Axis orientation</a></li>
               <li><a href="#axesAndLabels">Axes and Labels</a></li>
+              <li><a href="#yaxesorientation">Y Axis orientation</a></li>
               <li><a href="#interpolate">Interpolate</a></li>
               <li><a href="#xType">xType / yType</a></li>
               <li><a href="#grid">Grid</a></li>
@@ -155,11 +159,12 @@ class LineChartContainer extends React.Component {
               <li><a href="#domainRange">Domain range</a></li>
               <li><a href="#tickDisplay">Tick display</a></li>
               <li><a href="#tickAmount">Number of ticks</a></li>
-              <li><a href="#lineColors">lineColors</a></li>
+              <li><a href="#lineColors">Line Colors</a></li>
               <li><a href="#dataPoints">Data points</a></li>
               <li><a href="#mouseHandlers">Mouse handlers</a></li>
               <li><a href="#mouseHandlers">Click handler</a></li>
               <li><a href="#updateData">Updating the data</a></li>
+              <li><a href="#fluid">Fluid</a></li>
             </Scrollspy>
           </nav>
         </aside>
@@ -181,14 +186,17 @@ class LineChartContainer extends React.Component {
             }}}
           />
         </div>
-        <h2 id="introduction">Introduction</h2>
+        <section id="introduction">
+        <h2>Introduction</h2>
         <p>A line chart or line graph is a type of chart which displays information as a series of data points called 'markers' connected by straight line segments.<sup>(<a href="https://en.wikipedia.org/wiki/Line_chart">ref</a>)</sup></p>
-        <h2 id="data">Data</h2>
+        </section>
+
+        <section id="data">
+        <h2>Data</h2>
         <p>At the most basic the line chart can just take a single data file supplied in a JSON format and will render a
          simple line chart.</p>
         <p>The format of the data is an array of arrays which allows multiple lines to be generated.
         The x field represents the x axis and the y the y axis. This is to unify the data accross R2-D3 charts.</p>
-
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
 <LineChart
@@ -211,7 +219,11 @@ class LineChartContainer extends React.Component {
         <LineChart
           data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]]}
         />
-      <h2 id="heightAndWidth">Height and Width</h2>
+      </section>
+
+
+      <section id="heightAndWidth">
+      <h2>Height and Width</h2>
         <p>The height and width can be easily set by passing in a numeric y in as a prop.</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
@@ -227,8 +239,10 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
           height={50}
           data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]]}
         />
+        </section>
 
-        <h2 id="margin">Margin</h2>
+        <section id="margin">
+        <h2>Margin</h2>
         <p>The Margin can be overridden by passing in a margin object. The margin object must define the following: top, right, bottom and left</p>
         <p>This can be particulary useful if a label is cut off.</p>
         <pre>
@@ -247,8 +261,10 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
           height={250}
           data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]]}
         />
+        </section>
 
-        <h2 id="axes">Axes</h2>
+        <section id="axes">
+        <h2>Axes</h2>
         <p>The axes can be turned on by simply passing a boolean flag to true for <b>axes</b>.</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
@@ -266,8 +282,10 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
           height={250}
           data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]]}
         />
+        </section>
 
-        <h2 id="axesAndLabels">Axes labels</h2>
+        <section id="axesAndLabels">
+        <h2>Axes labels</h2>
         <p>The axisLabels can be overridden by simply passing <b>axisLabels</b> object with both a x and y y.</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
@@ -289,8 +307,10 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
           height={250}
           data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]]}
         />
+        </section>
 
-        <h2 id="yaxesorientation">Y Axis orientation</h2>
+        <section id="yaxesorientation">
+        <h2>Y Axis orientation</h2>
           <p>The Y axis can be placed on the right hand side by passing a boolean flag to true for yAxisOrientRight</p>
            <pre>
            <code dangerouslySetInnerHTML={{__html: escapeHTML(`
@@ -312,8 +332,10 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
             height={250}
             data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]]}
           />
+        </section>
 
-        <h2 id="interpolate">Interpolate (Making the lines smooth)</h2>
+        <section id="interpolate">
+        <h2>Interpolate (Making the lines smooth)</h2>
         <p>The Lines drawn can be set to be interpolated by passing in an interpolated param. By default this is set to linear.
         We can though override this for instance to make a cardinal line. The options that can be chosen can be found <a href="https://github.com/mbostock/d3/wiki/SVG-Shapes">here</a> under the interpolate section.</p>
         <pre>
@@ -338,8 +360,10 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
           height={250}
           data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]]}
         />
+        </section>
 
-        <h2 id="xType">xType / yType</h2>
+        <section id="xType">
+        <h2>xType / yType</h2>
         <p>The data passed associated to the particular axes can be in numeric, date (the default
            format is for example 1-Jan-15 but can be overridden)
          or textual formats (used for labelling). </p>
@@ -464,8 +488,10 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
             [{x: 0, y: '1-Jan-15'}, {x: 15, y: '10-Jan-15'}, {x: 20, y: '21-Jan-15'}, {x: 25, y: '31-Jan-15'}]
           ]}
         />
+        </section>
 
-        <h2 id="grid">Grid</h2>
+        <section id="grid">
+        <h2>Grid</h2>
         <p>A grid can be added to the graph by just passing in a boolean.</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
@@ -499,8 +525,10 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
             [{x: 0, y: '1-Jan-15'}, {x: 15, y: '10-Jan-15'}, {x: 20, y: '21-Jan-15'}, {x: 25, y: '31-Jan-15'}]
           ]}
         />
+        </section>
 
-        <h2 id="verticalGrid">Vertical Grid</h2>
+        <section id="verticalGrid">
+        <h2>Vertical Grid</h2>
         <p>A vertical grid can be added to the graph by just passing in a boolean for verticalGrid.</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
@@ -532,9 +560,10 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
             [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
           ]}
         />
+      </section>
 
-
-      <h2 id="domainRange">Domain range</h2>
+      <section id="domainRange">
+      <h2>Domain range</h2>
         <p>By default the axis ranges are automatically calculated based on the smallest and the largest ys.</p>
         <p>The range can be fixed by passing an array param of 2 numbers for the particular axis.
         The first number is the bottom of the range the second is the higher point of the range.</p>
@@ -568,7 +597,10 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
             [{x: 10, y: 40}, {x: 20, y: 30}, {x: 30, y: 25}, {x: 40, y: 60}, {x: 50, y: 22}, {x: 60, y: 9}]
           ]}
         />
-        <h2 id="tickDisplay">Tick display format</h2>
+        </section>
+
+        <section id="tickDisplay">
+        <h2>Tick display format</h2>
         <p>If the x or y axis  has an xType/yType of time then a display for the axis can be overridden by setting the tickTimeDisplayFormat.</p>
         <p>The options are very flexible and can be seen here <a href="https://github.com/mbostock/d3/wiki/Time-Formatting">Time Formatting</a></p>
         <pre>
@@ -604,8 +636,10 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
             [{x: 0, y: '1-Jan-15'}, {x: 15, y: '10-Jan-15'}, {x: 20, y: '21-Jan-15'}, {x: 25, y: '31-Jan-15'}]
           ]}
         />
+        </section>
 
-        <h2 id="tickAmount">Number of ticks</h2>
+        <section id="tickAmount">
+        <h2>Number of ticks</h2>
         <p>The number of ticks on the x and y axis can be set by passing in a number to xTicks or yTicks.
         This can make the axis easier to read.</p>
         <pre>
@@ -641,8 +675,10 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
             [{x: 10, y: 40}, {x: 20, y: 30}, {x: 30, y: 25}, {x: 40, y: 60}, {x: 50, y: 22}, {x: 60, y: 9}]
           ]}
         />
+        </section>
 
-        <h2 id="lineColors">Line Colors</h2>
+        <section id="lineColors">
+        <h2>Line Colors</h2>
         <p>The colours of the lines can be overridden easily. To do this we can pass in a lineColors array as a prop.</p>
         <p>The following example would be to change the color of the 2 lines.</p>
         <pre>
@@ -677,8 +713,10 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
             [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
           ]}
         />
+        </section>
 
-        <h2 id="dataPoints">Data Points</h2>
+        <section id="dataPoints">
+        <h2>Data Points</h2>
         <p>Data points can be added to the line chart by simply passing a dataPoints boolean.</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
@@ -711,8 +749,10 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
             [{x: 10, y: 40}, {x: 20, y: 30}, {x: 30, y: 25}, {x: 40, y: 60}, {x: 50, y: 22}, {x: 60, y: 9}]
           ]}
         />
+      </section>
 
-      <h2 id="mouseHandlers">Mouse handlers</h2>
+      <section id="mouseHandlers">
+      <h2>Mouse handlers</h2>
         <p>The chart will send out a mouseOver event, mouseMove and mouseOut event from the dataPoints (see above). The dataPoints will need to be set. This can be used by your react application in anyway you would require.
          The event handlers provides the mouse event and the point data. The mouse event can for instance provide the x and y coordinates which can be used for a tool tip.
           The data is related to the point currently moused over.</p>
@@ -776,8 +816,10 @@ mouseOutHandler() {
             [{x: 10, y: 40}, {x: 20, y: 30}, {x: 30, y: 25}, {x: 40, y: 60}, {x: 50, y: 22}, {x: 60, y: 9}]
           ]}
         />
+      </section>
 
-      <h2 id="clickHandler">Click Handler</h2>
+      <section id="clickHandler">
+      <h2>Click Handler</h2>
         <p>The chart will send out a clickHandler event from the dataPoints (see above). The dataPoints will need to be set. This can be used by your react application in anyway you would require.
          The event handler provides the point data.</p>
          <div>
@@ -802,8 +844,10 @@ mouseOutHandler() {
              {this.state.dataDisplay ? this.state.dataDisplay : 'Click on a point to show the value'}
            </div>
          </div>
+        </section>
 
-        <h2 id="updateData">Updating the data</h2>
+        <section id="updateData">
+        <h2>Updating the data</h2>
         <p>By selecting the button below to start the random data you can see a simulation of the performance if a data feed is passed in.
         React provides the functionality to only update the elements of the dom when required so should just change the line attributes.
         The data is passed in as a react param only and as soon as that data changes the chart will reflect that change automatically.</p>
@@ -849,8 +893,9 @@ mouseOutHandler() {
             stroke: 'green'
           }}}
         />
+        </section>
 
-
+        <section id="fluid">
         <h3>Fluid</h3>
         <p>Because the width and height of the chart can be passed in by a param then changes to the size of a window or container can change the chart dynamically.
         If you shrink your browser window width you will see the charts below change in a fluid manor. You can also introduce basic break points such as removing the axes if below a certain width.</p>
@@ -908,6 +953,7 @@ handleResize() {
           ]}
         />
         </div>
+        </section>
         <br/>
         <br/>
         {this.state.showToolTip ? <ToolTip top={this.state.top} left={this.state.left}>The value of x is {this.state.x} and the value of y is {this.state.y}</ToolTip> : null}
