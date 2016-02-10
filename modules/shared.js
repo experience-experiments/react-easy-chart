@@ -5,6 +5,13 @@ import {time, select} from 'd3';
 export const rmaColorPalet = ['#3F4C55', '#E3A51A', '#F4E956', '#AAAC84'];
 
 export const defaultStyle = {
+  '.bar': {
+    fill: 'blue',
+    transition: 'height 0.5s ease-in, y 0.5s ease-in'
+  },
+  '.bar:hover': {
+    opacity: 0.5
+  },
   '.line': {
     fill: 'none',
     strokeWidth: 1
