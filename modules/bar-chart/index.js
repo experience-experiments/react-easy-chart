@@ -1,48 +1,13 @@
 import React from 'react';
 import { ordinal, linear } from 'd3-scale';
 import { event as d3LastEvent, select, time, svg, scale, max} from 'd3';
-import {reduce, calcMargin, calcDefaultDomain} from '../shared';
+import {reduce, calcMargin, calcDefaultDomain, defaultStyle, createCircularTicks, getAxisStyles} from '../shared';
 import {extent} from 'd3-array';
 import {format} from 'd3-time-format';
 import { createElement } from 'react-faux-dom';
 import { Style } from 'radium';
 import merge from 'lodash.merge';
 
-const defaultStyle = {
-  '.bar': {
-    fill: 'blue',
-    transition: 'height 0.5s ease-in, y 0.5s ease-in'
-  },
-  '.bar:hover': {
-    opacity: 0.5
-  },
-  '.axis': {
-    font: '10px arial'
-  },
-  '.axis .label': {
-    font: '14px arial'
-  },
-  '.axis path,.axis line': {
-    fill: 'none',
-    stroke: '#000',
-    'shape-rendering': 'crispEdges'
-  },
-  'x.axis path': {
-    display: 'none'
-  },
-  '.tick line': {
-    stroke: 'lightgrey',
-    opacity: '0.7'
-  },
-  '.example-appear': {
-    opacity: 0.01
-  },
-  '.example-appear.example-appear-active': {
-    opacity: 1,
-    fill: 'red',
-    transition: 'all 1s ease-in'
-  }
-};
 const colorScale = scale.category20();
 
 export default class BarChart extends React.Component {
@@ -96,6 +61,16 @@ export default class BarChart extends React.Component {
     super(props);
     this.parseDate = format(props.datePattern).parse;
     this.uid = Math.floor(Math.random() * new Date().getTime());
+  }
+
+  componentDidMount() {
+    createCircularTicks(this.refs[this.uid]);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.width !== prevProps.width) {
+      createCircularTicks(this.refs[this.uid]);
+    }
   }
 
   setScaleDomainRange(axesType, domainRange, data, type, length) {
@@ -177,6 +152,7 @@ export default class BarChart extends React.Component {
       if (xType === 'time' && tickTimeDisplayFormat) {
         xAxis.tickFormat(time.format(tickTimeDisplayFormat));
       }
+      xAxis.tickSize(0).tickPadding(15);
       if (xTickNumber) xAxis.ticks(xTickNumber);
       root.append('g')
         .attr('class', 'x axis')
@@ -193,7 +169,7 @@ export default class BarChart extends React.Component {
           .scale(y)
           .orient(yAxisOrientRight ? 'right' : 'left');
       if (yTickNumber) yAxis.ticks(yTickNumber);
-      if (grid) yAxis.tickSize(-width, 6).tickPadding(12);
+      if (grid) { yAxis.tickSize(-width, 6).tickPadding(12); } else { yAxis.tickPadding(10); }
       root.append('g')
         .attr('class', 'y axis')
         .call(yAxis)
@@ -240,8 +216,8 @@ export default class BarChart extends React.Component {
     });
 
     return (
-      <div className={`bar-chart${this.uid}`}>
-        <Style scopeSelector={`.bar-chart${this.uid}`} rules={merge({}, defaultStyle, style)}/>
+      <div ref={this.uid} className={`bar-chart${this.uid}`}>
+        <Style scopeSelector={`.bar-chart${this.uid}`} rules={merge({}, defaultStyle, style, getAxisStyles(grid, false, yAxisOrientRight))}/>
         {svgNode.toReact()}
       </div>
     );
