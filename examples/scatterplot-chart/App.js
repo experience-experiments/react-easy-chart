@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ScatterplotChart from 'react-easy-chart/scatterplot-chart';
+import {ScatterplotChart} from 'react-easy-chart';
 import ToolTip from '../ToolTip';
 import Legend from '../Legend';
 import {escapeHTML} from '../util';
