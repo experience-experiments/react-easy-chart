@@ -193,7 +193,7 @@ var AreaChart = function (_React$Component) {
 
       defaultColours.map(function (fillCol, i) {
         if (!noAreaGradient) {
-          var gradient = (0, _d.select)(svgNode).append('defs').append('linearGradient').attr('id', 'gradient-' + i + '-' + _this2.uid).attr('x1', '0%').attr('x2', '0%').attr('y1', '20%').attr('y2', '80%');
+          var gradient = (0, _d.select)(svgNode).append('defs').append('linearGradient').attr('id', 'gradient-' + i + '-' + _this2.uid).attr('x1', '0%').attr('x2', '0%').attr('y1', '40%').attr('y2', '100%');
 
           _shared.defaultStyle['.dot' + i] = { fill: fillCol };
           gradient.append('stop').attr('offset', '0%').attr('style', 'stop-color:' + fillCol + ';stop-opacity:0.6');
@@ -204,7 +204,7 @@ var AreaChart = function (_React$Component) {
 
       data.map(function (dataElelment, i) {
         root.append('path').datum(dataElelment).attr('class', 'line').attr('style', 'stroke: ' + defaultColours[i]).attr('d', linePath);
-        root.append('path').datum(dataElelment).attr('d', area).style('fill', noAreaGradient ? defaultColours[i] : 'url(#gradient-' + i + '-' + _this2.uid + ')');
+        root.append('path').datum(dataElelment).attr('d', area).attr('class', 'area').style('fill', noAreaGradient ? defaultColours[i] : 'url(#gradient-' + i + '-' + _this2.uid + ')');
       });
 
       if (dataPoints) {

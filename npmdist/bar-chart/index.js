@@ -36,41 +36,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var defaultStyle = {
-  '.bar': {
-    fill: 'blue',
-    transition: 'height 0.5s ease-in, y 0.5s ease-in'
-  },
-  '.bar:hover': {
-    opacity: 0.5
-  },
-  '.axis': {
-    font: '10px arial'
-  },
-  '.axis .label': {
-    font: '14px arial'
-  },
-  '.axis path,.axis line': {
-    fill: 'none',
-    stroke: '#000',
-    'shape-rendering': 'crispEdges'
-  },
-  'x.axis path': {
-    display: 'none'
-  },
-  '.tick line': {
-    stroke: 'lightgrey',
-    opacity: '0.7'
-  },
-  '.example-appear': {
-    opacity: 0.01
-  },
-  '.example-appear.example-appear-active': {
-    opacity: 1,
-    fill: 'red',
-    transition: 'all 1s ease-in'
-  }
-};
 var colorScale = _d.scale.category20();
 
 var BarChart = function (_React$Component) {
@@ -136,6 +101,18 @@ var BarChart = function (_React$Component) {
   }
 
   _createClass(BarChart, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      (0, _shared.createCircularTicks)(this.refs[this.uid]);
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps) {
+      if (this.props.width !== prevProps.width) {
+        (0, _shared.createCircularTicks)(this.refs[this.uid]);
+      }
+    }
+  }, {
     key: 'setScaleDomainRange',
     value: function setScaleDomainRange(axesType, domainRange, data, type, length) {
       var _this2 = this;
@@ -219,12 +196,17 @@ var BarChart = function (_React$Component) {
         if (xType === 'time' && tickTimeDisplayFormat) {
           xAxis.tickFormat(_d.time.format(tickTimeDisplayFormat));
         }
+        xAxis.tickSize(0).tickPadding(15);
         if (xTickNumber) xAxis.ticks(xTickNumber);
         root.append('g').attr('class', 'x axis').attr('transform', 'translate(0,' + height + ')').call(xAxis).append('text').attr('class', 'label').attr('y', margin.bottom - 10).attr('x', yAxisOrientRight ? 0 : width).style('text-anchor', yAxisOrientRight ? 'start' : 'end').text(axisLabels.x);
 
         var yAxis = _d.svg.axis().scale(y).orient(yAxisOrientRight ? 'right' : 'left');
         if (yTickNumber) yAxis.ticks(yTickNumber);
-        if (grid) yAxis.tickSize(-width, 6).tickPadding(12);
+        if (grid) {
+          yAxis.tickSize(-width, 6).tickPadding(12);
+        } else {
+          yAxis.tickPadding(10);
+        }
         root.append('g').attr('class', 'y axis').call(yAxis).attr('transform', yAxisOrientRight ? 'translate(' + width + ', 0)' : 'translate(0, 0)').append('text').attr('class', 'label').attr('transform', 'rotate(-90)').attr('x', 0).attr('y', yAxisOrientRight ? -25 + margin.right : 10 - margin.left).attr('dy', '.9em').style('text-anchor', 'end').text(axisLabels.y);
       }
 
@@ -262,8 +244,8 @@ var BarChart = function (_React$Component) {
 
       return _react2.default.createElement(
         'div',
-        { className: 'bar-chart' + this.uid },
-        _react2.default.createElement(_radium.Style, { scopeSelector: '.bar-chart' + this.uid, rules: (0, _lodash2.default)({}, defaultStyle, style) }),
+        { ref: this.uid, className: 'bar-chart' + this.uid },
+        _react2.default.createElement(_radium.Style, { scopeSelector: '.bar-chart' + this.uid, rules: (0, _lodash2.default)({}, _shared.defaultStyle, style, (0, _shared.getAxisStyles)(grid, false, yAxisOrientRight)) }),
         svgNode.toReact()
       );
     }

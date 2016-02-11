@@ -12,7 +12,7 @@ var _react2 = _interopRequireDefault(_react);
 
 var _d = require('d3');
 
-var _d2 = _interopRequireDefault(_d);
+var _shared = require('../shared');
 
 var _reactFauxDom = require('react-faux-dom');
 
@@ -29,21 +29,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-// import { select, selectAll, svg, layout, scale, interpolate} from 'd3';
-// import { select, layout } from 'd3';
-
-var defaultStyles = {
-  '.chart_lines': {
-    stroke: '#fff',
-    strokeWidth: 1
-  },
-  '.chart_text': {
-    fontFamily: 'sans-serif',
-    fontSize: '12px',
-    textAnchor: 'middle',
-    fill: '#000'
-  }
-};
 
 var PieChart = function (_React$Component) {
   _inherits(PieChart, _React$Component);
@@ -87,10 +72,10 @@ var PieChart = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(PieChart).call(this, props));
 
     _this.uid = Math.floor(Math.random() * new Date().getTime());
-    _this.color = _d2.default.scale.category20();
+    _this.color = _d.scale.category20();
     _this.path = null;
     _this.text = null;
-    _this.pie = _d2.default.layout.pie().value(function (d) {
+    _this.pie = _d.layout.pie().value(function (d) {
       return d.value;
     }).sort(null);
     _this.current = [];
@@ -111,12 +96,12 @@ var PieChart = function (_React$Component) {
   }, {
     key: 'getArc',
     value: function getArc() {
-      return _d2.default.svg.arc().innerRadius(this.getInnerRadius() - this.props.padding).outerRadius(this.getRadius() - this.props.padding);
+      return _d.svg.arc().innerRadius(this.getInnerRadius() - this.props.padding).outerRadius(this.getRadius() - this.props.padding);
     }
   }, {
     key: 'getLabelArc',
     value: function getLabelArc() {
-      return _d2.default.svg.arc().outerRadius(this.getRadius() - this.props.padding - 20 * this.getRadius() / 100).innerRadius(this.getRadius() - this.props.padding - 20 * this.getRadius() / 100);
+      return _d.svg.arc().outerRadius(this.getRadius() - this.props.padding - 20 * this.getRadius() / 100).innerRadius(this.getRadius() - this.props.padding - 20 * this.getRadius() / 100);
     }
   }, {
     key: 'getRadius',
@@ -133,9 +118,9 @@ var PieChart = function (_React$Component) {
     value: function draw() {
       var _this2 = this;
 
-      this.path = _d2.default.select('#pie_' + this.uid).selectAll('path').data(this.pie(this.props.data)).enter().append('path').attr('fill', function (d, i) {
+      this.path = (0, _d.select)('#pie_' + this.uid).selectAll('path').data(this.pie(this.props.data)).enter().append('path').attr('fill', function (d, i) {
         return d.data.color ? d.data.color : _this2.color(i);
-      }).attr('d', this.getArc()).attr('class', 'chart_lines').on('mouseover', function (d) {
+      }).attr('d', this.getArc()).attr('class', 'pie_chart_lines').on('mouseover', function (d) {
         return _this2.props.mouseOverHandler(d, _d.event);
       }).on('mouseout', function (d) {
         return _this2.props.mouseOutHandler(d, _d.event);
@@ -147,9 +132,9 @@ var PieChart = function (_React$Component) {
         _this2.current.push(d);
       });
       if (this.props.labels) {
-        this.text = _d2.default.select('#labels_' + this.uid).selectAll('text').data(this.pie(this.props.data)).enter().append('text').attr('transform', function (d) {
+        this.text = (0, _d.select)('#labels_' + this.uid).selectAll('text').data(this.pie(this.props.data)).enter().append('text').attr('transform', function (d) {
           return 'translate(' + _this2.getLabelArc().centroid(d) + ')';
-        }).attr('dy', '.35em').attr('class', 'chart_text').text(function (d) {
+        }).attr('dy', '.35em').attr('class', 'pie_chart_text').text(function (d) {
           return d.data.key;
         }).each(function (d) {
           _this2.currentTxt.push(d);
@@ -174,7 +159,7 @@ var PieChart = function (_React$Component) {
       var _this4 = this;
 
       var cur = this.current[index];
-      var i = _d2.default.interpolate(cur, a);
+      var i = (0, _d.interpolate)(cur, a);
       this.current[index] = a;
       return function (t) {
         return _this4.getArc()(i(t));
@@ -184,8 +169,8 @@ var PieChart = function (_React$Component) {
     key: 'render',
     value: function render() {
       var node = (0, _reactFauxDom.createElement)('svg');
-      _d2.default.select(node).attr('width', this.props.size).attr('height', this.props.size).append('g').attr('id', 'pie_' + this.uid).attr('transform', 'translate(' + this.getRadius() + ', ' + this.getRadius() + ')');
-      _d2.default.select(node).attr('width', this.props.size).attr('height', this.props.size).append('g').attr('id', 'labels_' + this.uid).attr('transform', 'translate(' + this.getRadius() + ', ' + this.getRadius() + ')');
+      (0, _d.select)(node).attr('width', this.props.size).attr('height', this.props.size).append('g').attr('id', 'pie_' + this.uid).attr('transform', 'translate(' + this.getRadius() + ', ' + this.getRadius() + ')');
+      (0, _d.select)(node).attr('width', this.props.size).attr('height', this.props.size).append('g').attr('id', 'labels_' + this.uid).attr('transform', 'translate(' + this.getRadius() + ', ' + this.getRadius() + ')');
 
       var uid = Math.floor(Math.random() * new Date().getTime());
 
@@ -194,7 +179,7 @@ var PieChart = function (_React$Component) {
         { className: 'pie_chart' + uid },
         _react2.default.createElement(_radium.Style, {
           scopeSelector: '.pie_chart' + uid,
-          rules: (0, _lodash2.default)({}, defaultStyles, this.props.styles)
+          rules: (0, _lodash2.default)({}, _shared.defaultStyle, this.props.styles)
         }),
         node.toReact()
       );

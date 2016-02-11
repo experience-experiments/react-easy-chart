@@ -23,24 +23,56 @@ var _d = require('d3');
 var rmaColorPalet = exports.rmaColorPalet = ['#3F4C55', '#E3A51A', '#F4E956', '#AAAC84'];
 
 var defaultStyle = exports.defaultStyle = {
+  '.pie_chart_lines': {
+    stroke: '#fff',
+    strokeWidth: 1,
+    opacity: '1'
+  },
+  '.pie_chart_lines:hover': {
+    opacity: '0.8'
+  },
+  '.pie_chart_text': {
+    fontFamily: 'sans-serif',
+    fontSize: '12px',
+    textAnchor: 'middle',
+    fill: '#000'
+  },
+  '.bar': {
+    fill: 'blue',
+    transition: 'height 0.5s ease-in, y 0.5s ease-in',
+    opacity: 1
+  },
+  '.bar:hover': {
+    opacity: 0.8
+  },
   '.line': {
     fill: 'none',
-    strokeWidth: 1
+    strokeWidth: 1.5,
+    opacity: 0.7
+  },
+  '.line:hover': {
+    opacity: 1
   },
   '.area': {
-    stroke: 'black',
-    strokeWidth: 0
+    opacity: 0.7
+  },
+  '.area:hover': {
+    opacity: 1
   },
   '.dot': {
     strokeWidth: 0,
     opacity: 0.85
   },
+  '.dot:hover': {
+    opacity: 1
+  },
   'circle.data-point': {
-    r: 4
+    r: 4,
+    opacity: 0.7
   },
   'circle.data-point:hover': {
-    r: 8,
-    opacity: 0.6
+    r: 6,
+    opacity: 1
   },
   'circle.tick-circle': {
     r: 2,
