@@ -405,9 +405,13 @@ export default class ScatterplotContainer extends React.Component {
               height={this.state.componentWidth / 2}
             />
           </div>
-          <h2 id="introduction">Introduction</h2>
+          <section id="introduction">
+          <h2>Introduction</h2>
           <p>A scatter plot, scatterplot, or scattergraph is a type of mathematical diagram using Cartesian coordinates to display values for typically two variables for a set of data.<sup>(<a href="https://en.wikipedia.org/wiki/Scatter_plot">ref</a>)</sup></p>
-          <h2 id="data">Data</h2>
+          </section>
+
+          <section id="data">
+          <h2>Data</h2>
           <p>At the most basic the scatterplot chart can just take a single data file supplied in a JSON format and will render a
            simple scatterplot chart.</p>
           <p>The format of the data is an array of objects, with each object representing a single data item to be plotted.</p>
@@ -477,7 +481,10 @@ export default class ScatterplotContainer extends React.Component {
             />
          </pre>
          <ScatterplotChart data={bigData} />
-         <h2 id="heightAndWidth">Height and Width</h2>
+         </section>
+
+         <section id="heightAndWidth">
+         <h2>Height and Width</h2>
          <p>The height and width can be easily set by passing in a numeric value in as a prop.</p>
          <pre>
          <code dangerouslySetInnerHTML={{__html: escapeHTML(`
@@ -486,7 +493,10 @@ export default class ScatterplotContainer extends React.Component {
          />
          </pre>
          <ScatterplotChart data={bigData} width={160} height={90} />
-         <h2 id="margin">Margin</h2>
+         </section>
+
+         <section id="margin">
+         <h2>Margin</h2>
          <p>The Margin can be overridden by passing in a margin object. The margin object must define the following: top, right, bottom and left</p>
          <p>This can be particulary useful if a label is cut off.</p>
          <pre>
@@ -498,7 +508,10 @@ export default class ScatterplotContainer extends React.Component {
          />
          </pre>
          <ScatterplotChart data={bigData} margin={{top: 10, right: 10, bottom: 30, left: 100}} />
-         <h2 id="axes">Axes</h2>
+         </section>
+
+         <section id="axes">
+         <h2>Axes</h2>
          <p>The axes can be turned on by simply passing a boolean flag to true for <strong>axes</strong>.</p>
          <pre>
          <code dangerouslySetInnerHTML={{__html: escapeHTML(`
@@ -511,8 +524,10 @@ export default class ScatterplotContainer extends React.Component {
          />
          </pre>
          <ScatterplotChart data={bigData} axes width={480} height={270} />
+         </section>
 
-         <h2 id="yaxesorientation">Y Axis orientation</h2>
+         <section id="yaxesorientation">
+         <h2>Y Axis orientation</h2>
            <p>The Y axis can be placed on the right hand side by passing a boolean flag to true for yAxisOrientRight</p>
             <pre>
             <code dangerouslySetInnerHTML={{__html: escapeHTML(`
@@ -535,7 +550,11 @@ export default class ScatterplotContainer extends React.Component {
               width={480}
               height={270}
             />
-         <h2 id="axesLabels">Axes labels</h2>
+        </section>
+
+
+        <section id="axesLabels">
+         <h2>Axes labels</h2>
          <p>The axes labels (<strong>axisLabels</strong>) can be passed in for the x and y value.</p>
          <pre>
          <code dangerouslySetInnerHTML={{__html: escapeHTML(`
@@ -555,7 +574,10 @@ export default class ScatterplotContainer extends React.Component {
            width={480}
            height={270}
          />
-         <h2 id="dotRadius">Dot radius</h2>
+         </section>
+
+         <section id="dotRadius">
+         <h2>Dot radius</h2>
          <p>The default size of the dot can be changed via the <strong>dotRadius</strong> parameter</p>
          <pre>
          <code dangerouslySetInnerHTML={{__html: escapeHTML(`
@@ -577,7 +599,10 @@ export default class ScatterplotContainer extends React.Component {
            width={480}
            height={270}
          />
-         <h2 id ="config">Config</h2>
+         </section>
+
+         <section id="config">
+         <h2>Config</h2>
          <p>The <strong>config</strong> property allows for greater control over the look and feel.</p>
          <ul>
            <li><strong>type</strong>: a reference to the type value in the data object</li>
@@ -616,8 +641,10 @@ export default class ScatterplotContainer extends React.Component {
            height={270}
            config={config}
          />
+         </section>
 
-          <h2 id="grid">Grid</h2>
+         <section id="grid">
+          <h2>Grid</h2>
           <p>Apply a background grid with the grid boolean property</p>
           <pre>
           <code dangerouslySetInnerHTML={{__html: escapeHTML(`
@@ -642,8 +669,10 @@ export default class ScatterplotContainer extends React.Component {
             height={270}
             grid
           />
+        </section>
 
-        <h2 id="verticalGrid">Vertical Grid</h2>
+        <section id="verticalGrid">
+        <h2>Vertical Grid</h2>
         <p>A vertical grid can be added to the graph by just passing in a boolean for verticalGrid.</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
@@ -670,8 +699,10 @@ export default class ScatterplotContainer extends React.Component {
           height={270}
           grid
         />
+        </section>
 
-        <h2 id="axisType">Axis type</h2>
+        <section id="axisType">
+        <h2>Axis type</h2>
         <p>The data passed associated to the particular axes can be in numeric, date (the default format is for example 1-Jan-15 but can be overridden) or textual formats (used for labelling).</p>
         <p>For the example below the data for the x is text and so the <strong>xType</strong> needs to be changed to <strong>text</strong>.</p>
         <ul>
@@ -726,7 +757,10 @@ export default class ScatterplotContainer extends React.Component {
             grid
             xType="text"
           />
-          <h2 id="domainRange">Domain Range</h2>
+          </section>
+
+          <section id="domainRange">
+          <h2>Domain Range</h2>
           <p>By default the axis ranges are automatically calculated based on the smallest and the largest values</p>
           <p>The range can be fixed by passing an array param of 2 value for the particular axis. The first number is the bottom of the range the second is the higher point of the range.</p>
           <p>The following example sets the <strong>xType</strong> to time then passes a date range to <strong>xDomainRange</strong></p>
@@ -785,7 +819,10 @@ export default class ScatterplotContainer extends React.Component {
             xType="time"
             xDomainRange={['31-Dec-14', '4-Jan-15']}
           />
-          <h2 id="mouseEvents">Mouse events</h2>
+          </section>
+
+          <section id="mouseEvents">
+          <h2>Mouse events</h2>
           <p>The chart accepts the following mouse events</p>
           <ul>
             <li>- Mouse over</li>
@@ -848,7 +885,10 @@ export default class ScatterplotContainer extends React.Component {
           <div style={{display: 'inline-block', verticalAlign: 'top', paddingLeft: '20px'}}>
             {this.state.dataDisplay ? this.state.dataDisplay : 'Click on a circle to show the value'}
           </div>
-          <h2 id="customLegend">Custom legend</h2>
+          </section>
+
+          <section id="customLegend">
+          <h2>Custom legend</h2>
           <p>The scatterplot does not provide a legend by default. Below is an example of custom implementation</p>
           <ScatterplotChart
             data={bigData}
@@ -866,8 +906,11 @@ export default class ScatterplotContainer extends React.Component {
           <div style={{width: '480px'}} >
             <Legend data={bigData} />
           </div>
-          <h2 id="dataType">3rd data type</h2>
-          <p>It's also possible to pass in a third variable (z). This variable is a number and is used to scale the radius of the dot</p>
+          </section>
+
+          <section id="dataType">
+          <h2>3rd data type</h2>
+          <p>Its also possible to pass in a third variable (z). This variable is a number and is used to scale the radius of the dot</p>
           <pre>
           <code dangerouslySetInnerHTML={{__html: escapeHTML(`
   const data = [
@@ -958,7 +1001,10 @@ export default class ScatterplotContainer extends React.Component {
             mouseOutHandler={this.mouseOutHandler.bind(this)}
             mouseMoveHandler={this.mouseMoveHandler.bind(this)}
           />
-        <h2 id="generateData">Generate data</h2>
+          </section>
+
+        <section id="generateData">
+        <h2>Generate data</h2>
             <p>By selecting the button below to start the random data you can see a simulation of the performance if a data feed is passed in.
             React provides the functionality to only update the elements of the dom when required so will just change the path attributes.
             The data is passed in as a react param only and as soon as that data changes the chart will reflect that change automatically.</p>
@@ -988,6 +1034,7 @@ export default class ScatterplotContainer extends React.Component {
             width={this.state.componentWidth}
             height={this.state.componentWidth / 2}
           />
+          </section>
           <br />
           <br />
           <br />

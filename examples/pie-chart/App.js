@@ -149,9 +149,13 @@ export default class PieChartContainer extends React.Component {
         </aside>
         <div className="content">
         <h1>The React Easy Pie chart</h1>
-        <h2 id="introduction">Introduction</h2>
+        <section id="introduction">
+        <h2>Introduction</h2>
         <p>A pie chart (or a circle chart) is a circular statistical graphic, which is divided into slices to illustrate numerical proportion.<sup>(<a href="https://en.wikipedia.org/wiki/Pie_chart">ref</a>)</sup></p>
-        <h2 id="data">data</h2>
+        </section>
+
+        <section id="data">
+        <h2>data</h2>
         <p>At the most basic the Pie chart can just take a single data file supplied in a JSON format and will render a
          simple Pie chart. This is a single array of JavaScript objects with a key and value.</p>
          <pre>
@@ -184,8 +188,10 @@ export default class PieChartContainer extends React.Component {
            {key: 'C', value: 50, color: brandColors.orange}
          ]}
        />
+       </section>
 
-       <h2 id="size">Size</h2>
+       <section id="size">
+       <h2>Size</h2>
        <p>The size of the pie chart can be set easily by passing in a size param number.</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
@@ -208,8 +214,10 @@ export default class PieChartContainer extends React.Component {
            {key: 'C', value: 50, color: brandColors.orange}
          ]}
        />
+       </section>
 
-       <h2 id="donut">donut</h2>
+       <section id="donut">
+       <h2>donut</h2>
        <p>A donut can be produced by passing in a innerHoleSize prop. This should be less than the size prop.</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
@@ -234,8 +242,10 @@ export default class PieChartContainer extends React.Component {
            {key: 'C', value: 50, color: brandColors.orange}
          ]}
        />
+       </section>
 
-       <h2 id="padding">padding</h2>
+       <section id="padding">
+       <h2>padding</h2>
        <p>padding can be set by passing in a padding prop.</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
@@ -258,8 +268,10 @@ export default class PieChartContainer extends React.Component {
            {key: 'C', value: 50, color: brandColors.orange}
          ]}
        />
+       </section>
 
-       <h2 id="labels">labels</h2>
+       <section id="labels">
+       <h2>labels</h2>
        <p>Labels can be added by passing in a labels boolean prop. The labels will be the key value passed in with the data. The example below passes a custom style object to set the text colour to white</p>
         <pre>
         <code dangerouslySetInnerHTML={{__html: escapeHTML(`
@@ -294,8 +306,10 @@ export default class PieChartContainer extends React.Component {
            }
          }}
        />
+       </section>
 
-       <h2 id="style">style</h2>
+       <section id="style">
+       <h2>style</h2>
        <p>Styles for the lines and the text can be overridden by passing in a styles object prop.</p>
        <pre>
        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
@@ -336,9 +350,10 @@ export default class PieChartContainer extends React.Component {
            {key: 'C', value: 50, color: brandColors.orange}
          ]}
        />
+       </section>
 
-
-       <h2 id="mouseHandlers">Mouse handlers</h2>
+       <section id="mouseHandlers">
+       <h2>Mouse handlers</h2>
        <p>The chart will send out a mouseOver event, mouseMove and mouseOut event. This can be used by your react application in anyway you would require.
         The event handlers provides the mouse event and the segment data. The mouse event can for instance provide the x and y coordinates which can be used for a tool tip.
          The data can be segment related to the pie chart.</p>
@@ -394,8 +409,10 @@ mouseOutHandler() {
          padding={10}
          styles={this.styles}
        />
+       </section>
 
-       <h2 id="clickHandler">Click Handler</h2>
+       <section id="clickHandler">
+       <h2>Click Handler</h2>
        <p>The chart will send out a click event. The event will pass the data and the event.
         This allows the data to be presented from the clicking of a segment in any way the react developer requires.</p>
        <pre>
@@ -441,8 +458,10 @@ mouseOutHandler() {
          {this.state.dataDisplay ? this.state.dataDisplay : 'Click on a segment to show the value'}
          </div>
        </div>
+       </section>
 
-       <h2 id="updatingData">Updating the data</h2>
+       <section id="updatingData">
+       <h2>Updating the data</h2>
        <p>By selecting the button below to start the random data you can see a simulation of the performance if a data feed is passed in.
        React provides the functionality to only update the elements of the dom when required so will just change the path attributes.
        The data is passed in as a react param only and as soon as that data changes the chart will reflect that change automatically.</p>
@@ -475,6 +494,7 @@ mouseOutHandler() {
           }
         }}
       />
+      </section>
   </div></div>
       );
     }
