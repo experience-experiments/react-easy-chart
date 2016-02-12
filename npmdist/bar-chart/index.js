@@ -46,6 +46,7 @@ var BarChart = function (_React$Component) {
     get: function get() {
       return {
         data: _react2.default.PropTypes.array.isRequired,
+        lineData: _react2.default.PropTypes.array,
         width: _react2.default.PropTypes.number,
         height: _react2.default.PropTypes.number,
         margin: _react2.default.PropTypes.object,
@@ -53,6 +54,7 @@ var BarChart = function (_React$Component) {
         mouseOutHandler: _react2.default.PropTypes.func,
         mouseMoveHandler: _react2.default.PropTypes.func,
         clickHandler: _react2.default.PropTypes.func,
+        interpolate: _react2.default.PropTypes.string,
         style: _react2.default.PropTypes.object,
         colorBars: _react2.default.PropTypes.bool,
         axes: _react2.default.PropTypes.bool,
@@ -60,6 +62,7 @@ var BarChart = function (_React$Component) {
         axisLabels: _react2.default.PropTypes.object,
         xType: _react2.default.PropTypes.string,
         yType: _react2.default.PropTypes.string,
+        y2Type: _react2.default.PropTypes.string,
         xDomainRange: _react2.default.PropTypes.array,
         yDomainRange: _react2.default.PropTypes.array,
         datePattern: _react2.default.PropTypes.string,
@@ -74,12 +77,15 @@ var BarChart = function (_React$Component) {
     key: 'defaultProps',
     get: function get() {
       return {
+        lineData: [],
         width: 400,
         height: 200,
         barWidth: 10,
         axes: false,
         xType: 'text',
         yType: 'linear',
+        y2Type: 'linear',
+        interpolate: 'linear',
         mouseOverHandler: function mouseOverHandler() {},
         mouseOutHandler: function mouseOutHandler() {},
         mouseMoveHandler: function mouseMoveHandler() {},
@@ -161,6 +167,7 @@ var BarChart = function (_React$Component) {
 
       var _props = this.props;
       var data = _props.data;
+      var lineData = _props.lineData;
       var mouseOverHandler = _props.mouseOverHandler;
       var mouseOutHandler = _props.mouseOutHandler;
       var mouseMoveHandler = _props.mouseMoveHandler;
@@ -171,6 +178,8 @@ var BarChart = function (_React$Component) {
       var colorBars = _props.colorBars;
       var xType = _props.xType;
       var yType = _props.yType;
+      var y2Type = _props.y2Type;
+      var interpolate = _props.interpolate;
       var barWidth = _props.barWidth;
       var tickTimeDisplayFormat = _props.tickTimeDisplayFormat;
       var xTickNumber = _props.xTickNumber;
@@ -180,12 +189,15 @@ var BarChart = function (_React$Component) {
       var xDomainRange = _props.xDomainRange;
       var yDomainRange = _props.yDomainRange;
 
-      var margin = (0, _shared.calcMargin)(axes, this.props.margin, yAxisOrientRight);
+      var margin = (0, _shared.calcMargin)(axes, this.props.margin, yAxisOrientRight, lineData.length > 0);
       var width = (0, _shared.reduce)(this.props.width, margin.left, margin.right);
       var height = (0, _shared.reduce)(this.props.height, margin.top, margin.bottom);
 
       var x = this.setScaleDomainRange('x', xDomainRange, data, xType, width);
       var y = this.setScaleDomainRange('y', yDomainRange, data, yType, height);
+
+      var y2 = null;
+      if (lineData.length > 0) y2 = this.setScaleDomainRange('y', yDomainRange, lineData, y2Type, height);
 
       var svgNode = (0, _reactFauxDom.createElement)('svg');
       (0, _d.select)(svgNode).attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom);
@@ -208,6 +220,17 @@ var BarChart = function (_React$Component) {
           yAxis.tickPadding(10);
         }
         root.append('g').attr('class', 'y axis').call(yAxis).attr('transform', yAxisOrientRight ? 'translate(' + width + ', 0)' : 'translate(0, 0)').append('text').attr('class', 'label').attr('transform', 'rotate(-90)').attr('x', 0).attr('y', yAxisOrientRight ? -25 + margin.right : 10 - margin.left).attr('dy', '.9em').style('text-anchor', 'end').text(axisLabels.y);
+
+        if (y2) {
+          var yAxis2 = _d.svg.axis().scale(y2).orient(yAxisOrientRight ? 'left' : 'right');
+          if (yTickNumber) yAxis.ticks(yTickNumber);
+          if (grid) {
+            yAxis.tickSize(-width, 6).tickPadding(12);
+          } else {
+            yAxis.tickPadding(10);
+          }
+          root.append('g').attr('class', 'y axis').call(yAxis2).attr('transform', yAxisOrientRight ? 'translate(0, 0)' : 'translate(' + width + ', 0)').append('text').attr('class', 'label').attr('transform', 'rotate(-90)').attr('x', 0).attr('y', yAxisOrientRight ? 10 - margin.left : -25 + margin.right).attr('dy', '.9em').style('text-anchor', 'end').text(axisLabels.y2);
+        }
       }
 
       data.map(function () {
@@ -241,6 +264,20 @@ var BarChart = function (_React$Component) {
           return clickHandler(d, _d.event);
         });
       });
+
+      if (y2) {
+        (function () {
+          var yValue = (0, _shared.getValueFunction)('y', y2Type, _this3.parseDate);
+          var xValue = (0, _shared.getValueFunction)('x', xType, _this3.parseDate);
+          var myLinePath = _d.svg.line().interpolate(interpolate).x(function (d) {
+            return x(xValue(d));
+          }).y(function (d) {
+            return y2(yValue(d));
+          });
+
+          root.append('path').datum(lineData).attr('class', 'line').attr('style', 'stroke: red').attr('d', myLinePath);
+        })();
+      }
 
       return _react2.default.createElement(
         'div',

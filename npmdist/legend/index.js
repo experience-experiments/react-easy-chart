@@ -75,24 +75,40 @@ var Legend = function (_React$Component) {
   function Legend(props) {
     _classCallCheck(this, Legend);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(Legend).call(this, props));
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Legend).call(this, props));
+
+    _this.tags = [];
+    return _this;
   }
 
   _createClass(Legend, [{
-    key: 'getList',
-    value: function getList() {
+    key: 'componentWillMount',
+    value: function componentWillMount() {
       var _this2 = this;
 
+      var dataId = this.props.dataId;
+      this.props.data.map(function (item) {
+        var index = _this2.tags.findIndex(function (tag) {
+          return tag === item[dataId];
+        });
+        if (index === -1) _this2.tags.push(item[dataId]);
+      });
+    }
+  }, {
+    key: 'getList',
+    value: function getList() {
+      var _this3 = this;
+
       var cn = this.props.horizontal ? 'horizontal' : '';
-      return this.props.data.map(function (item, index) {
+      return this.tags.map(function (item, index) {
         return _react2.default.createElement(
           'li',
           { key: index, className: cn },
           _react2.default.createElement('span', {
             className: 'icon',
-            style: { backgroundColor: _this2.getIconColor(index) }
+            style: { backgroundColor: _this3.getIconColor(index) }
           }),
-          item[_this2.props.dataId]
+          item
         );
       });
     }

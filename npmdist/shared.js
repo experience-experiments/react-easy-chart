@@ -155,11 +155,11 @@ function getRandomId() {
   return Math.floor(Math.random() * new Date().getTime());
 }
 
-function calcMargin(axes, margin, yAxisOrientRight) {
+function calcMargin(axes, margin, yAxisOrientRight, y2) {
   if (margin) return margin;
-  var defaultMargins = axes ? { top: 20, right: 20, bottom: 50, left: 50 } : { top: 0, right: 0, bottom: 0, left: 0 };
+  var defaultMargins = axes ? { top: 20, right: y2 ? 50 : 20, bottom: 50, left: 50 } : { top: 0, right: 0, bottom: 0, left: 0 };
   if (yAxisOrientRight) {
-    defaultMargins = axes ? { top: 20, right: 50, bottom: 50, left: 20 } : { top: 0, right: 0, bottom: 0, left: 0 };
+    defaultMargins = axes ? { top: 20, right: 50, bottom: 50, left: y2 ? 50 : 20 } : { top: 0, right: 0, bottom: 0, left: 0 };
   }
   return defaultMargins;
 }
