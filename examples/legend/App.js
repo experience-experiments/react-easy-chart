@@ -53,9 +53,29 @@ const bigData = [
     'y': 5
   },
   {
+    'type': 'One',
+    'x': 2,
+    'y': 6
+  },
+  {
+    'type': 'One',
+    'x': 3,
+    'y': 7
+  },
+  {
     'type': 'Two',
     'x': 3,
     'y': 1
+  },
+  {
+    'type': 'Two',
+    'x': 4,
+    'y': 2
+  },
+  {
+    'type': 'Two',
+    'x': 5,
+    'y': 3
   },
   {
     'type': 'Three',
@@ -63,9 +83,29 @@ const bigData = [
     'y': 6
   },
   {
+    'type': 'Three',
+    'x': 1,
+    'y': 7
+  },
+  {
+    'type': 'Three',
+    'x': 2,
+    'y': 8
+  },
+  {
     'type': 'Four',
     'x': 5,
     'y': 2
+  },
+  {
+    'type': 'Four',
+    'x': 6,
+    'y': 3
+  },
+  {
+    'type': 'Four',
+    'x': 7,
+    'y': 4
   },
   {
     'type': 'Five',
@@ -73,29 +113,14 @@ const bigData = [
     'y': 4
   },
   {
-    'type': 'Six',
+    'type': 'Five',
     'x': 5,
-    'y': 9
+    'y': 5
   },
   {
-    'type': 'Seven',
-    'x': 9,
-    'y': 1
-  },
-  {
-    'type': 'Eight',
-    'x': 5,
+    'type': 'Five',
+    'x': 6,
     'y': 6
-  },
-  {
-    'type': 'Nine',
-    'x': 3,
-    'y': 9
-  },
-  {
-    'type': 'Ten',
-    'x': 7,
-    'y': 9
   }
 ];
 
@@ -306,59 +331,6 @@ const customStyle = {
             <p>A scatterplot example</p>
             <pre>
             <code dangerouslySetInnerHTML={{__html: escapeHTML(`
-const bigData = [
-  {
-    'type': 'One',
-    'x': 1,
-    'y': 5
-  },
-  {
-    'type': 'Two',
-    'x': 3,
-    'y': 1
-  },
-  {
-    'type': 'Three',
-    'x': 0,
-    'y': 6
-  },
-  {
-    'type': 'Four',
-    'x': 5,
-    'y': 2
-  },
-  {
-    'type': 'Five',
-    'x': 4,
-    'y': 4
-  },
-  {
-    'type': 'Six',
-    'x': 5,
-    'y': 9
-  },
-  {
-    'type': 'Seven',
-    'x': 9,
-    'y': 1
-  },
-  {
-    'type': 'Eight',
-    'x': 5,
-    'y': 6
-  },
-  {
-    'type': 'Nine',
-    'x': 3,
-    'y': 9
-  },
-  {
-    'type': 'Ten',
-    'x': 7,
-    'y': 9
-  }
-];
-
 const scatterStyle = {
   '.legend': {
     backgroundColor: '#f9f9f9',
@@ -379,7 +351,6 @@ const scatterStyle = {
 <Legend
   data={bigData}
   dataId={'type'}
-  config={config}
   styles={scatterStyle}
   horizontal
 />
@@ -395,7 +366,6 @@ const scatterStyle = {
             <Legend
               data={bigData}
               dataId={'type'}
-              config={config}
               styles={scatterStyle}
               horizontal
             />
