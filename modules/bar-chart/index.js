@@ -1,7 +1,7 @@
 import React from 'react';
 import { ordinal, linear } from 'd3-scale';
 import { event as d3LastEvent, select, time, svg, scale, max} from 'd3';
-import {reduce, calcMargin, calcDefaultDomain, defaultStyle, createCircularTicks, getAxisStyles} from '../shared';
+import {reduce, calcMargin, calcDefaultDomain, defaultStyle, createCircularTicks, getAxisStyles, getValueFunction} from '../shared';
 import {extent} from 'd3-array';
 import {format} from 'd3-time-format';
 import { createElement } from 'react-faux-dom';
@@ -15,6 +15,7 @@ export default class BarChart extends React.Component {
   static get propTypes() {
     return {
       data: React.PropTypes.array.isRequired,
+      lineData: React.PropTypes.array,
       width: React.PropTypes.number,
       height: React.PropTypes.number,
       margin: React.PropTypes.object,
@@ -22,6 +23,7 @@ export default class BarChart extends React.Component {
       mouseOutHandler: React.PropTypes.func,
       mouseMoveHandler: React.PropTypes.func,
       clickHandler: React.PropTypes.func,
+      interpolate: React.PropTypes.string,
       style: React.PropTypes.object,
       colorBars: React.PropTypes.bool,
       axes: React.PropTypes.bool,
@@ -29,6 +31,7 @@ export default class BarChart extends React.Component {
       axisLabels: React.PropTypes.object,
       xType: React.PropTypes.string,
       yType: React.PropTypes.string,
+      y2Type: React.PropTypes.string,
       xDomainRange: React.PropTypes.array,
       yDomainRange: React.PropTypes.array,
       datePattern: React.PropTypes.string,
@@ -42,12 +45,15 @@ export default class BarChart extends React.Component {
 
   static get defaultProps() {
     return {
+      lineData: [],
       width: 400,
       height: 200,
       barWidth: 10,
       axes: false,
       xType: 'text',
       yType: 'linear',
+      y2Type: 'linear',
+      interpolate: 'linear',
       mouseOverHandler: () => {},
       mouseOutHandler: () => {},
       mouseMoveHandler: () => {},
@@ -116,6 +122,7 @@ export default class BarChart extends React.Component {
   render() {
     const {
       data,
+      lineData,
       mouseOverHandler,
       mouseOutHandler,
       mouseMoveHandler,
@@ -126,6 +133,8 @@ export default class BarChart extends React.Component {
       colorBars,
       xType,
       yType,
+      y2Type,
+      interpolate,
       barWidth,
       tickTimeDisplayFormat,
       xTickNumber,
@@ -134,12 +143,15 @@ export default class BarChart extends React.Component {
       grid,
       xDomainRange,
       yDomainRange} = this.props;
-    const margin = calcMargin(axes, this.props.margin, yAxisOrientRight);
+    const margin = calcMargin(axes, this.props.margin, yAxisOrientRight, lineData.length > 0);
     const width = reduce(this.props.width, margin.left, margin.right);
     const height = reduce(this.props.height, margin.top, margin.bottom);
 
     const x = this.setScaleDomainRange('x', xDomainRange, data, xType, width);
     const y = this.setScaleDomainRange('y', yDomainRange, data, yType, height);
+
+    let y2 = null;
+    if (lineData.length > 0) y2 = this.setScaleDomainRange('y', yDomainRange, lineData, y2Type, height);
 
     const svgNode = createElement('svg');
     select(svgNode).attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom);
@@ -182,6 +194,26 @@ export default class BarChart extends React.Component {
         .attr('dy', '.9em')
         .style('text-anchor', 'end')
         .text(axisLabels.y);
+
+      if (y2) {
+        const yAxis2 = svg.axis()
+            .scale(y2)
+            .orient(yAxisOrientRight ? 'left' : 'right');
+        if (yTickNumber) yAxis.ticks(yTickNumber);
+        if (grid) { yAxis.tickSize(-width, 6).tickPadding(12); } else { yAxis.tickPadding(10); }
+        root.append('g')
+            .attr('class', 'y axis')
+            .call(yAxis2)
+            .attr('transform', yAxisOrientRight ? `translate(0, 0)` : `translate(${width}, 0)`)
+            .append('text')
+            .attr('class', 'label')
+            .attr('transform', 'rotate(-90)')
+            .attr('x', 0)
+            .attr('y', yAxisOrientRight ? 10 - margin.left : -25 + margin.right)
+            .attr('dy', '.9em')
+            .style('text-anchor', 'end')
+            .text(axisLabels.y2);
+      }
     }
 
     data.map(() => {
@@ -214,6 +246,18 @@ export default class BarChart extends React.Component {
           .on('mousemove', () => mouseMoveHandler(d3LastEvent))
           .on('click', (d) => clickHandler(d, d3LastEvent));
     });
+
+    if (y2) {
+      const yValue = getValueFunction('y', y2Type, this.parseDate);
+      const xValue = getValueFunction('x', xType, this.parseDate);
+      const myLinePath = svg.line().interpolate(interpolate).x((d) => x(xValue(d))).y((d) => y2(yValue(d)));
+
+      root.append('path')
+        .datum(lineData)
+        .attr('class', `line`)
+        .attr('style', `stroke: red`)
+        .attr('d', myLinePath);
+    }
 
     return (
       <div ref={this.uid} className={`bar-chart${this.uid}`}>
