@@ -15,6 +15,7 @@ export default class BarChartContainer extends React.Component {
         windowWidth: initialWidth - 100,
         componentWidth: 300
       };
+
       this.defaultData = [{
         'x': 'A',
         'y': 46
@@ -94,6 +95,86 @@ export default class BarChartContainer extends React.Component {
       {
         'x': 'T',
         'y': 18
+      }];
+      this.defaultLineData = [{
+        'x': 'A',
+        'y': 800
+      },
+      {
+        'x': 'B',
+        'y': 1100
+      },
+      {
+        'x': 'C',
+        'y': 1101
+      },
+      {
+        'x': 'D',
+        'y': 2000
+      },
+      {
+        'x': 'E',
+        'y': 900
+      },
+      {
+        'x': 'F',
+        'y': 1000
+      },
+      {
+        'x': 'G',
+        'y': 1500
+      },
+      {
+        'x': 'H',
+        'y': 1580
+      },
+      {
+        'x': 'I',
+        'y': 1900
+      },
+      {
+        'x': 'J',
+        'y': 700
+      },
+      {
+        'x': 'K',
+        'y': 1000
+      },
+      {
+        'x': 'L',
+        'y': 1500
+      },
+      {
+        'x': 'M',
+        'y': 1200
+      },
+      {
+        'x': 'N',
+        'y': 1300
+      },
+      {
+        'x': 'O',
+        'y': 1800
+      },
+      {
+        'x': 'P',
+        'y': 1900
+      },
+      {
+        'x': 'Q',
+        'y': 1200
+      },
+      {
+        'x': 'R',
+        'y': 1500
+      },
+      {
+        'x': 'S',
+        'y': 1900
+      },
+      {
+        'x': 'T',
+        'y': 1400
       }];
     }
 
@@ -203,6 +284,7 @@ export default class BarChartContainer extends React.Component {
                 'tickDisplay',
                 'numberOfTicks',
                 'grid',
+                'bar_and_line',
                 'mouseHandlers',
                 'clickHandler',
                 'updateData',
@@ -227,6 +309,7 @@ export default class BarChartContainer extends React.Component {
               <li><a href="#tickDisplay">Tick display format</a></li>
               <li><a href="#numberOfTicks">Number of ticks</a></li>
               <li><a href="#grid">Grid</a></li>
+              <li><a href="#bar_and_line">Bar and Line</a></li>
               <li><a href="#mouseHandlers">Mouse handlers</a></li>
               <li><a href="#clickHandler">Click handler</a></li>
               <li><a href="#updateData">Updating the data</a></li>
@@ -736,6 +819,60 @@ export default class BarChartContainer extends React.Component {
           colorBars
           height={250}
           width={650}
+          data={this.defaultData}
+        />
+        </section>
+
+        <section id="bar_and_line">
+        <h2>Bar and Line</h2>
+        <p>It is possible to add a line chart to the bar chart. This will automatically place a y-axis to the right hand side (or left if the data y has been assigned).
+         This can have a different Y scale. The X axis though has to be shared and have the same range of values. The component also takes in a interpolate value (please see the line graph documentation).
+          It can also take in a 3rd value into the labels to provide the label for the second y axis.
+         A y2Type can also be set to change the y axis type.</p>
+        <pre>
+        <code dangerouslySetInnerHTML={{__html: escapeHTML(`
+<BarChart
+  axisLabels={{x: 'My x Axis', y: 'My y Axis', y2: 'My second y Axis'}}
+  axes
+  grid
+  colorBars
+  height={450}
+  width={650}
+  interpolate={'cardinal'}
+  y2Type="linear"
+  lineData={[
+   {
+     'x': 'A',
+     'y': 1000
+   },
+   {
+     'x': 'B',
+     'y': 2000
+   }....
+  ]}
+  data={[
+   {
+     'x': 'A',
+     'y': 46
+   },
+   {
+     'x': 'B',
+     'y': 26
+   }....
+  ]}
+/>
+        `)}}
+        />
+        </pre>
+        <BarChart
+          axisLabels={{x: 'My x Axis', y: 'My y Axis', y2: 'My second y Axis'}}
+          axes
+          grid
+          colorBars
+          interpolate={'cardinal'}
+          height={450}
+          width={650}
+          lineData={this.defaultLineData}
           data={this.defaultData}
         />
         </section>
