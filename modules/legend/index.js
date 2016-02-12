@@ -47,12 +47,23 @@ export default class Legend extends React.Component {
 
   constructor(props) {
     super(props);
+    this.tags = [];
+  }
+
+  componentWillMount() {
+    const dataId = this.props.dataId;
+    this.props.data.map(
+      (item) => {
+        const index = this.tags.findIndex((tag) => tag === item[dataId]);
+        if (index === -1) this.tags.push(item[dataId]);
+      }
+    );
   }
 
   getList() {
     const cn = this.props.horizontal ? 'horizontal' : '';
     return (
-      this.props.data.map(
+      this.tags.map(
         (item, index) => {
           return (
             <li key={index} className={cn}>
@@ -61,7 +72,7 @@ export default class Legend extends React.Component {
                 style={{backgroundColor: this.getIconColor(index)}}
               >
             </span>
-            {item[this.props.dataId]}
+            {item}
             </li>
           );
         }
