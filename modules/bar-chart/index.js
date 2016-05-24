@@ -239,8 +239,8 @@ export default class BarChart extends React.Component {
                 return barWidth;
             }
           })
-          .style('y', (d) => y(d.y))
-          .style('height', (d) => height - y(d.y))
+          .attr('y', (d) => y(d.y))
+          .attr('height', (d) => height - y(d.y))
           .on('mouseover', (d) => mouseOverHandler(d, d3LastEvent))
           .on('mouseout', (d) => mouseOutHandler(d, d3LastEvent))
           .on('mousemove', () => mouseMoveHandler(d3LastEvent))
