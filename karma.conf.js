@@ -1,6 +1,7 @@
 /* eslint-env node */
 const path = require('path');
-var browsers = ['Chrome'];
+let browsers = ['Chrome'];
+const isparta = require('isparta');
 
 if (process.env.NODE_ENV === 'test') {
   browsers = ['PhantomJS'];
@@ -19,12 +20,33 @@ module.exports = (config) => {
     webpack: {
       resolve: {
         alias: {
-          'react-easy-chart': path.join(__dirname, 'modules')
+          'react-easy-chart': path.resolve(__dirname, 'modules/')
         }
       },
       module: {
+        preLoaders: [
+          {
+            test: /\.js$/,
+            loader: 'babel',
+            exclude: [
+              path.resolve(__dirname, 'modules/'),
+              path.resolve(__dirname, 'node_modules/')
+            ]
+          },
+          {
+            test: /\.js$/,
+            include: [
+              path.resolve(__dirname, 'modules/')
+            ],
+            loader: 'isparta'
+          }
+        ],
         loaders: [
-          { test: /\.js$/, loader: 'babel', exclude: /node_modules/ }
+          {
+            test: /\.js$/,
+            loader: 'babel',
+            exclude: /node_modules/
+          }
         ]
       },
       devtool: 'inline-source-map'
@@ -34,9 +56,25 @@ module.exports = (config) => {
     },
     browsers: browsers,
     singleRun: true,
-    reporters: ['progress'],
+    reporters: ['progress', 'coverage'],
+    coverageReporter: {
+      instrumenters: {
+        isparta: isparta
+      },
+      instrumenter: {
+        '**/*.js': 'isparta'
+      },
+      instrumenterOptions: {
+        isparta: {
+          babel: {
+            presets: ['es2015', 'react']
+          }
+        }
+      }
+    },
     plugins: [
       require('karma-mocha'),
+      require('karma-coverage'),
       require('karma-chai'),
       require('karma-webpack'),
       require('karma-sourcemap-loader'),
