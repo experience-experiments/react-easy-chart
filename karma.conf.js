@@ -1,6 +1,6 @@
 /* eslint-env node */
 const path = require('path');
-let browsers = ['Chrome'];
+var browsers = ['Chrome'];
 const isparta = require('isparta');
 
 if (process.env.NODE_ENV === 'test') {
