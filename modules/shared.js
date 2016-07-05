@@ -1,5 +1,5 @@
 import { extent } from 'd3-array';
-import { linear, ordinal } from 'd3-scale';
+import { scaleLinear as linear, scalePoint as point } from 'd3-scale';
 import { time, select } from 'd3';
 
 export const rmaColorPalet = ['#3F4C55', '#E3A51A', '#F4E956', '#AAAC84'];
@@ -168,32 +168,38 @@ export function setLineDomainAndRange(scale, domainRange, data, type, length, pa
   let d3Axis;
   switch (type) {
     case 'text':
-      d3Axis = ordinal();
-      d3Axis.domain(domainRange ?
-        calcDefaultDomain(domainRange, type, parseDate)
-        :
-        data[0].map((d) => d[dataIndex])
-      );
-
-      d3Axis.rangePoints([0, length], 0);
+      d3Axis = point();
+      d3Axis
+        .domain(
+          (domainRange)
+            ? calcDefaultDomain(domainRange, type, parseDate)
+            : data[0].map((d) => d[dataIndex]))
+          .range([0, length])
+          .padding(0);
       break;
     case 'linear':
       d3Axis = linear();
-      d3Axis.domain(domainRange ?
-        calcDefaultDomain(domainRange, type, parseDate)
-        :
-        findLargestExtent(data, getValueFunction(scale, type, parseDate))
-      );
-      d3Axis.range(scale === 'x' ? [0, length] : [length, 0]);
+      d3Axis
+        .domain(
+          (domainRange)
+            ? calcDefaultDomain(domainRange, type, parseDate)
+            : findLargestExtent(data, getValueFunction(scale, type, parseDate)))
+        .range(
+          (scale === 'x')
+            ? [0, length]
+            : [length, 0]);
       break;
     case 'time':
       d3Axis = time.scale();
-      d3Axis.domain(domainRange ?
-        calcDefaultDomain(domainRange, type, parseDate)
-        :
-        findLargestExtent(data, getValueFunction(scale, type, parseDate))
-      );
-      d3Axis.range(scale === 'x' ? [0, length] : [length, 0]);
+      d3Axis
+        .domain(
+          (domainRange)
+            ? calcDefaultDomain(domainRange, type, parseDate)
+            : findLargestExtent(data, getValueFunction(scale, type, parseDate)))
+        .range(
+          (scale === 'x')
+            ? [0, length]
+            : [length, 0]);
       break;
     default:
       break;

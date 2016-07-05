@@ -1,6 +1,6 @@
 import React from 'react';
-import { ordinal, linear } from 'd3-scale';
-import { event as d3LastEvent, select, time, svg, scale, max} from 'd3';
+import { scaleBand as band, scaleLinear as linear } from 'd3-scale';
+import { event as d3LastEvent, select, time, svg, scale, max } from 'd3';
 import { reduce, calcMargin, calcDefaultDomain, defaultStyle, createCircularTicks, getAxisStyles, getValueFunction } from '../shared';
 import { extent } from 'd3-array';
 import { timeParse as parse } from 'd3-time-format';
@@ -85,27 +85,36 @@ export default class BarChart extends React.Component {
     let d3Axis;
     switch (type) {
       case 'text':
-        d3Axis = ordinal();
-        d3Axis.domain(data.map((d) => d[dataIndex]));
-        d3Axis.rangeBands([0, length], barPadding);
+        d3Axis = band();
+        d3Axis
+          .domain(data.map((d) => d[dataIndex]))
+          .range([0, length])
+          .padding(barPadding);
         break;
       case 'linear':
         d3Axis = linear();
-        d3Axis.domain(domainRange ?
-          calcDefaultDomain(domainRange, type, this.parseDate)
-          :
-          [0, max(data, (d) => d[dataIndex])]
-        );
-        d3Axis.range(axesType === 'x' ? [0, length] : [length, 0]);
+        d3Axis
+          .domain(
+            (domainRange)
+              ? calcDefaultDomain(domainRange, type, this.parseDate)
+              : [0, max(data, (d) => d[dataIndex])])
+          .range(
+            (axesType === 'x')
+              ? [0, length]
+              : [length, 0]
+          );
         break;
       case 'time':
         d3Axis = time.scale();
-        d3Axis.domain(domainRange ?
-          calcDefaultDomain(domainRange, type, this.parseDate)
-          :
-          extent(data, (d) => this.parseDate(d[dataIndex]))
-        );
-        d3Axis.range(axesType === 'x' ? [0, length] : [length, 0]);
+        d3Axis
+          .domain(
+            (domainRange)
+              ? calcDefaultDomain(domainRange, type, this.parseDate)
+              : extent(data, (d) => this.parseDate(d[dataIndex])))
+          .range(
+            (axesType === 'x')
+              ? [0, length]
+              : [length, 0]);
         break;
       default:
         break;
@@ -142,7 +151,7 @@ export default class BarChart extends React.Component {
       yAxisOrientRight,
       grid,
       xDomainRange,
-      yDomainRange} = this.props;
+      yDomainRange } = this.props;
     const margin = calcMargin(axes, this.props.margin, yAxisOrientRight, lineData.length > 0);
     const width = reduce(this.props.width, margin.left, margin.right);
     const height = reduce(this.props.height, margin.top, margin.bottom);
@@ -234,7 +243,7 @@ export default class BarChart extends React.Component {
           .attr('width', () => {
             switch (xType) {
               case ('text'):
-                return x.rangeBand();
+                return x.bandwidth();
               default:
                 return barWidth;
             }
