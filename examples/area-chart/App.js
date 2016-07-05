@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDom from 'react-dom';
-import {escapeHTML} from '../util';
+import { escapeHTML } from '../util';
 import ToolTip from '../ToolTip';
-import {AreaChart} from 'react-easy-chart';
+import { AreaChart } from 'react-easy-chart';
 import moment from 'moment';
-import {format} from 'd3-time-format';
+import { timeParse as parse } from 'd3-time-format';
 import Scrollspy from 'react-scrollspy';
 
 class AreaChartContainer extends React.Component {
@@ -88,7 +88,7 @@ class AreaChartContainer extends React.Component {
     }
 
     updateData() {
-      const parseDate = format('%d-%b-%y %H:%M').parse;
+      const parseDate = parse('%d-%b-%y %H:%M');
       this.data.map((data) => {
         data.shift();
         let y = this.getRandomArbitrary(

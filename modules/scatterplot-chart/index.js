@@ -1,12 +1,12 @@
 import React from 'react';
-import {linear, ordinal} from 'd3-scale';
-import {event as d3LastEvent, min, max, scale, select, svg, time} from 'd3';
-import {format} from 'd3-time-format';
-import {extent} from 'd3-array';
+import { linear, ordinal } from 'd3-scale';
+import { event as d3LastEvent, min, max, scale, select, svg, time } from 'd3';
+import { timeParse as parse } from 'd3-time-format';
+import { extent } from 'd3-array';
 import { createElement } from 'react-faux-dom';
-import {Style} from 'radium';
+import { Style } from 'radium';
 import merge from 'lodash.merge';
-import {calcDefaultDomain, defaultStyle, getAxisStyles, createCircularTicks} from '../shared';
+import { calcDefaultDomain, defaultStyle, getAxisStyles, createCircularTicks } from '../shared';
 
 let parseDate = null;
 const axisMargin = 18;
@@ -84,7 +84,7 @@ export default class ScatterplotChart extends React.Component {
   }
 
   componentWillMount() {
-    parseDate = format(this.props.datePattern).parse;
+    parseDate = parse(this.props.datePattern);
     this.width = this.props.width;
     this.height = this.props.height;
     this.setMargin();

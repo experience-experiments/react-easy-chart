@@ -61,7 +61,7 @@
     "d3-array": "^0.6.1",
     "d3-scale": "^0.3.0",
     "d3-shape": "^0.2.2",
-    "d3-time-format": "^0.2.1",
+    "d3-time-format": "^0.4.0",
     "lodash.merge": "^4.0.1",
     "radium": "^0.17.1",
     "react": "^15.1.0",

@@ -1,9 +1,9 @@
 import React from 'react';
 import { ordinal, linear } from 'd3-scale';
 import { event as d3LastEvent, select, time, svg, scale, max} from 'd3';
-import {reduce, calcMargin, calcDefaultDomain, defaultStyle, createCircularTicks, getAxisStyles, getValueFunction} from '../shared';
-import {extent} from 'd3-array';
-import {format} from 'd3-time-format';
+import { reduce, calcMargin, calcDefaultDomain, defaultStyle, createCircularTicks, getAxisStyles, getValueFunction } from '../shared';
+import { extent} from 'd3-array';
+import { timeParse as parse } from 'd3-time-format';
 import { createElement } from 'react-faux-dom';
 import { Style } from 'radium';
 import merge from 'lodash.merge';
@@ -65,7 +65,7 @@ export default class BarChart extends React.Component {
 
   constructor(props) {
     super(props);
-    this.parseDate = format(props.datePattern).parse;
+    this.parseDate = parse(props.datePattern);
     this.uid = Math.floor(Math.random() * new Date().getTime());
   }
 
