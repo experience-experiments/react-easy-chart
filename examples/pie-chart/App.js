@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ToolTip from '../ToolTip';
-import {escapeHTML} from '../util';
-import {PieChart} from 'react-easy-chart';
-import Scrollspy from 'react-scrollspy';
+import { escapeHTML } from '../util';
+import { PieChart } from 'react-easy-chart';
+import { Scrollspy } from 'react-scrollspy';
 
 const brandColors = {
   greyBlueOne: '#1e313c',

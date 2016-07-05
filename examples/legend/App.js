@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Legend} from 'react-easy-chart';
-import {PieChart} from 'react-easy-chart';
+import { Legend } from 'react-easy-chart';
+import { PieChart } from 'react-easy-chart';
 import ScatterplotChart from 'react-easy-chart/scatterplot-chart';
-import {escapeHTML} from '../util';
-import Scrollspy from 'react-scrollspy';
+import { escapeHTML } from '../util';
+import { Scrollspy } from 'react-scrollspy';
 
 const pieData = [
   {key: 'Cats', value: 100},

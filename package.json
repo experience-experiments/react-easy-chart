@@ -51,7 +51,7 @@
     "moment": "^2.11.1",
     "open": "0.0.5",
     "phantomjs": "^2.1.7",
-    "react-scrollspy": "^0.2.0",
+    "react-scrollspy": "^2.1.1",
     "rimraf": "^2.4.4",
     "webpack": "^1.12.9",
     "webpack-dev-server": "^1.14.0"
