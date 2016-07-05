@@ -2,7 +2,7 @@ import React from 'react';
 import { ordinal, linear } from 'd3-scale';
 import { event as d3LastEvent, select, time, svg, scale, max} from 'd3';
 import { reduce, calcMargin, calcDefaultDomain, defaultStyle, createCircularTicks, getAxisStyles, getValueFunction } from '../shared';
-import { extent} from 'd3-array';
+import { extent } from 'd3-array';
 import { timeParse as parse } from 'd3-time-format';
 import { createElement } from 'react-faux-dom';
 import { Style } from 'radium';

@@ -1,6 +1,6 @@
-import {extent} from 'd3-array';
-import {linear, ordinal} from 'd3-scale';
-import {time, select} from 'd3';
+import { extent } from 'd3-array';
+import { linear, ordinal } from 'd3-scale';
+import { time, select } from 'd3';
 
 export const rmaColorPalet = ['#3F4C55', '#E3A51A', '#F4E956', '#AAAC84'];
 
