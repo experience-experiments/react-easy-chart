@@ -191,7 +191,7 @@ export default class LineChart extends React.Component {
 
     return (
       <div ref={this.uid} className={`line-chart${this.uid}`}>
-        <Style scopeSelector={`.line-chart${this.uid}`} rules={merge({}, defaultStyle, style, getAxisStyles(grid, verticalGrid, yAxisOrientRight))}/>
+        <Style scopeSelector={`.line-chart${this.uid}`} rules={merge({}, defaultStyle, style, getAxisStyles(grid, verticalGrid, yAxisOrientRight))} />
         {svgNode.toReact()}
       </div>
     );
