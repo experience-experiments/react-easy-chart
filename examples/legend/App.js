@@ -233,11 +233,11 @@ export default class LegendContainer extends React.Component {
             </section>
 
             <section id="config">
-            <h2>Config</h2>
-            <p>React Easy Charts use <a href="https://github.com/mbostock/d3/wiki/Ordinal-Scales#category20">d3.scale.category20</a> to generate a list of default colours. If your chart has a custom colour scheme, pass this colour array to the config property.</p>
-            <pre>
-            {(() => {
-              const html = (`
+              <h2>Config</h2>
+              <p>React Easy Charts use <a href="https://github.com/mbostock/d3/wiki/Ordinal-Scales#category20">d3.scale.category20</a> to generate a list of default colours. If your chart has a custom colour scheme, pass this colour array to the config property.</p>
+              <pre>
+              {(() => {
+                const html = (`
   const pieDataCustom = [
     {key: 'Cats', value: 100, color: '#aaac84'},
     {key: 'Dogs', value: 200, color: '#dce7c5'},
@@ -252,16 +252,16 @@ export default class LegendContainer extends React.Component {
 
   <PieChart data={pieDataCustom} size={300} />
 
-  <Legend data={pieDataCustom} dataId={'key'} config={config}/>`);
-              return (
-                <code dangerouslySetInnerHTML={{__html: escapeHTML(html)}} />
-              );
-            })()}
-            </pre>
-            <div>
-              <PieChart data={pieDataCustom} size={300} padding={20}/>
-              <Legend data={pieDataCustom} dataId={'key'} config={config} horizontal/>
-            </div>
+  <Legend data={pieDataCustom} dataId={'key'} config={config} />`);
+                return (
+                  <code dangerouslySetInnerHTML={{__html: escapeHTML(html)}} />
+                );
+              })()}
+              </pre>
+              <div>
+                <PieChart data={pieDataCustom} size={300} padding={20} />
+                <Legend data={pieDataCustom} dataId={'key'} config={config} horizontal />
+              </div>
             </section>
 
             <section id="styles">
@@ -270,55 +270,55 @@ export default class LegendContainer extends React.Component {
               <pre>
               {(() => {
                 const html = (`
-/* default component styles */
-const defaultStyles = {
-  '.legend': {
-    'list-style': 'none',
-    margin: 0,
-    padding: 0
-  },
-  '.legend li': {
-    display: 'block',
-    lineHeight: '24px',
-    marginRight: '24px',
-    marginBottom: '6px',
-    paddingLeft: '24px',
-    position: 'relative'
-  },
-  '.legend li.horizontal': {
-    display: 'inline-block'
-  },
-  '.legend .icon': {
-    width: '12px',
-    height: '12px',
-    background: 'red',
-    borderRadius: '6px',
-    position: 'absolute',
-    left: '0',
-    top: '50%',
-    marginTop: '-6px'
-  }
-};
+  /* default component styles */
+  const defaultStyles = {
+    '.legend': {
+      'list-style': 'none',
+      margin: 0,
+      padding: 0
+    },
+    '.legend li': {
+      display: 'block',
+      lineHeight: '24px',
+      marginRight: '24px',
+      marginBottom: '6px',
+      paddingLeft: '24px',
+      position: 'relative'
+    },
+    '.legend li.horizontal': {
+      display: 'inline-block'
+    },
+    '.legend .icon': {
+      width: '12px',
+      height: '12px',
+      background: 'red',
+      borderRadius: '6px',
+      position: 'absolute',
+      left: '0',
+      top: '50%',
+      marginTop: '-6px'
+    }
+  };
 
-/* example override */
-const customStyle = {
-  '.legend': {
-    backgroundColor: '#f9f9f9',
-    border: '1px solid #e5e5e5',
-    borderRadius: '12px',
-    fontSize: '0.8em',
-    maxWidth: '300px',
-    padding: '12px'
-  }
-};
+  /* example override */
+  const customStyle = {
+    '.legend': {
+      backgroundColor: '#f9f9f9',
+      border: '1px solid #e5e5e5',
+      borderRadius: '12px',
+      fontSize: '0.8em',
+      maxWidth: '300px',
+      padding: '12px'
+    }
+  };
 
-<Legend
-  data={pieDataCustom}
-  dataId={'key'}
-  config={config}
-  styles={customStyle}
-  horizontal
-/>`);
+  <Legend
+    data={pieDataCustom}
+    dataId={'key'}
+    config={config}
+    styles={customStyle}
+    horizontal
+  />`);
                 return (
                   <code dangerouslySetInnerHTML={{__html: escapeHTML(html)}} />
                 );

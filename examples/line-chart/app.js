@@ -202,8 +202,11 @@ class LineChartContainer extends React.Component {
               <pre>
               {(() => {
                 const html = (`
-<LineChart
-  data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}]]}/>`);
+  <LineChart
+    data={[
+      [{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}]
+    ]}
+  />`);
                 return (
                   <code dangerouslySetInnerHTML={{__html: escapeHTML(html)}} />
                 );
@@ -216,8 +219,11 @@ class LineChartContainer extends React.Component {
               <pre>
               {(() => {
                 const html = (`
-<LineChart
-  data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]]}/>`);
+  <LineChart
+    data={[
+      [{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]
+    ]}
+  />`);
                 return (
                   <code dangerouslySetInnerHTML={{__html: escapeHTML(html)}} />
                 );
@@ -234,10 +240,13 @@ class LineChartContainer extends React.Component {
               <pre>
               {(() => {
                 const html = (`
-<LineChart
-width={50}
-height={50}
-data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]]}/>`);
+  <LineChart
+    width={50}
+    height={50}
+    data={[
+      [{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]
+    ]}
+  />`);
                 return (
                   <code dangerouslySetInnerHTML={{__html: escapeHTML(html)}} />
                 );
@@ -257,11 +266,14 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
               <pre>
               {(() => {
                 const html = (`
-<LineChart
-margin={{top: 0, right: 0, bottom: 30, left: 100}}
-width={250}
-height={250}
-data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]]}/>`);
+  <LineChart
+    margin={{top: 0, right: 0, bottom: 30, left: 100}}
+    width={250}
+    height={250}
+    data={[
+      [{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]
+    ]}
+  />`);
                 return (
                   <code dangerouslySetInnerHTML={{__html: escapeHTML(html)}} />
                 );
@@ -281,11 +293,14 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
               <pre>
               {(() => {
                 const html = (`
-<LineChart
-  axes
-  width={250}
-  height={250}
-  data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]]}/>`);
+  <LineChart
+    axes
+    width={250}
+    height={250}
+    data={[
+      [{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]
+    ]}
+  />`);
                 return (
                   <code dangerouslySetInnerHTML={{__html: escapeHTML(html)}} />
                 );
@@ -305,13 +320,16 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
               <pre>
               {(() => {
                 const html = (`
-<LineChart
-  axes
-  margin={{top: 10, right: 10, bottom: 50, left: 50}}
-  axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
-  width={250}
-  height={250}
-  data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]]} />`);
+  <LineChart
+    axes
+    margin={{top: 10, right: 10, bottom: 50, left: 50}}
+    axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+    width={250}
+    height={250}
+    data={[
+      [{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]
+    ]}
+  />`);
                 return (
                   <code dangerouslySetInnerHTML={{__html: escapeHTML(html)}} />
                 );
@@ -333,13 +351,16 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
               <pre>
               {(() => {
                 const html = (`
-<LineChart
-  axes
-  axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
-  yAxisOrientRight
-  width={450}
-  height={250}
-  data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]]} />`);
+  <LineChart
+    axes
+    axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+    yAxisOrientRight
+    width={450}
+    height={250}
+    data={[
+      [{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]
+    ]}
+  />`);
                 return (
                   <code dangerouslySetInnerHTML={{__html: escapeHTML(html)}} />
                 );
@@ -362,14 +383,17 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
               <pre>
               {(() => {
                 const html = (`
-<LineChart
-  axes
-  margin={{top: 10, right: 10, bottom: 50, left: 50}}
-  axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
-  width={250}
-  interpolate={'cardinal'}
-  height={250}
-  data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]]} />`);
+  <LineChart
+    axes
+    margin={{top: 10, right: 10, bottom: 50, left: 50}}
+    axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+    width={250}
+    interpolate={'cardinal'}
+    height={250}
+    data={[
+      [{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 12}, {x: 3, y: 4}]
+    ]}
+  />`);
                 return (
                   <code dangerouslySetInnerHTML={{__html: escapeHTML(html)}} />
                 );
@@ -395,17 +419,17 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
               <pre>
               {(() => {
                 const html = (`
-<LineChart
-  xType={'text'}
-  axes
-  width={350}
-  height={250}
-  interpolate={'cardinal'}
-  data={[
-    [{x: 'Mon', y: 20}, {x: 'Tue', y: 10}, {x: 'Wed', y: 33}, {x: 'Thu', y: 45}, {x: 'Fri', y: 15}],
-    [{x: 'Mon', y: 10}, {x: 'Tue', y: 15}, {x: 'Wed', y: 13}, {x: 'Thu', y: 15}, {x: 'Fri', y: 10}]
-  ]}
-/>`);
+  <LineChart
+    xType={'text'}
+    axes
+    width={350}
+    height={250}
+    interpolate={'cardinal'}
+    data={[
+      [{x: 'Mon', y: 20}, {x: 'Tue', y: 10}, {x: 'Wed', y: 33}, {x: 'Thu', y: 45}, {x: 'Fri', y: 15}],
+      [{x: 'Mon', y: 10}, {x: 'Tue', y: 15}, {x: 'Wed', y: 13}, {x: 'Thu', y: 15}, {x: 'Fri', y: 10}]
+    ]}
+  />`);
                 return (
                   <code dangerouslySetInnerHTML={{__html: escapeHTML(html)}} />
                 );
@@ -426,17 +450,17 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
               <pre>
               {(() => {
                 const html = (`
-<LineChart
-  xType={'time'}
-  axes
-  interpolate={'cardinal'}
-  width={750}
-  height={250}
-  data={[
-    [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
-    [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
-  ]}
-/>`);
+  <LineChart
+    xType={'time'}
+    axes
+    interpolate={'cardinal'}
+    width={750}
+    height={250}
+    data={[
+      [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
+      [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
+    ]}
+  />`);
                 return (
                   <code dangerouslySetInnerHTML={{__html: escapeHTML(html)}} />
                 );
@@ -457,19 +481,19 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
               <pre>
               {(() => {
                 const html = (`
-<LineChart
-  yType={'text'}
-  xType={'text'}
-  axes
-  margin={{top: 0, right: 0, bottom: 100, left: 100}}
-  yDomainRange={['Allot', 'Middle', 'Less']}
-  interpolate={'cardinal'}
-  width={350}
-  height={250}
-  data={[
-    [{x: 'Mon', y: 'Less'}, {x: 'Tue', y: 'Middle'}, {x: 'Wed', y: 'Middle'}, {x: 'Thu', y: 'Less'}, {x: 'Fri', y: 'Middle'}]
-  ]}
-/>`);
+  <LineChart
+    yType={'text'}
+    xType={'text'}
+    axes
+    margin={{top: 0, right: 0, bottom: 100, left: 100}}
+    yDomainRange={['Allot', 'Middle', 'Less']}
+    interpolate={'cardinal'}
+    width={350}
+    height={250}
+    data={[
+      [{x: 'Mon', y: 'Less'}, {x: 'Tue', y: 'Middle'}, {x: 'Wed', y: 'Middle'}, {x: 'Thu', y: 'Less'}, {x: 'Fri', y: 'Middle'}]
+    ]}
+  />`);
                 return (
                   <code dangerouslySetInnerHTML={{__html: escapeHTML(html)}} />
                 );
@@ -493,18 +517,18 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
               <pre>
               {(() => {
                 const html = (`
-<LineChart
-  axisLabels={{x: 'Total Revenue', y: 'January'}}
-  margin={{top: 10, right: 30, bottom: 50, left: 70}}
-  yType={'time'}
-  axes
-  width={500}
-  height={500}
-  data={[
-    [{x: 10, y: '1-Jan-15'}, {x: 20, y: '10-Jan-15'}, {x: 40, y: '21-Jan-15'}, {x: 80, y: '31-Jan-15'}],
-    [{x: 0, y: '1-Jan-15'}, {x: 15, y: '10-Jan-15'}, {x: 20, y: '21-Jan-15'}, {x: 25, y: '31-Jan-15'}]
-  ]}
-/>`);
+  <LineChart
+    axisLabels={{x: 'Total Revenue', y: 'January'}}
+    margin={{top: 10, right: 30, bottom: 50, left: 70}}
+    yType={'time'}
+    axes
+    width={500}
+    height={500}
+    data={[
+      [{x: 10, y: '1-Jan-15'}, {x: 20, y: '10-Jan-15'}, {x: 40, y: '21-Jan-15'}, {x: 80, y: '31-Jan-15'}],
+      [{x: 0, y: '1-Jan-15'}, {x: 15, y: '10-Jan-15'}, {x: 20, y: '21-Jan-15'}, {x: 25, y: '31-Jan-15'}]
+    ]}
+  />`);
                 return (
                   <code dangerouslySetInnerHTML={{__html: escapeHTML(html)}} />
                 );
@@ -531,19 +555,19 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
               <pre>
               {(() => {
                 const html = (`
-<LineChart
-  axisLabels={{x: 'Total Revenue', y: 'January'}}
-  margin={{top: 10, right: 30, bottom: 50, left: 70}}
-  yType={'time'}
-  axes
-  grid
-  width={500}
-  height={500}
-  data={[
-    [{x: 10, y: '1-Jan-15'}, {x: 20, y: '10-Jan-15'}, {x: 40, y: '21-Jan-15'}, {x: 80, y: '31-Jan-15'}],
-    [{x: 0, y: '1-Jan-15'}, {x: 15, y: '10-Jan-15'}, {x: 20, y: '21-Jan-15'}, {x: 25, y: '31-Jan-15'}]
-  ]}
-/>`);
+  <LineChart
+    axisLabels={{x: 'Total Revenue', y: 'January'}}
+    margin={{top: 10, right: 30, bottom: 50, left: 70}}
+    yType={'time'}
+    axes
+    grid
+    width={500}
+    height={500}
+    data={[
+      [{x: 10, y: '1-Jan-15'}, {x: 20, y: '10-Jan-15'}, {x: 40, y: '21-Jan-15'}, {x: 80, y: '31-Jan-15'}],
+      [{x: 0, y: '1-Jan-15'}, {x: 15, y: '10-Jan-15'}, {x: 20, y: '21-Jan-15'}, {x: 25, y: '31-Jan-15'}]
+    ]}
+  />`);
                 return (
                   <code dangerouslySetInnerHTML={{__html: escapeHTML(html)}} />
                 );
@@ -571,19 +595,19 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
               <pre>
               {(() => {
                 const html = (`
-<LineChart
-  xType={'time'}
-  axes
-  grid
-  verticalGrid
-  interpolate={'cardinal'}
-  width={750}
-  height={250}
-  data={[
-        [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
-        [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
-  ]}
-/>`);
+  <LineChart
+    xType={'time'}
+    axes
+    grid
+    verticalGrid
+    interpolate={'cardinal'}
+    width={750}
+    height={250}
+    data={[
+      [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
+      [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
+    ]}
+  />`);
                 return (
                   <code dangerouslySetInnerHTML={{__html: escapeHTML(html)}} />
                 );
@@ -612,19 +636,19 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
             <pre>
             {(() => {
               const html = (`
-<LineChart
-  axes
-  xDomainRange={[0, 100]}
-  yDomainRange={[0, 100]}
-  margin={{top: 0, right: 0, bottom: 100, left: 100}}
-  width={250}
-  height={250}
-  interpolate={'cardinal'}
-  data={[
-    [{x: 10, y: 25}, {x: 20, y: 10}, {x: 30, y: 25}, {x: 40, y: 10}, {x: 50, y: 12}, {x: 60, y: 4}],
-    [{x: 10, y: 40}, {x: 20, y: 30}, {x: 30, y: 25}, {x: 40, y: 60}, {x: 50, y: 22}, {x: 60, y: 9}]
-  ]}
-/>`);
+  <LineChart
+    axes
+    xDomainRange={[0, 100]}
+    yDomainRange={[0, 100]}
+    margin={{top: 0, right: 0, bottom: 100, left: 100}}
+    width={250}
+    height={250}
+    interpolate={'cardinal'}
+    data={[
+      [{x: 10, y: 25}, {x: 20, y: 10}, {x: 30, y: 25}, {x: 40, y: 10}, {x: 50, y: 12}, {x: 60, y: 4}],
+      [{x: 10, y: 40}, {x: 20, y: 30}, {x: 30, y: 25}, {x: 40, y: 60}, {x: 50, y: 22}, {x: 60, y: 9}]
+    ]}
+  />`);
               return (
                 <code dangerouslySetInnerHTML={{__html: escapeHTML(html)}} />
               );
@@ -651,20 +675,20 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
             <pre>
             {(() => {
               const html = (`
-<LineChart
-  axisLabels={{x: 'Total Revenue', y: 'January'}}
-  margin={{top: 10, right: 30, bottom: 50, left: 70}}
-  yType={'time'}
-  axes
-  interpolate={'cardinal'}
-  tickTimeDisplayFormat={'%a'}
-  width={500}
-  height={500}
-  data={[
-    [{x: 10, y: '1-Jan-15'}, {x: 20, y: '10-Jan-15'}, {x: 40, y: '21-Jan-15'}, {x: 80, y: '31-Jan-15'}],
-    [{x: 0, y: '1-Jan-15'}, {x: 15, y: '10-Jan-15'}, {x: 20, y: '21-Jan-15'}, {x: 25, y: '31-Jan-15'}]
-  ]}
-/>`);
+  <LineChart
+    axisLabels={{x: 'Total Revenue', y: 'January'}}
+    margin={{top: 10, right: 30, bottom: 50, left: 70}}
+    yType={'time'}
+    axes
+    interpolate={'cardinal'}
+    tickTimeDisplayFormat={'%a'}
+    width={500}
+    height={500}
+    data={[
+      [{x: 10, y: '1-Jan-15'}, {x: 20, y: '10-Jan-15'}, {x: 40, y: '21-Jan-15'}, {x: 80, y: '31-Jan-15'}],
+      [{x: 0, y: '1-Jan-15'}, {x: 15, y: '10-Jan-15'}, {x: 20, y: '21-Jan-15'}, {x: 25, y: '31-Jan-15'}]
+    ]}
+  />`);
               return (
                 <code dangerouslySetInnerHTML={{__html: escapeHTML(html)}} />
               );
@@ -693,20 +717,20 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
             <pre>
             {(() => {
               const html = (`
-<LineChart
-  axes
-  xTicks={5}
-  yTicks={5}
-  xDomainRange={[0, 100]}
-  yDomainRange={[0, 100]}
-  width={500}
-  height={250}
-  interpolate={'cardinal'}
-  data={[
-    [{x: 10, y: 25}, {x: 20, y: 10}, {x: 30, y: 25}, {x: 40, y: 10}, {x: 50, y: 12}, {x: 60, y: 25}],
-    [{x: 10, y: 40}, {x: 20, y: 30}, {x: 30, y: 25}, {x: 40, y: 60}, {x: 50, y: 22}, {x: 60, y: 9}]
-  ]}
-/>`);
+  <LineChart
+    axes
+    xTicks={5}
+    yTicks={5}
+    xDomainRange={[0, 100]}
+    yDomainRange={[0, 100]}
+    width={500}
+    height={250}
+    interpolate={'cardinal'}
+    data={[
+      [{x: 10, y: 25}, {x: 20, y: 10}, {x: 30, y: 25}, {x: 40, y: 10}, {x: 50, y: 12}, {x: 60, y: 25}],
+      [{x: 10, y: 40}, {x: 20, y: 30}, {x: 30, y: 25}, {x: 40, y: 60}, {x: 50, y: 22}, {x: 60, y: 9}]
+    ]}
+  />`);
               return (
                 <code dangerouslySetInnerHTML={{__html: escapeHTML(html)}} />
               );
@@ -735,20 +759,20 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
             <pre>
             {(() => {
               const html = (`
-<LineChart
-  xType={'time'}
-  axes
-  grid
-  verticalGrid
-  interpolate={'cardinal'}
-  lineColors={['pink', 'cyan']}
-  width={750}
-  height={250}
-  data={[
-    [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
-    [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
-  ]}
-/>`);
+  <LineChart
+    xType={'time'}
+    axes
+    grid
+    verticalGrid
+    interpolate={'cardinal'}
+    lineColors={['pink', 'cyan']}
+    width={750}
+    height={250}
+    data={[
+      [{x: '1-Jan-15', y: 20}, {x: '1-Feb-15', y: 10}, {x: '1-Mar-15', y: 33}, {x: '1-Apr-15', y: 45}, {x: '1-May-15', y: 15}],
+      [{x: '1-Jan-15', y: 10}, {x: '1-Feb-15', y: 15}, {x: '1-Mar-15', y: 13}, {x: '1-Apr-15', y: 15}, {x: '1-May-15', y: 10}]
+    ]}
+  />`);
               return (
                 <code dangerouslySetInnerHTML={{__html: escapeHTML(html)}} />
               );
@@ -776,19 +800,19 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
             <pre>
             {(() => {
               const html = (`
-<LineChart
-  axes
-  dataPoints
-  xDomainRange={[0, 100]}
-  yDomainRange={[0, 100]}
-  width={500}
-  height={250}
-  interpolate={'cardinal'}
-  data={[
-    [{x: 10, y: 25}, {x: 20, y: 10}, {x: 30, y: 25}, {x: 40, y: 10}, {x: 50, y: 12}, {x: 60, y: 25}],
-    [{x: 10, y: 40}, {x: 20, y: 30}, {x: 30, y: 25}, {x: 40, y: 60}, {x: 50, y: 22}, {x: 60, y: 9}]
-  ]}
-/>`);
+  <LineChart
+    axes
+    dataPoints
+    xDomainRange={[0, 100]}
+    yDomainRange={[0, 100]}
+    width={500}
+    height={250}
+    interpolate={'cardinal'}
+    data={[
+      [{x: 10, y: 25}, {x: 20, y: 10}, {x: 30, y: 25}, {x: 40, y: 10}, {x: 50, y: 12}, {x: 60, y: 25}],
+      [{x: 10, y: 40}, {x: 20, y: 30}, {x: 30, y: 25}, {x: 40, y: 60}, {x: 50, y: 22}, {x: 60, y: 9}]
+    ]}
+  />`);
               return (
                 <code dangerouslySetInnerHTML={{__html: escapeHTML(html)}} />
               );
@@ -817,44 +841,44 @@ data={[[{x: 1, y: 20}, {x: 2, y: 10}, {x: 3, y: 25}], [{x: 1, y: 10}, {x: 2, y: 
             <pre>
             {(() => {
               const html = (`
-mouseOverHandler(d, e) {
-  this.setState({
-    showToolTip: true,
-    top: \`\${e.screenY - 10}px\`,
-    left: \`\${e.screenX + 10}px\`,
-    y: d.y,
-    x: d.x});
-}
-
-mouseMoveHandler(e) {
-  if (this.state.showToolTip) {
-    this.setState({top: \`\${e.y - 10}px\`, left: \`\${e.x + 10}px\`});
+  mouseOverHandler(d, e) {
+    this.setState({
+      showToolTip: true,
+      top: \`\${e.screenY - 10}px\`,
+      left: \`\${e.screenX + 10}px\`,
+      y: d.y,
+      x: d.x});
   }
-}
 
-mouseOutHandler() {
-  this.setState({showToolTip: false});
-}
+  mouseMoveHandler(e) {
+    if (this.state.showToolTip) {
+      this.setState({top: \`\${e.y - 10}px\`, left: \`\${e.x + 10}px\`});
+    }
+  }
 
-{this.state.showToolTip ? <ToolTip top={this.state.top} left={this.state.left}>The value of x is {this.state.x} and the value of y is {this.state.y}</ToolTip> : null}
+  mouseOutHandler() {
+    this.setState({showToolTip: false});
+  }
 
-<LineChart
-  axes
-  dataPoints
-  grid
-  xDomainRange={[0, 100]}
-  yDomainRange={[0, 100]}
-  mouseOverHandler={this.mouseOverHandler.bind(this)}
-  mouseOutHandler={this.mouseOutHandler.bind(this)}
-  mouseMoveHandler={this.mouseMoveHandler.bind(this)}
-  width={700}
-  height={350}
-  interpolate={'cardinal'}
-  data={[
-    [{x: 10, y: 25}, {x: 20, y: 10}, {x: 30, y: 25}, {x: 40, y: 10}, {x: 50, y: 12}, {x: 60, y: 25}],
-    [{x: 10, y: 40}, {x: 20, y: 30}, {x: 30, y: 25}, {x: 40, y: 60}, {x: 50, y: 22}, {x: 60, y: 9}]
-  ]}
-/>`);
+  {this.state.showToolTip ? <ToolTip top={this.state.top} left={this.state.left}>The value of x is {this.state.x} and the value of y is {this.state.y}</ToolTip> : null}
+
+  <LineChart
+    axes
+    dataPoints
+    grid
+    xDomainRange={[0, 100]}
+    yDomainRange={[0, 100]}
+    mouseOverHandler={this.mouseOverHandler.bind(this)}
+    mouseOutHandler={this.mouseOutHandler.bind(this)}
+    mouseMoveHandler={this.mouseMoveHandler.bind(this)}
+    width={700}
+    height={350}
+    interpolate={'cardinal'}
+    data={[
+      [{x: 10, y: 25}, {x: 20, y: 10}, {x: 30, y: 25}, {x: 40, y: 10}, {x: 50, y: 12}, {x: 60, y: 25}],
+      [{x: 10, y: 40}, {x: 20, y: 30}, {x: 30, y: 25}, {x: 40, y: 60}, {x: 50, y: 22}, {x: 60, y: 9}]
+    ]}
+  />`);
               return (
                 <code dangerouslySetInnerHTML={{__html: escapeHTML(html)}} />
               );
@@ -964,38 +988,38 @@ mouseOutHandler() {
             <pre>
             {(() => {
               const html = (`
-constructor(props) {
-  const initialWidth = window.innerWidth > 0 ? window.innerWidth : 500;
-  this.state = {showToolTip: false, windowWidth: initialWidth - 100};
-}
+  constructor(props) {
+    const initialWidth = window.innerWidth > 0 ? window.innerWidth : 500;
+    this.state = {showToolTip: false, windowWidth: initialWidth - 100};
+  }
 
-componentDidMount() {
-  window.addEventListener('resize', this.handleResize.bind(this));
-}
+  componentDidMount() {
+    window.addEventListener('resize', this.handleResize.bind(this));
+  }
 
-componentWillUnmount() {
-  window.removeEventListener('resize', this.handleResize);
-}
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleResize);
+  }
 
-handleResize() {
-  this.setState({windowWidth: window.innerWidth - 100});
-}
+  handleResize() {
+    this.setState({windowWidth: window.innerWidth - 100});
+  }
 
-<LineChart
-  xType={'time'}
-  axes={(this.state.componentWidth) > 600 ? true : false}
-  xTicks={5}
-  yTicks={3}
-  grid
-  width={this.state.componentWidth}
-  height={this.state.componentWidth / 2}
-  tickTimeDisplayFormat={'%d %m'}
-  interpolate={'cardinal'}
-  data={[
-    [{x: '1-Jan-13', y: 8}, {x: '1-Feb-13', y: 17}, {x: '1-Mar-13', y: 17}, {x: '1-Apr-13', y: 25}, {x: '1-May-13', y: 20}],
-    [{x: '1-Jan-13', y: 5}, {x: '1-Feb-13', y: 13}, {x: '1-Mar-13', y: 10}, {x: '1-Apr-13', y: 25}, {x: '1-May-13', y: 30}]
-  ]}
-/>`);
+  <LineChart
+    xType={'time'}
+    axes={(this.state.componentWidth) > 600 ? true : false}
+    xTicks={5}
+    yTicks={3}
+    grid
+    width={this.state.componentWidth}
+    height={this.state.componentWidth / 2}
+    tickTimeDisplayFormat={'%d %m'}
+    interpolate={'cardinal'}
+    data={[
+      [{x: '1-Jan-13', y: 8}, {x: '1-Feb-13', y: 17}, {x: '1-Mar-13', y: 17}, {x: '1-Apr-13', y: 25}, {x: '1-May-13', y: 20}],
+      [{x: '1-Jan-13', y: 5}, {x: '1-Feb-13', y: 13}, {x: '1-Mar-13', y: 10}, {x: '1-Apr-13', y: 25}, {x: '1-May-13', y: 30}]
+    ]}
+  />`);
               return (
                 <code dangerouslySetInnerHTML={{__html: escapeHTML(html)}} />
               );

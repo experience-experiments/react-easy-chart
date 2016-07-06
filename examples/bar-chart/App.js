@@ -468,17 +468,17 @@ export default class BarChartContainer extends React.Component {
               <pre>
               {(() => {
                 const html = (`
-<BarChart
-  data={[
-    {x: 'A', y: 20},
-    {x: 'B', y: 30, color: '#f00'},
-    {x: 'C', y: 40},
-    {x: 'D', y: 20},
-    {x: 'E', y: 40},
-    {x: 'F', y: 25},
-    {x: 'G', y: 5, color: 'orange'}
-  ]}
-/>`);
+  <BarChart
+    data={[
+      {x: 'A', y: 20},
+      {x: 'B', y: 30, color: '#f00'},
+      {x: 'C', y: 40},
+      {x: 'D', y: 20},
+      {x: 'E', y: 40},
+      {x: 'F', y: 25},
+      {x: 'G', y: 5, color: 'orange'}
+    ]}
+  />`);
                 return (
                   <code dangerouslySetInnerHTML={{__html: escapeHTML(html)}} />
                 );
@@ -706,21 +706,21 @@ export default class BarChartContainer extends React.Component {
               <pre>
               {(() => {
                 const html = (`
-<BarChart
-  axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
-  axes
-  height={250}
-  width={650}
-  margin={{top: 50, right: 100, bottom: 50, left: 100}}
-  colorBars
-  barWidth={40}
-  xType={'time'}
-  data={[
-    {x: '1-Jan-15', y: 20},
-    {x: '2-Jan-15', y: 10},
-    {x: '3-Jan-15', y: 33}
-  ]}
-/>`);
+  <BarChart
+    axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+    axes
+    height={250}
+    width={650}
+    margin={{top: 50, right: 100, bottom: 50, left: 100}}
+    colorBars
+    barWidth={40}
+    xType={'time'}
+    data={[
+      {x: '1-Jan-15', y: 20},
+      {x: '2-Jan-15', y: 10},
+      {x: '3-Jan-15', y: 33}
+    ]}
+  />`);
                 return (
                   <code dangerouslySetInnerHTML={{__html: escapeHTML(html)}} />
                 );
@@ -1043,33 +1043,33 @@ export default class BarChartContainer extends React.Component {
               <pre>
               {(() => {
                 const html = (`
-<div>
-  <div style={{display: 'inline-block'}}>
-    <BarChart
-      axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
-      axes
-      grid
-      colorBars
-      height={250}
-      width={650}
-      data={[
-        {
-          'x': 'A',
-          'y': 46
-        },
-        {
-          'x': 'B',
-          'y': 26
-        } ...
-      ]}
-      clickHandler={(d) => this.setState({dataDisplay: \`The value on the \${d.x} is \${d.y}\`})}
-      yDomainRange={[0, 100]}
-    />
-  </div>
-  <div style={{display: 'inline-block', verticalAlign: 'top', paddingLeft: '20px'}}>
-    {this.state.dataDisplay ? this.state.dataDisplay : 'Click on a bar to show the value'}
-  </div>
-</div>`);
+  <div>
+    <div style={{display: 'inline-block'}}>
+      <BarChart
+        axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+        axes
+        grid
+        colorBars
+        height={250}
+        width={650}
+        data={[
+          {
+            'x': 'A',
+            'y': 46
+          },
+          {
+            'x': 'B',
+            'y': 26
+          } ...
+        ]}
+        clickHandler={(d) => this.setState({dataDisplay: \`The value on the \${d.x} is \${d.y}\`})}
+        yDomainRange={[0, 100]}
+      />
+    </div>
+    <div style={{display: 'inline-block', verticalAlign: 'top', paddingLeft: '20px'}}>
+      {this.state.dataDisplay ? this.state.dataDisplay : 'Click on a bar to show the value'}
+    </div>
+  </div>`);
                 return (
                   <code dangerouslySetInnerHTML={{__html: escapeHTML(html)}} />
                 );
