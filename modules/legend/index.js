@@ -1,6 +1,6 @@
 import React from 'react';
 import { Style } from 'radium';
-import {scale} from 'd3';
+import { scale } from 'd3';
 import merge from 'lodash.merge';
 
 const defaultStyles = {
@@ -39,23 +39,30 @@ export default class Legend extends React.Component {
     return {
       config: React.PropTypes.array,
       data: React.PropTypes.array.isRequired,
+      tags: React.PropTypes.array,
       dataId: React.PropTypes.string.isRequired,
       horizontal: React.PropTypes.bool,
       styles: React.PropTypes.object
     };
   }
 
-  constructor(props) {
-    super(props);
-    this.tags = [];
+  static get defaultProps() {
+    return {
+      tags: []
+    };
   }
 
   componentWillMount() {
-    const dataId = this.props.dataId;
-    this.props.data.map(
+    const {
+      dataId,
+      data,
+      tags
+    } = this.props;
+
+    data.forEach(
       (item) => {
-        const index = this.tags.findIndex((tag) => tag === item[dataId]);
-        if (index === -1) this.tags.push(item[dataId]);
+        const index = tags.findIndex((tag) => tag === item[dataId]);
+        if (index === -1) tags.push(item[dataId]);
       }
     );
   }
@@ -63,27 +70,28 @@ export default class Legend extends React.Component {
   getList() {
     const cn = this.props.horizontal ? 'horizontal' : '';
     return (
-      this.tags.map(
-        (item, index) => {
-          return (
-            <li key={index} className={cn}>
-              <span
-                className="icon"
-                style={{backgroundColor: this.getIconColor(index)}}
-              >
-            </span>
+      this.props.tags.map(
+        (item, index) => (
+          <li key={index} className={cn}>
+            <span
+              className="icon"
+              style={{ backgroundColor: this.getIconColor(index) }}
+            />
             {item}
-            </li>
-          );
-        }
+          </li>
+        )
       )
     );
   }
 
   getIconColor(index) {
-    if (typeof this.props.config !== 'undefined') {
-      if (this.props.config.length > index) {
-        return this.props.config[index].color;
+    const {
+      config
+    } = this.props;
+
+    if (typeof config !== 'undefined') {
+      if (config.length > index) {
+        return config[index].color;
       }
     }
     return colors[index];

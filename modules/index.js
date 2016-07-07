@@ -6,9 +6,9 @@ import AreaChart from './area-chart';
 import Legend from './legend';
 
 
-export {BarChart};
-export {LineChart};
-export {PieChart};
-export {ScatterplotChart};
-export {AreaChart};
-export {Legend};
+export { BarChart };
+export { LineChart };
+export { PieChart };
+export { ScatterplotChart };
+export { AreaChart };
+export { Legend };

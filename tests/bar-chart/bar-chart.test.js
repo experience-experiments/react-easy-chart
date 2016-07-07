@@ -57,7 +57,7 @@ describe('BarChart component', () => {
     const svg = vdom.props.children[1];
     expect(svg.type).to.equal('svg');
     const g = svg.props.children[0];
-    expect(g.props.transform).to.equal('translate(0,0)');
+    expect(g.props.transform).to.equal('translate(0, 0)');
     expect(g.props.children[0].type).to.equal('rect');
     expect(g.props.children[1].type).to.equal('rect');
     expect(g.props.children[2].type).to.equal('rect');

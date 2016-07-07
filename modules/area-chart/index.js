@@ -1,8 +1,18 @@
 import React from 'react';
 import { createElement } from 'react-faux-dom';
-import { reduce, getValueFunction, getRandomId, calcMargin, setLineDomainAndRange, defaultStyle, getAxisStyles, createCircularTicks, rmaColorPalet } from '../shared';
+import {
+  reduce,
+  getValueFunction,
+  getRandomId,
+  calcMargin,
+  setLineDomainAndRange,
+  defaultStyle,
+  getAxisStyles,
+  createCircularTicks,
+  rmaColorPalet
+} from '../shared';
 import { select, svg, time, event as d3LastEvent } from 'd3';
-import { Style} from 'radium';
+import { Style } from 'radium';
 import merge from 'lodash.merge';
 import { timeParse as parse } from 'd3-time-format';
 
@@ -48,7 +58,7 @@ export default class AreaChart extends React.Component {
       areaColors: [],
       xType: 'linear',
       yType: 'linear',
-      axisLabels: {x: '', y: ''},
+      axisLabels: { x: '', y: '' },
       mouseOverHandler: () => {},
       mouseOutHandler: () => {},
       mouseMoveHandler: () => {},
@@ -73,7 +83,7 @@ export default class AreaChart extends React.Component {
   }
 
   render() {
-    const {data,
+    const { data,
       xType,
       yType,
       style,
@@ -94,7 +104,7 @@ export default class AreaChart extends React.Component {
       dataPoints,
       areaColors,
       noAreaGradient,
-      yAxisOrientRight} = this.props;
+      yAxisOrientRight } = this.props;
     const margin = calcMargin(axes, this.props.margin, yAxisOrientRight);
     const defaultColours = areaColors.concat(rmaColorPalet);
     const width = reduce(this.props.width, margin.left, margin.right);
@@ -106,20 +116,46 @@ export default class AreaChart extends React.Component {
 
     const yValue = getValueFunction('y', yType, this.parseDate);
     const xValue = getValueFunction('x', xType, this.parseDate);
-    const area = svg.area().interpolate(interpolate).x((d) => x(xValue(d))).y0(height).y1((d) => y(yValue(d)));
-    const linePath = svg.line().interpolate(interpolate).x((d) => x(xValue(d))).y((d) => y(yValue(d)));
+    const area = svg.area()
+      .interpolate(interpolate)
+      .x((d) => x(xValue(d)))
+      .y0(height)
+      .y1((d) => y(yValue(d)));
+
+    const linePath = svg.line()
+      .interpolate(interpolate)
+      .x((d) => x(xValue(d)))
+      .y((d) => y(yValue(d)));
 
     const svgNode = createElement('svg');
-    select(svgNode).attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom);
-    const root = select(svgNode).append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+    select(svgNode)
+      .attr('width', width + margin.left + margin.right)
+      .attr('height', height + margin.top + margin.bottom);
+
+    const root = select(svgNode)
+      .append('g')
+      .attr('transform', `translate(${margin.left},${margin.top})`);
 
     if (axes) {
       const xAxis = svg.axis().scale(x).orient('bottom');
       if (xType === 'time' && tickTimeDisplayFormat) {
         xAxis.tickFormat(time.format(tickTimeDisplayFormat));
       }
-      if (grid && verticalGrid) { xAxis.tickSize(-height, 6).tickPadding(15); } else { xAxis.tickSize(0).tickPadding(15);}
-      if (xTicks) xAxis.ticks(xTicks);
+      if (grid && verticalGrid) {
+        xAxis
+          .tickSize(-height, 6)
+          .tickPadding(15);
+      } else {
+        xAxis
+          .tickSize(0)
+          .tickPadding(15);
+      }
+
+      if (xTicks) {
+        xAxis
+          .ticks(xTicks);
+      }
+
       root.append('g')
         .attr('class', 'x axis')
         .attr('transform', `translate(0,${height})`)
@@ -131,17 +167,32 @@ export default class AreaChart extends React.Component {
         .style('text-anchor', yAxisOrientRight ? 'start' : 'end')
         .text(axisLabels.x);
 
-      const yAxis = svg.axis().scale(y)
+      const yAxis = svg.axis()
+        .scale(y)
         .orient(yAxisOrientRight ? 'right' : 'left');
+
       if (yType === 'time' && tickTimeDisplayFormat) {
-        yAxis.tickFormat(time.format(tickTimeDisplayFormat));
+        yAxis
+          .tickFormat(time.format(tickTimeDisplayFormat));
       }
-      if (grid) { yAxis.tickSize(-width, 6).tickPadding(12); } else { yAxis.tickPadding(10); }
-      if (yTicks) yAxis.ticks(yTicks);
+
+      if (grid) {
+        yAxis
+          .tickSize(-width, 6)
+          .tickPadding(12);
+      } else {
+        yAxis
+          .tickPadding(10);
+      }
+
+      if (yTicks) {
+        yAxis.ticks(yTicks);
+      }
+
       root.append('g')
         .attr('class', 'y axis')
         .call(yAxis)
-        .attr('transform', yAxisOrientRight ? `translate(${width}, 0)` : `translate(0, 0)`)
+        .attr('transform', yAxisOrientRight ? `translate(${width}, 0)` : 'translate(0, 0)')
         .append('text')
         .attr('class', 'label')
         .attr('transform', 'rotate(-90)')
@@ -152,8 +203,8 @@ export default class AreaChart extends React.Component {
         .text(axisLabels.y);
     }
 
-    defaultColours.map((fillCol, i) => {
-      if (!noAreaGradient) {
+    if (!noAreaGradient) {
+      defaultColours.forEach((fillCol, i) => {
         const gradient = select(svgNode).append('defs')
             .append('linearGradient')
             .attr('id', `gradient-${i}-${this.uid}`)
@@ -162,7 +213,7 @@ export default class AreaChart extends React.Component {
             .attr('y1', '40%')
             .attr('y2', '100%');
 
-        defaultStyle[`.dot${i}`] = {fill: fillCol};
+        defaultStyle[`.dot${i}`] = { fill: fillCol };
         gradient.append('stop')
             .attr('offset', '0%')
             .attr('style', `stop-color:${fillCol};stop-opacity:0.6`);
@@ -170,25 +221,27 @@ export default class AreaChart extends React.Component {
         gradient.append('stop')
             .attr('offset', '100%')
             .attr('style', `stop-color:${fillCol};stop-opacity:0.4`);
-      }
-    });
+      });
+    }
 
-    data.map((dataElelment, i) => {
+    data.forEach((dataElelment, i) => {
+      const defaultColour = defaultColours[i];
       root.append('path')
         .datum(dataElelment)
         .attr('class', 'line')
-        .attr('style', `stroke: ${defaultColours[i]}`)
+        .attr('style', `stroke: ${defaultColour}`)
         .attr('d', linePath);
+
       root.append('path')
         .datum(dataElelment)
         .attr('d', area)
         .attr('class', 'area')
-        .style('fill', noAreaGradient ? defaultColours[i] : `url(#gradient-${i}-${this.uid})`);
+        .style('fill', noAreaGradient ? defaultColour : `url(#gradient-${i}-${this.uid})`);
     });
 
     if (dataPoints) {
-      data.map((dataElelment, i) => {
-        dataElelment.map((dotData) => {
+      data.forEach((dataElelment, i) => {
+        dataElelment.forEach((dotData) => {
           root.append('circle')
           .attr('class', 'data-point')
           .style('strokeWidth', '2px')
@@ -219,7 +272,11 @@ export default class AreaChart extends React.Component {
     }
     return (
       <div ref={this.uid} className={`area-chart${this.uid}`}>
-        <Style scopeSelector={`.area-chart${this.uid}`} rules={merge({}, defaultStyle, style, getAxisStyles(grid, verticalGrid, yAxisOrientRight))}/>
+        <Style
+          scopeSelector={`.area-chart${this.uid}`}
+          rules={
+            merge({}, defaultStyle, style, getAxisStyles(grid, verticalGrid, yAxisOrientRight))}
+        />
         {svgNode.toReact()}
       </div>
     );

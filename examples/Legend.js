@@ -46,33 +46,30 @@ class Legend extends React.Component {
     };
   }
 
-  constructor(props) {
-    super(props);
-  }
-
   getList() {
     return (
       this.props.data.map(
-        (item, index) => {
-          return (
-            <li key={index}>
-              <span
-                className="icon"
-                style={{backgroundColor: this.getIconColor(index)}}
-              >
-            </span>
+        (item, index) => (
+          <li key={index}>
+            <span
+              className="icon"
+              style={{ backgroundColor: this.getIconColor(index) }}
+            />
             {item.type}
-            </li>
-          );
-        }
+          </li>
+        )
       )
     );
   }
 
   getIconColor(index) {
-    if (typeof this.props.config !== 'undefined') {
-      if (this.props.config.length > index) {
-        return this.props.config[index].color;
+    const {
+      config
+    } = this.props;
+
+    if (typeof config !== 'undefined') {
+      if (config.length > index) {
+        return config[index].color;
       }
     }
     return colors[index];
@@ -81,7 +78,7 @@ class Legend extends React.Component {
   render() {
     return (
       <div className="legend-container">
-        <Style scopeSelector=".legend-container" rules={legendStyles}/>
+        <Style scopeSelector=".legend-container" rules={legendStyles} />
         <ul className="legend">{this.getList()}</ul>
       </div>
     );

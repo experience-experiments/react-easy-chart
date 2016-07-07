@@ -1,6 +1,6 @@
 import React from 'react';
 import { scale, layout, svg, select, event as d3LastEvent, interpolate } from 'd3';
-import {defaultStyle} from '../shared';
+import { defaultStyle } from '../shared';
 import { createElement } from 'react-faux-dom';
 import { Style } from 'radium';
 import merge from 'lodash.merge';
@@ -80,7 +80,10 @@ export default class PieChart extends React.Component {
       .data(this.pie(this.props.data))
       .enter()
       .append('path')
-      .attr('fill', (d, i) => d.data.color ? d.data.color : this.color(i))
+      .attr('fill', (d, i) => (
+        (d.data.color)
+          ? d.data.color
+          : this.color(i)))
       .attr('d', this.getArc())
       .attr('class', 'pie_chart_lines')
       .on('mouseover', (d) => this.props.mouseOverHandler(d, d3LastEvent))
