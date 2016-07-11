@@ -1,3 +1,5 @@
 /* eslint-env node */
-const testsContext = require.context('.', true, /test\.js$/);
-testsContext.keys().forEach(testsContext);
+const context = require.context('.', true, /test\.js$/);
+context
+  .keys()
+  .forEach(context);

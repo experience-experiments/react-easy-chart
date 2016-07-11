@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React from 'react';
 import { scaleBand as band, scaleLinear as linear } from 'd3-scale';
 import { event as d3LastEvent, select, time, svg, scale, max } from 'd3';
@@ -12,55 +14,57 @@ const colorScale = scale.category20();
 
 export default class BarChart extends React.Component {
 
-  static get propTypes() {
-    return {
-      data: React.PropTypes.array.isRequired,
-      lineData: React.PropTypes.array,
-      width: React.PropTypes.number,
-      height: React.PropTypes.number,
-      margin: React.PropTypes.object,
-      mouseOverHandler: React.PropTypes.func,
-      mouseOutHandler: React.PropTypes.func,
-      mouseMoveHandler: React.PropTypes.func,
-      clickHandler: React.PropTypes.func,
-      interpolate: React.PropTypes.string,
-      style: React.PropTypes.object,
-      colorBars: React.PropTypes.bool,
-      axes: React.PropTypes.bool,
-      grid: React.PropTypes.bool,
-      axisLabels: React.PropTypes.object,
-      xType: React.PropTypes.string,
-      yType: React.PropTypes.string,
-      y2Type: React.PropTypes.string,
-      xDomainRange: React.PropTypes.array,
-      yDomainRange: React.PropTypes.array,
-      datePattern: React.PropTypes.string,
-      tickTimeDisplayFormat: React.PropTypes.string,
-      yAxisOrientRight: React.PropTypes.bool,
-      barWidth: React.PropTypes.number,
-      xTickNumber: React.PropTypes.number,
-      yTickNumber: React.PropTypes.number
-    };
+  static propTypes = {
+    data: React.PropTypes.array.isRequired,
+    lineData: React.PropTypes.array,
+    width: React.PropTypes.number,
+    height: React.PropTypes.number,
+    margin: React.PropTypes.object,
+    mouseOverHandler: React.PropTypes.func,
+    mouseOutHandler: React.PropTypes.func,
+    mouseMoveHandler: React.PropTypes.func,
+    clickHandler: React.PropTypes.func,
+    interpolate: React.PropTypes.string,
+    style: React.PropTypes.object,
+    colorBars: React.PropTypes.bool,
+    axes: React.PropTypes.bool,
+    grid: React.PropTypes.bool,
+    axisLabels: React.PropTypes.shape({
+      x: React.PropTypes.string,
+      y: React.PropTypes.string
+    }),
+    xType: React.PropTypes.string,
+    yType: React.PropTypes.string,
+    y2Type: React.PropTypes.string,
+    xDomainRange: React.PropTypes.array,
+    yDomainRange: React.PropTypes.array,
+    datePattern: React.PropTypes.string,
+    tickTimeDisplayFormat: React.PropTypes.string,
+    yAxisOrientRight: React.PropTypes.bool,
+    barWidth: React.PropTypes.number,
+    xTickNumber: React.PropTypes.number,
+    yTickNumber: React.PropTypes.number
   }
 
-  static get defaultProps() {
-    return {
-      lineData: [],
-      width: 400,
-      height: 200,
-      barWidth: 10,
-      axes: false,
-      xType: 'text',
-      yType: 'linear',
-      y2Type: 'linear',
-      interpolate: 'linear',
-      mouseOverHandler: () => {},
-      mouseOutHandler: () => {},
-      mouseMoveHandler: () => {},
-      clickHandler: () => {},
-      datePattern: '%d-%b-%y',
-      axisLabels: {x: '', y: ''}
-    };
+  static defaultProps = {
+    lineData: [],
+    width: 400,
+    height: 200,
+    barWidth: 10,
+    axes: false,
+    xType: 'text',
+    yType: 'linear',
+    y2Type: 'linear',
+    interpolate: 'linear',
+    mouseOverHandler: () => {},
+    mouseOutHandler: () => {},
+    mouseMoveHandler: () => {},
+    clickHandler: () => {},
+    datePattern: '%d-%b-%y',
+    axisLabels: {
+      x: '',
+      y: ''
+    }
   }
 
   constructor(props) {
@@ -82,18 +86,18 @@ export default class BarChart extends React.Component {
   setScaleDomainRange(axesType, domainRange, data, type, length) {
     const dataIndex = axesType === 'x' ? 'x' : 'y';
     const barPadding = (length / data.length) > 40 ? 0.02 : 0.04;
-    let d3Axis;
+    let axis;
     switch (type) {
       case 'text':
-        d3Axis = band();
-        d3Axis
+        axis = band();
+        axis
           .domain(data.map((d) => d[dataIndex]))
           .range([0, length])
           .padding(barPadding);
         break;
       case 'linear':
-        d3Axis = linear();
-        d3Axis
+        axis = linear();
+        axis
           .domain(
             (domainRange)
               ? calcDefaultDomain(domainRange, type, this.parseDate)
@@ -105,8 +109,8 @@ export default class BarChart extends React.Component {
           );
         break;
       case 'time':
-        d3Axis = time.scale();
-        d3Axis
+        axis = time.scale();
+        axis
           .domain(
             (domainRange)
               ? calcDefaultDomain(domainRange, type, this.parseDate)
@@ -119,7 +123,7 @@ export default class BarChart extends React.Component {
       default:
         break;
     }
-    return d3Axis;
+    return axis;
   }
 
   defineColor(i, d, colorBars) {
@@ -128,104 +132,163 @@ export default class BarChart extends React.Component {
     return null;
   }
 
-  render() {
+  createSvgNode({ w, h, m }) {
+    const node = createElement('svg');
+    select(node)
+      .attr('width', w + m.left + m.right)
+      .attr('height', h + m.top + m.bottom);
+    return node;
+  }
+
+  createSvgRoot({ node, m }) {
+    return select(node)
+      .append('g')
+      .attr('transform', `translate(${m.left}, ${m.top})`);
+  }
+
+  createXAxis({ root, m, w, h, x }) {
     const {
-      data,
-      lineData,
-      mouseOverHandler,
-      mouseOutHandler,
-      mouseMoveHandler,
-      clickHandler,
-      style,
-      axes,
       axisLabels,
-      colorBars,
       xType,
-      yType,
-      y2Type,
-      interpolate,
-      barWidth,
       tickTimeDisplayFormat,
       xTickNumber,
+      yAxisOrientRight
+    } = this.props;
+
+    const axis = svg.axis()
+        .scale(x)
+        .orient('bottom');
+
+    if (xType === 'time' && tickTimeDisplayFormat) {
+      axis
+        .tickFormat(time.format(tickTimeDisplayFormat));
+    }
+
+    axis
+      .tickSize(0)
+      .tickPadding(15);
+
+    if (xTickNumber) {
+      axis
+        .ticks(xTickNumber);
+    }
+
+    root.append('g')
+      .attr('class', 'x axis')
+      .attr('transform', `translate(0, ${h})`)
+      .call(axis)
+      .append('text')
+      .attr('class', 'label')
+      .attr('y', m.bottom - 10)
+      .attr('x', yAxisOrientRight ? 0 : w)
+      .style('text-anchor', yAxisOrientRight ? 'start' : 'end')
+      .text(axisLabels.x);
+
+    return axis;
+  }
+
+  createYAxis({ root, m, w, y }) {
+    const {
+      axisLabels,
+      yTickNumber,
+      yAxisOrientRight,
+      grid
+    } = this.props;
+
+    const axis = svg.axis()
+        .scale(y)
+        .orient(yAxisOrientRight ? 'right' : 'left');
+
+    if (yTickNumber) {
+      axis
+        .ticks(yTickNumber);
+    }
+
+    if (grid) {
+      axis
+        .tickSize(-w, 6)
+        .tickPadding(12);
+    } else {
+      axis
+        .tickPadding(10);
+    }
+
+    root.append('g')
+      .attr('class', 'y axis')
+      .call(axis)
+      .attr('transform', yAxisOrientRight ? `translate(${w}, 0)` : 'translate(0, 0)')
+      .append('text')
+      .attr('class', 'label')
+      .attr('transform', 'rotate(-90)')
+      .attr('x', 0)
+      .attr('y', yAxisOrientRight ? -25 + m.right : 10 - m.left)
+      .attr('dy', '.9em')
+      .style('text-anchor', 'end')
+      .text(axisLabels.y);
+
+    return axis;
+  }
+
+  createYAxis2({ root, m, w, h }) { //, yAxis }) {
+    const {
+      lineData,
+      axisLabels,
+      y2Type,
       yTickNumber,
       yAxisOrientRight,
       grid,
-      xDomainRange,
-      yDomainRange } = this.props;
-    const margin = calcMargin(axes, this.props.margin, yAxisOrientRight, lineData.length > 0);
-    const width = reduce(this.props.width, margin.left, margin.right);
-    const height = reduce(this.props.height, margin.top, margin.bottom);
+      yDomainRange
+    } = this.props;
 
-    const x = this.setScaleDomainRange('x', xDomainRange, data, xType, width);
-    const y = this.setScaleDomainRange('y', yDomainRange, data, yType, height);
+    const y = this.setScaleDomainRange('y', yDomainRange, lineData, y2Type, h);
 
-    let y2 = null;
-    if (lineData.length > 0) y2 = this.setScaleDomainRange('y', yDomainRange, lineData, y2Type, height);
+    const axis = svg.axis()
+        .scale(y)
+        .orient(yAxisOrientRight ? 'left' : 'right');
 
-    const svgNode = createElement('svg');
-    select(svgNode).attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom);
-    const root = select(svgNode).append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+    if (yTickNumber) {
+      axis // is this supposed to be yAxis 1 or yAxis 2? (WAS yAxis 1)
+        .ticks(yTickNumber);
+    }
 
-    if (axes) {
-      const xAxis = svg.axis()
-          .scale(x)
-          .orient('bottom');
-      if (xType === 'time' && tickTimeDisplayFormat) {
-        xAxis.tickFormat(time.format(tickTimeDisplayFormat));
-      }
-      xAxis.tickSize(0).tickPadding(15);
-      if (xTickNumber) xAxis.ticks(xTickNumber);
-      root.append('g')
-        .attr('class', 'x axis')
-        .attr('transform', 'translate(0,' + height + ')')
-        .call(xAxis)
-        .append('text')
-        .attr('class', 'label')
-        .attr('y', margin.bottom - 10)
-        .attr('x', yAxisOrientRight ? 0 : width)
-        .style('text-anchor', yAxisOrientRight ? 'start' : 'end')
-        .text(axisLabels.x);
+    if (grid) {
+      axis // is this supposed to be yAxis 1 or yAxis 2? (WAS yAxis 1)
+        .tickSize(-w, 6)
+        .tickPadding(12);
+    } else {
+      axis // is this supposed to be yAxis 1 or yAxis 2? (WAS yAxis 1)
+        .tickPadding(10);
+    }
 
-      const yAxis = svg.axis()
-          .scale(y)
-          .orient(yAxisOrientRight ? 'right' : 'left');
-      if (yTickNumber) yAxis.ticks(yTickNumber);
-      if (grid) { yAxis.tickSize(-width, 6).tickPadding(12); } else { yAxis.tickPadding(10); }
-      root.append('g')
+    root.append('g')
         .attr('class', 'y axis')
-        .call(yAxis)
-        .attr('transform', yAxisOrientRight ? `translate(${width}, 0)` : `translate(0, 0)`)
+        .call(axis)
+        .attr('transform', yAxisOrientRight ? 'translate(0, 0)' : `translate(${w}, 0)`)
         .append('text')
         .attr('class', 'label')
         .attr('transform', 'rotate(-90)')
         .attr('x', 0)
-        .attr('y', yAxisOrientRight ? -25 + margin.right : 10 - margin.left)
+        .attr('y', yAxisOrientRight ? 10 - m.left : -25 + m.right)
         .attr('dy', '.9em')
         .style('text-anchor', 'end')
-        .text(axisLabels.y);
+        .text(axisLabels.y2);
 
-      if (y2) {
-        const yAxis2 = svg.axis()
-            .scale(y2)
-            .orient(yAxisOrientRight ? 'left' : 'right');
-        if (yTickNumber) yAxis.ticks(yTickNumber);
-        if (grid) { yAxis.tickSize(-width, 6).tickPadding(12); } else { yAxis.tickPadding(10); }
-        root.append('g')
-            .attr('class', 'y axis')
-            .call(yAxis2)
-            .attr('transform', yAxisOrientRight ? `translate(0, 0)` : `translate(${width}, 0)`)
-            .append('text')
-            .attr('class', 'label')
-            .attr('transform', 'rotate(-90)')
-            .attr('x', 0)
-            .attr('y', yAxisOrientRight ? 10 - margin.left : -25 + margin.right)
-            .attr('dy', '.9em')
-            .style('text-anchor', 'end')
-            .text(axisLabels.y2);
-      }
-    }
+    return axis;
+  }
 
-    data.map(() => {
+  createBarChart({ root, x, y, h }) {
+    const {
+      data,
+      mouseOverHandler,
+      mouseOutHandler,
+      mouseMoveHandler,
+      clickHandler,
+      colorBars,
+      xType,
+      barWidth
+    } = this.props;
+
+    data.forEach(() => {
       root.selectAll('.bar')
           .data(data)
           .enter()
@@ -249,29 +312,136 @@ export default class BarChart extends React.Component {
             }
           })
           .attr('y', (d) => y(d.y))
-          .attr('height', (d) => height - y(d.y))
+          .attr('height', (d) => h - y(d.y))
           .on('mouseover', (d) => mouseOverHandler(d, d3LastEvent))
           .on('mouseout', (d) => mouseOutHandler(d, d3LastEvent))
           .on('mousemove', () => mouseMoveHandler(d3LastEvent))
           .on('click', (d) => clickHandler(d, d3LastEvent));
     });
+  }
 
-    if (y2) {
-      const yValue = getValueFunction('y', y2Type, this.parseDate);
-      const xValue = getValueFunction('x', xType, this.parseDate);
-      const myLinePath = svg.line().interpolate(interpolate).x((d) => x(xValue(d))).y((d) => y2(yValue(d)));
+  createLinePath({ root, h, x }) {
+    const {
+      lineData,
+      xType,
+      y2Type,
+      interpolate,
+      yDomainRange
+    } = this.props;
 
-      root.append('path')
-        .datum(lineData)
-        .attr('class', `line`)
-        .attr('style', `stroke: red`)
-        .attr('d', myLinePath);
+    const y = this.setScaleDomainRange('y', yDomainRange, lineData, y2Type, h);
+
+    const yValue = getValueFunction('y', y2Type, this.parseDate);
+    const xValue = getValueFunction('x', xType, this.parseDate);
+
+    const linePath = svg.line()
+      .interpolate(interpolate)
+      .x((d) => x(xValue(d)))
+      .y((d) => y(yValue(d)));
+
+    root.append('path')
+      .datum(lineData)
+      .attr('class', 'line')
+      .attr('style', 'stroke: red')
+      .attr('d', linePath);
+
+    return linePath;
+  }
+
+  createStyle() {
+    const {
+      style,
+      yAxisOrientRight,
+      grid
+    } = this.props;
+
+    const uid = this.uid;
+    const scope = `.bar-chart-${uid}`;
+    const axisStyles = getAxisStyles(grid, false, yAxisOrientRight);
+    const rules = merge({}, defaultStyle, style, axisStyles);
+    return (
+      <Style
+        scopeSelector={scope}
+        rules={rules} />
+    );
+  }
+
+  hasLineData() {
+    const {
+      lineData
+    } = this.props;
+
+    return (lineData.length > 0);
+  }
+
+  calculateChartParameters() {
+    const {
+      data,
+      axes,
+      xType,
+      yType,
+      yAxisOrientRight,
+      xDomainRange,
+      yDomainRange,
+      margin,
+      width,
+      height
+    } = this.props;
+
+    const hasLineData = this.hasLineData();
+    const m = calcMargin(axes, margin, yAxisOrientRight, hasLineData);
+    const w = reduce(width, m.left, m.right);
+    const h = reduce(height, m.top, m.bottom);
+    const x = this.setScaleDomainRange('x', xDomainRange, data, xType, w);
+    const y = this.setScaleDomainRange('y', yDomainRange, data, yType, h);
+
+    const node = this.createSvgNode({ w, h, m });
+    const root = this.createSvgRoot({ node, m });
+
+    return {
+      m,
+      w,
+      h,
+      x,
+      y,
+      node,
+      root
+    };
+  }
+
+  render() {
+    const {
+      axes
+    } = this.props;
+
+    const hasLineData = this.hasLineData();
+    const p = this.calculateChartParameters();
+
+    if (axes) {
+      this.createXAxis(p);
+
+      this.createYAxis(p); // const yAxis = this.createYAxis(p);
+
+      if (hasLineData) {
+        this.createYAxis2(p); // { ...p, yAxis });
+      }
     }
 
+    this.createBarChart(p);
+
+    if (hasLineData) {
+      this.createLinePath(p);
+    }
+
+    const uid = this.uid;
+    const {
+      node
+    } = p;
+
     return (
-      <div ref={this.uid} className={`bar-chart${this.uid}`}>
-        <Style scopeSelector={`.bar-chart${this.uid}`} rules={merge({}, defaultStyle, style, getAxisStyles(grid, false, yAxisOrientRight))}/>
-        {svgNode.toReact()}
+      <div ref={uid} className={`bar-chart-${uid}`}>
+        {this.createStyle()}
+        {node.toReact()}
       </div>
     );
   }
