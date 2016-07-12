@@ -41,7 +41,7 @@
     "chai-spies": "^0.7.1",
     "es5-shim": "^4.5.9",
     "es6-shim": "^0.35.1",
-    "eslint": "^3.0.1",
+    "eslint": "^2.9.0",
     "eslint-config-airbnb": "^9.0.1",
     "eslint-plugin-import": "^1.10.2",
     "eslint-plugin-jsx-a11y": "^1.5.5",
