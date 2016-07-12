@@ -1,6 +1,9 @@
 import React from 'react';
 import { Style } from 'radium';
 import { scale } from 'd3';
+import {
+  getRandomId
+} from '../shared';
 import merge from 'lodash.merge';
 
 import defaultStyles from './defaultStyles';
@@ -29,7 +32,7 @@ export default class Legend extends React.Component {
   constructor(props) {
     super(props);
 
-    this.uid = Math.floor(Math.random() * new Date().getTime());
+    this.uid = getRandomId(); // Math.floor(Math.random() * new Date().getTime());
   }
 
   getBackgroundColor(index) {
@@ -45,25 +48,40 @@ export default class Legend extends React.Component {
     return colors[index];
   }
 
-  createListItems() {
+  createLegend() {
     const {
+      dataId,
+      data,
+      tags,
       horizontal
     } = this.props;
 
-    const cn = horizontal ? 'horizontal' : '';
+    const className =
+      (horizontal)
+        ? 'horizontal'
+        : false;
+
+    data.forEach((item) => {
+      const index = tags.findIndex((tag) => tag === item[dataId]);
+      if (index < 0) tags.push(item[dataId]);
+    });
 
     return (
-      this.props.tags.map(
-        (item, index) => (
-          <li key={`legend-list-item-${index}`} className={cn}>
-            <span
-              className="icon"
-              style={{ backgroundColor: this.getBackgroundColor(index) }}
-            />
-            {item}
-          </li>
-        )
-      )
+      <ul className="legend">
+        {tags.map((item, index) => {
+          const key = `legend-item-${index}`;
+          const backgroundColor = this.getBackgroundColor(index);
+          return (
+            <li key={key} className={className}>
+              <span
+                className="icon"
+                style={{ backgroundColor }}
+              />
+              {item}
+            </li>
+          );
+        })}
+      </ul>
     );
   }
 
@@ -74,34 +92,23 @@ export default class Legend extends React.Component {
 
     const uid = this.uid;
     const rules = merge({}, defaultStyles, styles);
+    const scope = `.legend-container-${uid}`;
 
     return (
       <Style
-        scopeSelector={`.legend-container-${uid}`}
+        scopeSelector={scope}
         rules={rules}
       />
     );
   }
 
   render() {
-    const {
-      dataId,
-      data,
-      tags
-    } = this.props;
-
-    data.forEach((item) => {
-      const index = tags.findIndex((tag) => tag === item[dataId]);
-      if (index === -1) tags.push(item[dataId]);
-    });
-
     const uid = this.uid;
+    const className = `legend-container-${uid}`;
     return (
-      <div className={`legend-container-${uid}`}>
+      <div className={className}>
         {this.createStyle()}
-        <ul className="legend">
-          {this.createListItems()}
-        </ul>
+        {this.createLegend()}
       </div>
     );
   }
