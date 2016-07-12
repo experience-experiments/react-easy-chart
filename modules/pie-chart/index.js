@@ -1,6 +1,6 @@
 import React from 'react';
 import { scale, layout, svg, select, event as d3LastEvent, interpolate } from 'd3';
-import {defaultStyle} from '../shared';
+import { defaultStyle } from '../shared';
 import { createElement } from 'react-faux-dom';
 import { Style } from 'radium';
 import merge from 'lodash.merge';
@@ -39,31 +39,41 @@ export default class PieChart extends React.Component {
     super(props);
     this.uid = Math.floor(Math.random() * new Date().getTime());
     this.color = scale.category20();
-    this.path = null;
-    this.text = null;
-    this.pie = layout.pie().value((d) => d.value).sort(null);
+    this.pie = layout.pie()
+      .value((d) => d.value)
+      .sort(null);
     this.current = [];
     this.currentTxt = [];
   }
 
   componentDidMount() {
-    this.draw();
+    this.initialise();
   }
 
   componentDidUpdate() {
-    this.update();
+    this.transition();
   }
 
   getArc() {
+    const {
+      padding
+    } = this.props;
+
     return svg.arc()
-    .innerRadius(this.getInnerRadius() - this.props.padding)
-    .outerRadius(this.getRadius() - this.props.padding);
+      .innerRadius(this.getInnerRadius() - padding)
+      .outerRadius(this.getRadius() - padding);
   }
 
   getLabelArc() {
+    const {
+      padding
+    } = this.props;
+
+    const radius = this.getRadius();
+
     return svg.arc()
-    .outerRadius(this.getRadius() - this.props.padding - ((20 * this.getRadius()) / 100))
-    .innerRadius(this.getRadius() - this.props.padding - ((20 * this.getRadius()) / 100));
+      .outerRadius(radius - padding - ((20 * radius) / 100))
+      .innerRadius(radius - padding - ((20 * radius) / 100));
   }
 
   getRadius() {
@@ -74,50 +84,115 @@ export default class PieChart extends React.Component {
     return this.props.innerHoleSize * 0.5;
   }
 
-  draw() {
-    this.path = select(`#pie_${this.uid}`)
+  initialiseLabels() {
+    const {
+      data
+    } = this.props;
+
+    const uid = this.uid;
+
+    const text = select(`#labels_${uid}`)
+      .selectAll('text')
+      .data(this.pie(data))
+      .enter()
+      .append('text')
+      .attr('transform', (d) => `translate(${this.getLabelArc().centroid(d)})`)
+      .attr('dy', '.35em')
+      .attr('class', 'pie_chart_text')
+      .text((d) => d.data.key)
+      .each((d) => {
+        this.currentTxt.push(d);
+      });
+
+    this.text = text;
+  }
+
+  initialisePieChart() {
+    const {
+      data,
+      mouseOverHandler,
+      mouseOutHandler,
+      mouseMoveHandler,
+      clickHandler
+    } = this.props;
+
+    const uid = this.uid;
+
+    const path = select(`#pie_${uid}`)
       .selectAll('path')
-      .data(this.pie(this.props.data))
+      .data(this.pie(data))
       .enter()
       .append('path')
-      .attr('fill', (d, i) => d.data.color ? d.data.color : this.color(i))
+      .attr('fill', (d, i) => (
+        (d.data.color)
+          ? d.data.color
+          : this.color(i)))
       .attr('d', this.getArc())
       .attr('class', 'pie_chart_lines')
-      .on('mouseover', (d) => this.props.mouseOverHandler(d, d3LastEvent))
-      .on('mouseout', (d) => this.props.mouseOutHandler(d, d3LastEvent))
-      .on('mousemove', () => this.props.mouseMoveHandler(d3LastEvent))
-      .on('click', (d) => this.props.clickHandler(d, d3LastEvent))
+      .on('mouseover', (d) => mouseOverHandler(d, d3LastEvent))
+      .on('mouseout', (d) => mouseOutHandler(d, d3LastEvent))
+      .on('mousemove', () => mouseMoveHandler(d3LastEvent))
+      .on('click', (d) => clickHandler(d, d3LastEvent))
       .each((d) => {
         this.current.push(d);
       });
-    if (this.props.labels) {
-      this.text = select(`#labels_${this.uid}`)
-        .selectAll('text')
-        .data(this.pie(this.props.data))
-        .enter()
-        .append('text')
-        .attr('transform', (d) => `translate(${this.getLabelArc().centroid(d)})`)
-        .attr('dy', '.35em')
-        .attr('class', 'pie_chart_text')
-        .text((d) => d.data.key)
-        .each((d) => {
-          this.currentTxt.push(d);
-        });
+
+    this.path = path;
+  }
+
+  initialise() {
+    const {
+      labels
+    } = this.props;
+
+    this.initialisePieChart();
+
+    if (labels) {
+      this.initialiseLabels();
     }
   }
 
-  update() {
+  transitionPieChart() {
+    const {
+      data
+    } = this.props;
+
     this.path
-      .data(this.pie(this.props.data))
+      .data(this.pie(data))
       .transition()
       .duration(750)
       .attrTween('d', this.tween.bind(this));
-    if (this.props.labels) {
-      this.text
-        .data(this.pie(this.props.data))
-        .transition()
-        .duration(750)
-        .attr('transform', (d) => `translate(${this.getLabelArc().centroid(d)})`);
+  }
+
+  transitionLabels() {
+    const {
+      data
+    } = this.props;
+
+    this.text
+      .data(this.pie(data))
+      .transition()
+      .duration(750)
+      .attr('transform', (d) => `translate(${this.getLabelArc().centroid(d)})`);
+  }
+
+  transition() {
+    const {
+      labels
+    } = this.props;
+
+    this.transitionPieChart();
+
+    if (labels) {
+      if (this.text) {
+        this.transitionLabels();
+      } else {
+        this.initialiseLabels();
+      }
+    } else {
+      if (this.text) {
+        delete this.text;
+      }
     }
   }
 
@@ -128,29 +203,71 @@ export default class PieChart extends React.Component {
     return (t) => this.getArc()(i(t));
   }
 
-  render() {
-    const node = createElement('svg');
-    select(node)
-      .attr('width', this.props.size)
-      .attr('height', this.props.size)
-      .append('g')
-      .attr('id', `pie_${this.uid}`)
-      .attr('transform', `translate(${this.getRadius()}, ${this.getRadius()})`);
-    select(node)
-      .attr('width', this.props.size)
-      .attr('height', this.props.size)
-      .append('g')
-      .attr('id', `labels_${this.uid}`)
-      .attr('transform', `translate(${this.getRadius()}, ${this.getRadius()})`);
+  createPieChart(node) {
+    const {
+      size
+    } = this.props;
 
-    const uid = Math.floor(Math.random() * new Date().getTime());
+    const uid = this.uid;
+    const radius = this.getRadius();
+
+    select(node)
+      .attr('width', size)
+      .attr('height', size)
+      .append('g')
+      .attr('id', `pie_${uid}`)
+      .attr('transform', `translate(${radius}, ${radius})`);
+  }
+
+  createLabels(node) {
+    const {
+      size
+    } = this.props;
+
+    const uid = this.uid;
+    const radius = this.getRadius();
+
+    select(node)
+      .attr('width', size)
+      .attr('height', size)
+      .append('g')
+      .attr('id', `labels_${uid}`)
+      .attr('transform', `translate(${radius}, ${radius})`);
+  }
+
+  createStyle() {
+    const uid = this.uid;
+    const {
+      styles
+    } = this.props;
+    const rules = merge({}, defaultStyle, styles);
+
+    return (
+      <Style
+        scopeSelector={`.pie_chart${uid}`}
+        rules={rules}
+      />
+    );
+  }
+
+  render() {
+    const {
+      labels
+    } = this.props;
+
+    const node = createElement('svg');
+
+    this.createPieChart(node);
+
+    if (labels) {
+      this.createLabels(node);
+    }
+
+    const uid = this.uid;
 
     return (
       <div className={`pie_chart${uid}`}>
-        <Style
-          scopeSelector={`.pie_chart${uid}`}
-          rules={merge({}, defaultStyle, this.props.styles)}
-        />
+        {this.createStyle()}
         {node.toReact()}
       </div>
     );

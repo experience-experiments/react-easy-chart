@@ -142,7 +142,9 @@ export default class ScatterplotChart extends React.Component {
 
   setXandY() {
     const w = this.props.width - (this.margin.left + this.margin.right);
-    const h = this.props.height - (this.margin.top + this.margin.bottom + (this.props.dotRadius * 2));
+    const h = this.props.height - (
+      this.margin.top + this.margin.bottom + (this.props.dotRadius * 2));
+
     this.x = this.setDomainAndRange(
       'x',
       this.xDomainRange,
@@ -151,6 +153,7 @@ export default class ScatterplotChart extends React.Component {
       w,
       this.props.yAxisOrientRight
     );
+
     this.y = this.setDomainAndRange(
       'y',
       this.yDomainRange,
@@ -164,22 +167,51 @@ export default class ScatterplotChart extends React.Component {
     this.xAxis = svg.axis()
       .scale(this.x)
       .orient('bottom');
+
     if (this.props.xType === 'time' && this.props.tickTimeDisplayFormat) {
-      this.xAxis.tickFormat(time.format(this.props.tickTimeDisplayFormat));
+      this.xAxis
+        .tickFormat(time.format(this.props.tickTimeDisplayFormat));
     }
-    if (this.props.xTickNumber) this.xAxis.ticks(this.props.xTickNumber);
 
-    if (this.props.grid && this.props.verticalGrid) { this.xAxis.tickSize(-this.height, 6).tickPadding(15); } else { this.xAxis.tickSize(0).tickPadding(15);}
+    if (this.props.xTickNumber) {
+      this.xAxis
+        .ticks(this.props.xTickNumber);
+    }
 
-    if (this.props.xTicks) this.xAxis.ticks(this.props.xTicks);
+    if (this.props.grid && this.props.verticalGrid) {
+      this.xAxis
+        .tickSize(-this.height, 6)
+        .tickPadding(15);
+    } else {
+      this.xAxis
+        .tickSize(0)
+        .tickPadding(15);
+    }
+
+    if (this.props.xTicks) {
+      this.xAxis
+        .ticks(this.props.xTicks);
+    }
   }
 
   setYaxis() {
     this.yAxis = svg.axis()
       .scale(this.y)
       .orient(this.props.yAxisOrientRight ? 'right' : 'left');
-    if (this.props.grid) { this.yAxis.tickSize(-this.innerWidth, 6).tickPadding(12); } else { this.yAxis.tickPadding(10); }
-    if (this.props.yTicks) this.yAxis.ticks(this.props.yTicks);
+
+    if (this.props.grid) {
+      this.yAxis
+        .tickSize(-this.innerWidth, 6)
+        .tickPadding(12);
+    } else {
+      this.yAxis
+        .tickPadding(10);
+    }
+
+    if (this.props.yTicks) {
+      this.yAxis
+        .ticks(this.props.yTicks);
+    }
   }
 
   getScale(type) {
@@ -196,6 +228,8 @@ export default class ScatterplotChart extends React.Component {
   setDomainAndRange(axesType, domainRange, data, type, length, yAxisOrientRight) {
     const dataIndex = axesType === 'x' ? 'x' : 'y';
     let d3Axis;
+    let minAmount;
+    let maxAmount;
     switch (type) {
       case 'text':
         d3Axis = point();
@@ -205,21 +239,31 @@ export default class ScatterplotChart extends React.Component {
           .padding(1);
         break;
       case 'linear':
-        let minAmount = min(data, (d) => d[dataIndex]);
-        let maxAmount = max(data, (d) => d[dataIndex]);
+        minAmount = min(data, (d) => d[dataIndex]);
+        maxAmount = max(data, (d) => d[dataIndex]);
         d3Axis = linear();
         if (domainRange) {
           d3Axis.domain(calcDefaultDomain(domainRange, type, parseDate));
         } else {
           // set initial domain
-          d3Axis.domain([minAmount, maxAmount]);
+          d3Axis
+            .domain([minAmount, maxAmount]);
           // calculate 1 tick offset
           const ticks = d3Axis.ticks();
-          minAmount = yAxisOrientRight && axesType === 'x' ? minAmount : minAmount - (ticks[1] - ticks[0]);
-          maxAmount = yAxisOrientRight && axesType === 'x' ? maxAmount + (ticks[1] - ticks[0]) : maxAmount;
-          d3Axis.domain([minAmount, maxAmount]);
+
+          minAmount = (yAxisOrientRight && axesType === 'x')
+            ? minAmount
+            : minAmount - (ticks[1] - ticks[0]);
+
+          maxAmount = (yAxisOrientRight && axesType === 'x')
+            ? maxAmount + (ticks[1] - ticks[0])
+            : maxAmount;
+
+          d3Axis
+            .domain([minAmount, maxAmount]);
         }
-        d3Axis.range(axesType === 'x' ? [0, length] : [length, 0]);
+        d3Axis
+          .range(axesType === 'x' ? [0, length] : [length, 0]);
         break;
       case 'time':
         d3Axis = time.scale();
@@ -231,7 +275,7 @@ export default class ScatterplotChart extends React.Component {
           .range(
             (axesType === 'x')
               ? [0, length]
-              : [length, 0]); // , 1); // What is this second argument? Cannot find documentation in 0.3.0
+              : [length, 0]);
         break;
       default:
         break;
@@ -240,8 +284,12 @@ export default class ScatterplotChart extends React.Component {
   }
 
   getDataConfig(type) {
-    const index = this.props.config.findIndex((item) => item.type === type);
-    return this.props.config[index];
+    const {
+      config
+    } = this.props;
+
+    const index = config.findIndex((item) => item.type === type);
+    return config[index];
   }
 
   getFill(data) {
@@ -291,7 +339,7 @@ export default class ScatterplotChart extends React.Component {
         .call(this.yAxis)
         .attr(
           'transform', this.props.yAxisOrientRight ?
-          `translate(${this.innerWidth}, 0)` : `translate(0, 0)`
+          `translate(${this.innerWidth}, 0)` : 'translate(0, 0)'
         )
         .append('text')
         .attr('class', 'label')
@@ -321,7 +369,7 @@ export default class ScatterplotChart extends React.Component {
             return this.x(d.x);
         }
       })
-      .attr('cy', (d) => { return this.y(d.y); })
+      .attr('cy', (d) => this.y(d.y))
       .style('fill', (d) => this.getFill(d))
       .style('stroke', (d) => this.getStroke(d))
       .on('mouseover', (d) => this.props.mouseOverHandler(d, d3LastEvent))
@@ -364,15 +412,17 @@ export default class ScatterplotChart extends React.Component {
             return this.x(d.x);
         }
       })
-      .attr('cy', (d) => { return this.y(d.y); });
+      .attr('cy', (d) => this.y(d.y));
   }
 
   calcMargin(axes, spacer, yAxisOrientRight) {
     let defaultMargins = axes ?
-    {top: 24, right: 24, bottom: 24, left: 48} :
-    {top: spacer, right: spacer, bottom: spacer, left: spacer};
+    { top: 24, right: 24, bottom: 24, left: 48 } :
+    { top: spacer, right: spacer, bottom: spacer, left: spacer };
     if (yAxisOrientRight) {
-      defaultMargins = axes ? {top: 24, right: 48, bottom: 24, left: 24} : {top: spacer, right: spacer, bottom: spacer, left: spacer};
+      defaultMargins = (axes)
+        ? { top: 24, right: 48, bottom: 24, left: 24 }
+        : { top: spacer, right: spacer, bottom: spacer, left: spacer };
     }
     return defaultMargins;
   }
@@ -396,9 +446,19 @@ export default class ScatterplotChart extends React.Component {
 
     const uid = Math.floor(Math.random() * new Date().getTime());
 
+    const style = this.props.style;
+    const axisStyles = getAxisStyles(
+      this.props.grid,
+      this.props.verticalGrid,
+      this.props.yAxisOrientRight);
+
     return (
       <div ref={this.uid} className={`scatterplot_chart${uid}`}>
-        <Style scopeSelector={`.scatterplot_chart${uid}`} rules={merge({}, defaultStyle, this.props.style, getAxisStyles(this.props.grid, this.props.verticalGrid, this.props.yAxisOrientRight))}/>
+        <Style
+          scopeSelector={`.scatterplot_chart${uid}`}
+          rules={
+            merge({}, defaultStyle, style, axisStyles)}
+        />
         {node.toReact()}
       </div>
     );

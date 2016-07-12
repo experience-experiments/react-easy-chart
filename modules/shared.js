@@ -86,10 +86,10 @@ export const defaultStyle = {
   }
 };
 
-export function reduce(x) {
-  let rVal = x;
-  for (let i = 1; i < arguments.length; i++) {
-    rVal -= arguments[i];
+export function reduce(...args) {
+  let rVal = args[0];
+  for (let i = 1; i < args.length; i++) {
+    rVal -= args[i];
   }
   return rVal;
 }
@@ -105,10 +105,19 @@ export function getValueFunction(scale, type, dateParser) {
 }
 
 export function createCircularTicks(containerElement) {
-  select(containerElement).select('svg').selectAll('.tick-circle').remove();
-  const ticks = select(containerElement).select('svg').selectAll('.tick');
+  select(containerElement)
+    .select('svg')
+    .selectAll('.tick-circle')
+    .remove();
+
+  const ticks = select(containerElement)
+    .select('svg')
+    .selectAll('.tick');
+
   function circleAppender() {
-    select(this).append('circle').attr('class', 'tick-circle');
+    select(this)
+    .append('circle')
+    .attr('class', 'tick-circle');
   }
   ticks.each(circleAppender);
 }
@@ -133,11 +142,15 @@ export function getRandomId() {
   return Math.floor(Math.random() * new Date().getTime());
 }
 
-export function calcMargin(axes, margin, yAxisOrientRight, y2:false) {
+export function calcMargin(axes, margin, yAxisOrientRight, y2 = false) {
   if (margin) return margin;
-  let defaultMargins = axes ? {top: 20, right: y2 ? 50 : 20, bottom: 50, left: 50} : {top: 0, right: 0, bottom: 0, left: 0};
+  let defaultMargins = (axes)
+    ? { top: 20, right: y2 ? 50 : 20, bottom: 50, left: 50 }
+    : { top: 0, right: 0, bottom: 0, left: 0 };
   if (yAxisOrientRight) {
-    defaultMargins = axes ? {top: 20, right: 50, bottom: 50, left: y2 ? 50 : 20} : {top: 0, right: 0, bottom: 0, left: 0};
+    defaultMargins = (axes)
+      ? { top: 20, right: 50, bottom: 50, left: y2 ? 50 : 20 }
+      : { top: 0, right: 0, bottom: 0, left: 0 };
   }
   return defaultMargins;
 }
@@ -145,7 +158,7 @@ export function calcMargin(axes, margin, yAxisOrientRight, y2:false) {
 export function findLargestExtent(data, valueFunction) {
   let low;
   let high;
-  data.map((dataElement) => {
+  data.forEach((dataElement) => {
     const calcDomainRange = extent(dataElement, valueFunction);
     low = low < calcDomainRange[0] ? low : calcDomainRange[0];
     high = high > calcDomainRange[1] ? high : calcDomainRange[1];

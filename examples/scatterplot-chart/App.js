@@ -1,3 +1,5 @@
+/* eslint import/no-unresolved: 0 */
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { ScatterplotChart } from 'react-easy-chart';
@@ -59,117 +61,117 @@ const exampleTime = [
 
 const bigData = [
   {
-    'type': 'One',
-    'x': 1,
-    'y': 5
+    type: 'One',
+    x: 1,
+    y: 5
   },
   {
-    'type': 'Two',
-    'x': 3,
-    'y': 1
+    type: 'Two',
+    x: 3,
+    y: 1
   },
   {
-    'type': 'Three',
-    'x': 0,
-    'y': 6
+    type: 'Three',
+    x: 0,
+    y: 6
   },
   {
-    'type': 'Four',
-    'x': 5,
-    'y': 2
+    type: 'Four',
+    x: 5,
+    y: 2
   },
   {
-    'type': 'Five',
-    'x': 4,
-    'y': 4
+    type: 'Five',
+    x: 4,
+    y: 4
   },
   {
-    'type': 'Six',
-    'x': 5,
-    'y': 9
+    type: 'Six',
+    x: 5,
+    y: 9
   },
   {
-    'type': 'Seven',
-    'x': 9,
-    'y': 1
+    type: 'Seven',
+    x: 9,
+    y: 1
   },
   {
-    'type': 'Eight',
-    'x': 5,
-    'y': 6
+    type: 'Eight',
+    x: 5,
+    y: 6
   },
   {
-    'type': 'Nine',
-    'x': 3,
-    'y': 9
+    type: 'Nine',
+    x: 3,
+    y: 9
   },
   {
-    'type': 'Ten',
-    'x': 7,
-    'y': 9
+    type: 'Ten',
+    x: 7,
+    y: 9
   }
 ];
 
 const bigDataZ = [
   {
-    'type': 'One',
-    'x': 1,
-    'y': 5,
-    'z': 500
+    type: 'One',
+    x: 1,
+    y: 5,
+    z: 500
   },
   {
-    'type': 'One',
-    'x': 3,
-    'y': 1,
-    'z': 100
+    type: 'One',
+    x: 3,
+    y: 1,
+    z: 100
   },
   {
-    'type': 'One',
-    'x': 0,
-    'y': 6,
-    'z': 600
+    type: 'One',
+    x: 0,
+    y: 6,
+    z: 600
   },
   {
-    'type': 'One',
-    'x': 5,
-    'y': 2,
-    'z': 200
+    type: 'One',
+    x: 5,
+    y: 2,
+    z: 200
   },
   {
-    'type': 'One',
-    'x': 4,
-    'y': 4,
-    'z': 400
+    type: 'One',
+    x: 4,
+    y: 4,
+    z: 400
   },
   {
-    'type': 'One',
-    'x': 5,
-    'y': 9,
-    'z': 900
+    type: 'One',
+    x: 5,
+    y: 9,
+    z: 900
   },
   {
-    'type': 'One',
-    'x': 9,
-    'y': 1,
-    'z': 100
+    type: 'One',
+    x: 9,
+    y: 1,
+    z: 100
   },
   {
-    'type': 'One',
-    'x': 5,
-    'y': 6,
-    'z': 600
+    type: 'One',
+    x: 5,
+    y: 6,
+    z: 600
   },
   {
-    'type': 'One',
-    'x': 3,
-    'y': 9,
-    'z': 900
+    type: 'One',
+    x: 3,
+    y: 9,
+    z: 900
   },
   {
-    'type': 'One',
-    'x': 7,
-    'y': 9,
-    'z': 900
+    type: 'One',
+    x: 7,
+    y: 9,
+    z: 900
   }
 ];
 
@@ -254,6 +256,15 @@ const configGen = [
 export default class ScatterplotContainer extends React.Component {
   constructor(props) {
     super(props);
+
+    this.mouseOverHandler = this.mouseOverHandler.bind(this);
+    this.mouseOutHandler = this.mouseOutHandler.bind(this);
+    this.mouseMoveHandler = this.mouseMoveHandler.bind(this);
+    this.handleResize = this.handleResize.bind(this);
+    this.toggleState = this.toggleState.bind(this);
+    this.turnOffRandomData = this.turnOffRandomData.bind(this);
+    this.turnOnRandomData = this.turnOnRandomData.bind(this);
+
     this.state = {
       dataDisplay: '',
       showToolTip: false,
@@ -265,7 +276,7 @@ export default class ScatterplotContainer extends React.Component {
   }
 
   componentDidMount() {
-    window.addEventListener('resize', this.handleResize.bind(this));
+    window.addEventListener('resize', this.handleResize);
     this.handleResize();
   }
 
@@ -281,8 +292,12 @@ export default class ScatterplotContainer extends React.Component {
     const data = [];
     const keys = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
 
-    keys.map((key) => {
-      data.push({type: key, x: this.getRandomArbitrary(1, 1000), y: this.getRandomArbitrary(1, 1000)});
+    keys.forEach((key) => {
+      data.push({
+        type: key,
+        x: this.getRandomArbitrary(1, 1000),
+        y: this.getRandomArbitrary(1, 1000)
+      });
     });
     return data;
   }
@@ -300,30 +315,30 @@ export default class ScatterplotContainer extends React.Component {
       top: `${e.screenY - 10}px`,
       left: `${e.screenX + 10}px`,
       y: d.y,
-      x: d.x});
+      x: d.x });
   }
 
   mouseMoveHandler(e) {
     if (this.state.showToolTip) {
-      this.setState({top: `${e.y - 10}px`, left: `${e.x + 10}px`});
+      this.setState({ top: `${e.y - 10}px`, left: `${e.x + 10}px` });
     }
   }
 
   mouseOutHandler() {
-    this.setState({showToolTip: false});
+    this.setState({ showToolTip: false });
   }
 
   clickHandler(d) {
-    this.setState({dataDisplay: `The amount selected is ${d.y}`});
+    this.setState({ dataDisplay: `The amount selected is ${d.y}` });
   }
 
   turnOnRandomData() {
-    this.setState({randomDataIntervalId: setInterval(this.updateData.bind(this), 1000)});
+    this.setState({ randomDataIntervalId: setInterval(this.updateData.bind(this), 1000) });
   }
 
   turnOffRandomData() {
     clearInterval(this.state.randomDataIntervalId);
-    this.setState({randomDataIntervalId: null});
+    this.setState({ randomDataIntervalId: null });
   }
 
   updateData() {
@@ -337,12 +352,31 @@ export default class ScatterplotContainer extends React.Component {
     });
   }
 
+  createTooltip() {
+    if (this.state.showToolTip) {
+      return (
+        <ToolTip
+          top={this.state.top}
+          left={this.state.left}
+        >
+            The x value is {this.state.x} and the y value is {this.state.y}
+        </ToolTip>
+      );
+    }
+    return false;
+  }
+
   render() {
     const cn = this.state.active ? 'menu active' : 'menu';
     return (
       <div>
         <aside id="menu" className={cn}>
-          <a id="menuToggle" className="menu__toggle" aria-hidden="true" href="#" onClick={this.toggleState.bind(this)}>
+          <a
+            id="menuToggle"
+            className="menu__toggle"
+            aria-hidden="true" href="#"
+            onClick={this.toggleState}
+          >
             <span>Toggle menu</span>
           </a>
           <nav className="menu__nav">
@@ -397,6 +431,7 @@ export default class ScatterplotContainer extends React.Component {
         <div className="content">
           <h1>Scatterplot chart</h1>
           <div ref="component">
+
             <ScatterplotChart
               data={this.data}
               config={configGen}
@@ -404,21 +439,38 @@ export default class ScatterplotContainer extends React.Component {
               width={this.state.componentWidth}
               height={this.state.componentWidth / 2}
             />
+
           </div>
 
           <section id="introduction">
             <h2>Introduction</h2>
-            <p>A scatter plot, scatterplot, or scattergraph is a type of mathematical diagram using Cartesian coordinates to display values for typically two variables for a set of data.<sup>(<a href="https://en.wikipedia.org/wiki/Scatter_plot">ref</a>)</sup></p>
+            <p>
+              A scatter plot, scatterplot, or scattergraph is a type of mathematical diagram using
+              Cartesian coordinates to display values for typically two variables for a set of
+              data.<sup>(<a href="https://en.wikipedia.org/wiki/Scatter_plot">ref</a>)</sup>
+            </p>
           </section>
 
           <section id="data">
             <h2>Data</h2>
-            <p>At the most basic the scatterplot chart can just take a single data file supplied in a JSON format and will render a
-             simple scatterplot chart.</p>
-            <p>The format of the data is an array of objects, with each object representing a single data item to be plotted.</p>
-            <p>Each data item is give a type identifier and two variables</p>
+            <p>
+              At the most basic the scatterplot chart can just take a single data file supplied in
+              a JSON format and will render a simple scatterplot chart.
+            </p>
+
+            <p>
+              The format of the data is an array of objects, with each object representing a single
+              data item to be plotted.
+            </p>
+
+            <p>
+              Each data item is give a type identifier and two variables.
+            </p>
             <ul>
-              <li><b>type</b>: a generic identifier for the data. Muliple instances of the same type can exist</li>
+              <li>
+                <b>type</b>:
+                a generic identifier for the data. Muliple instances of the same type can exist
+              </li>
               <li><b>x</b>: data value for the x axis</li>
               <li><b>y</b>: data value for the y axis</li>
             </ul>
@@ -427,85 +479,98 @@ export default class ScatterplotContainer extends React.Component {
                 const html = (`
   const data = [
     {
-      'type': 'One',
-      'x': 1,
-      'y': 5
+      type: 'One',
+      x: 1,
+      y: 5
     },
     {
-      'type': 'Two',
-      'x': 3,
-      'y': 1
+      type: 'Two',
+      x: 3,
+      y: 1
     },
     {
-      'type': 'Three',
-      'x': 0,
-      'y': 6
+      type: 'Three',
+      x: 0,
+      y: 6
     },
     {
-      'type': 'Four',
-      'x': 5,
-      'y': 2
+      type: 'Four',
+      x: 5,
+      y: 2
     },
     {
-      'type': 'Five',
-      'x': 4,
-      'y': 4
+      type: 'Five',
+      x: 4,
+      y: 4
     },
     {
-      'type': 'Six',
-      'x': 5,
-      'y': 9
+      type: 'Six',
+      x: 5,
+      y: 9
     },
     {
-      'type': 'Seven',
-      'x': 9,
-      'y': 1
+      type: 'Seven',
+      x: 9,
+      y: 1
     },
     {
-      'type': 'Eight',
-      'x': 5,
-      'y': 6
+      type: 'Eight',
+      x: 5,
+      y: 6
     },
     {
-      'type': 'Nine',
-      'x': 3,
-      'y': 9
+      type: 'Nine',
+      x: 3,
+      y: 9
     },
     {
-      'type': 'Ten',
-      'x': 7,
-      'y': 9
+      type: 'Ten',
+      x: 7,
+      y: 9
     }
   ];
 
   <ScatterplotChart data={data} />`);
                 return (
-                  <code dangerouslySetInnerHTML={{__html: escapeHTML(html)}} />
+                  <code dangerouslySetInnerHTML={{ __html: escapeHTML(html) }} />
                 );
               })()}
             </pre>
+
             <ScatterplotChart data={bigData} />
+
           </section>
 
           <section id="heightAndWidth">
             <h2>Height and Width</h2>
-            <p>The height and width can be easily set by passing in a numeric value in as a prop.</p>
+            <p>
+              The height and width can be easily set by passing in a numeric value in as a prop.
+            </p>
             <pre>
             {(() => {
               const html = (`
   <ScatterplotChart data={data} width={160} height={90} />`);
               return (
-                <code dangerouslySetInnerHTML={{__html: escapeHTML(html)}} />
+                <code dangerouslySetInnerHTML={{ __html: escapeHTML(html) }} />
               );
             })()}
             </pre>
+
             <ScatterplotChart data={bigData} width={160} height={90} />
+
           </section>
 
           <section id="margin">
             <h2>Margin</h2>
-            <p>The Margin can be overridden by passing in a margin object. The margin object must define the following: top, right, bottom and left</p>
-            <p>This can be particulary useful if a label is cut off.</p>
+            <p>
+              The Margin can be overridden by passing in a margin object. The margin object must
+              define the following: top, right, bottom and left.
+            </p>
+
+            <p>
+              This can be particulary useful if a label is cut off.
+            </p>
+
             <pre>
             {(() => {
               const html = (`
@@ -513,16 +578,26 @@ export default class ScatterplotContainer extends React.Component {
     data={data}
     margin={{top: 10, right: 10, bottom: 30, left: 100}} />`);
               return (
-                <code dangerouslySetInnerHTML={{__html: escapeHTML(html)}} />
+                <code dangerouslySetInnerHTML={{ __html: escapeHTML(html) }} />
               );
             })()}
             </pre>
-            <ScatterplotChart data={bigData} margin={{top: 10, right: 10, bottom: 30, left: 100}} />
+
+            <ScatterplotChart
+              data={bigData}
+              margin={{ top: 10, right: 10, bottom: 30, left: 100 }}
+            />
+
           </section>
 
           <section id="axes">
             <h2>Axes</h2>
-            <p>The axes can be turned on by simply passing a boolean flag to true for <strong>axes</strong>.</p>
+
+            <p>
+              The axes can be turned on by simply passing a boolean flag to true for
+              <strong>axes</strong>.
+            </p>
+
             <pre>
             {(() => {
               const html = (`
@@ -532,16 +607,23 @@ export default class ScatterplotContainer extends React.Component {
     width={480}
     height={270} />`);
               return (
-                <code dangerouslySetInnerHTML={{__html: escapeHTML(html)}} />
+                <code dangerouslySetInnerHTML={{ __html: escapeHTML(html) }} />
               );
             })()}
             </pre>
+
             <ScatterplotChart data={bigData} axes width={480} height={270} />
+
           </section>
 
           <section id="yaxesorientation">
             <h2>Y Axis orientation</h2>
-            <p>The Y axis can be placed on the right hand side by passing a boolean flag to true for yAxisOrientRight</p>
+
+            <p>
+              The Y axis can be placed on the right hand side by passing a boolean flag to true for
+              yAxisOrientRight.
+            </p>
+
             <pre>
             {(() => {
               const html = (`
@@ -554,23 +636,29 @@ export default class ScatterplotContainer extends React.Component {
     height={270}
   />`);
               return (
-                <code dangerouslySetInnerHTML={{__html: escapeHTML(html)}} />
+                <code dangerouslySetInnerHTML={{ __html: escapeHTML(html) }} />
               );
             })()}
             </pre>
+
             <ScatterplotChart
               data={bigData}
               axes
               yAxisOrientRight
-              axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+              axisLabels={{ x: 'My x Axis', y: 'My y Axis' }}
               width={480}
               height={270}
             />
+
           </section>
 
           <section id="axesLabels">
             <h2>Axes labels</h2>
-            <p>The axes labels (<strong>axisLabels</strong>) can be passed in for the x and y value.</p>
+
+            <p>
+              The axes labels (<strong>axisLabels</strong>) can be passed in for the x and y value.
+            </p>
+
             <pre>
             {(() => {
               const html = (`
@@ -582,22 +670,29 @@ export default class ScatterplotContainer extends React.Component {
     height={270}
   />`);
               return (
-                <code dangerouslySetInnerHTML={{__html: escapeHTML(html)}} />
+                <code dangerouslySetInnerHTML={{ __html: escapeHTML(html) }} />
               );
             })()}
             </pre>
+
             <ScatterplotChart
               data={bigData}
               axes
-              axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+              axisLabels={{ x: 'My x Axis', y: 'My y Axis' }}
               width={480}
               height={270}
             />
+
           </section>
 
           <section id="dotRadius">
             <h2>Dot radius</h2>
-            <p>The default size of the dot can be changed via the <strong>dotRadius</strong> parameter</p>
+
+            <p>
+              The default size of the dot can be changed via the
+              <strong>dotRadius</strong> parameter.
+            </p>
+
             <pre>
             {(() => {
               const html = (`
@@ -610,29 +705,41 @@ export default class ScatterplotContainer extends React.Component {
     height={270}
   />`);
               return (
-                <code dangerouslySetInnerHTML={{__html: escapeHTML(html)}} />
+                <code dangerouslySetInnerHTML={{ __html: escapeHTML(html) }} />
               );
             })()}
             </pre>
+
             <ScatterplotChart
               data={bigData}
               axes
-              axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+              axisLabels={{ x: 'My x Axis', y: 'My y Axis' }}
               dotRadius={10}
               width={480}
               height={270}
             />
+
           </section>
 
           <section id="config">
             <h2>Config</h2>
-            <p>The <strong>config</strong> property allows for greater control over the look and feel.</p>
+
+            <p>
+              The <strong>config</strong> property allows for greater control over the look and
+              feel.
+            </p>
+
             <ul>
               <li><strong>type</strong>: a reference to the type value in the data object</li>
               <li><strong>color</strong>: dot color as a hex value</li>
               <li><strong>stroke</strong>: stroke color as a hex value</li>
             </ul>
-            <p>The following example changes the default color for types 'One', 'Two' and 'Three' and adds a stroke</p>
+
+            <p>
+              The following example changes the default color for types 'One', 'Two' and 'Three'
+              and adds a stroke.
+            </p>
+
             <pre>
             {(() => {
               const html = (`
@@ -654,24 +761,30 @@ export default class ScatterplotContainer extends React.Component {
     }
   ];`);
               return (
-                <code dangerouslySetInnerHTML={{__html: escapeHTML(html)}} />
+                <code dangerouslySetInnerHTML={{ __html: escapeHTML(html) }} />
               );
             })()}
             </pre>
+
             <ScatterplotChart
               data={bigData}
               axes
-              axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+              axisLabels={{ x: 'My x Axis', y: 'My y Axis' }}
               dotRadius={10}
               width={480}
               height={270}
               config={config}
             />
+
           </section>
 
           <section id="grid">
             <h2>Grid</h2>
-            <p>Apply a background grid with the grid boolean property</p>
+
+            <p>
+              Apply a background grid with the grid boolean property.
+            </p>
+
             <pre>
             {(() => {
               const html = (`
@@ -685,24 +798,31 @@ export default class ScatterplotContainer extends React.Component {
     grid
   />`);
               return (
-                <code dangerouslySetInnerHTML={{__html: escapeHTML(html)}} />
+                <code dangerouslySetInnerHTML={{ __html: escapeHTML(html) }} />
               );
             })()}
             </pre>
+
             <ScatterplotChart
               data={bigData}
               axes
-              axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+              axisLabels={{ x: 'My x Axis', y: 'My y Axis' }}
               dotRadius={6}
               width={480}
               height={270}
               grid
             />
+
           </section>
 
           <section id="verticalGrid">
             <h2>Vertical Grid</h2>
-            <p>A vertical grid can be added to the graph by just passing in a boolean for verticalGrid.</p>
+
+            <p>
+              A vertical grid can be added to the graph by just passing in a boolean for
+              verticalGrid.
+            </p>
+
             <pre>
             {(() => {
               const html = (`
@@ -717,30 +837,43 @@ export default class ScatterplotContainer extends React.Component {
     grid
   />`);
               return (
-                <code dangerouslySetInnerHTML={{__html: escapeHTML(html)}} />
+                <code dangerouslySetInnerHTML={{ __html: escapeHTML(html) }} />
               );
             })()}
             </pre>
+
             <ScatterplotChart
               data={bigData}
               axes
               verticalGrid
-              axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+              axisLabels={{ x: 'My x Axis', y: 'My y Axis' }}
               dotRadius={6}
               width={480}
               height={270}
               grid
             />
+
           </section>
 
           <section id="axisType">
             <h2>Axis type</h2>
-            <p>The data passed associated to the particular axes can be in numeric, date (the default format is for example 1-Jan-15 but can be overridden) or textual formats (used for labelling).</p>
-            <p>For the example below the data for the x is text and so the <strong>xType</strong> needs to be changed to <strong>text</strong>.</p>
+
+            <p>
+              The data passed associated to the particular axes can be in numeric, date (the
+              default format is for example 1-Jan-15 but can be overridden) or textual formats
+              (used for labelling).
+            </p>
+
+            <p>
+              For the example below the data for the x is text and so the <strong>xType</strong>
+              needs to be changed to <strong>text</strong>.
+            </p>
+
             <ul>
               <li><strong>xType</strong></li>
               <li><strong>yType</strong></li>
             </ul>
+
             <pre>
             {(() => {
               const html = (`
@@ -778,27 +911,43 @@ export default class ScatterplotContainer extends React.Component {
     xType="text"
   />`);
               return (
-                <code dangerouslySetInnerHTML={{__html: escapeHTML(html)}} />
+                <code dangerouslySetInnerHTML={{ __html: escapeHTML(html) }} />
               );
             })()}
             </pre>
+
             <ScatterplotChart
               data={exampleText}
               axes
-              axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+              axisLabels={{ x: 'My x Axis', y: 'My y Axis' }}
               dotRadius={6}
               width={480}
               height={270}
               grid
               xType="text"
             />
+
           </section>
 
           <section id="domainRange">
             <h2>Domain Range</h2>
-            <p>By default the axis ranges are automatically calculated based on the smallest and the largest values</p>
-            <p>The range can be fixed by passing an array param of 2 value for the particular axis. The first number is the bottom of the range the second is the higher point of the range.</p>
-            <p>The following example sets the <strong>xType</strong> to time then passes a date range to <strong>xDomainRange</strong></p>
+
+            <p>
+              By default the axis ranges are automatically calculated based on the smallest and
+              the largest values.
+            </p>
+
+            <p>
+              The range can be fixed by passing an array param of 2 value for the particular axis.
+              The first number is the bottom of the range the second is the higher point of the
+              range.
+            </p>
+
+            <p>
+              The following example sets the <strong>xType</strong> to time then passes a date
+              range to <strong>xDomainRange</strong>.
+            </p>
+
             <pre>
             {(() => {
               const html = (`
@@ -842,14 +991,15 @@ export default class ScatterplotContainer extends React.Component {
       xDomainRange={['31-Dec-14', '4-Jan-15']}
     />`);
               return (
-                <code dangerouslySetInnerHTML={{__html: escapeHTML(html)}} />
+                <code dangerouslySetInnerHTML={{ __html: escapeHTML(html) }} />
               );
             })()}
             </pre>
+
             <ScatterplotChart
               data={exampleTime}
               axes
-              axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+              axisLabels={{ x: 'My x Axis', y: 'My y Axis' }}
               dotRadius={6}
               width={480}
               height={270}
@@ -857,19 +1007,29 @@ export default class ScatterplotContainer extends React.Component {
               xType="time"
               xDomainRange={['31-Dec-14', '4-Jan-15']}
             />
+
           </section>
 
           <section id="mouseEvents">
             <h2>Mouse events</h2>
+
             <p>The chart accepts the following mouse events</p>
+
             <ul>
               <li>- Mouse over</li>
               <li>- Mouse out</li>
               <li>- Mouse move</li>
               <li>- Click</li>
             </ul>
-            <p>The event handlers provides the mouse event and the point data.</p>
-            <p>The example below demostrates a simple tooltip</p>
+
+            <p>
+              The event handlers provides the mouse event and the point data.
+            </p>
+
+            <p>
+              The example below demostrates a simple tooltip.
+            </p>
+
             <pre>
             {(() => {
               const html = (`
@@ -900,121 +1060,146 @@ export default class ScatterplotContainer extends React.Component {
     width={480}
     height={270}
     grid
-    mouseOverHandler={this.mouseOverHandler.bind(this)}
-    mouseOutHandler={this.mouseOutHandler.bind(this)}
-    mouseMoveHandler={this.mouseMoveHandler.bind(this)}
+    mouseOverHandler={this.mouseOverHandler}
+    mouseOutHandler={this.mouseOutHandler}
+    mouseMoveHandler={this.mouseMoveHandler}
     clickHandler={this.clickHandler.bind(this)}
   />`);
               return (
-                <code dangerouslySetInnerHTML={{__html: escapeHTML(html)}} />
+                <code dangerouslySetInnerHTML={{ __html: escapeHTML(html) }} />
               );
             })()}
             </pre>
+
             <ScatterplotChart
               data={bigData}
               axes
-              axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+              axisLabels={{ x: 'My x Axis', y: 'My y Axis' }}
               dotRadius={6}
               width={480}
               height={270}
               grid
-              mouseOverHandler={this.mouseOverHandler.bind(this)}
-              mouseOutHandler={this.mouseOutHandler.bind(this)}
-              mouseMoveHandler={this.mouseMoveHandler.bind(this)}
-              clickHandler={(d) => this.setState({dataDisplay: `The x value id ${d.x} and the y value is ${d.y}`})}
+              mouseOverHandler={this.mouseOverHandler}
+              mouseOutHandler={this.mouseOutHandler}
+              mouseMoveHandler={this.mouseMoveHandler}
+              clickHandler={(d) => this.setState({
+                dataDisplay: `The x value id ${d.x} and the y value is ${d.y}`
+              })}
             />
-            <div style={{display: 'inline-block', verticalAlign: 'top', paddingLeft: '20px'}}>
-              {this.state.dataDisplay ? this.state.dataDisplay : 'Click on a circle to show the value'}
+
+            <div
+              style={{
+                display: 'inline-block',
+                verticalAlign: 'top',
+                paddingLeft: '20px' }}
+            >
+              {(this.state.dataDisplay)
+                ? this.state.dataDisplay
+                : 'Click on a circle to show the value'
+              }
             </div>
           </section>
 
           <section id="customLegend">
             <h2>Custom legend</h2>
-            <p>The scatterplot does not provide a legend by default. Below is an example of custom implementation</p>
+
+            <p>
+              The scatterplot does not provide a legend by default. Below is an example of custom
+              implementation.
+            </p>
+
             <ScatterplotChart
               data={bigData}
               axes
-              axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+              axisLabels={{ x: 'My x Axis', y: 'My y Axis' }}
               dotRadius={6}
               width={480}
               height={270}
               grid
-              mouseOverHandler={this.mouseOverHandler.bind(this)}
-              mouseOutHandler={this.mouseOutHandler.bind(this)}
-              mouseMoveHandler={this.mouseMoveHandler.bind(this)}
-              clickHandler={(d) => this.setState({dataDisplay: `The x value id ${d.x} and the y value is ${d.y}`})}
+              mouseOverHandler={this.mouseOverHandler}
+              mouseOutHandler={this.mouseOutHandler}
+              mouseMoveHandler={this.mouseMoveHandler}
+              clickHandler={(d) => this.setState({
+                dataDisplay: `The x value id ${d.x} and the y value is ${d.y}`
+              })}
             />
-            <div style={{width: '480px'}} >
+
+            <div style={{ width: '480px' }} >
               <Legend data={bigData} />
             </div>
           </section>
 
           <section id="dataType">
             <h2>3rd data type</h2>
-            <p>Its also possible to pass in a third variable (z). This variable is a number and is used to scale the radius of the dot</p>
+
+            <p>
+              Its also possible to pass in a third variable (z). This variable is a number and is
+              used to scale the radius of the dot.
+            </p>
+
             <pre>
             {(() => {
               const html = (`
   const data = [
     {
-      'type': 'One',
-      'x': 1,
-      'y': 5,
-      'z': 500
+      type: 'One',
+      x: 1,
+      y: 5,
+      z: 500
     },
     {
-      'type': 'One',
-      'x': 3,
-      'y': 1,
-      'z': 100
+      type: 'One',
+      x: 3,
+      y: 1,
+      z: 100
     },
     {
-      'type': 'One',
-      'x': 0,
-      'y': 6,
-      'z': 600
+      type: 'One',
+      x: 0,
+      y: 6,
+      z: 600
     },
     {
-      'type': 'One',
-      'x': 5,
-      'y': 2,
-      'z': 200
+      type: 'One',
+      x: 5,
+      y: 2,
+      z: 200
     },
     {
-      'type': 'One',
-      'x': 4,
-      'y': 4,
-      'z': 400
+      type: 'One',
+      x: 4,
+      y: 4,
+      z: 400
     },
     {
-      'type': 'One',
-      'x': 5,
-      'y': 9,
-      'z': 900
+      type: 'One',
+      x: 5,
+      y: 9,
+      z: 900
     },
     {
-      'type': 'One',
-      'x': 9,
-      'y': 1,
-      'z': 100
+      type: 'One',
+      x: 9,
+      y: 1,
+      z: 100
     },
     {
-      'type': 'One',
-      'x': 5,
-      'y': 6,
-      'z': 600
+      type: 'One',
+      x: 5,
+      y: 6,
+      z: 600
     },
     {
-      'type': 'One',
-      'x': 3,
-      'y': 9,
-      'z': 900
+      type: 'One',
+      x: 3,
+      y: 9,
+      z: 900
     },
     {
-      'type': 'One',
-      'x': 7,
-      'y': 9,
-      'z': 900
+      type: 'One',
+      x: 7,
+      y: 9,
+      z: 900
     }
   ];
 
@@ -1025,63 +1210,83 @@ export default class ScatterplotContainer extends React.Component {
     width={480}
     height={270}
     grid
-    mouseOverHandler={this.mouseOverHandler.bind(this)}
-    mouseOutHandler={this.mouseOutHandler.bind(this)}
-    mouseMoveHandler={this.mouseMoveHandler.bind(this)}
+    mouseOverHandler={this.mouseOverHandler}
+    mouseOutHandler={this.mouseOutHandler}
+    mouseMoveHandler={this.mouseMoveHandler}
   />`);
               return (
-                <code dangerouslySetInnerHTML={{__html: escapeHTML(html)}} />
+                <code dangerouslySetInnerHTML={{ __html: escapeHTML(html) }} />
               );
             })()}
             </pre>
+
             <ScatterplotChart
               data={bigDataZ}
               axes
-              axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+              axisLabels={{ x: 'My x Axis', y: 'My y Axis' }}
               width={480}
               height={270}
               grid
-              mouseOverHandler={this.mouseOverHandler.bind(this)}
-              mouseOutHandler={this.mouseOutHandler.bind(this)}
-              mouseMoveHandler={this.mouseMoveHandler.bind(this)}
+              mouseOverHandler={this.mouseOverHandler}
+              mouseOutHandler={this.mouseOutHandler}
+              mouseMoveHandler={this.mouseMoveHandler}
             />
+
           </section>
 
           <section id="generateData">
             <h2>Generate data</h2>
-            <p>By selecting the button below to start the random data you can see a simulation of the performance if a data feed is passed in.
-            React provides the functionality to only update the elements of the dom when required so will just change the path attributes.
-            The data is passed in as a react param only and as soon as that data changes the chart will reflect that change automatically.</p>
-            <br/>
+
+            <p>
+              By selecting the button below to start the random data you can see a simulation of
+              the performance if a data feed is passed in. React provides the functionality to
+              only update the elements of the dom when required so will just change the path
+              attributes. The data is passed in as a react param only and as soon as that data
+              changes the chart will reflect that change automatically.
+            </p>
+
+            <br />
+
             {(this.state.randomDataIntervalId)
-              ? <input type="button" value="Stop random data" onClick={this.turnOffRandomData.bind(this)}></input>
-              : <input type="button" value="Start random data" onClick={this.turnOnRandomData.bind(this)}></input>}
+              ? <input type="button" value="Stop random data" onClick={this.turnOffRandomData} />
+              : <input type="button" value="Start random data" onClick={this.turnOnRandomData} />}
+
             <ScatterplotChart
               data={this.data}
               grid
               axes
-              axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
-              margin={{top: 10, right: 10, bottom: 30, left: 60}}
+              axisLabels={{ x: 'My x Axis', y: 'My y Axis' }}
+              margin={{ top: 10, right: 10, bottom: 30, left: 60 }}
               width={480}
               height={270}
             />
+
             <h2 id="fluid">Fluid</h2>
-            <p>Because the width and height of the chart can be passed in by a param then changes to the size of a window or container can change the chart dynamically. If you shrink your browser window width you will see the chart change in a fluid manor. You can also introduce basic break points such as removing the axes if below a certain width width.</p>
+
+            <p>
+              Because the width and height of the chart can be passed in by a param then changes
+              to the size of a window or container can change the chart dynamically. If you shrink
+              your browser window width you will see the chart change in a fluid manor. You can
+              also introduce basic break points such as removing the axes if below a certain width
+              width.
+            </p>
+
             <ScatterplotChart
               data={this.data}
               grid
-              axes={(this.state.componentWidth) > 400 ? true : false}
-              axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
-              margin={{top: 10, right: 10, bottom: 30, left: 60}}
+              axes={(this.state.componentWidth) > 400}
+              axisLabels={{ x: 'My x Axis', y: 'My y Axis' }}
+              margin={{ top: 10, right: 10, bottom: 30, left: 60 }}
               width={this.state.componentWidth}
               height={this.state.componentWidth / 2}
             />
+
           </section>
           <br />
           <br />
-          {(this.state.showToolTip)
-            ? <ToolTip top={this.state.top} left={this.state.left}>The x value is {this.state.x} and the y value is {this.state.y}</ToolTip>
-            : null}
+
+          {this.createTooltip()}
+
         </div>
       </div>
     );
