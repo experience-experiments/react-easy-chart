@@ -1,9 +1,15 @@
-/* eslint-disable */
-
 import React from 'react';
 import { scaleBand as band, scaleLinear as linear } from 'd3-scale';
 import { event as d3LastEvent, select, time, svg, scale, max } from 'd3';
-import { reduce, calcMargin, calcDefaultDomain, defaultStyle, createCircularTicks, getAxisStyles, getValueFunction } from '../shared';
+import {
+  reduce,
+  calcMargin,
+  calcDefaultDomain,
+  defaultStyle,
+  createCircularTicks,
+  getAxisStyles,
+  getValueFunction
+} from '../shared';
 import { extent } from 'd3-array';
 import { timeParse as parse } from 'd3-time-format';
 import { createElement } from 'react-faux-dom';
@@ -14,57 +20,61 @@ const colorScale = scale.category20();
 
 export default class BarChart extends React.Component {
 
-  static propTypes = {
-    data: React.PropTypes.array.isRequired,
-    lineData: React.PropTypes.array,
-    width: React.PropTypes.number,
-    height: React.PropTypes.number,
-    margin: React.PropTypes.object,
-    mouseOverHandler: React.PropTypes.func,
-    mouseOutHandler: React.PropTypes.func,
-    mouseMoveHandler: React.PropTypes.func,
-    clickHandler: React.PropTypes.func,
-    interpolate: React.PropTypes.string,
-    style: React.PropTypes.object,
-    colorBars: React.PropTypes.bool,
-    axes: React.PropTypes.bool,
-    grid: React.PropTypes.bool,
-    axisLabels: React.PropTypes.shape({
-      x: React.PropTypes.string,
-      y: React.PropTypes.string
-    }),
-    xType: React.PropTypes.string,
-    yType: React.PropTypes.string,
-    y2Type: React.PropTypes.string,
-    xDomainRange: React.PropTypes.array,
-    yDomainRange: React.PropTypes.array,
-    datePattern: React.PropTypes.string,
-    tickTimeDisplayFormat: React.PropTypes.string,
-    yAxisOrientRight: React.PropTypes.bool,
-    barWidth: React.PropTypes.number,
-    xTickNumber: React.PropTypes.number,
-    yTickNumber: React.PropTypes.number
+  static get propTypes() {
+    return {
+      data: React.PropTypes.array.isRequired,
+      lineData: React.PropTypes.array,
+      width: React.PropTypes.number,
+      height: React.PropTypes.number,
+      margin: React.PropTypes.object,
+      mouseOverHandler: React.PropTypes.func,
+      mouseOutHandler: React.PropTypes.func,
+      mouseMoveHandler: React.PropTypes.func,
+      clickHandler: React.PropTypes.func,
+      interpolate: React.PropTypes.string,
+      style: React.PropTypes.object,
+      colorBars: React.PropTypes.bool,
+      axes: React.PropTypes.bool,
+      grid: React.PropTypes.bool,
+      axisLabels: React.PropTypes.shape({
+        x: React.PropTypes.string,
+        y: React.PropTypes.string
+      }),
+      xType: React.PropTypes.string,
+      yType: React.PropTypes.string,
+      y2Type: React.PropTypes.string,
+      xDomainRange: React.PropTypes.array,
+      yDomainRange: React.PropTypes.array,
+      datePattern: React.PropTypes.string,
+      tickTimeDisplayFormat: React.PropTypes.string,
+      yAxisOrientRight: React.PropTypes.bool,
+      barWidth: React.PropTypes.number,
+      xTickNumber: React.PropTypes.number,
+      yTickNumber: React.PropTypes.number
+    };
   }
 
-  static defaultProps = {
-    lineData: [],
-    width: 400,
-    height: 200,
-    barWidth: 10,
-    axes: false,
-    xType: 'text',
-    yType: 'linear',
-    y2Type: 'linear',
-    interpolate: 'linear',
-    mouseOverHandler: () => {},
-    mouseOutHandler: () => {},
-    mouseMoveHandler: () => {},
-    clickHandler: () => {},
-    datePattern: '%d-%b-%y',
-    axisLabels: {
-      x: '',
-      y: ''
-    }
+  static get defaultProps() {
+    return {
+      lineData: [],
+      width: 400,
+      height: 200,
+      barWidth: 10,
+      axes: false,
+      xType: 'text',
+      yType: 'linear',
+      y2Type: 'linear',
+      interpolate: 'linear',
+      mouseOverHandler: () => {},
+      mouseOutHandler: () => {},
+      mouseMoveHandler: () => {},
+      clickHandler: () => {},
+      datePattern: '%d-%b-%y',
+      axisLabels: {
+        x: '',
+        y: ''
+      }
+    };
   }
 
   constructor(props) {
@@ -229,7 +239,7 @@ export default class BarChart extends React.Component {
     return axis;
   }
 
-  createYAxis2({ root, m, w, h }) { //, yAxis }) {
+  createYAxis2({ root, m, w, h }) { // , yAxis }) {
     const {
       lineData,
       axisLabels,
@@ -362,7 +372,8 @@ export default class BarChart extends React.Component {
     return (
       <Style
         scopeSelector={scope}
-        rules={rules} />
+        rules={rules}
+      />
     );
   }
 
