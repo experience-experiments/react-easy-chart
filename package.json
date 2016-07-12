@@ -68,7 +68,7 @@
     "phantomjs-polyfill": "0.0.2",
     "react-scrollspy": "^2.1.1",
     "rimraf": "^2.4.4",
-    "sinon": "^2.0.0-pre.2",
+    "sinon": "^1.17.4",
     "sinon-chai": "^2.8.0",
     "webpack": "^1.13.1",
     "webpack-dev-server": "^1.14.0"

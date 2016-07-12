@@ -18,5 +18,3 @@ cache:
 branches:
   only:
   - master
-install:
-  - npm install || 1

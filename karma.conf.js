@@ -103,6 +103,7 @@ module.exports = (config) => {
       devtool: 'sourcemap',
       resolve: {
         alias: {
+          sinon: 'sinon/pkg/sinon',
           'react-easy-chart': modulesPath
         }
       },
@@ -130,6 +131,9 @@ module.exports = (config) => {
             loader: 'babel',
             exclude: /node_modules/
           }
+        ],
+        noParse: [
+          /sinon/
         ]
       }
     },
