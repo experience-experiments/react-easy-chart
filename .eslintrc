@@ -1,7 +1,6 @@
 {
   "extends": [
-    "./node_modules/eslint-config-airbnb/.eslintrc",
-    "plugin:react/recommended"
+    "./node_modules/eslint-config-airbnb/.eslintrc"
   ],
   "env": {},
   "ecmaFeatures": {},
