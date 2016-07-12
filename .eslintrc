@@ -1,17 +1,9 @@
 {
   "extends": [
-    "./eslint-config/default/.eslintrc",
-    "./eslint-config/es6/.eslintrc",
-    "./eslint-config/react/.eslintrc"
+    "./node_modules/eslint-config-airbnb/.eslintrc"
   ],
   "env": {},
   "ecmaFeatures": {},
   "globals": {},
-  "rules": {
-    "react/prop-types": [2, {"ignore":["children"]}],
-    "comma-dangle": [2, "never"],
-    "object-curly-spacing": [0, "always"],
-    "space-after-keywords": [0, "always"],
-    "space-before-function-paren": [0, { "anonymous": "always", "named": "never" }]
-  }
+  "rules": {}
 }

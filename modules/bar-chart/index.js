@@ -1,7 +1,15 @@
 import React from 'react';
 import { scaleBand as band, scaleLinear as linear } from 'd3-scale';
 import { event as d3LastEvent, select, time, svg, scale, max } from 'd3';
-import { reduce, calcMargin, calcDefaultDomain, defaultStyle, createCircularTicks, getAxisStyles, getValueFunction } from '../shared';
+import {
+  reduce,
+  calcMargin,
+  calcDefaultDomain,
+  defaultStyle,
+  createCircularTicks,
+  getAxisStyles,
+  getValueFunction
+} from '../shared';
 import { extent } from 'd3-array';
 import { timeParse as parse } from 'd3-time-format';
 import { createElement } from 'react-faux-dom';
@@ -59,7 +67,7 @@ export default class BarChart extends React.Component {
       mouseMoveHandler: () => {},
       clickHandler: () => {},
       datePattern: '%d-%b-%y',
-      axisLabels: {x: '', y: ''}
+      axisLabels: { x: '', y: '' }
     };
   }
 
@@ -160,24 +168,40 @@ export default class BarChart extends React.Component {
     const y = this.setScaleDomainRange('y', yDomainRange, data, yType, height);
 
     let y2 = null;
-    if (lineData.length > 0) y2 = this.setScaleDomainRange('y', yDomainRange, lineData, y2Type, height);
+    if (lineData.length > 0) {
+      y2 = this.setScaleDomainRange('y', yDomainRange, lineData, y2Type, height);
+    }
 
     const svgNode = createElement('svg');
-    select(svgNode).attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom);
-    const root = select(svgNode).append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+    select(svgNode)
+      .attr('width', width + margin.left + margin.right)
+      .attr('height', height + margin.top + margin.bottom);
+
+    const root = select(svgNode)
+      .append('g')
+      .attr('transform', `translate(${margin.left}, ${margin.top})`);
 
     if (axes) {
       const xAxis = svg.axis()
           .scale(x)
           .orient('bottom');
+
       if (xType === 'time' && tickTimeDisplayFormat) {
-        xAxis.tickFormat(time.format(tickTimeDisplayFormat));
+        xAxis
+          .tickFormat(time.format(tickTimeDisplayFormat));
       }
-      xAxis.tickSize(0).tickPadding(15);
-      if (xTickNumber) xAxis.ticks(xTickNumber);
+
+      xAxis
+        .tickSize(0)
+        .tickPadding(15);
+
+      if (xTickNumber) {
+        xAxis.ticks(xTickNumber);
+      }
+
       root.append('g')
         .attr('class', 'x axis')
-        .attr('transform', 'translate(0,' + height + ')')
+        .attr('transform', `translate(0, ${height})`)
         .call(xAxis)
         .append('text')
         .attr('class', 'label')
@@ -189,12 +213,24 @@ export default class BarChart extends React.Component {
       const yAxis = svg.axis()
           .scale(y)
           .orient(yAxisOrientRight ? 'right' : 'left');
-      if (yTickNumber) yAxis.ticks(yTickNumber);
-      if (grid) { yAxis.tickSize(-width, 6).tickPadding(12); } else { yAxis.tickPadding(10); }
+
+      if (yTickNumber) {
+        yAxis.ticks(yTickNumber);
+      }
+
+      if (grid) {
+        yAxis
+          .tickSize(-width, 6)
+          .tickPadding(12);
+      } else {
+        yAxis
+          .tickPadding(10);
+      }
+
       root.append('g')
         .attr('class', 'y axis')
         .call(yAxis)
-        .attr('transform', yAxisOrientRight ? `translate(${width}, 0)` : `translate(0, 0)`)
+        .attr('transform', yAxisOrientRight ? `translate(${width}, 0)` : 'translate(0, 0)')
         .append('text')
         .attr('class', 'label')
         .attr('transform', 'rotate(-90)')
@@ -208,12 +244,24 @@ export default class BarChart extends React.Component {
         const yAxis2 = svg.axis()
             .scale(y2)
             .orient(yAxisOrientRight ? 'left' : 'right');
-        if (yTickNumber) yAxis.ticks(yTickNumber);
-        if (grid) { yAxis.tickSize(-width, 6).tickPadding(12); } else { yAxis.tickPadding(10); }
+
+        if (yTickNumber) {
+          yAxis.ticks(yTickNumber);
+        }
+
+        if (grid) {
+          yAxis
+            .tickSize(-width, 6)
+            .tickPadding(12);
+        } else {
+          yAxis
+            .tickPadding(10);
+        }
+
         root.append('g')
             .attr('class', 'y axis')
             .call(yAxis2)
-            .attr('transform', yAxisOrientRight ? `translate(0, 0)` : `translate(${width}, 0)`)
+            .attr('transform', yAxisOrientRight ? 'translate(0, 0)' : `translate(${width}, 0)`)
             .append('text')
             .attr('class', 'label')
             .attr('transform', 'rotate(-90)')
@@ -225,7 +273,7 @@ export default class BarChart extends React.Component {
       }
     }
 
-    data.map(() => {
+    data.forEach(() => {
       root.selectAll('.bar')
           .data(data)
           .enter()
@@ -259,18 +307,25 @@ export default class BarChart extends React.Component {
     if (y2) {
       const yValue = getValueFunction('y', y2Type, this.parseDate);
       const xValue = getValueFunction('x', xType, this.parseDate);
-      const myLinePath = svg.line().interpolate(interpolate).x((d) => x(xValue(d))).y((d) => y2(yValue(d)));
+      const myLinePath = svg.line()
+        .interpolate(interpolate)
+        .x((d) => x(xValue(d)))
+        .y((d) => y2(yValue(d)));
 
       root.append('path')
         .datum(lineData)
-        .attr('class', `line`)
-        .attr('style', `stroke: red`)
+        .attr('class', 'line')
+        .attr('style', 'stroke: red')
         .attr('d', myLinePath);
     }
 
     return (
       <div ref={this.uid} className={`bar-chart${this.uid}`}>
-        <Style scopeSelector={`.bar-chart${this.uid}`} rules={merge({}, defaultStyle, style, getAxisStyles(grid, false, yAxisOrientRight))}/>
+        <Style
+          scopeSelector={`.bar-chart${this.uid}`}
+          rules={
+            merge({}, defaultStyle, style, getAxisStyles(grid, false, yAxisOrientRight))}
+        />
         {svgNode.toReact()}
       </div>
     );

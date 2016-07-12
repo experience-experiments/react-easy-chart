@@ -1,6 +1,16 @@
 import React from 'react';
 import { createElement } from 'react-faux-dom';
-import { reduce, calcMargin, getValueFunction, getRandomId, setLineDomainAndRange, defaultStyle, getAxisStyles, createCircularTicks, rmaColorPalet } from '../shared';
+import {
+  reduce,
+  calcMargin,
+  getValueFunction,
+  getRandomId,
+  setLineDomainAndRange,
+  defaultStyle,
+  getAxisStyles,
+  createCircularTicks,
+  rmaColorPalet
+} from '../shared';
 import { select, svg, time, event as d3LastEvent } from 'd3';
 import { Style } from 'radium';
 import merge from 'lodash.merge';
@@ -47,7 +57,7 @@ export default class LineChart extends React.Component {
       xType: 'linear',
       yType: 'linear',
       lineColors: [],
-      axisLabels: {x: '', y: ''},
+      axisLabels: { x: '', y: '' },
       mouseOverHandler: () => {},
       mouseOutHandler: () => {},
       mouseMoveHandler: () => {},
@@ -72,7 +82,7 @@ export default class LineChart extends React.Component {
   }
 
   render() {
-    const {data,
+    const { data,
       xType,
       yType,
       style,
@@ -92,7 +102,7 @@ export default class LineChart extends React.Component {
       clickHandler,
       dataPoints,
       lineColors,
-      yAxisOrientRight} = this.props;
+      yAxisOrientRight } = this.props;
     const margin = calcMargin(axes, this.props.margin, yAxisOrientRight);
     const defaultColours = lineColors.concat(rmaColorPalet);
     const width = reduce(this.props.width, margin.left, margin.right);
@@ -103,22 +113,47 @@ export default class LineChart extends React.Component {
 
     const yValue = getValueFunction('y', yType, this.parseDate);
     const xValue = getValueFunction('x', xType, this.parseDate);
-    const linePath = svg.line().interpolate(interpolate).x((d) => x(xValue(d))).y((d) => y(yValue(d)));
+    const linePath = svg.line()
+      .interpolate(interpolate)
+      .x((d) => x(xValue(d)))
+      .y((d) => y(yValue(d)));
 
     const svgNode = createElement('svg');
-    select(svgNode).attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom);
-    const root = select(svgNode).append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+    select(svgNode)
+      .attr('width', width + margin.left + margin.right)
+      .attr('height', height + margin.top + margin.bottom);
+
+    const root = select(svgNode)
+      .append('g')
+      .attr('transform', `translate(${margin.left}, ${margin.top})`);
 
     if (axes) {
-      const xAxis = svg.axis().scale(x).orient('bottom');
+      const xAxis = svg.axis()
+        .scale(x)
+        .orient('bottom');
+
       if (xType === 'time' && tickTimeDisplayFormat) {
-        xAxis.tickFormat(time.format(tickTimeDisplayFormat));
+        xAxis
+          .tickFormat(time.format(tickTimeDisplayFormat));
       }
-      if (grid && verticalGrid) { xAxis.tickSize(-height, 6).tickPadding(15); } else { xAxis.tickSize(0).tickPadding(15);}
-      if (xTicks) xAxis.ticks(xTicks);
+
+      if (grid && verticalGrid) {
+        xAxis
+          .tickSize(-height, 6)
+          .tickPadding(15);
+      } else {
+        xAxis
+          .tickSize(0)
+          .tickPadding(15);
+      }
+
+      if (xTicks) {
+        xAxis.ticks(xTicks);
+      }
+
       root.append('g')
         .attr('class', 'x axis')
-        .attr('transform', `translate(0,${height})`)
+        .attr('transform', `translate(0, ${height})`)
         .call(xAxis)
         .append('text')
         .attr('class', 'label')
@@ -127,17 +162,31 @@ export default class LineChart extends React.Component {
         .style('text-anchor', yAxisOrientRight ? 'start' : 'end')
         .text(axisLabels.x);
 
-      const yAxis = svg.axis().scale(y)
+      const yAxis = svg.axis()
+        .scale(y)
         .orient(yAxisOrientRight ? 'right' : 'left');
+
       if (yType === 'time' && tickTimeDisplayFormat) {
-        yAxis.tickFormat(time.format(tickTimeDisplayFormat));
+        yAxis
+          .tickFormat(time.format(tickTimeDisplayFormat));
       }
-      if (grid) { yAxis.tickSize(-width, 6).tickPadding(12); } else { yAxis.tickPadding(10); }
-      if (yTicks) yAxis.ticks(yTicks);
+      if (grid) {
+        yAxis
+          .tickSize(-width, 6)
+          .tickPadding(12);
+      } else {
+        yAxis
+          .tickPadding(10);
+      }
+
+      if (yTicks) {
+        yAxis.ticks(yTicks);
+      }
+
       root.append('g')
         .attr('class', 'y axis')
         .call(yAxis)
-        .attr('transform', yAxisOrientRight ? `translate(${width}, 0)` : `translate(0, 0)`)
+        .attr('transform', yAxisOrientRight ? `translate(${width}, 0)` : 'translate(0, 0)')
         .append('text')
         .attr('class', 'label')
         .attr('transform', 'rotate(-90)')
@@ -148,17 +197,17 @@ export default class LineChart extends React.Component {
         .text(axisLabels.y);
     }
 
-    data.map((dataElelment, i) => {
+    data.forEach((dataElelment, i) => {
       root.append('path')
         .datum(dataElelment)
-        .attr('class', `line`)
+        .attr('class', 'line')
         .attr('style', `stroke: ${defaultColours[i]}`)
         .attr('d', linePath);
     });
 
     if (dataPoints) {
-      data.map((dataElelment, i) => {
-        dataElelment.map((dotData) => {
+      data.forEach((dataElelment, i) => {
+        dataElelment.forEach((dotData) => {
           root.append('circle')
           .attr('class', 'data-point')
           .style('strokeWidth', '2px')
@@ -191,7 +240,11 @@ export default class LineChart extends React.Component {
 
     return (
       <div ref={this.uid} className={`line-chart${this.uid}`}>
-        <Style scopeSelector={`.line-chart${this.uid}`} rules={merge({}, defaultStyle, style, getAxisStyles(grid, verticalGrid, yAxisOrientRight))} />
+        <Style
+          scopeSelector={`.line-chart${this.uid}`}
+          rules={
+            merge({}, defaultStyle, style, getAxisStyles(grid, verticalGrid, yAxisOrientRight))}
+        />
         {svgNode.toReact()}
       </div>
     );

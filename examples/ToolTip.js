@@ -11,21 +11,20 @@ const toolTipStyles = {
   }
 };
 
-class ToolTip extends React.Component {
+const ToolTip = (props) => (
+  <div className="tooltip-container">
+    <Style scopeSelector=".tooltip-container" rules={toolTipStyles} />
+    <div className="tooltip" style={{ top: props.top, left: props.left }}>
+      {props.children}
+    </div>
+  </div>
+);
 
-  render() {
-    return (<div className="tooltip-container">
-      <Style scopeSelector=".tooltip-container" rules={toolTipStyles}/>
-      <div className="tooltip" style={{'top': this.props.top, 'left': this.props.left}}>
-        {this.props.children}
-      </div>
-    </div>);
-  }
-}
-
+// https://github.com/yannickcr/eslint-plugin-react/issues/7
 ToolTip.propTypes = {
   left: React.PropTypes.string,
-  top: React.PropTypes.string
+  top: React.PropTypes.string,
+  children: React.PropTypes.node
 };
 
 export default ToolTip;
