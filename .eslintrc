@@ -1,5 +1,10 @@
 {
   "extends": [
-    "./node_modules/eslint-config-airbnb/.eslintrc"
-  ]
+    "./node_modules/eslint-config-airbnb/.eslintrc",
+    "plugin:react/recommended"
+  ],
+  "env": {},
+  "ecmaFeatures": {},
+  "globals": {},
+  "rules": {}
 }

@@ -45,10 +45,11 @@
     "eslint-config-airbnb": "^9.0.1",
     "eslint-plugin-import": "^1.10.2",
     "eslint-plugin-jsx-a11y": "^1.5.5",
+    "eslint-plugin-react": "^5.2.2",
     "isparta": "^4.0.0",
     "isparta-loader": "^2.0.0",
     "istanbul": "^0.4.4",
-    "karma": "^0.13.15",
+    "karma": "^0.13.22",
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^1.0.1",
     "karma-coverage": "^1.1.0",
@@ -69,7 +70,7 @@
     "rimraf": "^2.4.4",
     "sinon": "^2.0.0-pre.2",
     "sinon-chai": "^2.8.0",
-    "webpack": "^1.12.9",
+    "webpack": "^1.13.1",
     "webpack-dev-server": "^1.14.0"
   },
   "dependencies": {
