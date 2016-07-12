@@ -1,4 +1,6 @@
 /* eslint-env node */
+/* eslint-disable object-shorthand */
+
 const path = require('path');
 const isparta = require('isparta');
 const processCwd = process.cwd();
@@ -20,6 +22,13 @@ module.exports = (config) => {
     frameworks: ['mocha', 'chai', 'sinon', 'phantomjs-shim', 'es6-shim'],
 
 
+    // list of files / patterns to load in the browser
+    files: [
+      'node_modules/phantomjs-polyfill/bind-polyfill.js',
+      'tests/index.js'
+    ],
+
+
     plugins: [
       'karma-chai',
       'karma-chrome-launcher',
@@ -28,16 +37,10 @@ module.exports = (config) => {
       'karma-mocha',
       'karma-phantomjs-launcher',
       'karma-phantomjs-shim',
+      'karma-sinon',
       'karma-sourcemap-loader',
       'karma-spec-reporter',
       'karma-webpack'
-    ],
-
-
-    // list of files / patterns to load in the browser
-    files: [
-      'node_modules/phantomjs-polyfill/bind-polyfill.js',
-      'tests/index.js'
     ],
 
 
@@ -63,7 +66,12 @@ module.exports = (config) => {
 
 
     // level of logging
-    // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
+    // possible values:
+    //   config.LOG_DISABLE ||
+    //   config.LOG_ERROR ||
+    //   config.LOG_WARN ||
+    //   config.LOG_INFO ||
+    //   config.LOG_DEBUG
     logLevel: config.LOG_INFO,
 
 
@@ -99,7 +107,6 @@ module.exports = (config) => {
         }
       },
       module: {
-        devtool: 'sourcemap',
         preLoaders: [
           {
             test: /\.js$/,
@@ -129,21 +136,6 @@ module.exports = (config) => {
     webpackServer: {
       noInfo: true
     },
-    autoWatch: true,
-    browsers: browsers,
-    singleRun: false,
-    reporters: ['spec'], // ['progress'],
-    plugins: [
-      'karma-chai',
-      'karma-chrome-launcher',
-      'karma-es6-shim',
-      'karma-mocha',
-      'karma-phantomjs-launcher',
-      'karma-phantomjs-shim',
-      'karma-sinon',
-      'karma-sourcemap-loader',
-      'karma-spec-reporter',
-      'karma-webpack'
-    ]
+
   });
 };

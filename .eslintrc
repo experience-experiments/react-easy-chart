@@ -1,9 +1,5 @@
 {
   "extends": [
     "./node_modules/eslint-config-airbnb/.eslintrc"
-  ],
-  "env": {},
-  "ecmaFeatures": {},
-  "globals": {},
-  "rules": {}
+  ]
 }
