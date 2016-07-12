@@ -1,10 +1,10 @@
 import React from 'react';
-import {createElement} from 'react-faux-dom';
-import {reduce, calcMargin, getValueFunction, getRandomId, setLineDomainAndRange, defaultStyle, getAxisStyles, createCircularTicks, rmaColorPalet} from '../shared';
-import {select, svg, time, event as d3LastEvent} from 'd3';
-import {Style} from 'radium';
+import { createElement } from 'react-faux-dom';
+import { reduce, calcMargin, getValueFunction, getRandomId, setLineDomainAndRange, defaultStyle, getAxisStyles, createCircularTicks, rmaColorPalet } from '../shared';
+import { select, svg, time, event as d3LastEvent } from 'd3';
+import { Style } from 'radium';
 import merge from 'lodash.merge';
-import {format} from 'd3-time-format';
+import { timeParse as parse } from 'd3-time-format';
 
 export default class LineChart extends React.Component {
   static get propTypes() {
@@ -57,7 +57,7 @@ export default class LineChart extends React.Component {
 
   constructor(props) {
     super(props);
-    this.parseDate = format(props.datePattern).parse;
+    this.parseDate = parse(props.datePattern);
     this.uid = getRandomId();
   }
 
@@ -191,7 +191,7 @@ export default class LineChart extends React.Component {
 
     return (
       <div ref={this.uid} className={`line-chart${this.uid}`}>
-        <Style scopeSelector={`.line-chart${this.uid}`} rules={merge({}, defaultStyle, style, getAxisStyles(grid, verticalGrid, yAxisOrientRight))}/>
+        <Style scopeSelector={`.line-chart${this.uid}`} rules={merge({}, defaultStyle, style, getAxisStyles(grid, verticalGrid, yAxisOrientRight))} />
         {svgNode.toReact()}
       </div>
     );

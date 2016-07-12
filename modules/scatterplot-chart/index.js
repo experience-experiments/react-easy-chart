@@ -1,12 +1,12 @@
 import React from 'react';
-import {linear, ordinal} from 'd3-scale';
-import {event as d3LastEvent, min, max, scale, select, svg, time} from 'd3';
-import {format} from 'd3-time-format';
-import {extent} from 'd3-array';
+import { scaleLinear as linear, scalePoint as point } from 'd3-scale';
+import { event as d3LastEvent, min, max, scale, select, svg, time } from 'd3';
+import { timeParse as parse } from 'd3-time-format';
+import { extent } from 'd3-array';
 import { createElement } from 'react-faux-dom';
-import {Style} from 'radium';
+import { Style } from 'radium';
 import merge from 'lodash.merge';
-import {calcDefaultDomain, defaultStyle, getAxisStyles, createCircularTicks} from '../shared';
+import { calcDefaultDomain, defaultStyle, getAxisStyles, createCircularTicks } from '../shared';
 
 let parseDate = null;
 const axisMargin = 18;
@@ -84,7 +84,7 @@ export default class ScatterplotChart extends React.Component {
   }
 
   componentWillMount() {
-    parseDate = format(this.props.datePattern).parse;
+    parseDate = parse(this.props.datePattern);
     this.width = this.props.width;
     this.height = this.props.height;
     this.setMargin();
@@ -187,7 +187,7 @@ export default class ScatterplotChart extends React.Component {
       case 'time':
         return time.scale();
       case 'text':
-        return ordinal();
+        return point();
       default:
         return linear();
     }
@@ -198,9 +198,11 @@ export default class ScatterplotChart extends React.Component {
     let d3Axis;
     switch (type) {
       case 'text':
-        d3Axis = ordinal();
-        d3Axis.domain(data.map((d) => d[dataIndex]), 1);
-        d3Axis.rangePoints([0, length], 1);
+        d3Axis = point();
+        d3Axis
+          .domain(data.map((d) => d[dataIndex]), 1)
+          .range([0, length])
+          .padding(1);
         break;
       case 'linear':
         let minAmount = min(data, (d) => d[dataIndex]);
@@ -221,12 +223,15 @@ export default class ScatterplotChart extends React.Component {
         break;
       case 'time':
         d3Axis = time.scale();
-        if (domainRange) {
-          d3Axis.domain(calcDefaultDomain(domainRange));
-        } else {
-          d3Axis.domain(extent(data, (d) => parseDate(d[dataIndex])));
-        }
-        d3Axis.range(axesType === 'x' ? [0, length] : [length, 0], 1);
+        d3Axis
+          .domain(
+            (domainRange)
+              ? calcDefaultDomain(domainRange)
+              : extent(data, (d) => parseDate(d[dataIndex])))
+          .range(
+            (axesType === 'x')
+              ? [0, length]
+              : [length, 0]); // , 1); // What is this second argument? Cannot find documentation in 0.3.0
         break;
       default:
         break;
