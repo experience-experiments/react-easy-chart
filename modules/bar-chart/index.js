@@ -1,7 +1,15 @@
 import React from 'react';
 import { scaleBand as band, scaleLinear as linear } from 'd3-scale';
-import { event as d3LastEvent, select, time, svg, scale, max } from 'd3';
 import {
+  event as lastEvent,
+  select,
+  svg,
+  time,
+  scale,
+  max
+} from 'd3';
+import {
+  getRandomId,
   reduce,
   calcMargin,
   calcDefaultDomain,
@@ -80,17 +88,19 @@ export default class BarChart extends React.Component {
   constructor(props) {
     super(props);
     this.parseDate = parse(props.datePattern);
-    this.uid = Math.floor(Math.random() * new Date().getTime());
+    this.uid = getRandomId(); // Math.floor(Math.random() * new Date().getTime());
   }
 
   componentDidMount() {
-    createCircularTicks(this.refs[this.uid]);
+    const uid = this.uid;
+    const ref = this.refs[uid];
+    createCircularTicks(ref);
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.props.width !== prevProps.width) {
-      createCircularTicks(this.refs[this.uid]);
-    }
+  componentDidUpdate() {
+    const uid = this.uid;
+    const ref = this.refs[uid];
+    createCircularTicks(ref);
   }
 
   setScaleDomainRange(axesType, domainRange, data, type, length) {
@@ -142,7 +152,7 @@ export default class BarChart extends React.Component {
     return null;
   }
 
-  createSvgNode({ w, h, m }) {
+  createSvgNode({ m, w, h }) {
     const node = createElement('svg');
     select(node)
       .attr('width', w + m.left + m.right)
@@ -239,7 +249,7 @@ export default class BarChart extends React.Component {
     return axis;
   }
 
-  createYAxis2({ root, m, w, h }) { // , yAxis }) {
+  createYAxis2({ root, m, w, h }) {
     const {
       lineData,
       axisLabels,
@@ -286,7 +296,7 @@ export default class BarChart extends React.Component {
     return axis;
   }
 
-  createBarChart({ root, x, y, h }) {
+  createBarChart({ root, h, x, y }) {
     const {
       data,
       mouseOverHandler,
@@ -323,10 +333,10 @@ export default class BarChart extends React.Component {
           })
           .attr('y', (d) => y(d.y))
           .attr('height', (d) => h - y(d.y))
-          .on('mouseover', (d) => mouseOverHandler(d, d3LastEvent))
-          .on('mouseout', (d) => mouseOutHandler(d, d3LastEvent))
-          .on('mousemove', () => mouseMoveHandler(d3LastEvent))
-          .on('click', (d) => clickHandler(d, d3LastEvent));
+          .on('mouseover', (d) => mouseOverHandler(d, lastEvent))
+          .on('mouseout', (d) => mouseOutHandler(d, lastEvent))
+          .on('mousemove', () => mouseMoveHandler(lastEvent))
+          .on('click', (d) => clickHandler(d, lastEvent));
     });
   }
 
@@ -369,6 +379,7 @@ export default class BarChart extends React.Component {
     const scope = `.bar-chart-${uid}`;
     const axisStyles = getAxisStyles(grid, false, yAxisOrientRight);
     const rules = merge({}, defaultStyle, style, axisStyles);
+
     return (
       <Style
         scopeSelector={scope}
@@ -406,7 +417,7 @@ export default class BarChart extends React.Component {
     const x = this.setScaleDomainRange('x', xDomainRange, data, xType, w);
     const y = this.setScaleDomainRange('y', yDomainRange, data, yType, h);
 
-    const node = this.createSvgNode({ w, h, m });
+    const node = this.createSvgNode({ m, w, h });
     const root = this.createSvgRoot({ node, m });
 
     return {
@@ -445,12 +456,13 @@ export default class BarChart extends React.Component {
     }
 
     const uid = this.uid;
+    const className = `bar-chart-${uid}`;
     const {
       node
     } = p;
 
     return (
-      <div ref={uid} className={`bar-chart-${uid}`}>
+      <div ref={uid} className={className}>
         {this.createStyle()}
         {node.toReact()}
       </div>
