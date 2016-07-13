@@ -1,12 +1,26 @@
 import React from 'react';
 import { scaleLinear as linear, scalePoint as point } from 'd3-scale';
-import { event as d3LastEvent, min, max, scale, select, svg, time } from 'd3';
+import {
+  event as lastEvent,
+  min,
+  max,
+  scale,
+  select,
+  svg,
+  time
+} from 'd3';
 import { timeParse as parse } from 'd3-time-format';
 import { extent } from 'd3-array';
 import { createElement } from 'react-faux-dom';
 import { Style } from 'radium';
 import merge from 'lodash.merge';
-import { calcDefaultDomain, defaultStyle, getAxisStyles, createCircularTicks } from '../shared';
+import {
+  getRandomId,
+  calcDefaultDomain,
+  defaultStyle,
+  getAxisStyles,
+  createCircularTicks
+} from '../shared';
 
 const axisMargin = 18;
 
@@ -69,28 +83,28 @@ export default class ScatterplotChart extends React.Component {
       datePattern
     } = this.props;
 
-    this.color = scale.category20();
     this.parseDate = parse(datePattern);
-    this.uid = Math.floor(Math.random() * new Date().getTime());
+    this.uid = getRandomId(); // Math.floor(Math.random() * new Date().getTime());
+    this.color = scale.category20();
   }
 
   componentDidMount() {
     const p = this.calculateChartParameters();
-    const uid = this.uid;
-    const ref = this.refs[uid];
     this.initialiseXAxis(p);
     this.initialiseYAxis(p);
     this.initialiseChart(p);
+    const uid = this.uid;
+    const ref = this.refs[uid];
     createCircularTicks(ref);
   }
 
   componentDidUpdate() {
     const p = this.calculateChartParameters();
-    const uid = this.uid;
-    const ref = this.refs[uid];
     this.transitionXAxis(p);
     this.transitionYAxis(p);
     this.transitionChart(p);
+    const uid = this.uid;
+    const ref = this.refs[uid];
     createCircularTicks(ref);
   }
 
@@ -203,7 +217,21 @@ export default class ScatterplotChart extends React.Component {
     return typeof configItem !== 'undefined' ? configItem.stroke : 'none';
   }
 
-  initialiseXAxis({ innerH, innerW, m }) {
+  calcMargin(axes, spacer, yAxisOrientRight) {
+    let defaultMargins =
+      (axes)
+        ? { top: 24, right: 24, bottom: 24, left: 48 }
+        : { top: spacer, right: spacer, bottom: spacer, left: spacer };
+    if (yAxisOrientRight) {
+      defaultMargins =
+        (axes)
+          ? { top: 24, right: 48, bottom: 24, left: 24 }
+          : { top: spacer, right: spacer, bottom: spacer, left: spacer };
+    }
+    return defaultMargins;
+  }
+
+  initialiseXAxis({ innerW, innerH, m }) {
     const {
       axes,
       yAxisOrientRight,
@@ -288,10 +316,10 @@ export default class ScatterplotChart extends React.Component {
       .attr('cy', (d) => y(d.y))
       .style('fill', (d) => this.getFill(d))
       .style('stroke', (d) => this.getStroke(d))
-      .on('mouseover', (d) => mouseOverHandler(d, d3LastEvent))
-      .on('mouseout', (d) => mouseOutHandler(d, d3LastEvent))
-      .on('mousemove', () => mouseMoveHandler(d3LastEvent))
-      .on('click', (d) => clickHandler(d, d3LastEvent));
+      .on('mouseover', (d) => mouseOverHandler(d, lastEvent))
+      .on('mouseout', (d) => mouseOutHandler(d, lastEvent))
+      .on('mousemove', () => mouseMoveHandler(lastEvent))
+      .on('click', (d) => clickHandler(d, lastEvent));
   }
 
   transitionXAxis({ innerH, innerW }) {
@@ -349,21 +377,7 @@ export default class ScatterplotChart extends React.Component {
       .attr('cy', (d) => y(d.y));
   }
 
-  calcMargin(axes, spacer, yAxisOrientRight) {
-    let defaultMargins =
-      (axes)
-        ? { top: 24, right: 24, bottom: 24, left: 48 }
-        : { top: spacer, right: spacer, bottom: spacer, left: spacer };
-    if (yAxisOrientRight) {
-      defaultMargins =
-        (axes)
-          ? { top: 24, right: 48, bottom: 24, left: 24 }
-          : { top: spacer, right: spacer, bottom: spacer, left: spacer };
-    }
-    return defaultMargins;
-  }
-
-  createXAxis({ x, h }) {
+  createXAxis({ h, x }) {
     const {
       xType,
       tickTimeDisplayFormat,
@@ -402,7 +416,7 @@ export default class ScatterplotChart extends React.Component {
     return axis;
   }
 
-  createYAxis({ y, innerW }) {
+  createYAxis({ innerW, y }) {
     const {
       grid,
       yTicks,
@@ -448,6 +462,27 @@ export default class ScatterplotChart extends React.Component {
       .attr('id', `dots-${uid}`);
   }
 
+  createStyle() {
+    const {
+      style,
+      grid,
+      verticalGrid,
+      yAxisOrientRight
+    } = this.props;
+
+    const uid = this.uid;
+    const scope = `.scatterplot-chart-${uid}`;
+    const axisStyles = getAxisStyles(grid, verticalGrid, yAxisOrientRight);
+    const rules = merge({}, defaultStyle, style, axisStyles);
+
+    return (
+      <Style
+        scopeSelector={scope}
+        rules={rules}
+      />
+    );
+  }
+
   calculateChartParameters() {
     const {
       axes,
@@ -486,34 +521,15 @@ export default class ScatterplotChart extends React.Component {
     const node = createElement('svg');
 
     return {
+      m,
       w,
       h,
       innerW,
       innerH,
       x,
       y,
-      m,
       node
     };
-  }
-
-  createStyle() {
-    const {
-      style,
-      grid,
-      verticalGrid,
-      yAxisOrientRight
-    } = this.props;
-
-    const uid = this.uid;
-    const axisStyles = getAxisStyles(grid, verticalGrid, yAxisOrientRight);
-    const rules = merge({}, defaultStyle, style, axisStyles);
-    return (
-      <Style
-        scopeSelector={`.scatterplot_chart${uid}`}
-        rules={rules}
-      />
-    );
   }
 
   render() {
@@ -524,14 +540,14 @@ export default class ScatterplotChart extends React.Component {
 
     this.createScatterplotChart(p);
 
+    const uid = this.uid; // Math.floor(Math.random() * new Date().getTime());
+    const className = `scatterplot-chart-${uid}`;
     const {
       node
     } = p;
 
-    const uid = this.uid; // Math.floor(Math.random() * new Date().getTime());
-
     return (
-      <div ref={this.uid} className={`scatterplot_chart${uid}`}>
+      <div ref={uid} className={className}>
         {this.createStyle()}
         {node.toReact()}
       </div>
