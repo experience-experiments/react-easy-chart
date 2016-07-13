@@ -1,6 +1,9 @@
 import React from 'react';
 import { scale, layout, svg, select, event as d3LastEvent, interpolate } from 'd3';
-import { defaultStyle } from '../shared';
+import {
+  getRandomId,
+  defaultStyle
+} from '../shared';
 import { createElement } from 'react-faux-dom';
 import { Style } from 'radium';
 import merge from 'lodash.merge';
@@ -37,7 +40,7 @@ export default class PieChart extends React.Component {
 
   constructor(props) {
     super(props);
-    this.uid = Math.floor(Math.random() * new Date().getTime());
+    this.uid = getRandomId(); // Math.floor(Math.random() * new Date().getTime());
     this.color = scale.category20();
     this.pie = layout.pie()
       .value((d) => d.value)
@@ -82,6 +85,13 @@ export default class PieChart extends React.Component {
 
   getInnerRadius() {
     return this.props.innerHoleSize * 0.5;
+  }
+
+  tween(a, index) {
+    const cur = this.current[index];
+    const i = interpolate(cur, a);
+    this.current[index] = a;
+    return (t) => this.getArc()(i(t));
   }
 
   initialiseLabels() {
@@ -196,13 +206,6 @@ export default class PieChart extends React.Component {
     }
   }
 
-  tween(a, index) {
-    const cur = this.current[index];
-    const i = interpolate(cur, a);
-    this.current[index] = a;
-    return (t) => this.getArc()(i(t));
-  }
-
   createPieChart(node) {
     const {
       size
@@ -236,15 +239,17 @@ export default class PieChart extends React.Component {
   }
 
   createStyle() {
-    const uid = this.uid;
     const {
       styles
     } = this.props;
+
+    const uid = this.uid;
+    const scope = `.pie-chart-${uid}`;
     const rules = merge({}, defaultStyle, styles);
 
     return (
       <Style
-        scopeSelector={`.pie_chart${uid}`}
+        scopeSelector={scope}
         rules={rules}
       />
     );
@@ -264,9 +269,10 @@ export default class PieChart extends React.Component {
     }
 
     const uid = this.uid;
+    const className = `pie-chart-${uid}`;
 
     return (
-      <div className={`pie_chart${uid}`}>
+      <div className={className}>
         {this.createStyle()}
         {node.toReact()}
       </div>
