@@ -1,5 +1,5 @@
 /* eslint-env node, mocha */
-/* eslint no-unused-expressions: 0 */
+/* eslint no-unused-expressions: 0, max-len: 0 */
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -34,7 +34,9 @@ describe('PieChart component', () => {
     describe('Without required props', () => {
       it('throws a \'TypeError\'', () => {
         expect(() => {
-          TestUtils.renderIntoDocument(<PieChart />);
+          TestUtils.renderIntoDocument(
+            <PieChart />
+          );
         }).to.throw(TypeError);
       });
     });
@@ -43,7 +45,11 @@ describe('PieChart component', () => {
         let chart;
         beforeEach(() => {
           sinon.spy(PieChart.prototype, 'render');
-          chart = TestUtils.renderIntoDocument(<PieChart data={mockData} />);
+          chart = TestUtils.renderIntoDocument(
+            <PieChart
+              data={mockData}
+            />
+          );
         });
 
         afterEach(() => {
@@ -99,7 +105,11 @@ describe('PieChart component', () => {
 
       describe('Without optional props', () => {
         describe('Consuming the \'defaultProps\'', () => {
-          const chart = TestUtils.renderIntoDocument(<PieChart data={mockData} />);
+          const chart = TestUtils.renderIntoDocument(
+            <PieChart
+              data={mockData}
+            />
+          );
 
           it('has a size for the chart', () => {
             /**
@@ -157,7 +167,11 @@ describe('PieChart component', () => {
             sinon.spy(PieChart.prototype, 'createPieChart');
             sinon.spy(PieChart.prototype, 'createStyle');
             sinon.spy(PieChart.prototype, 'createLabels');
-            chart = TestUtils.renderIntoDocument(<PieChart data={mockData} />);
+            chart = TestUtils.renderIntoDocument(
+              <PieChart
+                data={mockData}
+              />
+            );
           });
 
           afterEach(() => {
@@ -186,7 +200,12 @@ describe('PieChart component', () => {
 
           beforeEach(() => {
             sinon.spy(PieChart.prototype, 'createLabels');
-            chart = TestUtils.renderIntoDocument(<PieChart data={mockData} labels />);
+            chart = TestUtils.renderIntoDocument(
+              <PieChart
+                data={mockData}
+                labels
+              />
+            );
           });
 
           afterEach(() => {
@@ -208,7 +227,11 @@ describe('PieChart component', () => {
   describe('Rendering the PieChart', () => {
     describe('Always', () => {
       const renderer = TestUtils.createRenderer();
-      renderer.render(<PieChart data={mockData} />);
+      renderer.render(
+        <PieChart
+          data={mockData}
+        />
+      );
       const chart = renderer.getRenderOutput();
       const svg = chart.props.children[1];
       const graph = svg.props.children[0];
