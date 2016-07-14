@@ -28,7 +28,10 @@ export default class ScatterplotChart extends React.Component {
   static get propTypes() {
     return {
       axes: React.PropTypes.bool,
-      axisLabels: React.PropTypes.object,
+      axisLabels: React.PropTypes.shape({
+        x: React.PropTypes.string,
+        y: React.PropTypes.string
+      }),
       clickHandler: React.PropTypes.func,
       config: React.PropTypes.array,
       data: React.PropTypes.array.isRequired,
@@ -60,7 +63,10 @@ export default class ScatterplotChart extends React.Component {
   static get defaultProps() {
     return {
       axes: false,
-      axisLabels: {},
+      axisLabels: {
+        x: '',
+        y: ''
+      },
       clickHandler: () => {},
       config: [],
       datePattern: '%d-%b-%y',
@@ -217,7 +223,7 @@ export default class ScatterplotChart extends React.Component {
     return typeof configItem !== 'undefined' ? configItem.stroke : 'none';
   }
 
-  calcMargin(axes, spacer, yAxisOrientRight) {
+  calculateMargin(axes, spacer, yAxisOrientRight) {
     let defaultMargins =
       (axes)
         ? { top: 24, right: 24, bottom: 24, left: 48 }
@@ -229,6 +235,20 @@ export default class ScatterplotChart extends React.Component {
           : { top: spacer, right: spacer, bottom: spacer, left: spacer };
     }
     return defaultMargins;
+  }
+
+  createSvgNode({ m, w, h }) {
+    const node = createElement('svg');
+    select(node)
+      .attr('width', w + m.left + m.right)
+      .attr('height', h + m.top + m.bottom);
+    return node;
+  }
+
+  createSvgRoot({ node, m }) {
+    return select(node)
+      .append('g')
+      .attr('transform', `translate(${m.left}, ${m.top})`);
   }
 
   initialiseXAxis({ innerW, innerH, m }) {
@@ -392,11 +412,13 @@ export default class ScatterplotChart extends React.Component {
       .orient('bottom');
 
     if (xType === 'time' && tickTimeDisplayFormat) {
-      axis.tickFormat(time.format(tickTimeDisplayFormat));
+      axis
+        .tickFormat(time.format(tickTimeDisplayFormat));
     }
 
     if (xTickNumber) {
-      axis.ticks(xTickNumber);
+      axis
+        .ticks(xTickNumber);
     }
 
     if (grid && verticalGrid) {
@@ -410,7 +432,8 @@ export default class ScatterplotChart extends React.Component {
     }
 
     if (xTicks) {
-      axis.ticks(xTicks);
+      axis
+        .ticks(xTicks);
     }
 
     return axis;
@@ -432,33 +455,36 @@ export default class ScatterplotChart extends React.Component {
         .tickSize(-innerW, 6)
         .tickPadding(12);
     } else {
-      axis.tickPadding(10);
+      axis
+        .tickPadding(10);
     }
 
     if (yTicks) {
-      axis.ticks(yTicks);
+      axis
+        .ticks(yTicks);
     }
 
     return axis;
   }
 
-  createScatterplotChart({ node, w, h, m }) {
+  createScatterplotChart({ w, h, node, root }) {
     const uid = this.uid;
 
-    const chart = select(node)
+    select(node)
       .attr('width', w)
-      .attr('height', h)
-      .append('g')
-      .attr('id', `area-${uid}`)
-      .attr('transform', `translate(${m.left}, ${m.top})`);
+      .attr('height', h);
 
-    chart.append('g')
+    root
+      .append('g')
+      .attr('id', `area-${uid}`);
+
+    root.append('g')
       .attr('id', `axis-x-${uid}`);
 
-    chart.append('g')
+    root.append('g')
       .attr('id', `axis-y-${uid}`);
 
-    chart.append('g')
+    root.append('g')
       .attr('id', `dots-${uid}`);
   }
 
@@ -483,6 +509,18 @@ export default class ScatterplotChart extends React.Component {
     );
   }
 
+  calculateInnerW(w, m) {
+    return (w - (m.left + m.right));
+  }
+
+  calculateInnerH(h, m) {
+    const {
+      dotRadius
+    } = this.props;
+
+    return (h - (m.top + m.bottom + (dotRadius * 2)));
+  }
+
   calculateChartParameters() {
     const {
       axes,
@@ -498,27 +536,28 @@ export default class ScatterplotChart extends React.Component {
       yAxisOrientRight
     } = this.props;
 
-    const m = margin || this.calcMargin(axes, dotRadius * 2, yAxisOrientRight);
+    const m = margin || this.calculateMargin(axes, dotRadius * 2, yAxisOrientRight);
     const w = width;
     const h = height + (dotRadius * 3);
 
-    const innerW = width - (m.left + m.right);
-    const innerH =
-      height - (m.top +
-      m.bottom + (dotRadius * 2));
+    const innerW = this.calculateInnerW(width, m);
+    const innerH = this.calculateInnerH(height, m);
 
-    const defaultXDomain = (xDomainRange)
-      ? calcDefaultDomain(xDomainRange, xType, this.parseDate)
-      : null;
+    const defaultXDomain =
+      (xDomainRange)
+        ? calcDefaultDomain(xDomainRange, xType, this.parseDate)
+        : null;
 
-    const defaultYDomain = (yDomainRange)
-      ? calcDefaultDomain(yDomainRange, yType, this.parseDate)
-      : null;
+    const defaultYDomain =
+      (yDomainRange)
+        ? calcDefaultDomain(yDomainRange, yType, this.parseDate)
+        : null;
 
     const x = this.setDomainAndRange('x', defaultXDomain, data, xType, innerW, yAxisOrientRight);
     const y = this.setDomainAndRange('y', defaultYDomain, data, yType, innerH, yAxisOrientRight);
 
-    const node = createElement('svg');
+    const node = this.createSvgNode({ m, w, h });
+    const root = this.createSvgRoot({ node, m });
 
     return {
       m,
@@ -528,7 +567,8 @@ export default class ScatterplotChart extends React.Component {
       innerH,
       x,
       y,
-      node
+      node,
+      root
     };
   }
 
