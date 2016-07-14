@@ -1,5 +1,13 @@
 import React from 'react';
-import { scale, layout, svg, select, event as d3LastEvent, interpolate } from 'd3';
+import {
+  scale,
+  layout,
+  svg,
+  select,
+  event as
+  lastEvent,
+  interpolate
+} from 'd3';
 import {
   getRandomId,
   defaultStyle
@@ -45,8 +53,8 @@ export default class PieChart extends React.Component {
     this.pie = layout.pie()
       .value((d) => d.value)
       .sort(null);
-    this.current = [];
-    this.currentTxt = [];
+    this.currentPieCharts = [];
+    this.currentLabels = [];
   }
 
   componentDidMount() {
@@ -79,18 +87,18 @@ export default class PieChart extends React.Component {
       .innerRadius(radius - padding - ((20 * radius) / 100));
   }
 
-  getRadius() {
-    return this.props.size * 0.5;
-  }
-
   getInnerRadius() {
     return this.props.innerHoleSize * 0.5;
   }
 
+  getRadius() {
+    return this.props.size * 0.5;
+  }
+
   tween(a, index) {
-    const cur = this.current[index];
-    const i = interpolate(cur, a);
-    this.current[index] = a;
+    const currentPieChart = this.currentPieCharts[index];
+    const i = interpolate(currentPieChart, a);
+    this.currentPieCharts[index] = a;
     return (t) => this.getArc()(i(t));
   }
 
@@ -101,7 +109,7 @@ export default class PieChart extends React.Component {
 
     const uid = this.uid;
 
-    const text = select(`#labels_${uid}`)
+    const text = select(`#labels-${uid}`)
       .selectAll('text')
       .data(this.pie(data))
       .enter()
@@ -111,7 +119,7 @@ export default class PieChart extends React.Component {
       .attr('class', 'pie_chart_text')
       .text((d) => d.data.key)
       .each((d) => {
-        this.currentTxt.push(d);
+        this.currentLabels.push(d);
       });
 
     this.text = text;
@@ -127,24 +135,25 @@ export default class PieChart extends React.Component {
     } = this.props;
 
     const uid = this.uid;
+    const calculateFill = (d, i) => (
+      (d.data.color)
+        ? d.data.color
+        : this.color(i));
 
-    const path = select(`#pie_${uid}`)
+    const path = select(`#pie-${uid}`)
       .selectAll('path')
       .data(this.pie(data))
       .enter()
       .append('path')
-      .attr('fill', (d, i) => (
-        (d.data.color)
-          ? d.data.color
-          : this.color(i)))
+      .attr('fill', calculateFill)
       .attr('d', this.getArc())
       .attr('class', 'pie_chart_lines')
-      .on('mouseover', (d) => mouseOverHandler(d, d3LastEvent))
-      .on('mouseout', (d) => mouseOutHandler(d, d3LastEvent))
-      .on('mousemove', () => mouseMoveHandler(d3LastEvent))
-      .on('click', (d) => clickHandler(d, d3LastEvent))
+      .on('mouseover', (d) => mouseOverHandler(d, lastEvent))
+      .on('mouseout', (d) => mouseOutHandler(d, lastEvent))
+      .on('mousemove', (d) => mouseMoveHandler(d, lastEvent))
+      .on('click', (d) => clickHandler(d, lastEvent))
       .each((d) => {
-        this.current.push(d);
+        this.currentPieCharts.push(d);
       });
 
     this.path = path;
@@ -218,7 +227,7 @@ export default class PieChart extends React.Component {
       .attr('width', size)
       .attr('height', size)
       .append('g')
-      .attr('id', `pie_${uid}`)
+      .attr('id', `pie-${uid}`)
       .attr('transform', `translate(${radius}, ${radius})`);
   }
 
@@ -234,7 +243,7 @@ export default class PieChart extends React.Component {
       .attr('width', size)
       .attr('height', size)
       .append('g')
-      .attr('id', `labels_${uid}`)
+      .attr('id', `labels-${uid}`)
       .attr('transform', `translate(${radius}, ${radius})`);
   }
 
