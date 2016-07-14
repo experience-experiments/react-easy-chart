@@ -1,5 +1,8 @@
 import React from 'react';
-import { scaleLinear as linear, scalePoint as point } from 'd3-scale';
+import {
+  scaleLinear as linear,
+  scalePoint as point
+} from 'd3-scale';
 import {
   event as lastEvent,
   min,
@@ -223,7 +226,7 @@ export default class ScatterplotChart extends React.Component {
     return typeof configItem !== 'undefined' ? configItem.stroke : 'none';
   }
 
-  calculateMargin(axes, spacer, yAxisOrientRight) {
+  calcMargin(axes, spacer, yAxisOrientRight) {
     let defaultMargins =
       (axes)
         ? { top: 24, right: 24, bottom: 24, left: 48 }
@@ -536,7 +539,7 @@ export default class ScatterplotChart extends React.Component {
       yAxisOrientRight
     } = this.props;
 
-    const m = margin || this.calculateMargin(axes, dotRadius * 2, yAxisOrientRight);
+    const m = margin || this.calcMargin(axes, dotRadius * 2, yAxisOrientRight);
     const w = width;
     const h = height + (dotRadius * 3);
 

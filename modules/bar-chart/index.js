@@ -199,8 +199,8 @@ export default class BarChart extends React.Component {
       .call(axis)
       .append('text')
       .attr('class', 'label')
-      .attr('y', m.bottom - 10)
       .attr('x', yAxisOrientRight ? 0 : w)
+      .attr('y', m.bottom - 10)
       .style('text-anchor', yAxisOrientRight ? 'start' : 'end')
       .text(axisLabels.x);
 
@@ -308,36 +308,31 @@ export default class BarChart extends React.Component {
       barWidth
     } = this.props;
 
-    data.forEach(() => {
-      root.selectAll('.bar')
-          .data(data)
-          .enter()
-          .append('rect')
-          .attr('class', 'bar')
-          .style('fill', (d, i) => this.defineColor(i, d, colorBars))
-          .attr('x', (d) => {
-            switch (xType) {
-              case ('time'):
-                return x(this.parseDate(d.x));
-              default:
-                return x(d.x);
-            }
-          })
-          .attr('width', () => {
-            switch (xType) {
-              case ('text'):
-                return x.bandwidth();
-              default:
-                return barWidth;
-            }
-          })
-          .attr('y', (d) => y(d.y))
-          .attr('height', (d) => h - y(d.y))
-          .on('mouseover', (d) => mouseOverHandler(d, lastEvent))
-          .on('mouseout', (d) => mouseOutHandler(d, lastEvent))
-          .on('mousemove', () => mouseMoveHandler(lastEvent))
-          .on('click', (d) => clickHandler(d, lastEvent));
-    });
+    const calculateX = (d) => (
+      (xType === 'time')
+          ? x(this.parseDate(d.x))
+          : x(d.x));
+    const calculateY = (d) => y(d.y);
+    const calculateW = () => (
+      (xType === 'text')
+          ? x.bandwidth()
+          : barWidth);
+    const calculateH = (d) => h - y(d.y);
+
+    root.selectAll('.bar')
+        .data(data)
+        .enter()
+        .append('rect')
+        .attr('class', 'bar')
+        .style('fill', (d, i) => this.defineColor(i, d, colorBars))
+        .attr('x', calculateX)
+        .attr('y', calculateY)
+        .attr('width', calculateW)
+        .attr('height', calculateH)
+        .on('mouseover', (d) => mouseOverHandler(d, lastEvent))
+        .on('mouseout', (d) => mouseOutHandler(d, lastEvent))
+        .on('mousemove', (d) => mouseMoveHandler(d, lastEvent))
+        .on('click', (d) => clickHandler(d, lastEvent));
   }
 
   createLinePath({ root, h, x }) {

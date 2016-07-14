@@ -1,5 +1,5 @@
 /* eslint-env node, mocha */
-/* eslint no-unused-expressions: 0 */
+/* eslint no-unused-expressions: 0, max-len: 0 */
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -21,10 +21,10 @@ const mockAxisLabels = {
 const mockW = 300;
 const mockH = 130;
 const mockM = {
-  top: 20,
-  right: 50,
-  bottom: 50,
-  left: 50
+  top: 0,
+  right: 0,
+  bottom: 0,
+  left: 0
 };
 const mockX = {};
 const mockY = {};
@@ -72,13 +72,27 @@ describe('BarChart component', () => {
   });
 
   describe('Instantiating the BarChart', () => {
+    describe('Without required props', () => {
+      it('throws a \'TypeError\'', () => {
+        expect(() => {
+          TestUtils.renderIntoDocument(
+            <BarChart />
+          );
+        }).to.throw(TypeError);
+      });
+    });
+
     describe('With required props', () => {
       describe('Always', () => {
         let chart;
 
         beforeEach(() => {
           sinon.spy(BarChart.prototype, 'render');
-          chart = TestUtils.renderIntoDocument(<BarChart data={mockData} />);
+          chart = TestUtils.renderIntoDocument(
+            <BarChart
+              data={mockData}
+            />
+          );
         });
 
         afterEach(() => {
@@ -113,7 +127,11 @@ describe('BarChart component', () => {
 
       describe('Without optional props', () => {
         describe('Consuming the \'defaultProps\'', () => {
-          const chart = TestUtils.renderIntoDocument(<BarChart data={mockData} />);
+          const chart = TestUtils.renderIntoDocument(
+            <BarChart
+              data={mockData}
+            />
+          );
 
           it('has a width and height for the chart', () => {
             /**
@@ -197,7 +215,11 @@ describe('BarChart component', () => {
             sinon.spy(BarChart.prototype, 'createStyle');
             sinon.spy(BarChart.prototype, 'createYAxis2');
             sinon.spy(BarChart.prototype, 'createLinePath');
-            chart = TestUtils.renderIntoDocument(<BarChart data={mockData} />);
+            chart = TestUtils.renderIntoDocument(
+              <BarChart
+                data={mockData}
+              />
+            );
           });
 
           afterEach(() => {
@@ -257,7 +279,12 @@ describe('BarChart component', () => {
             beforeEach(() => {
               sinon.spy(BarChart.prototype, 'createXAxis');
               sinon.spy(BarChart.prototype, 'createYAxis');
-              chart = TestUtils.renderIntoDocument(<BarChart data={mockData} axes />);
+              chart = TestUtils.renderIntoDocument(
+                <BarChart
+                  data={mockData}
+                  axes
+                />
+              );
             });
 
             afterEach(() => {
@@ -280,7 +307,13 @@ describe('BarChart component', () => {
             beforeEach(() => {
               sinon.spy(BarChart.prototype, 'createYAxis2');
               sinon.spy(BarChart.prototype, 'createLinePath');
-              chart = TestUtils.renderIntoDocument(<BarChart data={mockData} axes lineData={mockLineData} />);
+              chart = TestUtils.renderIntoDocument(
+                <BarChart
+                  data={mockData}
+                  axes
+                  lineData={mockLineData}
+                />
+              );
             });
 
             afterEach(() => {
@@ -299,14 +332,6 @@ describe('BarChart component', () => {
         });
       });
     });
-
-    describe('Without required props', () => {
-      it('throws a \'TypeError\'', () => {
-        expect(() => {
-          TestUtils.renderIntoDocument(<BarChart />);
-        }).to.throw(TypeError);
-      });
-    });
   });
 
   describe('calculateChartParameters()', () => {
@@ -315,7 +340,14 @@ describe('BarChart component', () => {
     let p;
 
     beforeEach(() => {
-      chart = TestUtils.renderIntoDocument(<BarChart data={mockData} axes xDomainRange={mockXDomainRange} yDomainRange={mockYDomainRange} />);
+      chart = TestUtils.renderIntoDocument(
+        <BarChart
+          data={mockData}
+          axes
+          xDomainRange={mockXDomainRange}
+          yDomainRange={mockYDomainRange}
+        />
+      );
       sinon.stub(chart, 'hasLineData').returns(true);
       stub = sinon.stub(chart, 'setScaleDomainRange');
       stub.withArgs('x').returns(mockX);
@@ -342,40 +374,55 @@ describe('BarChart component', () => {
 
     it('creates the svg node', () => {
       expect(chart.createSvgNode.calledWith({
+        m: {
+          top: 20,
+          right: 50,
+          bottom: 50,
+          left: 50
+        },
         w: mockW,
-        h: mockH,
-        m: mockM
+        h: mockH
       })).to.be.true;
     });
 
     it('creates the svg root', () => {
       expect(chart.createSvgRoot.calledWith({
-        node: mockNode,
-        m: mockM
+        m: {
+          top: 20,
+          right: 50,
+          bottom: 50,
+          left: 50
+        },
+        node: mockNode
       })).to.be.true;
     });
 
     it('returns the parameters as an object', () => {
       expect(p).to.deep.equal({
-        node: mockNode,
-        root: mockRoot,
+        m: {
+          top: 20,
+          right: 50,
+          bottom: 50,
+          left: 50
+        },
         w: mockW,
         h: mockH,
         x: mockX,
         y: mockY,
-        m: mockM
+        node: mockNode,
+        root: mockRoot
       });
     });
   });
 
   describe('createXAxis()', () => {
     const p = {
-      root: mockRoot,
+      m: mockM,
       w: mockW,
       h: mockH,
-      m: mockM,
       x: mockX,
-      y: mockY
+      y: mockY,
+      root: mockRoot
     };
 
     beforeEach(() => {
@@ -396,7 +443,12 @@ describe('BarChart component', () => {
 
     describe('Y axis orient to the left hand side (\'yAxisOrientRight\' is \'false\')', () => {
       beforeEach(() => {
-        const chart = TestUtils.renderIntoDocument(<BarChart data={mockData} axisLabels={mockAxisLabels} />);
+        const chart = TestUtils.renderIntoDocument(
+          <BarChart
+            data={mockData}
+            axisLabels={mockAxisLabels}
+          />
+        );
         chart.createXAxis(p);
       });
 
@@ -407,16 +459,22 @@ describe('BarChart component', () => {
         expect(mockRoot.call.called).to.be.true;
         expect(mockRoot.append.calledWith('text')).to.be.true;
         expect(mockRoot.attr.calledWith('class', 'label')).to.be.true;
-        expect(mockRoot.attr.calledWith('y', 40)).to.be.true;
-        expect(mockRoot.attr.calledWith('x', mockW)).to.be.true;
+        expect(mockRoot.attr.calledWith('x', 300)).to.be.true;
+        expect(mockRoot.attr.calledWith('y', -10)).to.be.true;
         expect(mockRoot.style.calledWith('text-anchor', 'end')).to.be.true;
         expect(mockRoot.text.calledWith('Mock X Label')).to.be.true;
       });
     });
 
-    describe('Y axis orient tp the right hand side (\'yAxisOrientRight\' is \'true\')', () => {
+    describe('Y axis orient to the right hand side (\'yAxisOrientRight\' is \'true\')', () => {
       beforeEach(() => {
-        const chart = TestUtils.renderIntoDocument(<BarChart data={mockData} axisLabels={mockAxisLabels} yAxisOrientRight />);
+        const chart = TestUtils.renderIntoDocument(
+          <BarChart
+            data={mockData}
+            axisLabels={mockAxisLabels}
+            yAxisOrientRight
+          />
+        );
         chart.createXAxis(p);
       });
 
@@ -427,8 +485,8 @@ describe('BarChart component', () => {
         expect(mockRoot.call.called).to.be.true;
         expect(mockRoot.append.calledWith('text')).to.be.true;
         expect(mockRoot.attr.calledWith('class', 'label')).to.be.true;
-        expect(mockRoot.attr.calledWith('y', 40)).to.be.true;
         expect(mockRoot.attr.calledWith('x', 0)).to.be.true;
+        expect(mockRoot.attr.calledWith('y', -10)).to.be.true;
         expect(mockRoot.style.calledWith('text-anchor', 'start')).to.be.true;
         expect(mockRoot.text.calledWith('Mock X Label')).to.be.true;
       });
@@ -437,12 +495,12 @@ describe('BarChart component', () => {
 
   describe('createYAxis()', () => {
     const p = {
-      root: mockRoot,
+      m: mockM,
       w: mockW,
       h: mockH,
-      m: mockM,
       x: mockX,
-      y: mockY
+      y: mockY,
+      root: mockRoot
     };
 
     beforeEach(() => {
@@ -463,7 +521,12 @@ describe('BarChart component', () => {
 
     describe('Y axis orient to the left hand side (\'yAxisOrientRight\' is \'false\')', () => {
       beforeEach(() => {
-        const chart = TestUtils.renderIntoDocument(<BarChart data={mockData} axisLabels={mockAxisLabels} />);
+        const chart = TestUtils.renderIntoDocument(
+          <BarChart
+            data={mockData}
+            axisLabels={mockAxisLabels}
+          />
+        );
         chart.createYAxis(p);
       });
 
@@ -475,16 +538,22 @@ describe('BarChart component', () => {
         expect(mockRoot.append.calledWith('text')).to.be.true;
         expect(mockRoot.attr.calledWith('class', 'label')).to.be.true;
         expect(mockRoot.attr.calledWith('x', 0)).to.be.true;
-        expect(mockRoot.attr.calledWith('y', -40)).to.be.true;
+        expect(mockRoot.attr.calledWith('y', 10)).to.be.true;
         expect(mockRoot.attr.calledWith('dy', '.9em')).to.be.true;
         expect(mockRoot.style.calledWith('text-anchor', 'end')).to.be.true;
         expect(mockRoot.text.calledWith('Mock Y Label')).to.be.true;
       });
     });
 
-    describe('Y axis orient tp the right hand side (\'yAxisOrientRight\' is \'true\')', () => {
+    describe('Y axis orient to the right hand side (\'yAxisOrientRight\' is \'true\')', () => {
       beforeEach(() => {
-        const chart = TestUtils.renderIntoDocument(<BarChart data={mockData} axisLabels={mockAxisLabels} yAxisOrientRight />);
+        const chart = TestUtils.renderIntoDocument(
+          <BarChart
+            data={mockData}
+            axisLabels={mockAxisLabels}
+            yAxisOrientRight
+          />
+        );
         chart.createYAxis(p);
       });
 
@@ -496,7 +565,7 @@ describe('BarChart component', () => {
         expect(mockRoot.append.calledWith('text')).to.be.true;
         expect(mockRoot.attr.calledWith('class', 'label')).to.be.true;
         expect(mockRoot.attr.calledWith('x', 0)).to.be.true;
-        expect(mockRoot.attr.calledWith('y', 25)).to.be.true;
+        expect(mockRoot.attr.calledWith('y', -25)).to.be.true;
         expect(mockRoot.attr.calledWith('dy', '.9em')).to.be.true;
         expect(mockRoot.style.calledWith('text-anchor', 'end')).to.be.true;
         expect(mockRoot.text.calledWith('Mock Y Label')).to.be.true;
@@ -506,12 +575,12 @@ describe('BarChart component', () => {
 
   describe('createBarChart()', () => {
     const p = {
-      root: mockRoot,
+      m: mockM,
       w: mockW,
       h: mockH,
-      m: mockM,
       x: mockX,
-      y: mockY
+      y: mockY,
+      root: mockRoot
     };
 
     beforeEach(() => {
@@ -523,7 +592,12 @@ describe('BarChart component', () => {
       sinon.spy(mockRoot, 'style');
       sinon.spy(mockRoot, 'on');
 
-      const chart = TestUtils.renderIntoDocument(<BarChart data={mockData} axisLabels={mockAxisLabels} />);
+      const chart = TestUtils.renderIntoDocument(
+        <BarChart
+          data={mockData}
+          axisLabels={mockAxisLabels}
+        />
+      );
       chart.createBarChart(p);
     });
 
@@ -558,12 +632,12 @@ describe('BarChart component', () => {
   describe('createLinePath()', () => {
     let chart;
     const p = {
-      root: mockRoot,
+      m: mockM,
       w: mockW,
       h: mockH,
-      m: mockM,
       x: mockX,
-      y: mockY
+      y: mockY,
+      root: mockRoot
     };
 
     beforeEach(() => {
@@ -571,7 +645,15 @@ describe('BarChart component', () => {
       sinon.spy(mockRoot, 'datum');
       sinon.spy(mockRoot, 'attr');
 
-      chart = TestUtils.renderIntoDocument(<BarChart data={mockData} lineData={mockLineData} xType={mockXType} y2Type={mockY2Type} yDomainRange={mockYDomainRange} />);
+      chart = TestUtils.renderIntoDocument(
+        <BarChart
+          data={mockData}
+          lineData={mockLineData}
+          xType={mockXType}
+          y2Type={mockY2Type}
+          yDomainRange={mockYDomainRange}
+        />
+      );
       sinon.spy(chart, 'setScaleDomainRange');
       chart.createLinePath(p);
     });
@@ -584,7 +666,9 @@ describe('BarChart component', () => {
     });
 
     it('sets the scale, domain and range of the y axis', () => {
-      expect(chart.setScaleDomainRange.calledWith('y', mockYDomainRange, mockLineData, mockY2Type, mockH)).to.be.true;
+      expect(chart.setScaleDomainRange
+        .calledWith('y', mockYDomainRange, mockLineData, mockY2Type, mockH)
+      ).to.be.true;
     });
 
     it('creates the line path', () => {
@@ -599,17 +683,21 @@ describe('BarChart component', () => {
   describe('Rendering the BarChart', () => {
     describe('Always', () => {
       const renderer = TestUtils.createRenderer();
-      renderer.render(<BarChart data={mockData} />);
+      renderer.render(
+        <BarChart
+          data={mockData}
+        />
+      );
 
       const chart = renderer.getRenderOutput();
       const svg = chart.props.children[1];
       const graph = svg.props.children[0];
 
-      it('renders a \'div\' container', () => {
+      it('renders a <div /> container', () => {
         expect(chart.type).to.equal('div');
       });
 
-      it('renders a \'svg\' child', () => {
+      it('renders a <svg /> child', () => {
         expect(svg.type).to.equal('svg');
       });
 
@@ -623,7 +711,8 @@ describe('BarChart component', () => {
 
     describe('With optional props', () => {
       const chart = TestUtils.renderIntoDocument(
-        <BarChart data={mockData}
+        <BarChart
+          data={mockData}
           mouseOverHandler={mouseOverSpy}
           mouseOutHandler={mouseOutSpy}
           mouseMoveHandler={mouseMoveSpy}
