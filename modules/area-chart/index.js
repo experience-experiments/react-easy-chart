@@ -148,8 +148,8 @@ export default class AreaChart extends React.Component {
       .call(axis)
       .append('text')
       .attr('class', 'label')
-      .attr('y', m.bottom - 10)
       .attr('x', yAxisOrientRight ? 0 : w)
+      .attr('y', m.bottom - 10)
       .style('text-anchor', yAxisOrientRight ? 'start' : 'end')
       .text(axisLabels.x);
 
@@ -281,30 +281,30 @@ export default class AreaChart extends React.Component {
     data.forEach((lineItem, i) => {
       lineItem.forEach((dataPoint) => {
         root.append('circle')
-        .attr('class', 'data-point')
-        .style('strokeWidth', '2px')
-        .style('stroke', colors[i])
-        .style('fill', 'white')
-        .attr('cx', () => {
-          switch (xType) {
-            case ('time'):
-              return x(this.parseDate(dataPoint.x));
-            default:
-              return x(dataPoint.x);
-          }
-        })
-        .attr('cy', () => {
-          switch (yType) {
-            case ('time'):
-              return y(this.parseDate(dataPoint.y));
-            default:
-              return y(dataPoint.y);
-          }
-        })
-        .on('mouseover', () => mouseOverHandler(dataPoint, lastEvent))
-        .on('mouseout', () => mouseOutHandler(dataPoint, lastEvent))
-        .on('mousemove', () => mouseMoveHandler(lastEvent))
-        .on('click', () => clickHandler(dataPoint, lastEvent));
+          .attr('class', 'data-point')
+          .style('strokeWidth', '2px')
+          .style('stroke', colors[i])
+          .style('fill', 'white')
+          .attr('cx', () => {
+            switch (xType) {
+              case ('time'):
+                return x(this.parseDate(dataPoint.x));
+              default:
+                return x(dataPoint.x);
+            }
+          })
+          .attr('cy', () => {
+            switch (yType) {
+              case ('time'):
+                return y(this.parseDate(dataPoint.y));
+              default:
+                return y(dataPoint.y);
+            }
+          })
+          .on('mouseover', () => mouseOverHandler(dataPoint, lastEvent))
+          .on('mouseout', () => mouseOutHandler(dataPoint, lastEvent))
+          .on('mousemove', () => mouseMoveHandler(lastEvent))
+          .on('click', () => clickHandler(dataPoint, lastEvent));
       });
     });
   }
