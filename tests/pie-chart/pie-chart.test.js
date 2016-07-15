@@ -245,7 +245,7 @@ describe('PieChart component', () => {
       });
 
       it('renders the graph', () => {
-        expect(graph.props.transform).to.equal('translate(200, 200)');
+        expect(graph.props.transform).to.equal('translate(0, 0)');
       });
     });
 

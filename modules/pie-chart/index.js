@@ -102,6 +102,20 @@ export default class PieChart extends React.Component {
     return (t) => this.getArc()(i(t));
   }
 
+  createSvgNode({ size }) {
+    const node = createElement('svg');
+    select(node)
+      .attr('width', size)
+      .attr('height', size);
+    return node;
+  }
+
+  createSvgRoot({ node }) {
+    return select(node)
+      .append('g')
+      .attr('transform', 'translate(0, 0)');
+  }
+
   initialiseLabels() {
     const {
       data
@@ -215,7 +229,7 @@ export default class PieChart extends React.Component {
     }
   }
 
-  createPieChart(node) {
+  createPieChart({ node, root }) {
     const {
       size
     } = this.props;
@@ -225,13 +239,15 @@ export default class PieChart extends React.Component {
 
     select(node)
       .attr('width', size)
-      .attr('height', size)
+      .attr('height', size);
+
+    root
       .append('g')
       .attr('id', `pie-${uid}`)
       .attr('transform', `translate(${radius}, ${radius})`);
   }
 
-  createLabels(node) {
+  createLabels({ node, root }) {
     const {
       size
     } = this.props;
@@ -241,7 +257,9 @@ export default class PieChart extends React.Component {
 
     select(node)
       .attr('width', size)
-      .attr('height', size)
+      .attr('height', size);
+
+    root
       .append('g')
       .attr('id', `labels-${uid}`)
       .attr('transform', `translate(${radius}, ${radius})`);
@@ -264,21 +282,38 @@ export default class PieChart extends React.Component {
     );
   }
 
+  calculateChartParameters() {
+    const {
+      size
+    } = this.props;
+
+    const node = this.createSvgNode({ size });
+    const root = this.createSvgRoot({ node });
+
+    return {
+      node,
+      root
+    };
+  }
+
   render() {
     const {
       labels
     } = this.props;
 
-    const node = createElement('svg');
+    const p = this.calculateChartParameters();
 
-    this.createPieChart(node);
+    this.createPieChart(p);
 
     if (labels) {
-      this.createLabels(node);
+      this.createLabels(p);
     }
 
     const uid = this.uid;
     const className = `pie-chart-${uid}`;
+    const {
+      node
+    } = p;
 
     return (
       <div className={className}>
