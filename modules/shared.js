@@ -102,13 +102,13 @@ export function reduce(...args) {
 }
 
 export function getValueFunction(scale, type, dateParser) {
-  const dataIndex = scale === 'x' ? 'x' : 'y';
-  switch (type) {
-    case 'time':
-      return (d) => dateParser(d[dataIndex]);
-    default:
-      return (d) => d[dataIndex];
-  }
+  const dataIndex =
+    (scale === 'x')
+      ? 'x'
+      : 'y';
+  return (type === time)
+    ? (d) => dateParser(d[dataIndex])
+    : (d) => d[dataIndex];
 }
 
 export function createCircularTicks(containerElement) {
@@ -149,47 +149,52 @@ export function getRandomId() {
   return Math.floor(Math.random() * new Date().getTime());
 }
 
-export function calcMargin(axes, margin, yAxisOrientRight, y2 = false) {
+export function calcMargin(axes, margin, yAxisOrientRight, y2) {
   if (margin) return margin;
-  let defaultMargins = (axes)
-    ? { top: 20, right: y2 ? 50 : 20, bottom: 50, left: 50 }
-    : { top: 0, right: 0, bottom: 0, left: 0 };
   if (yAxisOrientRight) {
-    defaultMargins = (axes)
-      ? { top: 20, right: 50, bottom: 50, left: y2 ? 50 : 20 }
+    return (axes)
+      ? { top: 20, right: 50, bottom: 50, left: (y2) ? 50 : 20 }
+      : { top: 0, right: 0, bottom: 0, left: 0 };
+  } else {
+    return (axes)
+      ? { top: 20, right: (y2) ? 50 : 20, bottom: 50, left: 50 }
       : { top: 0, right: 0, bottom: 0, left: 0 };
   }
-  return defaultMargins;
 }
 
 export function findLargestExtent(data, valueFunction) {
-  let low;
-  let high;
+  let lo; // Low
+  let hi; // High
   data.forEach((dataElement) => {
-    const calcDomainRange = extent(dataElement, valueFunction);
-    low = low < calcDomainRange[0] ? low : calcDomainRange[0];
-    high = high > calcDomainRange[1] ? high : calcDomainRange[1];
+    const domainRange = extent(dataElement, valueFunction);
+    const LO = domainRange[0];
+    const HI = domainRange[1];
+    lo = lo < LO ? lo : LO;
+    hi = hi > HI ? hi : HI;
   });
-  return [low, high];
+  return [lo, hi];
 }
 
 export function calcDefaultDomain(domainRange, type, dateParser) {
-  if (!domainRange) return null;
-  switch (type) {
-    case 'time':
-      return [dateParser(domainRange[0]), dateParser(domainRange[1])];
-    default:
-      return domainRange;
+  if (domainRange) {
+    return (type === 'time')
+      ? (() => {
+        const lo = dateParser(domainRange[0]);
+        const hi = dateParser(domainRange[1]);
+        return [lo, hi]
+      })()
+      : domainRange;
   }
+  return null;
 }
 
 export function setLineDomainAndRange(scale, domainRange, data, type, length, parseDate) {
   const dataIndex = scale === 'x' ? 'x' : 'y';
-  let d3Axis;
+  let axis;
   switch (type) {
     case 'text':
-      d3Axis = point();
-      d3Axis
+      axis = point();
+      axis
         .domain(
           (domainRange)
             ? calcDefaultDomain(domainRange, type, parseDate)
@@ -198,8 +203,8 @@ export function setLineDomainAndRange(scale, domainRange, data, type, length, pa
           .padding(0);
       break;
     case 'linear':
-      d3Axis = linear();
-      d3Axis
+      axis = linear();
+      axis
         .domain(
           (domainRange)
             ? calcDefaultDomain(domainRange, type, parseDate)
@@ -210,8 +215,8 @@ export function setLineDomainAndRange(scale, domainRange, data, type, length, pa
             : [length, 0]);
       break;
     case 'time':
-      d3Axis = time.scale();
-      d3Axis
+      axis = time.scale();
+      axis
         .domain(
           (domainRange)
             ? calcDefaultDomain(domainRange, type, parseDate)
@@ -224,5 +229,5 @@ export function setLineDomainAndRange(scale, domainRange, data, type, length, pa
     default:
       break;
   }
-  return d3Axis;
+  return axis;
 }
