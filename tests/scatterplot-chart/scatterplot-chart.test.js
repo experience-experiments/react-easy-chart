@@ -1,5 +1,5 @@
 /* eslint-env node, mocha */
-/* eslint no-unused-expressions: 0, max-len: 0 */
+/* eslint no-unused-expressions: 0, no-console: 0, max-len: 0 */
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -62,12 +62,6 @@ const mockData = [
   { key: 'C', value: 0.1 }
 ];
 
-const mockLineData = [
-  { x: 'A', y: 800 },
-  { x: 'B', y: 1100 },
-  { x: 'C', y: 1101 }
-];
-
 describe('ScatterplotChart component', () => {
   it('should be defined as a function', () => {
     ScatterplotChart.should.be.a('function');
@@ -87,7 +81,9 @@ describe('ScatterplotChart component', () => {
 
       it('throws an \'Error\'', () => {
         expect(() => {
-          TestUtils.renderIntoDocument(<ScatterplotChart />);
+          TestUtils.renderIntoDocument(
+            <ScatterplotChart />
+          );
         }).to.throw(Error);
       });
     });
@@ -98,7 +94,11 @@ describe('ScatterplotChart component', () => {
 
         beforeEach(() => {
           sinon.spy(ScatterplotChart.prototype, 'render');
-          chart = TestUtils.renderIntoDocument(<ScatterplotChart data={mockData} />);
+          chart = TestUtils.renderIntoDocument(
+            <ScatterplotChart
+              data={mockData}
+            />
+          );
         });
 
         afterEach(() => {
@@ -133,7 +133,11 @@ describe('ScatterplotChart component', () => {
 
       describe('Without optional props', () => {
         describe('Consuming the \'defaultProps\'', () => {
-          const chart = TestUtils.renderIntoDocument(<ScatterplotChart data={mockData} />);
+          const chart = TestUtils.renderIntoDocument(
+            <ScatterplotChart
+              data={mockData}
+            />
+          );
 
           it('has a width and height for the chart', () => {
             /**
@@ -220,7 +224,11 @@ describe('ScatterplotChart component', () => {
             sinon.spy(ScatterplotChart.prototype, 'createYAxis');
             sinon.spy(ScatterplotChart.prototype, 'createScatterplotChart');
             sinon.spy(ScatterplotChart.prototype, 'createStyle');
-            chart = TestUtils.renderIntoDocument(<ScatterplotChart data={mockData} />);
+            chart = TestUtils.renderIntoDocument(
+              <ScatterplotChart
+                data={mockData}
+              />
+            );
           });
 
           afterEach(() => {
@@ -265,7 +273,12 @@ describe('ScatterplotChart component', () => {
             beforeEach(() => {
               sinon.spy(ScatterplotChart.prototype, 'createXAxis');
               sinon.spy(ScatterplotChart.prototype, 'createYAxis');
-              chart = TestUtils.renderIntoDocument(<ScatterplotChart data={mockData} axes />);
+              chart = TestUtils.renderIntoDocument(
+                <ScatterplotChart
+                  data={mockData}
+                  axes
+                />
+              );
             });
 
             afterEach(() => {
@@ -292,7 +305,11 @@ describe('ScatterplotChart component', () => {
     let p;
 
     beforeEach(() => {
-      chart = TestUtils.renderIntoDocument(<ScatterplotChart data={mockData} />);
+      chart = TestUtils.renderIntoDocument(
+        <ScatterplotChart
+          data={mockData}
+        />
+      );
       stub = sinon.stub(chart, 'setDomainAndRange');
       stub.withArgs('x').returns(mockX);
       stub.withArgs('y').returns(mockY);
@@ -351,7 +368,12 @@ describe('ScatterplotChart component', () => {
 
     describe('Y axis orient to the left hand side (\'yAxisOrientRight\' is \'false\')', () => {
       beforeEach(() => {
-        const chart = TestUtils.renderIntoDocument(<ScatterplotChart data={mockData} axisLabels={mockAxisLabels} />);
+        const chart = TestUtils.renderIntoDocument(
+          <ScatterplotChart
+            data={mockData}
+            axisLabels={mockAxisLabels}
+          />
+        );
         chart.createXAxis(p);
       });
 
@@ -371,7 +393,13 @@ describe('ScatterplotChart component', () => {
 
     describe('Y axis orient tp the right hand side (\'yAxisOrientRight\' is \'true\')', () => {
       beforeEach(() => {
-        const chart = TestUtils.renderIntoDocument(<ScatterplotChart data={mockData} axisLabels={mockAxisLabels} yAxisOrientRight />);
+        const chart = TestUtils.renderIntoDocument(
+          <ScatterplotChart
+            data={mockData}
+            axisLabels={mockAxisLabels}
+            yAxisOrientRight
+          />
+        );
         chart.createXAxis(p);
       });
 
@@ -418,7 +446,12 @@ describe('ScatterplotChart component', () => {
 
     describe('Y axis orient to the left hand side (\'yAxisOrientRight\' is \'false\')', () => {
       beforeEach(() => {
-        const chart = TestUtils.renderIntoDocument(<ScatterplotChart data={mockData} axisLabels={mockAxisLabels} />);
+        const chart = TestUtils.renderIntoDocument(
+          <ScatterplotChart
+            data={mockData}
+            axisLabels={mockAxisLabels}
+          />
+        );
         chart.createYAxis(p);
       });
 
@@ -439,7 +472,13 @@ describe('ScatterplotChart component', () => {
 
     describe('Y axis orient tp the right hand side (\'yAxisOrientRight\' is \'true\')', () => {
       beforeEach(() => {
-        const chart = TestUtils.renderIntoDocument(<ScatterplotChart data={mockData} axisLabels={mockAxisLabels} yAxisOrientRight />);
+        const chart = TestUtils.renderIntoDocument(
+          <ScatterplotChart
+            data={mockData}
+            axisLabels={mockAxisLabels}
+            yAxisOrientRight
+          />
+        );
         chart.createYAxis(p);
       });
 
@@ -475,7 +514,12 @@ describe('ScatterplotChart component', () => {
       sinon.spy(mockRoot, 'append');
       sinon.spy(mockRoot, 'attr');
 
-      const chart = TestUtils.renderIntoDocument(<ScatterplotChart data={mockData} axisLabels={mockAxisLabels} />);
+      const chart = TestUtils.renderIntoDocument(
+        <ScatterplotChart
+          data={mockData}
+          axisLabels={mockAxisLabels}
+        />
+      );
       chart.uid = 'mock-uid';
       chart.createScatterplotChart(p);
     });
@@ -494,7 +538,11 @@ describe('ScatterplotChart component', () => {
   describe('Rendering the ScatterplotChart', () => {
     describe('Always', () => {
       const renderer = TestUtils.createRenderer();
-      renderer.render(<ScatterplotChart data={mockData} />);
+      renderer.render(
+        <ScatterplotChart
+          data={mockData}
+        />
+      );
 
       const chart = renderer.getRenderOutput();
       const svg = chart.props.children[1];

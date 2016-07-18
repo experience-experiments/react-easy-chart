@@ -1,5 +1,5 @@
 /* eslint-env node, mocha */
-/* eslint no-unused-expressions: 0, max-len: 0 */
+/* eslint no-unused-expressions: 0, no-console: 0, max-len: 0 */
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -82,7 +82,9 @@ describe('LineChart component', () => {
 
       it('throws an \'Error\'', () => {
         expect(() => {
-          TestUtils.renderIntoDocument(<LineChart />);
+          TestUtils.renderIntoDocument(
+            <LineChart />
+          );
         }).to.throw(Error);
       });
     });
@@ -93,7 +95,11 @@ describe('LineChart component', () => {
 
         beforeEach(() => {
           sinon.spy(LineChart.prototype, 'render');
-          chart = TestUtils.renderIntoDocument(<LineChart data={mockData} />);
+          chart = TestUtils.renderIntoDocument(
+            <LineChart
+              data={mockData}
+            />
+          );
         });
 
         afterEach(() => {
@@ -128,11 +134,15 @@ describe('LineChart component', () => {
 
       describe('Without optional props', () => {
         describe('Consuming the \'defaultProps\'', () => {
-          const chart = TestUtils.renderIntoDocument(<LineChart data={mockData} />);
+          const chart = TestUtils.renderIntoDocument(
+            <LineChart
+              data={mockData}
+            />
+          );
 
           it('has a width and height for the chart', () => {
             /**
-             * Bar Charts must have non-zero width and height. We
+             * Line Charts must have non-zero width and height. We
              * default to 400 x 300
              */
             expect(chart.props).to.have.property('width', mockW);
@@ -148,7 +158,7 @@ describe('LineChart component', () => {
 
           it('can render successfully without axes (\'axes\' is \'false\')', () => {
             /**
-             * Bar Charts can render without x and y axes. We assume that there are no
+             * Line Charts can render without x and y axes. We assume that there are no
              * axes to render unless they are passed to the component!
              */
             expect(chart.props).to.have.property('axes', false);
@@ -178,7 +188,7 @@ describe('LineChart component', () => {
 
           it('has labels for the axes (\'axes\' is \'true\' but their labels are unspecified)', () => {
             /**
-             * Bar Charts can render without axis labels. We default to
+             * Line Charts can render without axis labels. We default to
              * empty strings
              */
             expect(chart.props).to.have.deep.property('axisLabels.x');
@@ -189,7 +199,7 @@ describe('LineChart component', () => {
 
           it('has event handlers for events raised by the chart (no op)', () => {
             /*
-             * Bar Charts can raise events. We default to "no op" handlers
+             * Line Charts can raise events. We default to "no op" handlers
              */
             expect(chart.props.mouseOverHandler).to.be.a('function');
             expect(chart.props.mouseOutHandler).to.be.a('function');
@@ -208,7 +218,11 @@ describe('LineChart component', () => {
             sinon.spy(LineChart.prototype, 'createLinePathChart');
             sinon.spy(LineChart.prototype, 'createPoints');
             sinon.spy(LineChart.prototype, 'createStyle');
-            chart = TestUtils.renderIntoDocument(<LineChart data={mockData} />);
+            chart = TestUtils.renderIntoDocument(
+              <LineChart
+                data={mockData}
+              />
+            );
           });
 
           afterEach(() => {
@@ -258,7 +272,12 @@ describe('LineChart component', () => {
             beforeEach(() => {
               sinon.spy(LineChart.prototype, 'createXAxis');
               sinon.spy(LineChart.prototype, 'createYAxis');
-              chart = TestUtils.renderIntoDocument(<LineChart data={mockData} axes />);
+              chart = TestUtils.renderIntoDocument(
+                <LineChart
+                  data={mockData}
+                  axes
+                />
+              );
             });
 
             afterEach(() => {
@@ -284,7 +303,11 @@ describe('LineChart component', () => {
     let p;
 
     beforeEach(() => {
-      chart = TestUtils.renderIntoDocument(<LineChart data={mockData} />); // axes xDomainRange={mockXDomainRange} yDomainRange={mockYDomainRange} />);
+      chart = TestUtils.renderIntoDocument(
+        <LineChart
+          data={mockData}
+        />
+      );
       sinon.stub(chart, 'createSvgNode').returns(mockNode);
       sinon.stub(chart, 'createSvgRoot').returns(mockRoot);
       p = chart.calculateChartParameters();
@@ -352,7 +375,12 @@ describe('LineChart component', () => {
 
     describe('Y axis orient to the left hand side (\'yAxisOrientRight\' is \'false\')', () => {
       beforeEach(() => {
-        const chart = TestUtils.renderIntoDocument(<LineChart data={mockData} axisLabels={mockAxisLabels} />);
+        const chart = TestUtils.renderIntoDocument(
+          <LineChart
+            data={mockData}
+            axisLabels={mockAxisLabels}
+          />
+        );
         chart.createXAxis(p);
       });
 
@@ -372,7 +400,13 @@ describe('LineChart component', () => {
 
     describe('Y axis orient tp the right hand side (\'yAxisOrientRight\' is \'true\')', () => {
       beforeEach(() => {
-        const chart = TestUtils.renderIntoDocument(<LineChart data={mockData} axisLabels={mockAxisLabels} yAxisOrientRight />);
+        const chart = TestUtils.renderIntoDocument(
+          <LineChart
+            data={mockData}
+            axisLabels={mockAxisLabels}
+            yAxisOrientRight
+          />
+        );
         chart.createXAxis(p);
       });
 
@@ -419,7 +453,12 @@ describe('LineChart component', () => {
 
     describe('Y axis orient to the left hand side (\'yAxisOrientRight\' is \'false\')', () => {
       beforeEach(() => {
-        const chart = TestUtils.renderIntoDocument(<LineChart data={mockData} axisLabels={mockAxisLabels} />);
+        const chart = TestUtils.renderIntoDocument(
+          <LineChart
+            data={mockData}
+            axisLabels={mockAxisLabels}
+          />
+        );
         chart.createYAxis(p);
       });
 
@@ -441,7 +480,13 @@ describe('LineChart component', () => {
 
     describe('Y axis orient to the right hand side (\'yAxisOrientRight\' is \'true\')', () => {
       beforeEach(() => {
-        const chart = TestUtils.renderIntoDocument(<LineChart data={mockData} axisLabels={mockAxisLabels} yAxisOrientRight />);
+        const chart = TestUtils.renderIntoDocument(
+          <LineChart
+            data={mockData}
+            axisLabels={mockAxisLabels}
+            yAxisOrientRight
+          />
+        );
         chart.createYAxis(p);
       });
 
@@ -480,7 +525,12 @@ describe('LineChart component', () => {
       sinon.spy(mockRoot, 'append');
       sinon.spy(mockRoot, 'attr');
 
-      const chart = TestUtils.renderIntoDocument(<LineChart data={mockData} axisLabels={mockAxisLabels} />);
+      const chart = TestUtils.renderIntoDocument(
+        <LineChart
+          data={mockData}
+          axisLabels={mockAxisLabels}
+        />
+      );
       chart.createLinePathChart(p);
     });
 
@@ -518,7 +568,12 @@ describe('LineChart component', () => {
       sinon.spy(mockRoot, 'style');
       sinon.spy(mockRoot, 'on');
 
-      chart = TestUtils.renderIntoDocument(<LineChart data={mockData} dataPoints />);
+      chart = TestUtils.renderIntoDocument(
+        <LineChart
+          data={mockData}
+          dataPoints
+        />
+      );
       chart.createPoints(p);
     });
 
@@ -547,7 +602,11 @@ describe('LineChart component', () => {
   describe('Rendering the LineChart', () => {
     xdescribe('Always', () => {
       const renderer = TestUtils.createRenderer();
-      renderer.render(<LineChart data={mockData} />);
+      renderer.render(
+        <LineChart
+          data={mockData}
+        />
+      );
 
       const chart = renderer.getRenderOutput();
       const svg = chart.props.children[1];

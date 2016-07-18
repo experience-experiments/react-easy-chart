@@ -82,7 +82,9 @@ describe('AreaChart component', () => {
 
       it('throws an \'Error\'', () => {
         expect(() => {
-          TestUtils.renderIntoDocument(<AreaChart />);
+          TestUtils.renderIntoDocument(
+            <AreaChart />
+          );
         }).to.throw(Error);
       });
     });
@@ -93,7 +95,11 @@ describe('AreaChart component', () => {
 
         beforeEach(() => {
           sinon.spy(AreaChart.prototype, 'render');
-          chart = TestUtils.renderIntoDocument(<AreaChart data={mockData} />);
+          chart = TestUtils.renderIntoDocument(
+            <AreaChart
+              data={mockData}
+            />
+          );
         });
 
         afterEach(() => {
@@ -128,11 +134,15 @@ describe('AreaChart component', () => {
 
       describe('Without optional props', () => {
         describe('Consuming the \'defaultProps\'', () => {
-          const chart = TestUtils.renderIntoDocument(<AreaChart data={mockData} />);
+          const chart = TestUtils.renderIntoDocument(
+            <AreaChart
+              data={mockData}
+            />
+          );
 
           it('has a width and height for the chart', () => {
             /**
-             * Bar Charts must have non-zero width and height. We
+             * Area Charts must have non-zero width and height. We
              * default to 400 x 300
              */
             expect(chart.props).to.have.property('width', mockW);
@@ -148,7 +158,7 @@ describe('AreaChart component', () => {
 
           it('can render successfully without axes (\'axes\' is \'false\')', () => {
             /**
-             * Bar Charts can render without x and y axes. We assume that there are no
+             * Area Charts can render without x and y axes. We assume that there are no
              * axes to render unless they are passed to the component!
              */
             expect(chart.props).to.have.property('axes', false);
@@ -178,7 +188,7 @@ describe('AreaChart component', () => {
 
           it('has labels for the axes (\'axes\' is \'true\' but their labels are unspecified)', () => {
             /**
-             * Bar Charts can render without axis labels. We default to
+             * Area Charts can render without axis labels. We default to
              * empty strings
              */
             expect(chart.props).to.have.deep.property('axisLabels.x');
@@ -189,7 +199,7 @@ describe('AreaChart component', () => {
 
           it('has event handlers for events raised by the chart (no op)', () => {
             /*
-             * Bar Charts can raise events. We default to "no op" handlers
+             * Area Charts can raise events. We default to "no op" handlers
              */
             expect(chart.props.mouseOverHandler).to.be.a('function');
             expect(chart.props.mouseOutHandler).to.be.a('function');
@@ -209,7 +219,11 @@ describe('AreaChart component', () => {
             sinon.spy(AreaChart.prototype, 'createFill');
             sinon.spy(AreaChart.prototype, 'createPoints');
             sinon.spy(AreaChart.prototype, 'createStyle');
-            chart = TestUtils.renderIntoDocument(<AreaChart data={mockData} />);
+            chart = TestUtils.renderIntoDocument(
+              <AreaChart
+                data={mockData}
+              />
+            );
           });
 
           afterEach(() => {
@@ -245,7 +259,7 @@ describe('AreaChart component', () => {
             expect(chart.createPoints.called).to.be.false;
           });
 
-          it('creates the bar chart', () => {
+          it('creates the area chart', () => {
             expect(chart.createAreaPathChart.called).to.be.true;
           });
 
@@ -267,7 +281,12 @@ describe('AreaChart component', () => {
             beforeEach(() => {
               sinon.spy(AreaChart.prototype, 'createXAxis');
               sinon.spy(AreaChart.prototype, 'createYAxis');
-              chart = TestUtils.renderIntoDocument(<AreaChart data={mockData} axes />);
+              chart = TestUtils.renderIntoDocument(
+                <AreaChart
+                  data={mockData}
+                  axes
+                />
+              );
             });
 
             afterEach(() => {
@@ -293,7 +312,11 @@ describe('AreaChart component', () => {
     let p;
 
     beforeEach(() => {
-      chart = TestUtils.renderIntoDocument(<AreaChart data={mockData} />); // axes xDomainRange={mockXDomainRange} yDomainRange={mockYDomainRange} />);
+      chart = TestUtils.renderIntoDocument(
+        <AreaChart
+          data={mockData}
+        />
+      );
       sinon.stub(chart, 'createSvgNode').returns(mockNode);
       sinon.stub(chart, 'createSvgRoot').returns(mockRoot);
       p = chart.calculateChartParameters();
@@ -335,12 +358,12 @@ describe('AreaChart component', () => {
 
   describe('createXAxis()', () => {
     const p = {
-      root: mockRoot,
+      m: mockM,
       w: mockW,
       h: mockH,
-      m: mockM,
       x: mockX,
-      y: mockY
+      y: mockY,
+      root: mockRoot
     };
 
     beforeEach(() => {
@@ -361,7 +384,12 @@ describe('AreaChart component', () => {
 
     describe('Y axis orient to the left hand side (\'yAxisOrientRight\' is \'false\')', () => {
       beforeEach(() => {
-        const chart = TestUtils.renderIntoDocument(<AreaChart data={mockData} axisLabels={mockAxisLabels} />);
+        const chart = TestUtils.renderIntoDocument(
+          <AreaChart
+            data={mockData}
+            axisLabels={mockAxisLabels}
+          />
+        );
         chart.createXAxis(p);
       });
 
@@ -381,7 +409,13 @@ describe('AreaChart component', () => {
 
     describe('Y axis orient tp the right hand side (\'yAxisOrientRight\' is \'true\')', () => {
       beforeEach(() => {
-        const chart = TestUtils.renderIntoDocument(<AreaChart data={mockData} axisLabels={mockAxisLabels} yAxisOrientRight />);
+        const chart = TestUtils.renderIntoDocument(
+          <AreaChart
+            data={mockData}
+            axisLabels={mockAxisLabels}
+            yAxisOrientRight
+          />
+        );
         chart.createXAxis(p);
       });
 
@@ -402,12 +436,12 @@ describe('AreaChart component', () => {
 
   describe('createYAxis()', () => {
     const p = {
-      root: mockRoot,
+      m: mockM,
       w: mockW,
       h: mockH,
-      m: mockM,
       x: mockX,
-      y: mockY
+      y: mockY,
+      root: mockRoot
     };
 
     beforeEach(() => {
@@ -428,7 +462,12 @@ describe('AreaChart component', () => {
 
     describe('Y axis orient to the left hand side (\'yAxisOrientRight\' is \'false\')', () => {
       beforeEach(() => {
-        const chart = TestUtils.renderIntoDocument(<AreaChart data={mockData} axisLabels={mockAxisLabels} />);
+        const chart = TestUtils.renderIntoDocument(
+          <AreaChart
+            data={mockData}
+            axisLabels={mockAxisLabels}
+          />
+        );
         chart.createYAxis(p);
       });
 
@@ -450,7 +489,13 @@ describe('AreaChart component', () => {
 
     describe('Y axis orient to the right hand side (\'yAxisOrientRight\' is \'true\')', () => {
       beforeEach(() => {
-        const chart = TestUtils.renderIntoDocument(<AreaChart data={mockData} axisLabels={mockAxisLabels} yAxisOrientRight />);
+        const chart = TestUtils.renderIntoDocument(
+          <AreaChart
+            data={mockData}
+            axisLabels={mockAxisLabels}
+            yAxisOrientRight
+          />
+        );
         chart.createYAxis(p);
       });
 
@@ -490,7 +535,11 @@ describe('AreaChart component', () => {
       sinon.spy(mockRoot, 'attr');
       sinon.spy(mockRoot, 'style');
 
-      const chart = TestUtils.renderIntoDocument(<AreaChart data={mockData} axisLabels={mockAxisLabels} />);
+      const chart = TestUtils.renderIntoDocument(
+        <AreaChart
+          data={mockData}
+          axisLabels={mockAxisLabels}
+        />);
       chart.createAreaPathChart(p);
     });
 
@@ -502,8 +551,8 @@ describe('AreaChart component', () => {
     });
 
     it('creates the area chart', () => {
-      expect(mockRoot.datum.called).to.be.true;
       expect(mockRoot.append.calledWith('path')).to.be.true;
+      expect(mockRoot.datum.called).to.be.true;
       expect(mockRoot.attr.calledWith('class', 'area')).to.be.true;
       expect(mockRoot.attr.calledWith('class', 'line')).to.be.true;
       expect(mockRoot.style.calledWith('fill')).to.be.true;
@@ -531,7 +580,12 @@ describe('AreaChart component', () => {
       sinon.spy(mockRoot, 'style');
       sinon.spy(mockRoot, 'on');
 
-      chart = TestUtils.renderIntoDocument(<AreaChart data={mockData} dataPoints />);
+      chart = TestUtils.renderIntoDocument(
+        <AreaChart
+          data={mockData}
+          dataPoints
+        />
+      );
       chart.createPoints(p);
     });
 
@@ -560,7 +614,11 @@ describe('AreaChart component', () => {
   describe('Rendering the AreaChart', () => {
     describe('Always', () => {
       const renderer = TestUtils.createRenderer();
-      renderer.render(<AreaChart data={mockData} />);
+      renderer.render(
+        <AreaChart
+          data={mockData}
+        />
+      );
 
       const chart = renderer.getRenderOutput();
       const svg = chart.props.children[1];
