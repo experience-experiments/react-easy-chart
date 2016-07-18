@@ -1,5 +1,5 @@
 /* eslint-env node, mocha */
-/* eslint no-unused-expressions: 0 */
+/* eslint no-unused-expressions: 0, max-len: 0 */
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -50,9 +50,6 @@ const mockYValue = () => {};
 
 const mockColors = [];
 
-const mockXDomainRange = [];
-const mockYDomainRange = [];
-
 const mouseOverSpy = chai.spy(() => {});
 const mouseOutSpy = chai.spy(() => {});
 const mouseMoveSpy = chai.spy(() => {});
@@ -73,10 +70,20 @@ describe('LineChart component', () => {
 
   describe('Instantiating the LineChart', () => {
     describe('Without required props', () => {
-      it('throws a \'TypeError\'', () => {
+      beforeEach(() => {
+        sinon.stub(console, 'error', (e) => {
+          throw new Error(e);
+        });
+      });
+
+      afterEach(() => {
+        console.error.restore();
+      });
+
+      it('throws an \'Error\'', () => {
         expect(() => {
           TestUtils.renderIntoDocument(<LineChart />);
-        }).to.throw(TypeError);
+        }).to.throw(Error);
       });
     });
 
@@ -556,8 +563,8 @@ describe('LineChart component', () => {
 
       it('renders the graph', () => {
         expect(graph.props.transform).to.equal('translate(0, 0)');
-        expect(graph.props.children[0].type).to.equal('path');
-        expect(graph.props.children[1].type).to.equal('path');
+        expect(graph.props.children[0].props.children[0].type).to.equal('path');
+        expect(graph.props.children[0].props.children[1].type).to.equal('path');
       });
     });
 
@@ -574,7 +581,10 @@ describe('LineChart component', () => {
       );
       const domRoot = ReactDOM.findDOMNode(chart);
       const svgNode = domRoot.childNodes[1];
-      const dataPointNode = svgNode.childNodes[0].childNodes[1]; // 1 - 3
+      const dataPointNode = svgNode
+        .childNodes[0]
+        .childNodes[1]
+        .childNodes[1]; // 1 - 3
 
       it('responds to click events', () => {
         TestUtils.Simulate.click(dataPointNode);

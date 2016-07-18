@@ -1,5 +1,5 @@
 /* eslint-env node, mocha */
-/* eslint no-unused-expressions: 0 */
+/* eslint no-unused-expressions: 0, no-console: 0, max-len: 0 */
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -36,9 +36,11 @@ const mockRoot = {
   text: () => mockRoot,
   selectAll: () => mockRoot,
   append: () => mockRoot,
+  remove: () => mockRoot,
   style: () => mockRoot,
   datum: () => mockRoot,
   enter: () => mockRoot,
+  exit: () => mockRoot,
   on: () => mockRoot
 };
 
@@ -72,6 +74,24 @@ describe('BarChart component', () => {
   });
 
   describe('Instantiating the BarChart', () => {
+    describe('Without required props', () => {
+      beforeEach(() => {
+        sinon.stub(console, 'error', (e) => {
+          throw new Error(e);
+        });
+      });
+
+      afterEach(() => {
+        console.error.restore();
+      });
+
+      it('throws an \'Error\'', () => {
+        expect(() => {
+          TestUtils.renderIntoDocument(<BarChart />);
+        }).to.throw(Error);
+      });
+    });
+
     describe('With required props', () => {
       describe('Always', () => {
         let chart;
@@ -299,14 +319,6 @@ describe('BarChart component', () => {
         });
       });
     });
-
-    describe('Without required props', () => {
-      it('throws a \'TypeError\'', () => {
-        expect(() => {
-          TestUtils.renderIntoDocument(<BarChart />);
-        }).to.throw(TypeError);
-      });
-    });
   });
 
   describe('calculateChartParameters()', () => {
@@ -519,7 +531,9 @@ describe('BarChart component', () => {
       sinon.spy(mockRoot, 'data');
       sinon.spy(mockRoot, 'enter');
       sinon.spy(mockRoot, 'append');
+      sinon.spy(mockRoot, 'remove');
       sinon.spy(mockRoot, 'attr');
+      sinon.spy(mockRoot, 'exit');
       sinon.spy(mockRoot, 'style');
       sinon.spy(mockRoot, 'on');
 
@@ -532,13 +546,15 @@ describe('BarChart component', () => {
       mockRoot.data.restore();
       mockRoot.enter.restore();
       mockRoot.append.restore();
+      mockRoot.remove.restore();
       mockRoot.attr.restore();
+      mockRoot.exit.restore();
       mockRoot.style.restore();
       mockRoot.on.restore();
     });
 
-    it('creates the bar chart', () => {
-      expect(mockRoot.selectAll.calledWith('.bar')).to.be.true;
+    it('creates new bars on the bar chart', () => {
+      expect(mockRoot.selectAll.calledWith('rect')).to.be.true; // .bar'
       expect(mockRoot.data.calledWith(mockData)).to.be.true;
       expect(mockRoot.enter.called).to.be.true;
       expect(mockRoot.append.calledWith('rect')).to.be.true;
@@ -552,6 +568,11 @@ describe('BarChart component', () => {
       expect(mockRoot.on.calledWith('mouseout')).to.be.true;
       expect(mockRoot.on.calledWith('mousemove')).to.be.true;
       expect(mockRoot.on.calledWith('click')).to.be.true;
+    });
+
+    it('removes old bars from the bar chart', () => {
+      expect(mockRoot.exit.called).to.be.true;
+      expect(mockRoot.remove.called).to.be.true;
     });
   });
 

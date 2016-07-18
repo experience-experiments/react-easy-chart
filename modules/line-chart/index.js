@@ -21,6 +21,8 @@ import { Style } from 'radium';
 import merge from 'lodash.merge';
 import { timeParse as parse } from 'd3-time-format';
 
+const dateParser = {};
+
 export default class LineChart extends React.Component {
   static get propTypes() {
     return {
@@ -78,20 +80,17 @@ export default class LineChart extends React.Component {
 
   constructor(props) {
     super(props);
-    this.parseDate = parse(props.datePattern);
     this.uid = getRandomId();
   }
 
   componentDidMount() {
-    const uid = this.uid;
-    const ref = this.refs[uid];
-    createCircularTicks(ref);
+    const lineChart = this.refs.lineChart;
+    createCircularTicks(lineChart);
   }
 
   componentDidUpdate() {
-    const uid = this.uid;
-    const ref = this.refs[uid];
-    createCircularTicks(ref);
+    const lineChart = this.refs.lineChart;
+    createCircularTicks(lineChart);
   }
 
   createSvgNode({ m, w, h }) {
@@ -142,18 +141,20 @@ export default class LineChart extends React.Component {
       axis.ticks(xTicks);
     }
 
-    root.append('g')
+    const group = root.append('g')
       .attr('class', 'x axis')
-      .attr('transform', `translate(0, ${h})`)
-      .call(axis)
+      .attr('transform', `translate(0, ${h})`);
+
+    group
+      .call(axis);
+
+    group
       .append('text')
       .attr('class', 'label')
       .attr('y', m.bottom - 10)
       .attr('x', yAxisOrientRight ? 0 : w)
       .style('text-anchor', yAxisOrientRight ? 'start' : 'end')
       .text(axisLabels.x);
-
-    return axis;
   }
 
   createYAxis({ root, m, w, y }) {
@@ -187,20 +188,28 @@ export default class LineChart extends React.Component {
       axis.ticks(yTicks);
     }
 
-    root.append('g')
+    const group = root.append('g')
       .attr('class', 'y axis')
-      .call(axis)
-      .attr('transform', yAxisOrientRight ? `translate(${w}, 0)` : 'translate(0, 0)')
+      .attr('transform',
+        (yAxisOrientRight)
+          ? `translate(${w}, 0)`
+          : 'translate(0, 0)');
+
+    group
+      .call(axis);
+
+    group
       .append('text')
       .attr('class', 'label')
       .attr('transform', 'rotate(-90)')
       .attr('x', 0)
-      .attr('y', yAxisOrientRight ? -20 + m.right : 0 - m.left)
+      .attr('y',
+        (yAxisOrientRight)
+          ? -20 + m.right
+          : 0 - m.left)
       .attr('dy', '.9em')
       .style('text-anchor', 'end')
       .text(axisLabels.y);
-
-    return axis;
   }
 
   createLinePathChart({ root, x, y, xValue, yValue, colors }) {
@@ -214,15 +223,17 @@ export default class LineChart extends React.Component {
       .x((d) => x(xValue(d)))
       .y((d) => y(yValue(d)));
 
+    const group = root.append('g')
+      .attr('class', 'lineChart');
+
     data.forEach((lineItem, i) => {
-      root.append('path')
+      const color = colors[i];
+      group.append('path')
         .datum(lineItem)
         .attr('class', 'line')
-        .attr('style', `stroke: ${colors[i]}`)
+        .attr('style', `stroke: ${color}`)
         .attr('d', linePath);
     });
-
-    return linePath;
   }
 
   createPoints({ root, x, y, colors }) {
@@ -236,33 +247,49 @@ export default class LineChart extends React.Component {
       clickHandler
     } = this.props;
 
+    /*
+     * We don't really need to do this, but it
+     * avoids obscure "this" below
+     */
+    const calculateDate = (v) => this.parseDate(v);
+
+    const group = root.append('g')
+      .attr('class', 'dataPoints');
+
     data.forEach((lineItem, i) => {
+      const color = colors[i];
       lineItem.forEach((dataPoint) => {
-        root.append('circle')
+        /*
+         * Creating the calculation functions
+         */
+        const calculateCX = () => (
+          (xType === 'time')
+            ? x(calculateDate(dataPoint.x))
+            : x(dataPoint.x));
+        const calculateCY = () => (
+          (yType === 'time')
+            ? y(calculateDate(dataPoint.y))
+            : y(dataPoint.y));
+
+        const mouseover = () => mouseOverHandler(dataPoint, lastEvent);
+        const mouseout = () => mouseOutHandler(dataPoint, lastEvent);
+        const mousemove = () => mouseMoveHandler(dataPoint, lastEvent);
+        const click = () => clickHandler(dataPoint, lastEvent);
+
+        /*
+         * Applying the calculation functions
+         */
+        group.append('circle')
           .attr('class', 'data-point')
           .style('strokeWidth', '2px')
-          .style('stroke', colors[i])
+          .style('stroke', color)
           .style('fill', 'white')
-          .attr('cx', () => {
-            switch (xType) {
-              case ('time'):
-                return x(this.parseDate(dataPoint.x));
-              default:
-                return x(dataPoint.x);
-            }
-          })
-          .attr('cy', () => {
-            switch (yType) {
-              case ('time'):
-                return y(this.parseDate(dataPoint.y));
-              default:
-                return y(dataPoint.y);
-            }
-          })
-          .on('mouseover', () => mouseOverHandler(dataPoint, lastEvent))
-          .on('mouseout', () => mouseOutHandler(dataPoint, lastEvent))
-          .on('mousemove', () => mouseMoveHandler(lastEvent))
-          .on('click', () => clickHandler(dataPoint, lastEvent));
+          .attr('cx', calculateCX)
+          .attr('cy', calculateCY)
+          .on('mouseover', mouseover)
+          .on('mouseout', mouseout)
+          .on('mousemove', mousemove)
+          .on('click', click);
       });
     });
   }
@@ -288,6 +315,18 @@ export default class LineChart extends React.Component {
     );
   }
 
+  parseDate(v) {
+    const {
+      datePattern
+    } = this.props;
+
+    const datePatternParser = (
+      dateParser[datePattern] || (
+      dateParser[datePattern] = parse(datePattern)));
+
+    return datePatternParser(v);
+  }
+
   calculateChartParameters() {
     const {
       data,
@@ -303,15 +342,20 @@ export default class LineChart extends React.Component {
       yAxisOrientRight
     } = this.props;
 
+    /*
+     * We could "bind" but this is neater
+     */
+    const parseDate = (v) => this.parseDate(v);
+
     const m = calcMargin(axes, margin, yAxisOrientRight);
     const w = reduce(width, m.left, m.right);
     const h = reduce(height, m.top, m.bottom);
 
-    const x = setLineDomainAndRange('x', xDomainRange, data, xType, w, this.parseDate);
-    const y = setLineDomainAndRange('y', yDomainRange, data, yType, h, this.parseDate);
+    const x = setLineDomainAndRange('x', xDomainRange, data, xType, w, parseDate);
+    const y = setLineDomainAndRange('y', yDomainRange, data, yType, h, parseDate);
 
-    const xValue = getValueFunction('x', xType, this.parseDate);
-    const yValue = getValueFunction('y', yType, this.parseDate);
+    const xValue = getValueFunction('x', xType, parseDate);
+    const yValue = getValueFunction('y', yType, parseDate);
 
     const colors = lineColors.concat(defaultColors);
 
@@ -359,7 +403,7 @@ export default class LineChart extends React.Component {
     } = p;
 
     return (
-      <div ref={uid} className={className}>
+      <div ref="lineChart" className={className}>
         {this.createStyle()}
         {node.toReact()}
       </div>

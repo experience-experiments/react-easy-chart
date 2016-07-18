@@ -1,5 +1,8 @@
 import React from 'react';
-import { scaleLinear as linear, scalePoint as point } from 'd3-scale';
+import {
+  scaleLinear as linear,
+  scalePoint as point
+} from 'd3-scale';
 import {
   event as lastEvent,
   min,
@@ -20,7 +23,11 @@ import {
   defaultStyle,
   getAxisStyles,
   createCircularTicks
-} from '../shared';
+} from '../../shared';
+
+const dateParser = {};
+
+const color = scale.category20();
 
 const axisMargin = 18;
 
@@ -53,8 +60,8 @@ export default class ScatterplotChart extends React.Component {
       yDomainRange: React.PropTypes.array,
       xTickNumber: React.PropTypes.number,
       yTickNumber: React.PropTypes.number,
-      yTicks: React.PropTypes.number,
       xTicks: React.PropTypes.number,
+      yTicks: React.PropTypes.number,
       xType: React.PropTypes.string,
       yType: React.PropTypes.string
     };
@@ -84,33 +91,16 @@ export default class ScatterplotChart extends React.Component {
 
   constructor(props) {
     super(props);
-
-    const {
-      datePattern
-    } = this.props;
-
-    this.parseDate = parse(datePattern);
-    this.uid = getRandomId(); // Math.floor(Math.random() * new Date().getTime());
-    this.color = scale.category20();
+    this.uid = getRandomId();
   }
 
   componentDidMount() {
-    const p = this.calculateChartParameters();
-    this.initialiseXAxis(p);
-    this.initialiseYAxis(p);
-    this.initialiseChart(p);
-    const uid = this.uid;
-    const ref = this.refs[uid];
+    const ref = this.refs.scatterplotChart;
     createCircularTicks(ref);
   }
 
   componentDidUpdate() {
-    const p = this.calculateChartParameters();
-    this.transitionXAxis(p);
-    this.transitionYAxis(p);
-    this.transitionChart(p);
-    const uid = this.uid;
-    const ref = this.refs[uid];
+    const ref = this.refs.scatterplotChart;
     createCircularTicks(ref);
   }
 
@@ -130,9 +120,13 @@ export default class ScatterplotChart extends React.Component {
       (axesType === 'x')
         ? 'x'
         : 'y';
+
     let axis;
     let minAmount;
     let maxAmount;
+
+    const parseDate = (v) => this.parseDate(v);
+
     switch (type) {
       case 'text':
         axis = point();
@@ -147,7 +141,7 @@ export default class ScatterplotChart extends React.Component {
         maxAmount = max(data, (d) => d[dataIndex]);
         if (domainRange) {
           axis
-            .domain(calcDefaultDomain(domainRange, type, this.parseDate));
+            .domain(calcDefaultDomain(domainRange, type, parseDate));
         } else {
           // set initial domain
           axis
@@ -155,13 +149,15 @@ export default class ScatterplotChart extends React.Component {
           // calculate 1 tick offset
           const ticks = axis.ticks();
 
-          minAmount = (yAxisOrientRight && axesType === 'x')
-            ? minAmount
-            : minAmount - (ticks[1] - ticks[0]);
+          minAmount =
+            (yAxisOrientRight && axesType === 'x')
+              ? minAmount
+              : minAmount - (ticks[1] - ticks[0]);
 
-          maxAmount = (yAxisOrientRight && axesType === 'x')
-            ? maxAmount + (ticks[1] - ticks[0])
-            : maxAmount;
+          maxAmount =
+            (yAxisOrientRight && axesType === 'x')
+              ? maxAmount + (ticks[1] - ticks[0])
+              : maxAmount;
 
           axis
             .domain([minAmount, maxAmount]);
@@ -178,7 +174,7 @@ export default class ScatterplotChart extends React.Component {
           .domain(
             (domainRange)
               ? calcDefaultDomain(domainRange)
-              : extent(data, (d) => this.parseDate(d[dataIndex])))
+              : extent(data, (d) => parseDate(d[dataIndex])))
           .range(
             (axesType === 'x')
               ? [0, length]
@@ -201,7 +197,7 @@ export default class ScatterplotChart extends React.Component {
 
   getFill(data) {
     const configItem = this.getDataConfig(data.type);
-    return typeof configItem !== 'undefined' ? configItem.color : this.color(data.type);
+    return typeof configItem !== 'undefined' ? configItem.color : color(data.type);
   }
 
   getRadius(data, dataItem, dotRadius) {
@@ -223,7 +219,7 @@ export default class ScatterplotChart extends React.Component {
     return typeof configItem !== 'undefined' ? configItem.stroke : 'none';
   }
 
-  calculateMargin(axes, spacer, yAxisOrientRight) {
+  calcMargin(axes, spacer, yAxisOrientRight) {
     let defaultMargins =
       (axes)
         ? { top: 24, right: 24, bottom: 24, left: 48 }
@@ -237,167 +233,19 @@ export default class ScatterplotChart extends React.Component {
     return defaultMargins;
   }
 
-  createSvgNode({ m, w, h }) {
-    const node = createElement('svg');
-    select(node)
-      .attr('width', w + m.left + m.right)
-      .attr('height', h + m.top + m.bottom);
-    return node;
+  calculateInnerW(w, m) {
+    return (w - (m.left + m.right));
   }
 
-  createSvgRoot({ node, m }) {
-    return select(node)
-      .append('g')
-      .attr('transform', `translate(${m.left}, ${m.top})`);
-  }
-
-  initialiseXAxis({ innerW, innerH, m }) {
+  calculateInnerH(h, m) {
     const {
-      axes,
-      yAxisOrientRight,
-      axisLabels
+      dotRadius
     } = this.props;
 
-    const uid = this.uid;
-
-    if (axes) {
-      this.axisX = select(`#axis-x-${uid}`)
-        .attr('class', 'x axis')
-        .attr('transform', `translate(0, ${innerH})`)
-        .call(this.xAxis)
-        .append('text')
-        .attr('id', 'label-x')
-        .attr('class', 'label')
-        .attr('x', yAxisOrientRight ? 0 : innerW)
-        .attr('y', m.bottom + axisMargin)
-        .style('text-anchor', yAxisOrientRight ? 'start' : 'end')
-        .text(axisLabels.x);
-    }
+    return (h - (m.top + m.bottom + (dotRadius * 2)));
   }
 
-  initialiseYAxis({ innerW, m }) {
-    const {
-      axes,
-      yAxisOrientRight,
-      axisLabels
-    } = this.props;
-
-    const uid = this.uid;
-
-    if (axes) {
-      this.axisY = select(`#axis-y-${uid}`)
-        .attr('class', 'y axis')
-        .call(this.yAxis)
-        .attr(
-          'transform', yAxisOrientRight ?
-          `translate(${innerW}, 0)` : 'translate(0, 0)'
-        )
-        .append('text')
-        .attr('class', 'label')
-        .attr('transform', 'rotate(-90)')
-        .attr('y', (yAxisOrientRight)
-            ? -25 + m.right
-            : 10 - m.left
-        )
-        .attr('dy', '.71em')
-        .style('text-anchor', 'end')
-        .text(axisLabels.y);
-    }
-  }
-
-  initialiseChart({ x, y }) {
-    const {
-      data,
-      dotRadius,
-      xType,
-      mouseOverHandler,
-      mouseOutHandler,
-      mouseMoveHandler,
-      clickHandler
-    } = this.props;
-
-    const uid = this.uid;
-
-    this.chart = select(`#dots-${uid}`)
-      .selectAll('.dot')
-      .data(data)
-      .enter()
-      .append('circle')
-      .attr('class', 'dot')
-      .attr('r', (d) => this.getRadius(data, d, dotRadius))
-      .attr('cx', (d) => {
-        switch (xType) {
-          case ('time'):
-            return x(this.parseDate(d.x));
-          default:
-            return x(d.x);
-        }
-      })
-      .attr('cy', (d) => y(d.y))
-      .style('fill', (d) => this.getFill(d))
-      .style('stroke', (d) => this.getStroke(d))
-      .on('mouseover', (d) => mouseOverHandler(d, lastEvent))
-      .on('mouseout', (d) => mouseOutHandler(d, lastEvent))
-      .on('mousemove', () => mouseMoveHandler(lastEvent))
-      .on('click', (d) => clickHandler(d, lastEvent));
-  }
-
-  transitionXAxis({ innerH, innerW }) {
-    const {
-      axes,
-      yAxisOrientRight
-    } = this.props;
-
-    const uid = this.uid;
-
-    if (axes) {
-      this.axisX = select(`#axis-x-${uid}`)
-        .attr('transform', `translate(0, ${innerH})`)
-        .transition()
-        .duration(750)
-        .call(this.xAxis)
-        .select('#label-x')
-        .attr('x', yAxisOrientRight ? 0 : innerW);
-    }
-  }
-
-  transitionYAxis() {
-    const {
-      axes
-    } = this.props;
-
-    const uid = this.uid;
-
-    if (axes) {
-      this.axisY = select(`#axis-y-${uid}`)
-        .transition()
-        .duration(750)
-        .call(this.yAxis);
-    }
-  }
-
-  transitionChart({ x, y }) {
-    const {
-      data,
-      xType
-    } = this.props;
-
-    this.chart
-      .data(data)
-      .transition()
-      .duration(750)
-      .attr('cx', (d) => {
-        switch (xType) {
-          case ('time'):
-            return x(this.parseDate(d.x));
-          default:
-            return x(d.x);
-        }
-      })
-      .attr('cy', (d) => y(d.y));
-  }
-
-  createXAxis({ h, x }) {
+  calculateXAxis({ h, x }) {
     const {
       xType,
       tickTimeDisplayFormat,
@@ -439,7 +287,7 @@ export default class ScatterplotChart extends React.Component {
     return axis;
   }
 
-  createYAxis({ innerW, y }) {
+  calculateYAxis({ y, innerW }) {
     const {
       grid,
       yTicks,
@@ -467,25 +315,138 @@ export default class ScatterplotChart extends React.Component {
     return axis;
   }
 
-  createScatterplotChart({ w, h, node, root }) {
-    const uid = this.uid;
-
+  createSvgNode({ m, w, h }) {
+    const node = createElement('svg');
     select(node)
-      .attr('width', w)
-      .attr('height', h);
+      .attr('width', w + m.left + m.right)
+      .attr('height', h + m.top + m.bottom);
+    return node;
+  }
 
-    root
+  createSvgRoot({ node, m }) {
+    return select(node)
       .append('g')
-      .attr('id', `area-${uid}`);
+      .attr('transform', `translate(${m.left}, ${m.top})`);
+  }
 
-    root.append('g')
-      .attr('id', `axis-x-${uid}`);
+  createXAxis({ m, innerW, innerH, xAxis, root }) {
+    const {
+      yAxisOrientRight,
+      axisLabels
+    } = this.props;
 
-    root.append('g')
-      .attr('id', `axis-y-${uid}`);
+    const group = root.append('g')
+      .attr('class', 'x axis')
+      .attr('transform', `translate(0, ${innerH})`);
 
-    root.append('g')
-      .attr('id', `dots-${uid}`);
+    group
+      .call(xAxis);
+
+    const label = axisLabels.x;
+
+    if (label) {
+      group
+        .append('text')
+        .attr('id', 'label-x')
+        .attr('class', 'label')
+        .attr('x',
+            (yAxisOrientRight)
+              ? 0
+              : innerW)
+        .attr('y', m.bottom + axisMargin)
+        .style('text-anchor',
+            (yAxisOrientRight)
+              ? 'start'
+              : 'end')
+        .text(label);
+    }
+  }
+
+  createYAxis({ m, innerW, yAxis, root }) {
+    const {
+      yAxisOrientRight,
+      axisLabels
+    } = this.props;
+
+    const group = root
+      .append('g')
+      .attr('class', 'y axis')
+      .attr('transform',
+        (yAxisOrientRight)
+          ? `translate(${innerW}, 0)`
+          : 'translate(0, 0)');
+
+    group
+      .call(yAxis);
+
+    const label = axisLabels.y;
+
+    if (label) {
+      group
+        .append('text')
+        .attr('class', 'label')
+        .attr('transform', 'rotate(-90)')
+        .attr('y',
+          (yAxisOrientRight)
+            ? -25 + m.right
+            : 10 - m.left
+        )
+        .attr('dy', '.71em')
+        .style('text-anchor', 'end')
+        .text(label);
+    }
+  }
+
+  createScatterplotChart({ x, y, root }) {
+    const {
+      data,
+      dotRadius,
+      xType,
+      mouseOverHandler,
+      mouseOutHandler,
+      mouseMoveHandler,
+      clickHandler
+    } = this.props;
+
+    const calculateDate = (v) => this.parseDate(v);
+
+    const calculateR = (d) => this.getRadius(data, d, dotRadius);
+    const calculateCX = (d) => (
+        (xType === 'time')
+          ? x(calculateDate(d.x))
+          : x(d.x));
+    const calculateCY = (d) => y(d.y);
+
+    const getFill = (d) => this.getFill(d);
+    const getStroke = (d) => this.getStroke(d);
+
+    const mouseOver = (d) => mouseOverHandler(d, lastEvent);
+    const mouseOut = (d) => mouseOutHandler(d, lastEvent);
+    const mouseMove = (d) => mouseMoveHandler(d, lastEvent);
+    const click = (d) => clickHandler(d, lastEvent);
+
+    const circle = root
+      .append('g')
+      .selectAll('circle') // '.dot'
+      .data(data);
+
+    circle
+      .enter()
+      .append('circle')
+      .attr('class', 'dot')
+      .attr('r', calculateR)
+      .attr('cx', calculateCX)
+      .attr('cy', calculateCY)
+      .style('fill', getFill)
+      .style('stroke', getStroke)
+      .on('mouseover', mouseOver)
+      .on('mouseout', mouseOut)
+      .on('mousemove', mouseMove)
+      .on('click', click);
+
+    circle
+      .exit()
+      .remove();
   }
 
   createStyle() {
@@ -509,16 +470,16 @@ export default class ScatterplotChart extends React.Component {
     );
   }
 
-  calculateInnerW(w, m) {
-    return (w - (m.left + m.right));
-  }
-
-  calculateInnerH(h, m) {
+  parseDate(v) {
     const {
-      dotRadius
+      datePattern
     } = this.props;
 
-    return (h - (m.top + m.bottom + (dotRadius * 2)));
+    const datePatternParser = (
+      dateParser[datePattern] || (
+      dateParser[datePattern] = parse(datePattern)));
+
+    return datePatternParser(v);
   }
 
   calculateChartParameters() {
@@ -536,7 +497,12 @@ export default class ScatterplotChart extends React.Component {
       yAxisOrientRight
     } = this.props;
 
-    const m = margin || this.calculateMargin(axes, dotRadius * 2, yAxisOrientRight);
+    /*
+     * We could "bind" but this is neater
+     */
+    const parseDate = (v) => this.parseDate(v);
+
+    const m = margin || this.calcMargin(axes, dotRadius * 2, yAxisOrientRight);
     const w = width;
     const h = height + (dotRadius * 3);
 
@@ -545,16 +511,19 @@ export default class ScatterplotChart extends React.Component {
 
     const defaultXDomain =
       (xDomainRange)
-        ? calcDefaultDomain(xDomainRange, xType, this.parseDate)
+        ? calcDefaultDomain(xDomainRange, xType, parseDate)
         : null;
 
     const defaultYDomain =
       (yDomainRange)
-        ? calcDefaultDomain(yDomainRange, yType, this.parseDate)
+        ? calcDefaultDomain(yDomainRange, yType, parseDate)
         : null;
 
     const x = this.setDomainAndRange('x', defaultXDomain, data, xType, innerW, yAxisOrientRight);
     const y = this.setDomainAndRange('y', defaultYDomain, data, yType, innerH, yAxisOrientRight);
+
+    const xAxis = this.calculateXAxis({ m, h, x, innerW });
+    const yAxis = this.calculateYAxis({ m, y, innerW });
 
     const node = this.createSvgNode({ m, w, h });
     const root = this.createSvgRoot({ node, m });
@@ -567,27 +536,36 @@ export default class ScatterplotChart extends React.Component {
       innerH,
       x,
       y,
+      xAxis,
+      yAxis,
       node,
       root
     };
   }
 
   render() {
+    const {
+      axes
+    } = this.props;
+
     const p = this.calculateChartParameters();
 
-    this.xAxis = this.createXAxis(p);
-    this.yAxis = this.createYAxis(p);
+    if (axes) {
+      this.createXAxis(p);
+
+      this.createYAxis(p);
+    }
 
     this.createScatterplotChart(p);
 
-    const uid = this.uid; // Math.floor(Math.random() * new Date().getTime());
+    const uid = this.uid;
     const className = `scatterplot-chart-${uid}`;
     const {
       node
     } = p;
 
     return (
-      <div ref={uid} className={className}>
+      <div ref="scatterplotChart" className={className}>
         {this.createStyle()}
         {node.toReact()}
       </div>

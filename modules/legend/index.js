@@ -31,7 +31,6 @@ export default class Legend extends React.Component {
 
   constructor(props) {
     super(props);
-
     this.uid = getRandomId(); // Math.floor(Math.random() * new Date().getTime());
   }
 
@@ -69,7 +68,7 @@ export default class Legend extends React.Component {
     return (
       <ul className="legend">
         {tags.map((item, index) => {
-          const key = `legend-item-${index}`;
+          const key = `legend-${index}`;
           const backgroundColor = this.getBackgroundColor(index);
           return (
             <li key={key} className={className}>

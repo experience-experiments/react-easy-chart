@@ -1,5 +1,5 @@
 /* eslint-env node, mocha */
-/* eslint no-unused-expressions: 0 */
+/* eslint no-unused-expressions: 0, no-console: 0 */
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -32,10 +32,20 @@ describe('PieChart component', () => {
 
   describe('Instantiating the PieChart', () => {
     describe('Without required props', () => {
-      it('throws a \'TypeError\'', () => {
+      beforeEach(() => {
+        sinon.stub(console, 'error', (e) => {
+          throw new Error(e);
+        });
+      });
+
+      afterEach(() => {
+        console.error.restore();
+      });
+
+      it('throws an \'Error\'', () => {
         expect(() => {
           TestUtils.renderIntoDocument(<PieChart />);
-        }).to.throw(TypeError);
+        }).to.throw(Error);
       });
     });
     describe('With required props', () => {
@@ -69,28 +79,21 @@ describe('PieChart component', () => {
         });
 
         /*
-         * PieCharts require a color palette
+         * PieCharts require a pie slice tween method
          */
-        it('assigns the method \'color\' to the instance', () => {
-          expect(chart.color).to.be.a('function');
+        it('assigns the method \'tweenSlice\' to the instance', () => {
+          expect(chart.tweenSlice).to.be.a('function');
         });
 
         /*
-         * PieCharts require a pie data transformer
+         * An array for pie slices
          */
-        it('assigns the method \'pie\' to the instance', () => {
-          expect(chart.color).to.be.a('function');
+        it('assigns the array \'currentSlices\' to the instance', () => {
+          expect(chart.currentSlices).to.be.a('array');
         });
 
         /*
-         * An array for pie charts
-         */
-        it('assigns the array \'currentPieCharts\' to the instance', () => {
-          expect(chart.currentPieCharts).to.be.a('array');
-        });
-
-        /*
-         * An array for labels
+         * An array for pie labels
          */
         it('assigns the array \'currentLabels\' to the instance', () => {
           expect(chart.currentLabels).to.be.a('array');
@@ -154,20 +157,20 @@ describe('PieChart component', () => {
           let chart;
 
           beforeEach(() => {
-            sinon.spy(PieChart.prototype, 'createPieChart');
+            sinon.spy(PieChart.prototype, 'createSlices');
             sinon.spy(PieChart.prototype, 'createStyle');
             sinon.spy(PieChart.prototype, 'createLabels');
             chart = TestUtils.renderIntoDocument(<PieChart data={mockData} />);
           });
 
           afterEach(() => {
-            PieChart.prototype.createPieChart.restore();
+            PieChart.prototype.createSlices.restore();
             PieChart.prototype.createStyle.restore();
             PieChart.prototype.createLabels.restore();
           });
 
           it('creates the pie chart', () => {
-            expect(chart.createPieChart.called).to.be.true;
+            expect(chart.createSlices.called).to.be.true;
           });
 
           it('creates the <Style /> component', () => {
@@ -201,7 +204,7 @@ describe('PieChart component', () => {
     });
   });
 
-  describe('createPieChart()', () => {});
+  describe('createSlices()', () => {});
 
   describe('createLabels()', () => {});
 
@@ -211,7 +214,7 @@ describe('PieChart component', () => {
       renderer.render(<PieChart data={mockData} />);
       const chart = renderer.getRenderOutput();
       const svg = chart.props.children[1];
-      const graph = svg.props.children[0];
+      const group = svg.props.children[0];
 
       it('renders a <div /> container', () => {
         expect(chart.type).to.equal('div');
@@ -221,12 +224,12 @@ describe('PieChart component', () => {
         expect(svg.type).to.equal('svg');
       });
 
-      it('renders the graph', () => {
-        expect(graph.props.transform).to.equal('translate(0, 0)');
+      it('renders the group', () => {
+        expect(group.props.transform).to.equal('translate(200, 200)');
       });
     });
 
-    describe('With optional props', () => {
+    xdescribe('With optional props', () => {
       const chart = TestUtils.renderIntoDocument(
         <PieChart
           data={mockData}
@@ -240,22 +243,22 @@ describe('PieChart component', () => {
       const svgNode = domRoot.childNodes[1];
       const pieNode = svgNode.childNodes[0]; // .childNodes[0]
 
-      xit('responds to click events', () => {
+      it('responds to click events', () => {
         TestUtils.Simulate.click(pieNode);
         expect(clickSpy).to.have.been.called();
       });
 
-      xit('responds to mouse over events', () => {
+      it('responds to mouse over events', () => {
         TestUtils.SimulateNative.mouseOver(pieNode);
         expect(mouseOverSpy).to.have.been.called();
       });
 
-      xit('responds to mouse out events', () => {
+      it('responds to mouse out events', () => {
         TestUtils.SimulateNative.mouseOut(pieNode);
         expect(mouseOutSpy).to.have.been.called();
       });
 
-      xit('responds to mouse move events', () => {
+      it('responds to mouse move events', () => {
         TestUtils.SimulateNative.mouseMove(pieNode);
         expect(mouseMoveSpy).to.have.been.called();
       });

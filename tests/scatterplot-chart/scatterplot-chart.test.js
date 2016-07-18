@@ -1,5 +1,5 @@
 /* eslint-env node, mocha */
-/* eslint no-unused-expressions: 0 */
+/* eslint no-unused-expressions: 0, max-len: 0 */
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -75,10 +75,20 @@ describe('ScatterplotChart component', () => {
 
   describe('Instantiating the ScatterplotChart', () => {
     describe('Without required props', () => {
-      it('throws a \'TypeError\'', () => {
+      beforeEach(() => {
+        sinon.stub(console, 'error', (e) => {
+          throw new Error(e);
+        });
+      });
+
+      afterEach(() => {
+        console.error.restore();
+      });
+
+      it('throws an \'Error\'', () => {
         expect(() => {
           TestUtils.renderIntoDocument(<ScatterplotChart />);
-        }).to.throw(TypeError);
+        }).to.throw(Error);
       });
     });
 
@@ -476,14 +486,8 @@ describe('ScatterplotChart component', () => {
     });
 
     it('creates the scatterplot chart', () => {
-      expect(mockNode.setAttribute.calledWith('width', mockW)).to.be.true; // 320
-      expect(mockNode.setAttribute.calledWith('height', mockH)).to.be.true; // 180
       expect(mockRoot.append.calledWith('g')).to.be.true;
-      expect(mockRoot.append.callCount).to.equal(4);
-      expect(mockRoot.attr.calledWith('id', 'area-mock-uid')).to.be.true;
-      expect(mockRoot.attr.calledWith('id', 'axis-x-mock-uid')).to.be.true;
-      expect(mockRoot.attr.calledWith('id', 'axis-y-mock-uid')).to.be.true;
-      expect(mockRoot.attr.calledWith('id', 'dots-mock-uid')).to.be.true;
+      expect(mockRoot.attr.calledWith('id', 'scatterplot-chart-mock-uid')).to.be.true;
     });
   });
 

@@ -1,5 +1,5 @@
 /* eslint-env node, mocha */
-/* eslint no-unused-expressions: 0 */
+/* eslint no-unused-expressions: 0, no-console: 0, max-len: 0 */
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -50,9 +50,6 @@ const mockYValue = () => {};
 
 const mockColors = [];
 
-const mockXDomainRange = [];
-const mockYDomainRange = [];
-
 const mouseOverSpy = chai.spy(() => {});
 const mouseOutSpy = chai.spy(() => {});
 const mouseMoveSpy = chai.spy(() => {});
@@ -73,10 +70,20 @@ describe('AreaChart component', () => {
 
   describe('Instantiating the AreaChart', () => {
     describe('Without required props', () => {
-      it('throws a \'TypeError\'', () => {
+      beforeEach(() => {
+        sinon.stub(console, 'error', (e) => {
+          throw new Error(e);
+        });
+      });
+
+      afterEach(() => {
+        console.error.restore();
+      });
+
+      it('throws an \'Error\'', () => {
         expect(() => {
           TestUtils.renderIntoDocument(<AreaChart />);
-        }).to.throw(TypeError);
+        }).to.throw(Error);
       });
     });
 
@@ -558,6 +565,8 @@ describe('AreaChart component', () => {
       const chart = renderer.getRenderOutput();
       const svg = chart.props.children[1];
       const graph = svg.props.children[0];
+      console.log(graph.props.children[0].props.children[0].type);
+      console.log(graph.props.children[0].props.children[1].type);
 
       it('renders a <div /> container', () => {
         expect(chart.type).to.equal('div');
@@ -569,8 +578,9 @@ describe('AreaChart component', () => {
 
       it('renders the graph', () => {
         expect(graph.props.transform).to.equal('translate(0, 0)');
-        expect(graph.props.children[0].type).to.equal('path');
-        expect(graph.props.children[1].type).to.equal('path');
+        console.log(graph.props.children[0]);
+        expect(graph.props.children[0].props.children[0].type).to.equal('path');
+        expect(graph.props.children[0].props.children[1].type).to.equal('path');
       });
     });
 
@@ -587,7 +597,10 @@ describe('AreaChart component', () => {
       );
       const domRoot = ReactDOM.findDOMNode(chart);
       const svgNode = domRoot.childNodes[1];
-      const dataPointNode = svgNode.childNodes[0].childNodes[2]; // 2 - 4
+      const dataPointNode = svgNode
+        .childNodes[0]
+        .childNodes[1]
+        .childNodes[2]; // 2 - 4
 
       it('responds to click events', () => {
         TestUtils.Simulate.click(dataPointNode);

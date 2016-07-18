@@ -24,6 +24,8 @@ import { createElement } from 'react-faux-dom';
 import { Style } from 'radium';
 import merge from 'lodash.merge';
 
+const dateParser = {};
+
 const colorScale = scale.category20();
 
 export default class BarChart extends React.Component {
@@ -87,25 +89,23 @@ export default class BarChart extends React.Component {
 
   constructor(props) {
     super(props);
-    this.parseDate = parse(props.datePattern);
-    this.uid = getRandomId(); // Math.floor(Math.random() * new Date().getTime());
+    this.uid = getRandomId();
   }
 
   componentDidMount() {
-    const uid = this.uid;
-    const ref = this.refs[uid];
+    const ref = this.refs.barChart;
     createCircularTicks(ref);
   }
 
   componentDidUpdate() {
-    const uid = this.uid;
-    const ref = this.refs[uid];
+    const ref = this.refs.barChart;
     createCircularTicks(ref);
   }
 
   setScaleDomainRange(axesType, domainRange, data, type, length) {
     const dataIndex = axesType === 'x' ? 'x' : 'y';
     const barPadding = (length / data.length) > 40 ? 0.02 : 0.04;
+    const parseDate = (v) => this.parseDate(v);
     let axis;
     switch (type) {
       case 'text':
@@ -120,7 +120,7 @@ export default class BarChart extends React.Component {
         axis
           .domain(
             (domainRange)
-              ? calcDefaultDomain(domainRange, type, this.parseDate)
+              ? calcDefaultDomain(domainRange, type, parseDate)
               : [0, max(data, (d) => d[dataIndex])])
           .range(
             (axesType === 'x')
@@ -133,8 +133,8 @@ export default class BarChart extends React.Component {
         axis
           .domain(
             (domainRange)
-              ? calcDefaultDomain(domainRange, type, this.parseDate)
-              : extent(data, (d) => this.parseDate(d[dataIndex])))
+              ? calcDefaultDomain(domainRange, type, parseDate)
+              : extent(data, (d) => parseDate(d[dataIndex])))
           .range(
             (axesType === 'x')
               ? [0, length]
@@ -193,18 +193,30 @@ export default class BarChart extends React.Component {
         .ticks(xTickNumber);
     }
 
-    root.append('g')
+    const group = root.append('g')
       .attr('class', 'x axis')
-      .attr('transform', `translate(0, ${h})`)
-      .call(axis)
-      .append('text')
-      .attr('class', 'label')
-      .attr('y', m.bottom - 10)
-      .attr('x', yAxisOrientRight ? 0 : w)
-      .style('text-anchor', yAxisOrientRight ? 'start' : 'end')
-      .text(axisLabels.x);
+      .attr('transform', `translate(0, ${h})`);
 
-    return axis;
+    group
+      .call(axis);
+
+    const label = axisLabels.x;
+
+    if (label) {
+      group
+        .append('text')
+        .attr('class', 'label')
+        .attr('x',
+          (yAxisOrientRight)
+            ? 0
+            : w)
+        .attr('y', m.bottom - 10)
+        .style('text-anchor',
+          (yAxisOrientRight)
+            ? 'start'
+            : 'end')
+        .text(label);
+    }
   }
 
   createYAxis({ root, m, w, y }) {
@@ -233,20 +245,32 @@ export default class BarChart extends React.Component {
         .tickPadding(10);
     }
 
-    root.append('g')
-      .attr('class', 'y axis')
-      .call(axis)
-      .attr('transform', yAxisOrientRight ? `translate(${w}, 0)` : 'translate(0, 0)')
-      .append('text')
-      .attr('class', 'label')
-      .attr('transform', 'rotate(-90)')
-      .attr('x', 0)
-      .attr('y', yAxisOrientRight ? -25 + m.right : 10 - m.left)
-      .attr('dy', '.9em')
-      .style('text-anchor', 'end')
-      .text(axisLabels.y);
+    const group = root.append('g')
+      .attr('class', 'y axis');
 
-    return axis;
+    group
+      .call(axis);
+
+    const label = axisLabels.y;
+
+    if (label) {
+      group
+        .attr('transform',
+          (yAxisOrientRight)
+            ? `translate(${w}, 0)`
+            : 'translate(0, 0)')
+        .append('text')
+        .attr('class', 'label')
+        .attr('transform', 'rotate(-90)')
+        .attr('x', 0)
+        .attr('y',
+          (yAxisOrientRight)
+            ? -25 + m.right
+            : 10 - m.left)
+        .attr('dy', '.9em')
+        .style('text-anchor', 'end')
+        .text(label);
+    }
   }
 
   createYAxis2({ root, m, w, h }) {
@@ -267,33 +291,45 @@ export default class BarChart extends React.Component {
         .orient(yAxisOrientRight ? 'left' : 'right');
 
     if (yTickNumber) {
-      axis // is this supposed to be yAxis 1 or yAxis 2? (WAS yAxis 1)
+      axis
         .ticks(yTickNumber);
     }
 
     if (grid) {
-      axis // is this supposed to be yAxis 1 or yAxis 2? (WAS yAxis 1)
+      axis
         .tickSize(-w, 6)
         .tickPadding(12);
     } else {
-      axis // is this supposed to be yAxis 1 or yAxis 2? (WAS yAxis 1)
+      axis
         .tickPadding(10);
     }
 
-    root.append('g')
-        .attr('class', 'y axis')
-        .call(axis)
-        .attr('transform', yAxisOrientRight ? 'translate(0, 0)' : `translate(${w}, 0)`)
+    const group = root.append('g')
+      .attr('class', 'y axis');
+
+    group
+      .call(axis);
+
+    const label = axisLabels.y2;
+
+    if (label) {
+      group
+        .attr('transform',
+          (yAxisOrientRight)
+            ? 'translate(0, 0)'
+            : `translate(${w}, 0)`)
         .append('text')
         .attr('class', 'label')
         .attr('transform', 'rotate(-90)')
         .attr('x', 0)
-        .attr('y', yAxisOrientRight ? 10 - m.left : -25 + m.right)
+        .attr('y',
+          (yAxisOrientRight)
+            ? 10 - m.left
+            : -25 + m.right)
         .attr('dy', '.9em')
         .style('text-anchor', 'end')
-        .text(axisLabels.y2);
-
-    return axis;
+        .text(label);
+    }
   }
 
   createBarChart({ root, h, x, y }) {
@@ -308,36 +344,46 @@ export default class BarChart extends React.Component {
       barWidth
     } = this.props;
 
-    data.forEach(() => {
-      root.selectAll('.bar')
-          .data(data)
-          .enter()
-          .append('rect')
-          .attr('class', 'bar')
-          .style('fill', (d, i) => this.defineColor(i, d, colorBars))
-          .attr('x', (d) => {
-            switch (xType) {
-              case ('time'):
-                return x(this.parseDate(d.x));
-              default:
-                return x(d.x);
-            }
-          })
-          .attr('width', () => {
-            switch (xType) {
-              case ('text'):
-                return x.bandwidth();
-              default:
-                return barWidth;
-            }
-          })
-          .attr('y', (d) => y(d.y))
-          .attr('height', (d) => h - y(d.y))
-          .on('mouseover', (d) => mouseOverHandler(d, lastEvent))
-          .on('mouseout', (d) => mouseOutHandler(d, lastEvent))
-          .on('mousemove', () => mouseMoveHandler(lastEvent))
-          .on('click', (d) => clickHandler(d, lastEvent));
-    });
+    const calculateDate = (v) => this.parseDate(v);
+    const calculateFill = (d, i) => this.defineColor(i, d, colorBars);
+
+    const calculateX = (d) => (
+      (xType === 'time')
+        ? x(calculateDate(d.x))
+        : x(d.x));
+    const calculateY = (d) => y(d.y);
+    const calculateW = () => (
+      (xType === 'text')
+        ? x.bandwidth()
+        : barWidth);
+    const calculateH = (d) => h - y(d.y);
+
+    const mouseover = (d) => mouseOverHandler(d, lastEvent);
+    const mouseout = (d) => mouseOutHandler(d, lastEvent);
+    const mousemove = (d) => mouseMoveHandler(d, lastEvent);
+    const click = (d) => clickHandler(d, lastEvent);
+
+    const group = root
+      .selectAll('rect') // '.bar'
+      .data(data);
+
+    group
+      .enter()
+      .append('rect')
+      .attr('class', 'bar')
+      .style('fill', calculateFill)
+      .attr('x', calculateX)
+      .attr('y', calculateY)
+      .attr('width', calculateW)
+      .attr('height', calculateH)
+      .on('mouseover', mouseover)
+      .on('mouseout', mouseout)
+      .on('mousemove', mousemove)
+      .on('click', click);
+
+    group
+      .exit()
+      .remove();
   }
 
   createLinePath({ root, h, x }) {
@@ -349,10 +395,12 @@ export default class BarChart extends React.Component {
       yDomainRange
     } = this.props;
 
+    const parseDate = (v) => this.parseDate(v);
+
     const y = this.setScaleDomainRange('y', yDomainRange, lineData, y2Type, h);
 
-    const yValue = getValueFunction('y', y2Type, this.parseDate);
-    const xValue = getValueFunction('x', xType, this.parseDate);
+    const yValue = getValueFunction('y', y2Type, parseDate);
+    const xValue = getValueFunction('x', xType, parseDate);
 
     const linePath = svg.line()
       .interpolate(interpolate)
@@ -364,8 +412,6 @@ export default class BarChart extends React.Component {
       .attr('class', 'line')
       .attr('style', 'stroke: red')
       .attr('d', linePath);
-
-    return linePath;
   }
 
   createStyle() {
@@ -394,6 +440,18 @@ export default class BarChart extends React.Component {
     } = this.props;
 
     return (lineData.length > 0);
+  }
+
+  parseDate(v) {
+    const {
+      datePattern
+    } = this.props;
+
+    const datePatternParser = (
+      dateParser[datePattern] || (
+      dateParser[datePattern] = parse(datePattern)));
+
+    return datePatternParser(v);
   }
 
   calculateChartParameters() {
@@ -462,7 +520,7 @@ export default class BarChart extends React.Component {
     } = p;
 
     return (
-      <div ref={uid} className={className}>
+      <div ref="barChart" className={className}>
         {this.createStyle()}
         {node.toReact()}
       </div>

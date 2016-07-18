@@ -20,6 +20,8 @@ import { Style } from 'radium';
 import merge from 'lodash.merge';
 import { timeParse as parse } from 'd3-time-format';
 
+const dateParser = {};
+
 export default class AreaChart extends React.Component {
   static get propTypes() {
     return {
@@ -78,19 +80,16 @@ export default class AreaChart extends React.Component {
 
   constructor(props) {
     super(props);
-    this.parseDate = parse(props.datePattern);
     this.uid = getRandomId();
   }
 
   componentDidMount() {
-    const uid = this.uid;
-    const ref = this.refs[uid];
+    const ref = this.refs.areaChart;
     createCircularTicks(ref);
   }
 
   componentDidUpdate() {
-    const uid = this.uid;
-    const ref = this.refs[uid];
+    const ref = this.refs.areaChart;
     createCircularTicks(ref);
   }
 
@@ -142,10 +141,14 @@ export default class AreaChart extends React.Component {
         .ticks(xTicks);
     }
 
-    root.append('g')
+    const group = root.append('g')
       .attr('class', 'x axis')
-      .attr('transform', `translate(0, ${h})`)
-      .call(axis)
+      .attr('transform', `translate(0, ${h})`);
+
+    group
+      .call(axis);
+
+    group
       .append('text')
       .attr('class', 'label')
       .attr('x', yAxisOrientRight ? 0 : w)
@@ -250,16 +253,19 @@ export default class AreaChart extends React.Component {
 
     const uid = this.uid;
 
+    const group = root.append('g')
+      .attr('class', 'areaChart');
+
     data.forEach((lineItem, i) => {
       const color = colors[i];
 
-      root.append('path')
+      group.append('path')
         .datum(lineItem)
         .attr('class', 'area')
         .style('fill', noAreaGradient ? color : `url(#gradient-${i}-${uid})`)
         .attr('d', areaPath);
 
-      root.append('path')
+      group.append('path')
         .datum(lineItem)
         .attr('class', 'line')
         .attr('style', `stroke: ${color}`)
@@ -278,33 +284,51 @@ export default class AreaChart extends React.Component {
       clickHandler
     } = this.props;
 
+    /*
+     * We don't really need to do this, but it
+     * avoids obscure "this" below
+     */
+    const calculateDate = (v) => this.parseDate(v);
+
+    const group = root.append('g')
+      .attr('class', 'dataPoints');
+
     data.forEach((lineItem, i) => {
+      const color = colors[i];
+
       lineItem.forEach((dataPoint) => {
-        root.append('circle')
+        /*
+         * Creating the calculation functions
+         */
+        const calculateCX = () => (
+          (xType === 'time')
+            ? x(calculateDate(dataPoint.x))
+            : x(dataPoint.x));
+
+        const calculateCY = () => (
+          (yType === 'time')
+            ? y(calculateDate(dataPoint.y))
+            : y(dataPoint.y));
+
+        const mouseover = () => mouseOverHandler(dataPoint, lastEvent);
+        const mouseout = () => mouseOutHandler(dataPoint, lastEvent);
+        const mousemove = () => mouseMoveHandler(dataPoint, lastEvent);
+        const click = () => clickHandler(dataPoint, lastEvent);
+
+        /*
+         * Applying the calculation functions
+         */
+        group.append('circle')
           .attr('class', 'data-point')
           .style('strokeWidth', '2px')
-          .style('stroke', colors[i])
+          .style('stroke', color)
           .style('fill', 'white')
-          .attr('cx', () => {
-            switch (xType) {
-              case ('time'):
-                return x(this.parseDate(dataPoint.x));
-              default:
-                return x(dataPoint.x);
-            }
-          })
-          .attr('cy', () => {
-            switch (yType) {
-              case ('time'):
-                return y(this.parseDate(dataPoint.y));
-              default:
-                return y(dataPoint.y);
-            }
-          })
-          .on('mouseover', () => mouseOverHandler(dataPoint, lastEvent))
-          .on('mouseout', () => mouseOutHandler(dataPoint, lastEvent))
-          .on('mousemove', () => mouseMoveHandler(lastEvent))
-          .on('click', () => clickHandler(dataPoint, lastEvent));
+          .attr('cx', calculateCX)
+          .attr('cy', calculateCY)
+          .on('mouseover', mouseover)
+          .on('mouseout', mouseout)
+          .on('mousemove', mousemove)
+          .on('click', click);
       });
     });
   }
@@ -330,6 +354,18 @@ export default class AreaChart extends React.Component {
     );
   }
 
+  parseDate(v) {
+    const {
+      datePattern
+    } = this.props;
+
+    const datePatternParser = (
+      dateParser[datePattern] || (
+      dateParser[datePattern] = parse(datePattern)));
+
+    return datePatternParser(v);
+  }
+
   calculateChartParameters() {
     const {
       data,
@@ -345,15 +381,20 @@ export default class AreaChart extends React.Component {
       height
     } = this.props;
 
+    /*
+     * We could "bind" but this is neater
+     */
+    const parseDate = (v) => this.parseDate(v);
+
     const m = calcMargin(axes, margin, yAxisOrientRight);
     const w = reduce(width, m.left, m.right);
     const h = reduce(height, m.top, m.bottom);
 
-    const x = setLineDomainAndRange('x', xDomainRange, data, xType, w, this.parseDate);
-    const y = setLineDomainAndRange('y', yDomainRange, data, yType, h, this.parseDate);
+    const x = setLineDomainAndRange('x', xDomainRange, data, xType, w, parseDate);
+    const y = setLineDomainAndRange('y', yDomainRange, data, yType, h, parseDate);
 
-    const xValue = getValueFunction('x', xType, this.parseDate);
-    const yValue = getValueFunction('y', yType, this.parseDate);
+    const xValue = getValueFunction('x', xType, parseDate);
+    const yValue = getValueFunction('y', yType, parseDate);
 
     const colors = areaColors.concat(defaultColors);
 
@@ -407,7 +448,7 @@ export default class AreaChart extends React.Component {
     } = p;
 
     return (
-      <div ref={uid} className={className}>
+      <div ref="areaChart" className={className}>
         {this.createStyle()}
         {node.toReact()}
       </div>
