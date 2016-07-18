@@ -12,10 +12,10 @@ import {
   calcMargin,
   getValueFunction,
   setLineDomainAndRange,
-  defaultStyle,
+  defaultColors,
+  defaultStyles,
   getAxisStyles,
-  createCircularTicks,
-  rmaColorPalet as defaultColors
+  createCircularTicks
 } from '../shared';
 import { Style } from 'radium';
 import merge from 'lodash.merge';
@@ -305,7 +305,7 @@ export default class LineChart extends React.Component {
     const uid = this.uid;
     const scope = `.line-chart-${uid}`;
     const axisStyles = getAxisStyles(grid, verticalGrid, yAxisOrientRight);
-    const rules = merge({}, defaultStyle, style, axisStyles);
+    const rules = merge({}, defaultStyles, style, axisStyles);
 
     return (
       <Style

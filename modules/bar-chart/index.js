@@ -13,10 +13,10 @@ import {
   reduce,
   calcMargin,
   calcDefaultDomain,
-  defaultStyle,
-  createCircularTicks,
+  defaultStyles,
   getAxisStyles,
-  getValueFunction
+  getValueFunction,
+  createCircularTicks
 } from '../shared';
 import { extent } from 'd3-array';
 import { timeParse as parse } from 'd3-time-format';
@@ -424,7 +424,7 @@ export default class BarChart extends React.Component {
     const uid = this.uid;
     const scope = `.bar-chart-${uid}`;
     const axisStyles = getAxisStyles(grid, false, yAxisOrientRight);
-    const rules = merge({}, defaultStyle, style, axisStyles);
+    const rules = merge({}, defaultStyles, style, axisStyles);
 
     return (
       <Style

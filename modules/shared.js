@@ -2,18 +2,23 @@ import { extent } from 'd3-array';
 import { scaleLinear as linear, scalePoint as point } from 'd3-scale';
 import { time, select } from 'd3';
 
-export const rmaColorPalet = ['#3F4C55', '#E3A51A', '#F4E956', '#AAAC84'];
+export const defaultColors = [
+  '#3F4C55',
+  '#E3A51A',
+  '#F4E956',
+  '#AAAC84'
+];
 
-export const defaultStyle = {
-  '.pie_chart_lines': {
+export const defaultStyles = {
+  '.pie-chart-slice': {
     stroke: '#fff',
     strokeWidth: 1,
     opacity: '1'
   },
-  '.pie_chart_lines:hover': {
+  '.pie-chart-slice:hover': {
     opacity: '0.8'
   },
-  '.pie_chart_text': {
+  '.pie-chart-label': {
     fontFamily: 'sans-serif',
     fontSize: '12px',
     textAnchor: 'middle',
@@ -21,7 +26,7 @@ export const defaultStyle = {
   },
   '.bar': {
     fill: 'blue',
-    transition: 'height 0.5s ease-in, y 0.5s ease-in',
+    transition: 'height 0.5s ease-in, width 0.5s ease-in, x 0.5s ease-in, y 0.5s ease-in',
     opacity: 1
   },
   '.bar:hover': {
@@ -43,14 +48,16 @@ export const defaultStyle = {
   },
   '.dot': {
     strokeWidth: 0,
-    opacity: 0.85
+    opacity: 0.85,
+    transition: 'r 0.5s ease-in, cx 0.5s ease-in, cy 0.5s ease-in'
   },
   '.dot:hover': {
     opacity: 1
   },
   'circle.data-point': {
     r: 4,
-    opacity: 0.7
+    opacity: 0.7,
+    transition: 'cx 0.5s ease-in, cy 0.5s ease-in'
   },
   'circle.data-point:hover': {
     r: 6,
@@ -70,7 +77,7 @@ export const defaultStyle = {
   '.axis .label': {
     font: '14px arial'
   },
-  '.axis path,.axis line': {
+  '.axis path, .axis line': {
     fill: 'none',
     strokeWidth: 1,
     'shape-rendering': 'crispEdges'
