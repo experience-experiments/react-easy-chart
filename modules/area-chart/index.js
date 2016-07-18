@@ -6,10 +6,10 @@ import {
   getValueFunction,
   calcMargin,
   setLineDomainAndRange,
-  defaultStyle,
+  defaultColors,
+  defaultStyles,
   getAxisStyles,
-  createCircularTicks,
-  rmaColorPalet as defaultColors
+  createCircularTicks
 } from '../shared';
 import {
   event as lastEvent,
@@ -221,7 +221,7 @@ export default class AreaChart extends React.Component {
         .attr('y1', '40%')
         .attr('y2', '100%');
 
-      defaultStyle[`.dot${i}`] = { fill: color };
+      defaultStyles[`.dot${i}`] = { fill: color };
 
       gradient.append('stop')
           .attr('offset', '0%')
@@ -344,7 +344,7 @@ export default class AreaChart extends React.Component {
     const uid = this.uid;
     const scope = `.area-chart-${uid}`;
     const axisStyles = getAxisStyles(grid, verticalGrid, yAxisOrientRight);
-    const rules = merge({}, defaultStyle, style, axisStyles);
+    const rules = merge({}, defaultStyles, style, axisStyles);
 
     return (
       <Style

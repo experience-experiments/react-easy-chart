@@ -20,7 +20,7 @@ import merge from 'lodash.merge';
 import {
   getRandomId,
   calcDefaultDomain,
-  defaultStyle,
+  defaultStyles,
   getAxisStyles,
   createCircularTicks
 } from '../../shared';
@@ -335,7 +335,8 @@ export default class ScatterplotChart extends React.Component {
       axisLabels
     } = this.props;
 
-    const group = root.append('g')
+    const group = root
+      .append('g')
       .attr('class', 'x axis')
       .attr('transform', `translate(0, ${innerH})`);
 
@@ -460,7 +461,7 @@ export default class ScatterplotChart extends React.Component {
     const uid = this.uid;
     const scope = `.scatterplot-chart-${uid}`;
     const axisStyles = getAxisStyles(grid, verticalGrid, yAxisOrientRight);
-    const rules = merge({}, defaultStyle, style, axisStyles);
+    const rules = merge({}, defaultStyles, style, axisStyles);
 
     return (
       <Style

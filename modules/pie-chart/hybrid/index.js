@@ -10,7 +10,7 @@ import {
 } from 'd3';
 import {
   getRandomId,
-  defaultStyle
+  defaultStyles
 } from '../../shared';
 import { createElement } from 'react-faux-dom';
 import { Style } from 'radium';
@@ -157,7 +157,7 @@ export default class PieChart extends React.Component {
       .enter()
       .append('text')
       .attr('dy', '.35em')
-      .attr('class', 'pie_chart_text')
+      .attr('class', 'pie-chart-label')
       .attr('transform', (d) => {
         const [labelX, labelY] = this.getLabelArc().centroid(d);
         return `translate(${labelX}, ${labelY})`;
@@ -180,7 +180,7 @@ export default class PieChart extends React.Component {
     path
       .enter()
       .append('path')
-      .attr('class', 'pie_chart_lines')
+      .attr('class', 'pie-chart-slice')
       .attr('fill', getSliceFill)
       .attr('d', this.getSliceArc())
       .on('mouseover', (d) => mouseOverHandler(d, lastEvent))
@@ -238,7 +238,7 @@ export default class PieChart extends React.Component {
       path
         .enter()
         .append('path')
-        .attr('class', 'pie_chart_lines')
+        .attr('class', 'pie-chart-slice')
         .attr('fill', getSliceFill)
         .on('mouseover', (d) => mouseOverHandler(d, lastEvent))
         .on('mouseout', (d) => mouseOutHandler(d, lastEvent))
@@ -292,7 +292,7 @@ export default class PieChart extends React.Component {
         .enter()
         .append('text')
         .attr('dy', '.35em')
-        .attr('class', 'pie_chart_text')
+        .attr('class', 'pie-chart-label')
         .attr('transform', getLabelArcTransform)
         .text(getLabelText)
         .each((d, i) => currentLabels.splice(i, 1, d))
@@ -349,7 +349,7 @@ export default class PieChart extends React.Component {
 
     const uid = this.uid;
     const scope = `.pie-chart-${uid}`;
-    const rules = merge({}, defaultStyle, styles);
+    const rules = merge({}, defaultStyles, styles);
 
     return (
       <Style
