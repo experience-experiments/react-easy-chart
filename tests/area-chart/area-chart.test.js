@@ -622,9 +622,7 @@ describe('AreaChart component', () => {
 
       const chart = renderer.getRenderOutput();
       const svg = chart.props.children[1];
-      const graph = svg.props.children[0];
-      console.log(graph.props.children[0].props.children[0].type);
-      console.log(graph.props.children[0].props.children[1].type);
+      const group = svg.props.children[0];
 
       it('renders a <div /> container', () => {
         expect(chart.type).to.equal('div');
@@ -634,11 +632,10 @@ describe('AreaChart component', () => {
         expect(svg.type).to.equal('svg');
       });
 
-      it('renders the graph', () => {
-        expect(graph.props.transform).to.equal('translate(0, 0)');
-        console.log(graph.props.children[0]);
-        expect(graph.props.children[0].props.children[0].type).to.equal('path');
-        expect(graph.props.children[0].props.children[1].type).to.equal('path');
+      it('renders the group', () => {
+        expect(group.props.transform).to.equal('translate(0, 0)');
+        expect(group.props.children[0].props.children[0].type).to.equal('path');
+        expect(group.props.children[0].props.children[1].type).to.equal('path');
       });
     });
 

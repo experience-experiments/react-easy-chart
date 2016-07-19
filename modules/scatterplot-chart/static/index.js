@@ -18,8 +18,8 @@ import { createElement } from 'react-faux-dom';
 import { Style } from 'radium';
 import merge from 'lodash.merge';
 import {
-  getRandomId,
-  calcDefaultDomain,
+  createUniqueID,
+  calculateDomainRange,
   defaultStyles,
   getAxisStyles,
   createCircularTicks
@@ -91,7 +91,7 @@ export default class ScatterplotChart extends React.Component {
 
   constructor(props) {
     super(props);
-    this.uid = getRandomId();
+    this.uid = createUniqueID();
   }
 
   componentDidMount() {
@@ -115,9 +115,9 @@ export default class ScatterplotChart extends React.Component {
     }
   }
 
-  setDomainAndRange(axesType, domainRange, data, type, length, yAxisOrientRight) {
+  createDomainRangeGenerator(axisType, domainRange, data, type, length, yAxisOrientRight) {
     const dataIndex =
-      (axesType === 'x')
+      (axisType === 'x')
         ? 'x'
         : 'y';
 
@@ -141,7 +141,7 @@ export default class ScatterplotChart extends React.Component {
         maxAmount = max(data, (d) => d[dataIndex]);
         if (domainRange) {
           axis
-            .domain(calcDefaultDomain(domainRange, type, parseDate));
+            .domain(domainRange); // calculateDomainRange(domainRange, type, parseDate));
         } else {
           // set initial domain
           axis
@@ -150,12 +150,12 @@ export default class ScatterplotChart extends React.Component {
           const ticks = axis.ticks();
 
           minAmount =
-            (yAxisOrientRight && axesType === 'x')
+            (yAxisOrientRight && axisType === 'x')
               ? minAmount
               : minAmount - (ticks[1] - ticks[0]);
 
           maxAmount =
-            (yAxisOrientRight && axesType === 'x')
+            (yAxisOrientRight && axisType === 'x')
               ? maxAmount + (ticks[1] - ticks[0])
               : maxAmount;
 
@@ -164,7 +164,7 @@ export default class ScatterplotChart extends React.Component {
         }
         axis
           .range(
-            (axesType === 'x')
+            (axisType === 'x')
               ? [0, length]
               : [length, 0]);
         break;
@@ -173,10 +173,10 @@ export default class ScatterplotChart extends React.Component {
         axis
           .domain(
             (domainRange)
-              ? calcDefaultDomain(domainRange)
+              ? calculateDomainRange(domainRange)
               : extent(data, (d) => parseDate(d[dataIndex])))
           .range(
-            (axesType === 'x')
+            (axisType === 'x')
               ? [0, length]
               : [length, 0]);
         break;
@@ -197,7 +197,9 @@ export default class ScatterplotChart extends React.Component {
 
   getFill(data) {
     const configItem = this.getDataConfig(data.type);
-    return typeof configItem !== 'undefined' ? configItem.color : color(data.type);
+    return (configItem)
+      ? configItem.color
+      : color(data.type);
   }
 
   getRadius(data, dataItem, dotRadius) {
@@ -216,21 +218,20 @@ export default class ScatterplotChart extends React.Component {
 
   getStroke(data) {
     const configItem = this.getDataConfig(data.type);
-    return typeof configItem !== 'undefined' ? configItem.stroke : 'none';
+    return (configItem)
+      ? configItem.stroke
+      : 'none'; // typeof configItem !== 'undefined' ? configItem.stroke : 'none';
   }
 
-  calcMargin(axes, spacer, yAxisOrientRight) {
-    let defaultMargins =
-      (axes)
-        ? { top: 24, right: 24, bottom: 24, left: 48 }
-        : { top: spacer, right: spacer, bottom: spacer, left: spacer };
+  calculateMargin(axes, spacer, yAxisOrientRight) {
     if (yAxisOrientRight) {
-      defaultMargins =
-        (axes)
-          ? { top: 24, right: 48, bottom: 24, left: 24 }
-          : { top: spacer, right: spacer, bottom: spacer, left: spacer };
+      return (axes)
+        ? { top: 24, right: 48, bottom: 24, left: 24 }
+        : { top: spacer, right: spacer, bottom: spacer, left: spacer };
     }
-    return defaultMargins;
+    return (axes)
+      ? { top: 24, right: 24, bottom: 24, left: 48 }
+      : { top: spacer, right: spacer, bottom: spacer, left: spacer };
   }
 
   calculateInnerW(w, m) {
@@ -296,7 +297,10 @@ export default class ScatterplotChart extends React.Component {
 
     const axis = svg.axis()
       .scale(y)
-      .orient(yAxisOrientRight ? 'right' : 'left');
+      .orient(
+        (yAxisOrientRight)
+          ? 'right'
+          : 'left');
 
     if (grid) {
       axis
@@ -499,29 +503,24 @@ export default class ScatterplotChart extends React.Component {
     } = this.props;
 
     /*
-     * We could "bind" but this is neater
+     * We could "bind"!
      */
     const parseDate = (v) => this.parseDate(v);
 
-    const m = margin || this.calcMargin(axes, dotRadius * 2, yAxisOrientRight);
+    const m = margin || this.calculateMargin(axes, dotRadius * 2, yAxisOrientRight);
     const w = width;
     const h = height + (dotRadius * 3);
 
     const innerW = this.calculateInnerW(width, m);
     const innerH = this.calculateInnerH(height, m);
 
-    const defaultXDomain =
-      (xDomainRange)
-        ? calcDefaultDomain(xDomainRange, xType, parseDate)
-        : null;
+    const defaultXDomainRange = calculateDomainRange(xDomainRange, xType, parseDate);
+    const defaultYDomainRange = calculateDomainRange(yDomainRange, yType, parseDate);
 
-    const defaultYDomain =
-      (yDomainRange)
-        ? calcDefaultDomain(yDomainRange, yType, parseDate)
-        : null;
-
-    const x = this.setDomainAndRange('x', defaultXDomain, data, xType, innerW, yAxisOrientRight);
-    const y = this.setDomainAndRange('y', defaultYDomain, data, yType, innerH, yAxisOrientRight);
+    const x = this.createDomainRangeGenerator(
+      'x', defaultXDomainRange, data, xType, innerW, yAxisOrientRight);
+    const y = this.createDomainRangeGenerator(
+      'y', defaultYDomainRange, data, yType, innerH, yAxisOrientRight);
 
     const xAxis = this.calculateXAxis({ m, h, x, innerW });
     const yAxis = this.calculateYAxis({ m, y, innerW });

@@ -361,7 +361,7 @@ describe('BarChart component', () => {
         />
       );
       sinon.stub(chart, 'hasLineData').returns(true);
-      stub = sinon.stub(chart, 'setScaleDomainRange');
+      stub = sinon.stub(chart, 'createDomainRangeGenerator');
       stub.withArgs('x').returns(mockX);
       stub.withArgs('y').returns(mockY);
       sinon.stub(chart, 'createSvgNode').returns(mockNode);
@@ -371,7 +371,7 @@ describe('BarChart component', () => {
 
     afterEach(() => {
       chart.hasLineData.restore();
-      chart.setScaleDomainRange.restore();
+      chart.createDomainRangeGenerator.restore();
       chart.createSvgNode.restore();
       chart.createSvgRoot.restore();
     });
@@ -675,7 +675,7 @@ describe('BarChart component', () => {
           yDomainRange={mockYDomainRange}
         />
       );
-      sinon.spy(chart, 'setScaleDomainRange');
+      sinon.spy(chart, 'createDomainRangeGenerator');
       chart.createLinePath(p);
     });
 
@@ -683,11 +683,11 @@ describe('BarChart component', () => {
       mockRoot.append.restore();
       mockRoot.datum.restore();
       mockRoot.attr.restore();
-      chart.setScaleDomainRange.restore();
+      chart.createDomainRangeGenerator.restore();
     });
 
     it('sets the scale, domain and range of the y axis', () => {
-      expect(chart.setScaleDomainRange
+      expect(chart.createDomainRangeGenerator
         .calledWith('y', mockYDomainRange, mockLineData, mockY2Type, mockH)
       ).to.be.true;
     });
@@ -712,7 +712,7 @@ describe('BarChart component', () => {
 
       const chart = renderer.getRenderOutput();
       const svg = chart.props.children[1];
-      const graph = svg.props.children[0];
+      const group = svg.props.children[0];
 
       it('renders a <div /> container', () => {
         expect(chart.type).to.equal('div');
@@ -722,11 +722,11 @@ describe('BarChart component', () => {
         expect(svg.type).to.equal('svg');
       });
 
-      it('renders the graph', () => {
-        expect(graph.props.transform).to.equal('translate(0, 0)');
-        expect(graph.props.children[0].type).to.equal('rect');
-        expect(graph.props.children[1].type).to.equal('rect');
-        expect(graph.props.children[2].type).to.equal('rect');
+      it('renders the group', () => {
+        expect(group.props.transform).to.equal('translate(0, 0)');
+        expect(group.props.children[0].type).to.equal('rect');
+        expect(group.props.children[1].type).to.equal('rect');
+        expect(group.props.children[2].type).to.equal('rect');
       });
     });
 

@@ -26,7 +26,7 @@ export const defaultStyles = {
   },
   '.bar': {
     fill: 'blue',
-    transition: 'height 0.5s ease-in, width 0.5s ease-in, x 0.5s ease-in, y 0.5s ease-in',
+    transition: 'x 0.35s ease-in, y 0.35s ease-in, height 0.5s ease-in, width 0.5s ease-in',
     opacity: 1
   },
   '.bar:hover': {
@@ -49,7 +49,7 @@ export const defaultStyles = {
   '.dot': {
     strokeWidth: 0,
     opacity: 0.85,
-    transition: 'r 0.5s ease-in, cx 0.5s ease-in, cy 0.5s ease-in'
+    transition: 'cx 0.35s ease-in, cy 0.35s ease-in, r 0.5s ease-in'
   },
   '.dot:hover': {
     opacity: 1
@@ -57,7 +57,7 @@ export const defaultStyles = {
   'circle.data-point': {
     r: 4,
     opacity: 0.7,
-    transition: 'cx 0.5s ease-in, cy 0.5s ease-in'
+    transition: 'cx 0.35s ease-in, cy 0.35s ease-in'
   },
   'circle.data-point:hover': {
     r: 6,
@@ -101,13 +101,13 @@ export function reduce(...args) {
   return rVal;
 }
 
-export function getValueFunction(scale, type, dateParser) {
+export function createValueGenerator(scale, type, parseDate) {
   const dataIndex =
     (scale === 'x')
       ? 'x'
       : 'y';
-  return (type === time)
-    ? (d) => dateParser(d[dataIndex])
+  return (type === 'time')
+    ? (d) => parseDate(d[dataIndex])
     : (d) => d[dataIndex];
 }
 
@@ -123,8 +123,8 @@ export function createCircularTicks(containerElement) {
 
   function circleAppender() {
     select(this)
-    .append('circle')
-    .attr('class', 'tick-circle');
+      .append('circle')
+      .attr('class', 'tick-circle');
   }
   ticks.each(circleAppender);
 }
@@ -132,72 +132,88 @@ export function createCircularTicks(containerElement) {
 export function getAxisStyles(grid, verticalGrid, yAxisOrientRight) {
   return {
     '.x circle.tick-circle ': {
-      fill: verticalGrid ? 'none' : 'lightgrey'
+      fill:
+        (verticalGrid)
+          ? 'none'
+          : 'lightgrey'
     },
     '.y circle.tick-circle': {
-      cx: yAxisOrientRight ? '+5px' : '-8px',
-      fill: grid ? 'none' : 'lightgrey'
+      cx:
+        (yAxisOrientRight)
+          ? '+5px'
+          : '-8px',
+      fill:
+        (grid)
+          ? 'none'
+          : 'lightgrey'
     },
     '.y.axis line': {
-      display: grid ? 'inline' : 'none',
+      display:
+        (grid)
+          ? 'inline'
+          : 'none',
       stroke: 'lightgrey'
     }
   };
 }
 
-export function getRandomId() {
+export function createUniqueID() {
   return Math.floor(Math.random() * new Date().getTime());
 }
 
-export function calcMargin(axes, margin, yAxisOrientRight, y2) {
+export function calculateMargin(axes, margin, yAxisOrientRight, y2) {
   if (margin) return margin;
   if (yAxisOrientRight) {
     return (axes)
       ? { top: 20, right: 50, bottom: 50, left: (y2) ? 50 : 20 }
       : { top: 0, right: 0, bottom: 0, left: 0 };
-  } else {
-    return (axes)
-      ? { top: 20, right: (y2) ? 50 : 20, bottom: 50, left: 50 }
-      : { top: 0, right: 0, bottom: 0, left: 0 };
   }
+  return (axes)
+    ? { top: 20, right: (y2) ? 50 : 20, bottom: 50, left: 50 }
+    : { top: 0, right: 0, bottom: 0, left: 0 };
 }
 
-export function findLargestExtent(data, valueFunction) {
+export function calculateExtent(data, valueGenerator) {
   let lo; // Low
   let hi; // High
-  data.forEach((dataElement) => {
-    const domainRange = extent(dataElement, valueFunction);
-    const LO = domainRange[0];
-    const HI = domainRange[1];
+  data.forEach((item) => {
+    const domainRange = extent(item, valueGenerator);
+    const [LO, HI] = domainRange;
     lo = lo < LO ? lo : LO;
     hi = hi > HI ? hi : HI;
   });
   return [lo, hi];
 }
 
-export function calcDefaultDomain(domainRange, type, dateParser) {
-  if (domainRange) {
-    return (type === 'time')
-      ? (() => {
-        const lo = dateParser(domainRange[0]);
-        const hi = dateParser(domainRange[1]);
-        return [lo, hi]
-      })()
-      : domainRange;
-  }
-  return null;
+function timeDomainRange(domainRange, parseDate) {
+  const [LO, HI] = domainRange;
+  const lo = parseDate(LO);
+  const hi = parseDate(HI);
+  return [lo, hi];
 }
 
-export function setLineDomainAndRange(scale, domainRange, data, type, length, parseDate) {
-  const dataIndex = scale === 'x' ? 'x' : 'y';
+export function calculateDomainRange(domainRange, type, parseDate) {
+  if (!Array.isArray(domainRange)) return null;
+  return (type === 'time')
+    ? timeDomainRange(domainRange, parseDate)
+    : domainRange;
+}
+
+export function createDomainRangeGenerator(scale, domainRange, data, type, length, parseDate) {
+  const dataIndex =
+    (scale === 'x')
+      ? 'x'
+      : 'y';
+
   let axis;
+
   switch (type) {
     case 'text':
       axis = point();
       axis
         .domain(
-          (domainRange)
-            ? calcDefaultDomain(domainRange, type, parseDate)
+          Array.isArray(domainRange)
+            ? domainRange // calculateDomainRange(domainRange, type, parseDate)
             : data[0].map((d) => d[dataIndex]))
           .range([0, length])
           .padding(0);
@@ -206,9 +222,9 @@ export function setLineDomainAndRange(scale, domainRange, data, type, length, pa
       axis = linear();
       axis
         .domain(
-          (domainRange)
-            ? calcDefaultDomain(domainRange, type, parseDate)
-            : findLargestExtent(data, getValueFunction(scale, type, parseDate)))
+          Array.isArray(domainRange)
+            ? domainRange // calculateDomainRange(domainRange, type, parseDate)
+            : calculateExtent(data, createValueGenerator(scale, type, parseDate)))
         .range(
           (scale === 'x')
             ? [0, length]
@@ -218,9 +234,9 @@ export function setLineDomainAndRange(scale, domainRange, data, type, length, pa
       axis = time.scale();
       axis
         .domain(
-          (domainRange)
-            ? calcDefaultDomain(domainRange, type, parseDate)
-            : findLargestExtent(data, getValueFunction(scale, type, parseDate)))
+          Array.isArray(domainRange)
+            ? timeDomainRange(domainRange, parseDate)
+            : calculateExtent(data, createValueGenerator(scale, type, parseDate)))
         .range(
           (scale === 'x')
             ? [0, length]

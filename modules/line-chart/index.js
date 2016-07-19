@@ -7,11 +7,11 @@ import {
   time
 } from 'd3';
 import {
-  getRandomId,
+  createUniqueID,
   reduce,
-  calcMargin,
-  getValueFunction,
-  setLineDomainAndRange,
+  calculateMargin,
+  createValueGenerator,
+  createDomainRangeGenerator,
   defaultColors,
   defaultStyles,
   getAxisStyles,
@@ -80,7 +80,7 @@ export default class LineChart extends React.Component {
 
   constructor(props) {
     super(props);
-    this.uid = getRandomId();
+    this.uid = createUniqueID();
   }
 
   componentDidMount() {
@@ -141,7 +141,8 @@ export default class LineChart extends React.Component {
       axis.ticks(xTicks);
     }
 
-    const group = root.append('g')
+    const group = root
+      .append('g')
       .attr('class', 'x axis')
       .attr('transform', `translate(0, ${h})`);
 
@@ -153,7 +154,10 @@ export default class LineChart extends React.Component {
       .attr('class', 'label')
       .attr('y', m.bottom - 10)
       .attr('x', yAxisOrientRight ? 0 : w)
-      .style('text-anchor', yAxisOrientRight ? 'start' : 'end')
+      .style('text-anchor',
+        (yAxisOrientRight)
+          ? 'start'
+          : 'end')
       .text(axisLabels.x);
   }
 
@@ -188,7 +192,8 @@ export default class LineChart extends React.Component {
       axis.ticks(yTicks);
     }
 
-    const group = root.append('g')
+    const group = root
+      .append('g')
       .attr('class', 'y axis')
       .attr('transform',
         (yAxisOrientRight)
@@ -223,7 +228,8 @@ export default class LineChart extends React.Component {
       .x((d) => x(xValue(d)))
       .y((d) => y(yValue(d)));
 
-    const group = root.append('g')
+    const group = root
+      .append('g')
       .attr('class', 'lineChart');
 
     data.forEach((lineItem, i) => {
@@ -253,7 +259,8 @@ export default class LineChart extends React.Component {
      */
     const calculateDate = (v) => this.parseDate(v);
 
-    const group = root.append('g')
+    const group = root
+      .append('g')
       .attr('class', 'dataPoints');
 
     data.forEach((lineItem, i) => {
@@ -343,19 +350,19 @@ export default class LineChart extends React.Component {
     } = this.props;
 
     /*
-     * We could "bind" but this is neater
+     * We could "bind"!
      */
     const parseDate = (v) => this.parseDate(v);
 
-    const m = calcMargin(axes, margin, yAxisOrientRight);
+    const m = calculateMargin(axes, margin, yAxisOrientRight);
     const w = reduce(width, m.left, m.right);
     const h = reduce(height, m.top, m.bottom);
 
-    const x = setLineDomainAndRange('x', xDomainRange, data, xType, w, parseDate);
-    const y = setLineDomainAndRange('y', yDomainRange, data, yType, h, parseDate);
+    const x = createDomainRangeGenerator('x', xDomainRange, data, xType, w, parseDate);
+    const y = createDomainRangeGenerator('y', yDomainRange, data, yType, h, parseDate);
 
-    const xValue = getValueFunction('x', xType, parseDate);
-    const yValue = getValueFunction('y', yType, parseDate);
+    const xValue = createValueGenerator('x', xType, parseDate);
+    const yValue = createValueGenerator('y', yType, parseDate);
 
     const colors = lineColors.concat(defaultColors);
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { Style } from 'radium';
 import { scale } from 'd3';
 import {
-  getRandomId
+  createUniqueID
 } from '../shared';
 import merge from 'lodash.merge';
 
@@ -31,7 +31,7 @@ export default class Legend extends React.Component {
 
   constructor(props) {
     super(props);
-    this.uid = getRandomId(); // Math.floor(Math.random() * new Date().getTime());
+    this.uid = createUniqueID(); // Math.floor(Math.random() * new Date().getTime());
   }
 
   getBackgroundColor(index) {
