@@ -310,7 +310,7 @@ describe('ScatterplotChart component', () => {
           data={mockData}
         />
       );
-      stub = sinon.stub(chart, 'setDomainAndRange');
+      stub = sinon.stub(chart, 'createDomainRangeGenerator');
       stub.withArgs('x').returns(mockX);
       stub.withArgs('y').returns(mockY);
       p = chart.calculateChartParameters();
@@ -319,7 +319,7 @@ describe('ScatterplotChart component', () => {
     });
 
     afterEach(() => {
-      chart.setDomainAndRange.restore();
+      chart.createDomainRangeGenerator.restore();
     });
 
     it('sets the scale, domain and range of the x axis', () => {
@@ -515,11 +515,11 @@ describe('ScatterplotChart component', () => {
       sinon.spy(mockRoot, 'attr');
 
       const chart = TestUtils.renderIntoDocument(
-          <ScatterplotChart
-            data={mockData}
-            axisLabels={mockAxisLabels}
-          />
-        );
+        <ScatterplotChart
+          data={mockData}
+          axisLabels={mockAxisLabels}
+        />
+      );
       chart.uid = 'mock-uid';
       chart.createScatterplotChart(p);
     });
@@ -546,7 +546,7 @@ describe('ScatterplotChart component', () => {
 
       const chart = renderer.getRenderOutput();
       const svg = chart.props.children[1];
-      const graph = svg.props.children[0];
+      const group = svg.props.children[0];
 
       it('renders a <div /> container', () => {
         expect(chart.type).to.equal('div');
@@ -556,11 +556,8 @@ describe('ScatterplotChart component', () => {
         expect(svg.type).to.equal('svg');
       });
 
-      xit('renders the graph', () => {
-        expect(graph.props.transform).to.equal('translate(10, 10)');
-        expect(graph.props.children[0].type).to.equal('rect');
-        expect(graph.props.children[1].type).to.equal('rect');
-        expect(graph.props.children[2].type).to.equal('rect');
+      it('renders the group', () => {
+        expect(group.props.transform).to.equal('translate(10, 10)');
       });
     });
 

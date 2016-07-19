@@ -9,7 +9,7 @@ import {
   interpolate
 } from 'd3';
 import {
-  getRandomId,
+  createUniqueID,
   defaultStyles
 } from '../../shared';
 import { createElement } from 'react-faux-dom';
@@ -60,7 +60,7 @@ export default class PieChart extends React.Component {
 
   constructor(props) {
     super(props);
-    this.uid = getRandomId(); // Math.floor(Math.random() * new Date().getTime());
+    this.uid = createUniqueID(); 
     this.currentSlices = [];
     this.currentLabels = [];
     this.tweenSlice = (slice, index) => {

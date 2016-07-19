@@ -1,11 +1,11 @@
 import React from 'react';
 import { createElement } from 'react-faux-dom';
 import {
-  getRandomId,
+  createUniqueID,
   reduce,
-  getValueFunction,
-  calcMargin,
-  setLineDomainAndRange,
+  createValueGenerator,
+  calculateMargin,
+  createDomainRangeGenerator,
   defaultColors,
   defaultStyles,
   getAxisStyles,
@@ -80,7 +80,7 @@ export default class AreaChart extends React.Component {
 
   constructor(props) {
     super(props);
-    this.uid = getRandomId();
+    this.uid = createUniqueID();
   }
 
   componentDidMount() {
@@ -141,7 +141,8 @@ export default class AreaChart extends React.Component {
         .ticks(xTicks);
     }
 
-    const group = root.append('g')
+    const group = root
+      .append('g')
       .attr('class', 'x axis')
       .attr('transform', `translate(0, ${h})`);
 
@@ -151,9 +152,15 @@ export default class AreaChart extends React.Component {
     group
       .append('text')
       .attr('class', 'label')
-      .attr('x', yAxisOrientRight ? 0 : w)
+      .attr('x',
+        (yAxisOrientRight)
+          ? 0
+          : w)
       .attr('y', m.bottom - 10)
-      .style('text-anchor', yAxisOrientRight ? 'start' : 'end')
+      .style('text-anchor',
+        (yAxisOrientRight)
+          ? 'start'
+          : 'end')
       .text(axisLabels.x);
 
     return axis;
@@ -192,15 +199,22 @@ export default class AreaChart extends React.Component {
         .ticks(yTicks);
     }
 
-    root.append('g')
+    root
+      .append('g')
       .attr('class', 'y axis')
       .call(axis)
-      .attr('transform', yAxisOrientRight ? `translate(${w}, 0)` : 'translate(0, 0)')
+      .attr('transform',
+        (yAxisOrientRight)
+          ? `translate(${w}, 0)`
+          : 'translate(0, 0)')
       .append('text')
       .attr('class', 'label')
       .attr('transform', 'rotate(-90)')
       .attr('x', 0)
-      .attr('y', yAxisOrientRight ? -20 + m.right : 0 - m.left)
+      .attr('y',
+        (yAxisOrientRight)
+          ? -20 + m.right
+          : 0 - m.left)
       .attr('dy', '.9em')
       .style('text-anchor', 'end')
       .text(axisLabels.y);
@@ -253,22 +267,28 @@ export default class AreaChart extends React.Component {
 
     const uid = this.uid;
 
-    const group = root.append('g')
+    const group = root
+      .append('g')
       .attr('class', 'areaChart');
 
     data.forEach((lineItem, i) => {
       const color = colors[i];
 
-      group.append('path')
+      group
+        .append('path')
         .datum(lineItem)
         .attr('class', 'area')
-        .style('fill', noAreaGradient ? color : `url(#gradient-${i}-${uid})`)
+        .style('fill',
+          (noAreaGradient)
+            ? color
+            : `url(#gradient-${i}-${uid})`)
         .attr('d', areaPath);
 
-      group.append('path')
+      group
+        .append('path')
         .datum(lineItem)
         .attr('class', 'line')
-        .attr('style', `stroke: ${color}`)
+        .attr('style', `stroke:${color}`)
         .attr('d', linePath);
     });
   }
@@ -290,7 +310,8 @@ export default class AreaChart extends React.Component {
      */
     const calculateDate = (v) => this.parseDate(v);
 
-    const group = root.append('g')
+    const group = root
+      .append('g')
       .attr('class', 'dataPoints');
 
     data.forEach((lineItem, i) => {
@@ -382,19 +403,19 @@ export default class AreaChart extends React.Component {
     } = this.props;
 
     /*
-     * We could "bind" but this is neater
+     * We could "bind"!
      */
     const parseDate = (v) => this.parseDate(v);
 
-    const m = calcMargin(axes, margin, yAxisOrientRight);
+    const m = calculateMargin(axes, margin, yAxisOrientRight);
     const w = reduce(width, m.left, m.right);
     const h = reduce(height, m.top, m.bottom);
 
-    const x = setLineDomainAndRange('x', xDomainRange, data, xType, w, parseDate);
-    const y = setLineDomainAndRange('y', yDomainRange, data, yType, h, parseDate);
+    const x = createDomainRangeGenerator('x', xDomainRange, data, xType, w, parseDate);
+    const y = createDomainRangeGenerator('y', yDomainRange, data, yType, h, parseDate);
 
-    const xValue = getValueFunction('x', xType, parseDate);
-    const yValue = getValueFunction('y', yType, parseDate);
+    const xValue = createValueGenerator('x', xType, parseDate);
+    const yValue = createValueGenerator('y', yType, parseDate);
 
     const colors = areaColors.concat(defaultColors);
 

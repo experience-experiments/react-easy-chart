@@ -9,13 +9,13 @@ import {
   max
 } from 'd3';
 import {
-  getRandomId,
+  createUniqueID,
   reduce,
-  calcMargin,
-  calcDefaultDomain,
+  calculateMargin,
+  calculateDomainRange,
   defaultStyles,
   getAxisStyles,
-  getValueFunction,
+  createValueGenerator,
   createCircularTicks
 } from '../shared';
 import { extent } from 'd3-array';
@@ -89,7 +89,7 @@ export default class BarChart extends React.Component {
 
   constructor(props) {
     super(props);
-    this.uid = getRandomId();
+    this.uid = createUniqueID();
   }
 
   componentDidMount() {
@@ -102,7 +102,7 @@ export default class BarChart extends React.Component {
     createCircularTicks(ref);
   }
 
-  setScaleDomainRange(axesType, domainRange, data, type, length) {
+  createDomainRangeGenerator(axesType, domainRange, data, type, length) {
     const dataIndex = axesType === 'x' ? 'x' : 'y';
     const barPadding = (length / data.length) > 40 ? 0.02 : 0.04;
     const parseDate = (v) => this.parseDate(v);
@@ -119,8 +119,8 @@ export default class BarChart extends React.Component {
         axis = linear();
         axis
           .domain(
-            (domainRange)
-              ? calcDefaultDomain(domainRange, type, parseDate)
+            Array.isArray(domainRange)
+              ? domainRange // calculateDomainRange(domainRange, type, parseDate)
               : [0, max(data, (d) => d[dataIndex])])
           .range(
             (axesType === 'x')
@@ -132,8 +132,8 @@ export default class BarChart extends React.Component {
         axis = time.scale();
         axis
           .domain(
-            (domainRange)
-              ? calcDefaultDomain(domainRange, type, parseDate)
+            Array.isArray(domainRange)
+              ? calculateDomainRange(domainRange, type, parseDate)
               : extent(data, (d) => parseDate(d[dataIndex])))
           .range(
             (axesType === 'x')
@@ -193,7 +193,8 @@ export default class BarChart extends React.Component {
         .ticks(xTickNumber);
     }
 
-    const group = root.append('g')
+    const group = root
+      .append('g')
       .attr('class', 'x axis')
       .attr('transform', `translate(0, ${h})`);
 
@@ -245,7 +246,8 @@ export default class BarChart extends React.Component {
         .tickPadding(10);
     }
 
-    const group = root.append('g')
+    const group = root
+      .append('g')
       .attr('class', 'y axis');
 
     group
@@ -284,11 +286,14 @@ export default class BarChart extends React.Component {
       yDomainRange
     } = this.props;
 
-    const y = this.setScaleDomainRange('y', yDomainRange, lineData, y2Type, h);
+    const y = this.createDomainRangeGenerator('y', yDomainRange, lineData, y2Type, h);
 
     const axis = svg.axis()
         .scale(y)
-        .orient(yAxisOrientRight ? 'left' : 'right');
+        .orient(
+          (yAxisOrientRight)
+            ? 'left'
+            : 'right');
 
     if (yTickNumber) {
       axis
@@ -304,7 +309,8 @@ export default class BarChart extends React.Component {
         .tickPadding(10);
     }
 
-    const group = root.append('g')
+    const group = root
+      .append('g')
       .attr('class', 'y axis');
 
     group
@@ -397,10 +403,10 @@ export default class BarChart extends React.Component {
 
     const parseDate = (v) => this.parseDate(v);
 
-    const y = this.setScaleDomainRange('y', yDomainRange, lineData, y2Type, h);
+    const y = this.createDomainRangeGenerator('y', yDomainRange, lineData, y2Type, h);
 
-    const yValue = getValueFunction('y', y2Type, parseDate);
-    const xValue = getValueFunction('x', xType, parseDate);
+    const yValue = createValueGenerator('y', y2Type, parseDate);
+    const xValue = createValueGenerator('x', xType, parseDate);
 
     const linePath = svg.line()
       .interpolate(interpolate)
@@ -469,11 +475,11 @@ export default class BarChart extends React.Component {
     } = this.props;
 
     const hasLineData = this.hasLineData();
-    const m = calcMargin(axes, margin, yAxisOrientRight, hasLineData);
+    const m = calculateMargin(axes, margin, yAxisOrientRight, hasLineData);
     const w = reduce(width, m.left, m.right);
     const h = reduce(height, m.top, m.bottom);
-    const x = this.setScaleDomainRange('x', xDomainRange, data, xType, w);
-    const y = this.setScaleDomainRange('y', yDomainRange, data, yType, h);
+    const x = this.createDomainRangeGenerator('x', xDomainRange, data, xType, w);
+    const y = this.createDomainRangeGenerator('y', yDomainRange, data, yType, h);
 
     const node = this.createSvgNode({ m, w, h });
     const root = this.createSvgRoot({ node, m });
