@@ -20,6 +20,48 @@ const mockData = [
   { key: 'C', value: 50 }
 ];
 
+const mockRoot = {
+  attr: () => mockRoot,
+  append: () => mockRoot
+};
+
+const mockPath = {
+  enter: () => mockPath,
+  append: () => mockPath,
+  attr: () => mockPath,
+  attrTween: () => mockPath,
+  on: () => mockPath,
+  each: () => mockPath,
+  transition: () => mockPath,
+  duration: () => mockPath,
+  exit: () => mockPath,
+  remove: () => mockPath
+};
+
+const mockText = {
+  enter: () => mockText,
+  append: () => mockText,
+  attr: () => mockText,
+  attrTween: () => mockText,
+  text: () => mockText,
+  each: () => mockText,
+  transition: () => mockText,
+  duration: () => mockText,
+  exit: () => mockText,
+  remove: () => mockText
+};
+
+const mockSlice = {
+  data: () => true
+};
+
+const mockLabel = {
+  data: () => true
+};
+
+const mockOuterRadius = 200;
+// const mockInnerRadius = 100;
+
 const mouseOverSpy = chai.spy(() => {});
 const mouseOutSpy = chai.spy(() => {});
 const mouseMoveSpy = chai.spy(() => {});
@@ -53,6 +95,7 @@ describe('PieChart component', () => {
     describe('With required props', () => {
       describe('Always', () => {
         let chart;
+
         beforeEach(() => {
           sinon.spy(PieChart.prototype, 'render');
           chart = TestUtils.renderIntoDocument(
@@ -223,9 +266,373 @@ describe('PieChart component', () => {
     });
   });
 
-  describe('createSlices()', () => {});
+  describe('createSlices()', () => {
+    const chart = TestUtils.renderIntoDocument(
+      <PieChart
+        data={mockData}
+      />
+    );
 
-  describe('createLabels()', () => {});
+    beforeEach(() => {
+      sinon.spy(mockRoot, 'append');
+      sinon.spy(mockRoot, 'attr');
+
+      sinon.stub(chart, 'getOuterRadius').returns(mockOuterRadius);
+
+      chart.uid = 'mock-uid';
+      chart.createSlices({ root: mockRoot });
+    });
+
+    afterEach(() => {
+      mockRoot.append.restore();
+      mockRoot.attr.restore();
+
+      chart.getOuterRadius.restore();
+    });
+
+    it('creates the slices', () => {
+      expect(mockRoot.append.calledWith('g')).to.be.true;
+      expect(mockRoot.attr.calledWith('id', 'slices-mock-uid')).to.be.true;
+      expect(mockRoot.attr.calledWith('transform', 'translate(200, 200)')).to.be.true;
+    });
+  });
+
+  describe('createLabels()', () => {
+    const chart = TestUtils.renderIntoDocument(
+      <PieChart
+        data={mockData}
+      />
+    );
+
+    beforeEach(() => {
+      sinon.spy(mockRoot, 'append');
+      sinon.spy(mockRoot, 'attr');
+
+      sinon.stub(chart, 'getOuterRadius').returns(mockOuterRadius);
+
+      chart.uid = 'mock-uid';
+      chart.createLabels({ root: mockRoot });
+    });
+
+    afterEach(() => {
+      mockRoot.append.restore();
+      mockRoot.attr.restore();
+
+      chart.getOuterRadius.restore();
+    });
+
+    it('creates the labels', () => {
+      expect(mockRoot.append.calledWith('g')).to.be.true;
+      expect(mockRoot.attr.calledWith('id', 'labels-mock-uid')).to.be.true;
+      expect(mockRoot.attr.calledWith('transform', 'translate(200, 200)')).to.be.true;
+    });
+  });
+
+  describe('initialise()', () => {
+    beforeEach(() => {
+      sinon.spy(PieChart.prototype, 'calculateChartParameters');
+      sinon.spy(PieChart.prototype, 'initialiseSlices');
+      sinon.spy(PieChart.prototype, 'initialiseLabels');
+    });
+
+    afterEach(() => {
+      PieChart.prototype.calculateChartParameters.restore();
+      PieChart.prototype.initialiseSlices.restore();
+      PieChart.prototype.initialiseLabels.restore();
+    });
+
+    describe('Always', () => {
+      const chart = TestUtils.renderIntoDocument(
+        <PieChart
+          data={mockData}
+        />
+      );
+
+      beforeEach(() => {
+        chart.initialise();
+      });
+
+      it('initialises the slices', () => {
+        expect(chart.initialiseSlices.called).to.be.true;
+      });
+
+      it('does not initialise the labels (\'labels\' is \'false\')', () => {
+        expect(chart.initialiseLabels.called).to.be.false;
+      });
+    });
+
+    describe('With optional props', () => {
+      describe('\'labels\' is \'true\'', () => {
+        it('initialises the labels (\'labels\' is \'true\')', () => {
+          const chart = TestUtils.renderIntoDocument(
+            <PieChart
+              data={mockData}
+              labels
+            />
+          );
+
+          chart.initialise();
+
+          expect(chart.initialiseLabels.called).to.be.true;
+        });
+      });
+    });
+  });
+
+  describe('initialiseSlices()', () => {
+    const chart = TestUtils.renderIntoDocument(
+      <PieChart
+        data={mockData}
+      />
+    );
+
+    beforeEach(() => {
+      sinon.spy(mockPath, 'enter');
+      sinon.spy(mockPath, 'append');
+      sinon.spy(mockPath, 'attr');
+      sinon.spy(mockPath, 'on');
+      sinon.spy(mockPath, 'each');
+
+      sinon.stub(mockSlice, 'data').returns(mockPath);
+      sinon.stub(chart, 'getSlices').returns(mockSlice);
+
+      chart.initialiseSlices();
+    });
+
+    afterEach(() => {
+      mockPath.enter.restore();
+      mockPath.append.restore();
+      mockPath.attr.restore();
+      mockPath.on.restore();
+      mockPath.each.restore();
+
+      mockSlice.data.restore();
+      chart.getSlices.restore();
+    });
+
+    it('initialises the slices', () => {
+      expect(mockPath.enter.called).to.be.true;
+      expect(mockPath.append.calledWith('path')).to.be.true;
+      expect(mockPath.attr.calledWith('class', 'pie-chart-slice')).to.be.true;
+      expect(mockPath.attr.calledWith('fill')).to.be.true;
+      expect(mockPath.attr.calledWith('d')).to.be.true;
+      expect(mockPath.on.calledWith('mouseover')).to.be.true;
+      expect(mockPath.on.calledWith('mouseout')).to.be.true;
+      expect(mockPath.on.calledWith('mousemove')).to.be.true;
+      expect(mockPath.on.calledWith('click')).to.be.true;
+      expect(mockPath.each.called).to.be.true;
+    });
+  });
+
+  describe('initialiseLabels()', () => {
+    const chart = TestUtils.renderIntoDocument(
+      <PieChart
+        data={mockData}
+      />
+    );
+
+    beforeEach(() => {
+      sinon.spy(mockText, 'enter');
+      sinon.spy(mockText, 'append');
+      sinon.spy(mockText, 'attr');
+      sinon.spy(mockText, 'text');
+      sinon.spy(mockText, 'each');
+
+      sinon.stub(mockLabel, 'data').returns(mockText);
+      sinon.stub(chart, 'getLabels').returns(mockLabel);
+
+      chart.initialiseLabels();
+    });
+
+    afterEach(() => {
+      mockText.enter.restore();
+      mockText.append.restore();
+      mockText.attr.restore();
+      mockText.text.restore();
+      mockText.each.restore();
+
+      mockLabel.data.restore();
+      chart.getLabels.restore();
+    });
+
+    it('initialises the labels', () => {
+      expect(mockText.enter.called).to.be.true;
+      expect(mockText.append.calledWith('text')).to.be.true;
+      expect(mockText.attr.calledWith('dy', '.35em')).to.be.true;
+      expect(mockText.attr.calledWith('class', 'pie-chart-label')).to.be.true;
+      expect(mockText.attr.calledWith('transform')).to.be.true;
+      expect(mockText.text.called).to.be.true;
+      expect(mockText.each.called).to.be.true;
+    });
+  });
+
+  describe('transition()', () => {
+    beforeEach(() => {
+      sinon.spy(PieChart.prototype, 'calculateChartParameters');
+      sinon.spy(PieChart.prototype, 'transitionSlices');
+      sinon.spy(PieChart.prototype, 'transitionLabels');
+    });
+
+    afterEach(() => {
+      PieChart.prototype.calculateChartParameters.restore();
+      PieChart.prototype.transitionSlices.restore();
+      PieChart.prototype.transitionLabels.restore();
+    });
+
+    describe('Always', () => {
+      const chart = TestUtils.renderIntoDocument(
+        <PieChart
+          data={mockData}
+        />
+      );
+
+      beforeEach(() => {
+        chart.transition();
+      });
+
+      it('transitions the slices', () => {
+        expect(chart.transitionSlices.called).to.be.true;
+      });
+
+      it('does not transition the labels (\'labels\' is \'false\')', () => {
+        expect(chart.transitionLabels.called).to.be.false;
+      });
+    });
+
+    describe('With optional props', () => {
+      describe('\'labels\' is \'true\'', () => {
+        it('transitions the labels (\'labels\' is \'true\')', () => {
+          const chart = TestUtils.renderIntoDocument(
+            <PieChart
+              data={mockData}
+              labels
+            />
+          );
+
+          chart.transition();
+
+          expect(chart.transitionLabels.called).to.be.true;
+        });
+      });
+    });
+  });
+
+  describe('transitionSlices()', () => {
+    const chart = TestUtils.renderIntoDocument(
+      <PieChart
+        data={mockData}
+      />
+    );
+
+    beforeEach(() => {
+      sinon.spy(mockPath, 'enter');
+      sinon.spy(mockPath, 'append');
+      sinon.spy(mockPath, 'attr');
+      sinon.spy(mockPath, 'on');
+      sinon.spy(mockPath, 'each');
+      sinon.spy(mockPath, 'transition');
+      sinon.spy(mockPath, 'duration');
+      sinon.spy(mockPath, 'attrTween');
+      sinon.spy(mockPath, 'exit');
+      sinon.spy(mockPath, 'remove');
+
+      sinon.stub(mockSlice, 'data').returns(mockPath);
+      sinon.stub(chart, 'getSlices').returns(mockSlice);
+
+      chart.transitionSlices();
+    });
+
+    afterEach(() => {
+      mockPath.enter.restore();
+      mockPath.append.restore();
+      mockPath.attr.restore();
+      mockPath.on.restore();
+      mockPath.each.restore();
+      mockPath.transition.restore();
+      mockPath.duration.restore();
+      mockPath.attrTween.restore();
+      mockPath.exit.restore();
+      mockPath.remove.restore();
+
+      mockSlice.data.restore();
+      chart.getSlices.restore();
+    });
+
+    it('defines the transition', () => {
+      expect(mockPath.transition.called).to.be.true;
+      expect(mockPath.duration.calledWith(750)).to.be.true;
+    });
+
+    it('transitions the slices', () => {
+      expect(mockPath.enter.called).to.be.true;
+      expect(mockPath.append.calledWith('path')).to.be.true;
+      expect(mockPath.attr.calledWith('class', 'pie-chart-slice')).to.be.true;
+      expect(mockPath.attr.calledWith('fill')).to.be.true;
+      expect(mockPath.on.calledWith('mouseover')).to.be.true;
+      expect(mockPath.on.calledWith('mouseout')).to.be.true;
+      expect(mockPath.on.calledWith('mousemove')).to.be.true;
+      expect(mockPath.on.calledWith('click')).to.be.true;
+      expect(mockPath.each.called).to.be.true;
+      expect(mockPath.attrTween.calledWith('d')).to.be.true;
+    });
+  });
+
+  describe('transitionLabels()', () => {
+    const chart = TestUtils.renderIntoDocument(
+      <PieChart
+        data={mockData}
+      />
+    );
+
+    beforeEach(() => {
+      sinon.spy(mockText, 'enter');
+      sinon.spy(mockText, 'append');
+      sinon.spy(mockText, 'attr');
+      sinon.spy(mockText, 'text');
+      sinon.spy(mockText, 'each');
+      sinon.spy(mockText, 'exit');
+      sinon.spy(mockText, 'remove');
+      sinon.spy(mockText, 'transition');
+      sinon.spy(mockText, 'duration');
+
+      sinon.stub(mockLabel, 'data').returns(mockText);
+      sinon.stub(chart, 'getLabels').returns(mockLabel);
+
+      chart.transitionLabels();
+    });
+
+    afterEach(() => {
+      mockText.enter.restore();
+      mockText.append.restore();
+      mockText.attr.restore();
+      mockText.text.restore();
+      mockText.each.restore();
+      mockText.exit.restore();
+      mockText.remove.restore();
+      mockText.transition.restore();
+      mockText.duration.restore();
+
+      mockLabel.data.restore();
+      chart.getLabels.restore();
+    });
+
+    it('defines the transition', () => {
+      expect(mockText.transition.called).to.be.true;
+      expect(mockText.duration.calledWith(750)).to.be.true;
+    });
+
+    it('transitions the labels', () => {
+      expect(mockText.enter.called).to.be.true;
+      expect(mockText.append.calledWith('text')).to.be.true;
+      expect(mockText.attr.calledWith('dy', '.35em')).to.be.true;
+      expect(mockText.attr.calledWith('class', 'pie-chart-label')).to.be.true;
+      expect(mockText.attr.calledWith('transform')).to.be.true;
+      expect(mockText.text.called).to.be.true;
+      expect(mockText.each.called).to.be.true;
+      expect(mockText.exit.called).to.be.true;
+      expect(mockText.remove.called).to.be.true;
+    });
+  });
 
   describe('Rendering the PieChart', () => {
     describe('Always', () => {
