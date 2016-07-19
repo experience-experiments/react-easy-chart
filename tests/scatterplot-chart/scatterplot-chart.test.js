@@ -243,11 +243,11 @@ describe('ScatterplotChart component', () => {
             expect(chart.calculateChartParameters.called).to.be.true;
           });
 
-          xit('does not create the x axis (\'axes\' is \'false\')', () => {
+          it('does not create the x axis (\'axes\' is \'false\')', () => {
             expect(chart.createXAxis.called).to.be.false;
           });
 
-          xit('does not create the y axis (\'axes\' is \'false\')', () => {
+          it('does not create the y axis (\'axes\' is \'false\')', () => {
             expect(chart.createYAxis.called).to.be.false;
           });
 
@@ -265,7 +265,7 @@ describe('ScatterplotChart component', () => {
         });
       });
 
-      xdescribe('With optional props', () => {
+      describe('With optional props', () => {
         describe('\'axes\' is \'true\'', () => {
           describe('Always', () => {
             let chart;
@@ -340,13 +340,15 @@ describe('ScatterplotChart component', () => {
     });
   });
 
-  xdescribe('createXAxis()', () => {
+  describe('createXAxis()', () => {
     const p = {
       m: mockM,
       w: mockW,
       h: mockH,
       x: mockX,
       y: mockY,
+      innerH: mockInnerH,
+      innerW: mockInnerW,
       root: mockRoot
     };
 
@@ -367,64 +369,103 @@ describe('ScatterplotChart component', () => {
     });
 
     describe('Y axis orient to the left hand side (\'yAxisOrientRight\' is \'false\')', () => {
-      beforeEach(() => {
-        const chart = TestUtils.renderIntoDocument(
-          <ScatterplotChart
-            data={mockData}
-            axisLabels={mockAxisLabels}
-          />
-        );
-        chart.createXAxis(p);
+      describe('Always', () => {
+        beforeEach(() => {
+          const chart = TestUtils.renderIntoDocument(
+            <ScatterplotChart
+              data={mockData}
+            />
+          );
+          chart.uid = 'mock-uid';
+          chart.createXAxis(p);
+        });
+
+        it('creates the x axis', () => {
+          expect(mockRoot.append.calledWith('g')).to.be.true;
+          expect(mockRoot.attr.calledWith('class', 'x axis')).to.be.true;
+          expect(mockRoot.attr.calledWith('id', 'scatterplot-x-axis-mock-uid')).to.be.true;
+          expect(mockRoot.attr.calledWith('transform', 'translate(0, 150)')).to.be.true;
+        });
       });
 
-      it('creates the x axis', () => {
-        expect(mockRoot.append.calledWith('g')).to.be.true;
-        expect(mockRoot.attr.calledWith('class', 'x axis')).to.be.true;
-        expect(mockRoot.attr.calledWith('transform', 'translate(0, 130)')).to.be.true;
-        expect(mockRoot.call.called).to.be.true;
-        expect(mockRoot.append.calledWith('text')).to.be.true;
-        expect(mockRoot.attr.calledWith('class', 'label')).to.be.true;
-        expect(mockRoot.attr.calledWith('y', 40)).to.be.true;
-        expect(mockRoot.attr.calledWith('x', mockW)).to.be.true;
-        expect(mockRoot.style.calledWith('text-anchor', 'end')).to.be.true;
-        expect(mockRoot.text.calledWith('Mock X Label')).to.be.true;
+      describe('With axis labels', () => {
+        beforeEach(() => {
+          const chart = TestUtils.renderIntoDocument(
+            <ScatterplotChart
+              data={mockData}
+              axisLabels={mockAxisLabels}
+            />
+          );
+          chart.uid = 'mock-uid';
+          chart.createXAxis(p);
+        });
+
+        it('creates the x label', () => {
+          expect(mockRoot.append.calledWith('text')).to.be.true;
+          expect(mockRoot.attr.calledWith('class', 'label')).to.be.true;
+          expect(mockRoot.attr.calledWith('x', mockInnerW)).to.be.true;
+          expect(mockRoot.attr.calledWith('y', 28)).to.be.true;
+          expect(mockRoot.style.calledWith('text-anchor', 'end')).to.be.true;
+          expect(mockRoot.text.calledWith('Mock X Label')).to.be.true;
+        });
       });
     });
 
-    describe('Y axis orient tp the right hand side (\'yAxisOrientRight\' is \'true\')', () => {
-      beforeEach(() => {
-        const chart = TestUtils.renderIntoDocument(
-          <ScatterplotChart
-            data={mockData}
-            axisLabels={mockAxisLabels}
-            yAxisOrientRight
-          />
-        );
-        chart.createXAxis(p);
+    describe('Y axis orient to the right hand side (\'yAxisOrientRight\' is \'true\')', () => {
+      describe('Always', () => {
+        beforeEach(() => {
+          const chart = TestUtils.renderIntoDocument(
+            <ScatterplotChart
+              data={mockData}
+              yAxisOrientRight
+            />
+          );
+          chart.uid = 'mock-uid';
+          chart.createXAxis(p);
+        });
+
+        it('creates the x axis', () => {
+          expect(mockRoot.append.calledWith('g')).to.be.true;
+          expect(mockRoot.attr.calledWith('class', 'x axis')).to.be.true;
+          expect(mockRoot.attr.calledWith('id', 'scatterplot-x-axis-mock-uid')).to.be.true;
+          expect(mockRoot.attr.calledWith('transform', 'translate(0, 150)')).to.be.true;
+        });
       });
 
-      it('creates the x axis', () => {
-        expect(mockRoot.append.calledWith('g')).to.be.true;
-        expect(mockRoot.attr.calledWith('class', 'x axis')).to.be.true;
-        expect(mockRoot.attr.calledWith('transform', 'translate(0, 130)')).to.be.true;
-        expect(mockRoot.call.called).to.be.true;
-        expect(mockRoot.append.calledWith('text')).to.be.true;
-        expect(mockRoot.attr.calledWith('class', 'label')).to.be.true;
-        expect(mockRoot.attr.calledWith('y', 40)).to.be.true;
-        expect(mockRoot.attr.calledWith('x', 0)).to.be.true;
-        expect(mockRoot.style.calledWith('text-anchor', 'start')).to.be.true;
-        expect(mockRoot.text.calledWith('Mock X Label')).to.be.true;
+      describe('With optional props', () => {
+        beforeEach(() => {
+          const chart = TestUtils.renderIntoDocument(
+            <ScatterplotChart
+              data={mockData}
+              axisLabels={mockAxisLabels}
+              yAxisOrientRight
+            />
+          );
+          chart.uid = 'mock-uid';
+          chart.createXAxis(p);
+        });
+
+        it('creates the x axis', () => {
+          expect(mockRoot.append.calledWith('text')).to.be.true;
+          expect(mockRoot.attr.calledWith('class', 'label')).to.be.true;
+          expect(mockRoot.attr.calledWith('x', 0)).to.be.true;
+          expect(mockRoot.attr.calledWith('y', 28)).to.be.true;
+          expect(mockRoot.style.calledWith('text-anchor', 'start')).to.be.true;
+          expect(mockRoot.text.calledWith('Mock X Label')).to.be.true;
+        });
       });
     });
   });
 
-  xdescribe('createYAxis()', () => {
+  describe('createYAxis()', () => {
     const p = {
       m: mockM,
       w: mockW,
       h: mockH,
       x: mockX,
       y: mockY,
+      innerW: mockInnerW,
+      innerH: mockInnerH,
       root: mockRoot
     };
 
@@ -445,55 +486,93 @@ describe('ScatterplotChart component', () => {
     });
 
     describe('Y axis orient to the left hand side (\'yAxisOrientRight\' is \'false\')', () => {
-      beforeEach(() => {
-        const chart = TestUtils.renderIntoDocument(
-          <ScatterplotChart
-            data={mockData}
-            axisLabels={mockAxisLabels}
-          />
-        );
-        chart.createYAxis(p);
+      describe('Always', () => {
+        beforeEach(() => {
+          const chart = TestUtils.renderIntoDocument(
+            <ScatterplotChart
+              data={mockData}
+            />
+          );
+          chart.uid = 'mock-uid';
+          chart.createYAxis(p);
+        });
+
+        it('creates the y axis', () => {
+          expect(mockRoot.append.calledWith('g')).to.be.true;
+          expect(mockRoot.attr.calledWith('class', 'y axis')).to.be.true;
+          expect(mockRoot.attr.calledWith('id', 'scatterplot-y-axis-mock-uid')).to.be.true;
+          expect(mockRoot.attr.calledWith('transform', 'translate(0, 0)')).to.be.true;
+        });
       });
 
-      it('creates the y axis', () => {
-        expect(mockRoot.append.calledWith('g')).to.be.true;
-        expect(mockRoot.attr.calledWith('class', 'y axis')).to.be.true;
-        expect(mockRoot.attr.calledWith('transform', 'translate(0, 0)')).to.be.true;
-        expect(mockRoot.call.called).to.be.true;
-        expect(mockRoot.append.calledWith('text')).to.be.true;
-        expect(mockRoot.attr.calledWith('class', 'label')).to.be.true;
-        expect(mockRoot.attr.calledWith('x', 0)).to.be.true;
-        expect(mockRoot.attr.calledWith('y', -40)).to.be.true;
-        expect(mockRoot.attr.calledWith('dy', '.9em')).to.be.true;
-        expect(mockRoot.style.calledWith('text-anchor', 'end')).to.be.true;
-        expect(mockRoot.text.calledWith('Mock Y Label')).to.be.true;
+      describe('With optional props', () => {
+        beforeEach(() => {
+          const chart = TestUtils.renderIntoDocument(
+            <ScatterplotChart
+              data={mockData}
+              axisLabels={mockAxisLabels}
+            />
+          );
+          chart.uid = 'mock-uid';
+          chart.createYAxis(p);
+        });
+
+        it('creates the y axis', () => {
+          expect(mockRoot.append.calledWith('text')).to.be.true;
+          expect(mockRoot.attr.calledWith('class', 'label')).to.be.true;
+          expect(mockRoot.attr.calledWith('transform', 'rotate(-90)')).to.be.true;
+          expect(mockRoot.attr.calledWith('y', 0)).to.be.true;
+          expect(mockRoot.attr.calledWith('dy', '.71em')).to.be.true;
+          expect(mockRoot.style.calledWith('text-anchor', 'end')).to.be.true;
+          expect(mockRoot.text.calledWith('Mock Y Label')).to.be.true;
+        });
       });
     });
 
-    describe('Y axis orient tp the right hand side (\'yAxisOrientRight\' is \'true\')', () => {
-      beforeEach(() => {
-        const chart = TestUtils.renderIntoDocument(
-          <ScatterplotChart
-            data={mockData}
-            axisLabels={mockAxisLabels}
-            yAxisOrientRight
-          />
-        );
-        chart.createYAxis(p);
+    describe('Y axis orient to the right hand side (\'yAxisOrientRight\' is \'true\')', () => {
+      describe('Always', () => {
+        beforeEach(() => {
+          const chart = TestUtils.renderIntoDocument(
+            <ScatterplotChart
+              data={mockData}
+              axisLabels={mockAxisLabels}
+              yAxisOrientRight
+            />
+          );
+          chart.uid = 'mock-uid';
+          chart.createYAxis(p);
+        });
+
+        it('creates the y axis', () => {
+          expect(mockRoot.append.calledWith('g')).to.be.true;
+          expect(mockRoot.attr.calledWith('class', 'y axis')).to.be.true;
+          expect(mockRoot.attr.calledWith('id', 'scatterplot-y-axis-mock-uid')).to.be.true;
+          expect(mockRoot.attr.calledWith('transform', 'translate(300, 0)')).to.be.true;
+        });
       });
 
-      it('creates the y axis', () => {
-        expect(mockRoot.append.calledWith('g')).to.be.true;
-        expect(mockRoot.attr.calledWith('class', 'y axis')).to.be.true;
-        expect(mockRoot.attr.calledWith('transform', 'translate(300, 0)')).to.be.true;
-        expect(mockRoot.call.called).to.be.true;
-        expect(mockRoot.append.calledWith('text')).to.be.true;
-        expect(mockRoot.attr.calledWith('class', 'label')).to.be.true;
-        expect(mockRoot.attr.calledWith('x', 0)).to.be.true;
-        expect(mockRoot.attr.calledWith('y', 25)).to.be.true;
-        expect(mockRoot.attr.calledWith('dy', '.9em')).to.be.true;
-        expect(mockRoot.style.calledWith('text-anchor', 'end')).to.be.true;
-        expect(mockRoot.text.calledWith('Mock Y Label')).to.be.true;
+      describe('With axis labels', () => {
+        beforeEach(() => {
+          const chart = TestUtils.renderIntoDocument(
+            <ScatterplotChart
+              data={mockData}
+              axisLabels={mockAxisLabels}
+              yAxisOrientRight
+            />
+          );
+          chart.uid = 'mock-uid';
+          chart.createYAxis(p);
+        });
+
+        it('creates the y axis', () => {
+          expect(mockRoot.append.calledWith('text')).to.be.true;
+          expect(mockRoot.attr.calledWith('class', 'label')).to.be.true;
+          expect(mockRoot.attr.calledWith('transform', 'rotate(-90)')).to.be.true;
+          expect(mockRoot.attr.calledWith('y', -15)).to.be.true;
+          expect(mockRoot.attr.calledWith('dy', '.71em')).to.be.true;
+          expect(mockRoot.style.calledWith('text-anchor', 'end')).to.be.true;
+          expect(mockRoot.text.calledWith('Mock Y Label')).to.be.true;
+        });
       });
     });
   });
@@ -535,6 +614,433 @@ describe('ScatterplotChart component', () => {
     });
   });
 
+  describe('initialise()', () => {
+    beforeEach(() => {
+      sinon.spy(ScatterplotChart.prototype, 'calculateChartParameters');
+      sinon.spy(ScatterplotChart.prototype, 'initialiseXAxis');
+      sinon.spy(ScatterplotChart.prototype, 'initialiseYAxis');
+      sinon.spy(ScatterplotChart.prototype, 'initialiseChart');
+    });
+
+    afterEach(() => {
+      ScatterplotChart.prototype.calculateChartParameters.restore();
+      ScatterplotChart.prototype.initialiseXAxis.restore();
+      ScatterplotChart.prototype.initialiseYAxis.restore();
+      ScatterplotChart.prototype.initialiseChart.restore();
+    });
+
+    describe('Always', () => {
+      let chart;
+
+      beforeEach(() => {
+        chart = TestUtils.renderIntoDocument(
+          <ScatterplotChart
+            data={mockData}
+          />
+        );
+        chart.initialise();
+      });
+
+      it('calculates the chart parameters', () => {
+        expect(chart.calculateChartParameters.called).to.be.true;
+      });
+
+      it('does not initialise the x axis (\'axes\' is \'false\')', () => {
+        expect(chart.initialiseXAxis.called).to.be.false;
+      });
+
+      it('does not initialise the y axis (\'axes\' is \'false\')', () => {
+        expect(chart.initialiseYAxis.called).to.be.false;
+      });
+
+      it('initialises the chart', () => {
+        expect(chart.initialiseChart.called).to.be.true;
+      });
+    });
+
+    describe('With optional props', () => {
+      describe('\'axes\' is \'true\'', () => {
+        let chart;
+
+        beforeEach(() => {
+          chart = TestUtils.renderIntoDocument(
+            <ScatterplotChart
+              data={mockData}
+              axes
+            />
+          );
+          chart.initialise();
+        });
+
+        it('initialises the x axis (\'axes\' is \'true\')', () => {
+          expect(chart.initialiseXAxis.called).to.be.true;
+        });
+
+        it('initialises the y axis (\'axes\' is \'true\')', () => {
+          expect(chart.initialiseYAxis.called).to.be.true;
+        });
+      });
+    });
+  });
+
+  describe('initialiseXAxis()', () => {
+    const mockXAxis = {
+      call: () => true
+    };
+
+    const mockXAxisGenerator = () => true;
+
+    const chart = TestUtils.renderIntoDocument(
+      <ScatterplotChart
+        data={mockData}
+        axes
+      />
+    );
+
+    it('initialises the x axis', () => {
+      sinon.spy(mockXAxis, 'call');
+      sinon.stub(chart, 'getXAxis').returns(mockXAxis);
+      chart.initialiseXAxis({ xAxis: mockXAxisGenerator });
+      expect(mockXAxis.call
+        .calledWith(mockXAxisGenerator)
+      ).to.be.true;
+    });
+  });
+
+  describe('initialiseYAxis()', () => {
+    const mockYAxis = {
+      call: () => true
+    };
+
+    const mockYAxisGenerator = () => true;
+
+    const chart = TestUtils.renderIntoDocument(
+      <ScatterplotChart
+        data={mockData}
+        axes
+      />
+    );
+
+    it('initialises the y axis', () => {
+      sinon.spy(mockYAxis, 'call');
+      sinon.stub(chart, 'getYAxis').returns(mockYAxis);
+      chart.initialiseYAxis({ yAxis: mockYAxisGenerator });
+      expect(mockYAxis.call
+        .calledWith(mockYAxisGenerator)
+      ).to.be.true;
+    });
+  });
+
+  describe('initialiseChart()', () => {
+    const mockCircle = {
+      enter: () => mockCircle,
+      append: () => mockCircle,
+      attr: () => mockCircle,
+      style: () => mockCircle,
+      on: () => mockCircle
+    };
+
+    const mockCircles = {
+      data: () => true
+    };
+
+    const chart = TestUtils.renderIntoDocument(
+      <ScatterplotChart
+        data={mockData}
+        axes
+      />
+    );
+
+    beforeEach(() => {
+      sinon.spy(mockCircle, 'enter');
+      sinon.spy(mockCircle, 'append');
+      sinon.spy(mockCircle, 'attr');
+      sinon.spy(mockCircle, 'style');
+      sinon.spy(mockCircle, 'on');
+      sinon.stub(mockCircles, 'data').returns(mockCircle);
+      sinon.stub(chart, 'getCircles').returns(mockCircles);
+      chart.initialiseChart({ x: mockX, y: mockY });
+    });
+
+    afterEach(() => {
+      mockCircle.enter.restore();
+      mockCircle.append.restore();
+      mockCircle.attr.restore();
+      mockCircle.style.restore();
+      mockCircle.on.restore();
+      mockCircles.data.restore();
+      chart.getCircles.restore();
+    });
+
+    it('binds the data', () => {
+      expect(mockCircles.data
+        .calledWith(mockData)
+      ).to.be.true;
+    });
+
+    it('initialises the chart', () => {
+      expect(mockCircle.enter.called).to.be.true;
+      expect(mockCircle.append.calledWith('circle')).to.be.true;
+      expect(mockCircle.attr.calledWith('class', 'dot')).to.be.true;
+      expect(mockCircle.attr.calledWith('r')).to.be.true;
+      expect(mockCircle.attr.calledWith('cx')).to.be.true;
+      expect(mockCircle.attr.calledWith('cy')).to.be.true;
+      expect(mockCircle.style.calledWith('fill')).to.be.true;
+      expect(mockCircle.style.calledWith('stroke')).to.be.true;
+      expect(mockCircle.on.calledWith('mouseover')).to.be.true;
+      expect(mockCircle.on.calledWith('mouseout')).to.be.true;
+      expect(mockCircle.on.calledWith('mousemove')).to.be.true;
+      expect(mockCircle.on.calledWith('click')).to.be.true;
+    });
+  });
+
+  describe('transition()', () => {
+    beforeEach(() => {
+      sinon.spy(ScatterplotChart.prototype, 'calculateChartParameters');
+      sinon.spy(ScatterplotChart.prototype, 'transitionXAxis');
+      sinon.spy(ScatterplotChart.prototype, 'transitionYAxis');
+      sinon.spy(ScatterplotChart.prototype, 'transitionChart');
+    });
+
+    afterEach(() => {
+      ScatterplotChart.prototype.calculateChartParameters.restore();
+      ScatterplotChart.prototype.transitionXAxis.restore();
+      ScatterplotChart.prototype.transitionYAxis.restore();
+      ScatterplotChart.prototype.transitionChart.restore();
+    });
+
+    describe('Always', () => {
+      let chart;
+
+      beforeEach(() => {
+        chart = TestUtils.renderIntoDocument(
+          <ScatterplotChart
+            data={mockData}
+          />
+        );
+        chart.transition();
+      });
+
+      it('calculates the chart parameters', () => {
+        expect(chart.calculateChartParameters.called).to.be.true;
+      });
+
+      it('does not transition the x axis (\'axes\' is \'false\')', () => {
+        expect(chart.transitionXAxis.called).to.be.false;
+      });
+
+      it('does not transition the y axis (\'axes\' is \'false\')', () => {
+        expect(chart.transitionYAxis.called).to.be.false;
+      });
+
+      it('transitions the chart', () => {
+        expect(chart.transitionChart.called).to.be.true;
+      });
+    });
+
+    describe('With optional props', () => {
+      describe('\'axes\' is \'true\'', () => {
+        let chart;
+
+        beforeEach(() => {
+          chart = TestUtils.renderIntoDocument(
+            <ScatterplotChart
+              data={mockData}
+              axes
+            />
+          );
+          chart.transition();
+        });
+
+        it('transitions the x axis (\'axes\' is \'true\')', () => {
+          expect(chart.transitionXAxis.called).to.be.true;
+        });
+
+        it('transitions the y axis (\'axes\' is \'true\')', () => {
+          expect(chart.transitionYAxis.called).to.be.true;
+        });
+      });
+    });
+  });
+
+  describe('transitionXAxis()', () => {
+    const mockXAxis = {
+      transition: () => mockXAxis,
+      duration: () => mockXAxis,
+      call: () => true
+    };
+
+    const mockXAxisGenerator = () => true;
+
+    const chart = TestUtils.renderIntoDocument(
+      <ScatterplotChart
+        data={mockData}
+        axes
+      />
+    );
+
+    beforeEach(() => {
+      sinon.spy(mockXAxis, 'transition');
+      sinon.spy(mockXAxis, 'duration');
+      sinon.spy(mockXAxis, 'call');
+      sinon.stub(chart, 'getXAxis').returns(mockXAxis);
+      chart.transitionXAxis({ xAxis: mockXAxisGenerator });
+    });
+
+    afterEach(() => {
+      mockXAxis.transition.restore();
+      mockXAxis.duration.restore();
+      mockXAxis.call.restore();
+      chart.getXAxis.restore();
+    });
+
+    it('defines the transition', () => {
+      expect(mockXAxis.transition
+        .called
+      ).to.be.true;
+      expect(mockXAxis.duration
+        .calledWith(750)
+      ).to.be.true;
+    });
+
+    it('transitions the x axis', () => {
+      expect(mockXAxis.call
+        .calledWith(mockXAxisGenerator)
+      ).to.be.true;
+    });
+  });
+
+  describe('transitionYAxis()', () => {
+    const mockYAxis = {
+      transition: () => mockYAxis,
+      duration: () => mockYAxis,
+      call: () => true
+    };
+
+    const mockYAxisGenerator = () => true;
+
+    const chart = TestUtils.renderIntoDocument(
+      <ScatterplotChart
+        data={mockData}
+        axes
+      />
+    );
+
+    beforeEach(() => {
+      sinon.spy(mockYAxis, 'transition');
+      sinon.spy(mockYAxis, 'duration');
+      sinon.spy(mockYAxis, 'call');
+      sinon.stub(chart, 'getYAxis').returns(mockYAxis);
+      chart.transitionYAxis({ yAxis: mockYAxisGenerator });
+    });
+
+    afterEach(() => {
+      mockYAxis.transition.restore();
+      mockYAxis.duration.restore();
+      mockYAxis.call.restore();
+      chart.getYAxis.restore();
+    });
+
+    it('defines the transition', () => {
+      expect(mockYAxis.transition
+        .called
+      ).to.be.true;
+      expect(mockYAxis.duration
+        .calledWith(750)
+      ).to.be.true;
+    });
+
+    it('transitions the y axis', () => {
+      expect(mockYAxis.call
+        .calledWith(mockYAxisGenerator)
+      ).to.be.true;
+    });
+  });
+
+  describe('transitionChart()', () => {
+    const mockCircle = {
+      transition: () => mockCircle,
+      duration: () => mockCircle,
+      enter: () => mockCircle,
+      append: () => mockCircle,
+      attr: () => mockCircle,
+      style: () => mockCircle,
+      on: () => mockCircle,
+      exit: () => mockCircle,
+      remove: () => mockCircle
+    };
+
+    const mockCircles = {
+      data: () => true
+    };
+
+    const chart = TestUtils.renderIntoDocument(
+      <ScatterplotChart
+        data={mockData}
+        axes
+      />
+    );
+
+    beforeEach(() => {
+      sinon.spy(mockCircle, 'transition');
+      sinon.spy(mockCircle, 'duration');
+      sinon.spy(mockCircle, 'enter');
+      sinon.spy(mockCircle, 'append');
+      sinon.spy(mockCircle, 'attr');
+      sinon.spy(mockCircle, 'style');
+      sinon.spy(mockCircle, 'on');
+      sinon.spy(mockCircle, 'exit');
+      sinon.spy(mockCircle, 'remove');
+      sinon.stub(mockCircles, 'data').returns(mockCircle);
+      sinon.stub(chart, 'getCircles').returns(mockCircles);
+      chart.transitionChart({ x: mockX, y: mockY });
+    });
+
+    afterEach(() => {
+      mockCircle.transition.restore();
+      mockCircle.duration.restore();
+      mockCircle.enter.restore();
+      mockCircle.append.restore();
+      mockCircle.attr.restore();
+      mockCircle.style.restore();
+      mockCircle.on.restore();
+      mockCircle.exit.restore();
+      mockCircle.remove.restore();
+      mockCircles.data.restore();
+      chart.getCircles.restore();
+    });
+
+    it('binds the data', () => {
+      expect(mockCircles.data
+        .calledWith(mockData)
+      ).to.be.true;
+    });
+
+    it('defines the transition', () => {
+      expect(mockCircle.transition
+        .called
+      ).to.be.true;
+      expect(mockCircle.duration
+        .calledWith(750)
+      ).to.be.true;
+    });
+
+    it('transitions the chart', () => {
+      expect(mockCircle.enter.called).to.be.true;
+      expect(mockCircle.append.calledWith('circle')).to.be.true;
+      expect(mockCircle.attr.calledWith('class', 'dot')).to.be.true;
+      expect(mockCircle.attr.calledWith('r')).to.be.true;
+      expect(mockCircle.attr.calledWith('cx')).to.be.true;
+      expect(mockCircle.attr.calledWith('cy')).to.be.true;
+      expect(mockCircle.style.calledWith('fill')).to.be.true;
+      expect(mockCircle.style.calledWith('stroke')).to.be.true;
+      expect(mockCircle.on.calledWith('mouseover')).to.be.true;
+      expect(mockCircle.on.calledWith('mouseout')).to.be.true;
+      expect(mockCircle.on.calledWith('mousemove')).to.be.true;
+      expect(mockCircle.on.calledWith('click')).to.be.true;
+    });
+  });
+
   describe('Rendering the ScatterplotChart', () => {
     describe('Always', () => {
       const renderer = TestUtils.createRenderer();
@@ -561,38 +1067,89 @@ describe('ScatterplotChart component', () => {
       });
     });
 
-    xdescribe('With optional props', () => {
-      const chart = TestUtils.renderIntoDocument(
-        <ScatterplotChart
-          data={mockData}
-          mouseOverHandler={mouseOverSpy}
-          mouseOutHandler={mouseOutSpy}
-          mouseMoveHandler={mouseMoveSpy}
-          clickHandler={clickSpy}
-        />
-      );
-      const domRoot = ReactDOM.findDOMNode(chart);
-      const svgNode = domRoot.childNodes[1];
-      const barNode = svgNode.childNodes[0].childNodes[1];
+    describe('With optional props', () => {
+      describe('initialise()', () => {
+        const chart = TestUtils.renderIntoDocument(
+          <ScatterplotChart
+            data={mockData}
+            axes
+            mouseOverHandler={mouseOverSpy}
+            mouseOutHandler={mouseOutSpy}
+            mouseMoveHandler={mouseMoveSpy}
+            clickHandler={clickSpy}
+          />
+        );
 
-      it('responds to click events', () => {
-        TestUtils.Simulate.click(barNode);
-        expect(clickSpy).to.have.been.called();
+        chart.initialise();
+
+        const domRoot = ReactDOM.findDOMNode(chart);
+        const svgNode = domRoot.childNodes[1];
+        const circleNode = svgNode
+          .childNodes[0]
+          .childNodes[2]
+          .childNodes[0];
+
+        xit('responds to click events', () => {
+          TestUtils.Simulate.click(circleNode);
+          expect(clickSpy).to.have.been.called();
+        });
+
+        xit('responds to mouse over events', () => {
+          TestUtils.SimulateNative.mouseOver(circleNode);
+          expect(mouseOverSpy).to.have.been.called();
+        });
+
+        xit('responds to mouse out events', () => {
+          TestUtils.SimulateNative.mouseOut(circleNode);
+          expect(mouseOutSpy).to.have.been.called();
+        });
+
+        xit('responds to mouse move events', () => {
+          TestUtils.SimulateNative.mouseMove(circleNode);
+          expect(mouseMoveSpy).to.have.been.called();
+        });
       });
 
-      it('responds to mouse over events', () => {
-        TestUtils.SimulateNative.mouseOver(barNode);
-        expect(mouseOverSpy).to.have.been.called();
-      });
+      describe('transition()', () => {
+        const chart = TestUtils.renderIntoDocument(
+          <ScatterplotChart
+            data={mockData}
+            axes
+            mouseOverHandler={mouseOverSpy}
+            mouseOutHandler={mouseOutSpy}
+            mouseMoveHandler={mouseMoveSpy}
+            clickHandler={clickSpy}
+          />
+        );
 
-      it('responds to mouse out events', () => {
-        TestUtils.SimulateNative.mouseOut(barNode);
-        expect(mouseOutSpy).to.have.been.called();
-      });
+        chart.transition();
 
-      it('responds to mouse move events', () => {
-        TestUtils.SimulateNative.mouseMove(barNode);
-        expect(mouseMoveSpy).to.have.been.called();
+        const domRoot = ReactDOM.findDOMNode(chart);
+        const svgNode = domRoot.childNodes[1];
+        const circleNode = svgNode
+          .childNodes[0]
+          .childNodes[2]
+          .childNodes[0];
+
+        xit('responds to click events', () => {
+          TestUtils.Simulate.click(circleNode);
+          expect(clickSpy).to.have.been.called();
+        });
+
+        xit('responds to mouse over events', () => {
+          TestUtils.SimulateNative.mouseOver(circleNode);
+          expect(mouseOverSpy).to.have.been.called();
+        });
+
+        xit('responds to mouse out events', () => {
+          TestUtils.SimulateNative.mouseOut(circleNode);
+          expect(mouseOutSpy).to.have.been.called();
+        });
+
+        xit('responds to mouse move events', () => {
+          TestUtils.SimulateNative.mouseMove(circleNode);
+          expect(mouseMoveSpy).to.have.been.called();
+        });
       });
     });
   });

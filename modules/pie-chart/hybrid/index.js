@@ -60,7 +60,7 @@ export default class PieChart extends React.Component {
 
   constructor(props) {
     super(props);
-    this.uid = createUniqueID(); 
+    this.uid = createUniqueID();
     this.currentSlices = [];
     this.currentLabels = [];
     this.tweenSlice = (slice, index) => {
