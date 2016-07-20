@@ -4,8 +4,7 @@ import {
   layout,
   svg,
   select,
-  event as
-  lastEvent,
+  event as lastEvent,
   interpolate
 } from 'd3';
 import {
@@ -152,17 +151,21 @@ export default class PieChart extends React.Component {
     const text = this.getLabels()
       .data(pie);
 
+    const getLabelArcTransform = (d) => {
+      const [labelX, labelY] = this.getLabelArc().centroid(d);
+      return `translate(${labelX}, ${labelY})`;
+    };
+
+    const currentLabels = this.currentLabels;
+
     text
       .enter()
       .append('text')
       .attr('dy', '.35em')
       .attr('class', 'pie-chart-label')
-      .attr('transform', (d) => {
-        const [labelX, labelY] = this.getLabelArc().centroid(d);
-        return `translate(${labelX}, ${labelY})`;
-      })
+      .attr('transform', getLabelArcTransform)
       .text(getLabelText)
-      .each((d) => this.currentLabels.push(d));
+      .each((d) => currentLabels.push(d));
   }
 
   initialiseSlices() {
@@ -173,6 +176,13 @@ export default class PieChart extends React.Component {
       clickHandler
     } = this.props;
 
+    const mouseover = (d) => mouseOverHandler(d, lastEvent);
+    const mouseout = (d) => mouseOutHandler(d, lastEvent);
+    const mousemove = (d) => mouseMoveHandler(d, lastEvent);
+    const click = (d) => clickHandler(d, lastEvent);
+
+    const currentSlices = this.currentSlices;
+
     const path = this.getSlices()
       .data(pie);
 
@@ -182,11 +192,11 @@ export default class PieChart extends React.Component {
       .attr('class', 'pie-chart-slice')
       .attr('fill', getSliceFill)
       .attr('d', this.getSliceArc())
-      .on('mouseover', (d) => mouseOverHandler(d, lastEvent))
-      .on('mouseout', (d) => mouseOutHandler(d, lastEvent))
-      .on('mousemove', (d) => mouseMoveHandler(d, lastEvent))
-      .on('click', (d) => clickHandler(d, lastEvent))
-      .each((d) => this.currentSlices.push(d));
+      .on('mouseover', mouseover)
+      .on('mouseout', mouseout)
+      .on('mousemove', mousemove)
+      .on('click', click)
+      .each((d) => currentSlices.push(d));
   }
 
   initialise() {
@@ -210,6 +220,11 @@ export default class PieChart extends React.Component {
       clickHandler
     } = this.props;
 
+    const mouseover = (d) => mouseOverHandler(d, lastEvent);
+    const mouseout = (d) => mouseOutHandler(d, lastEvent);
+    const mousemove = (d) => mouseMoveHandler(d, lastEvent);
+    const click = (d) => clickHandler(d, lastEvent);
+
     const n = data.length;
     const currentSlices = this.currentSlices;
 
@@ -223,10 +238,10 @@ export default class PieChart extends React.Component {
        */
       path
         .attr('fill', getSliceFill)
-        .on('mouseover', (d) => mouseOverHandler(d, lastEvent))
-        .on('mouseout', (d) => mouseOutHandler(d, lastEvent))
-        .on('mousemove', (d) => mouseMoveHandler(d, lastEvent))
-        .on('click', (d) => clickHandler(d, lastEvent))
+        .on('mouseover', mouseover)
+        .on('mouseout', mouseout)
+        .on('mousemove', mousemove)
+        .on('click', click)
         .transition()
         .duration(750)
         .attrTween('d', this.tweenSlice);
@@ -239,10 +254,10 @@ export default class PieChart extends React.Component {
         .append('path')
         .attr('class', 'pie-chart-slice')
         .attr('fill', getSliceFill)
-        .on('mouseover', (d) => mouseOverHandler(d, lastEvent))
-        .on('mouseout', (d) => mouseOutHandler(d, lastEvent))
-        .on('mousemove', (d) => mouseMoveHandler(d, lastEvent))
-        .on('click', (d) => clickHandler(d, lastEvent))
+        .on('mouseover', mouseover)
+        .on('mouseout', mouseout)
+        .on('mousemove', mousemove)
+        .on('click', click)
         .each((d, i) => currentSlices.splice(i, 1, d))
         .transition()
         .duration(750)
