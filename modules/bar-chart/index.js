@@ -155,7 +155,7 @@ export default class BarChart extends React.Component {
   createSvgNode({ m, w, h }) {
     const node = createElement('svg');
     node.setAttribute('width', w + m.left + m.right);
-    node.setAttribute('height', h + m.top + m.bottom)
+    node.setAttribute('height', h + m.top + m.bottom);
     return node;
   }
 
