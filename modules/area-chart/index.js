@@ -101,6 +101,13 @@ export default class AreaChart extends React.Component {
     return node;
   }
 
+  createSvgNode({ m, w, h }) {
+    const node = createElement('svg');
+    node.setAttribute('width', w + m.left + m.right);
+    node.setAttribute('height', h + m.top + m.bottom);
+    return node;
+  }
+
   createSvgRoot({ node, m }) {
     return select(node)
       .append('g')

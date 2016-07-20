@@ -97,9 +97,8 @@ export default class PieChart extends React.Component {
 
   createSvgNode({ size }) {
     const node = createElement('svg');
-    select(node)
-      .attr('width', size)
-      .attr('height', size);
+    node.setAttribute('width', size);
+    node.setAttribute('height', size)
     return node;
   }
 
