@@ -18,6 +18,9 @@ class LineChartContainer extends React.Component {
     this.mouseOutHandler = this.mouseOutHandler.bind(this);
     this.mouseMoveHandler = this.mouseMoveHandler.bind(this);
 
+    this.turnOnRandomData = this.turnOnRandomData.bind(this);
+    this.turnOffRandomData = this.turnOffRandomData.bind(this);
+
     this.updateData = this.updateData.bind(this);
     this.handleResize = this.handleResize.bind(this);
     this.toggleState = this.toggleState.bind(this);
@@ -159,8 +162,8 @@ class LineChartContainer extends React.Component {
               <li><a href="../" className="menu__all-charts">&#8592; All charts</a></li>
             </ul>
             <Scrollspy
-              items={
-                ['introduction',
+              items={[
+                'introduction',
                 'data',
                 'heightAndWidth',
                 'margin',
@@ -179,8 +182,8 @@ class LineChartContainer extends React.Component {
                 'mouseHandlers',
                 'clickHandler',
                 'updateData',
-                'fluid']
-              }
+                'fluid'
+              ]}
               currentClassName="active"
             >
               <li><a href="#introduction">Introduction</a></li>
@@ -647,7 +650,7 @@ class LineChartContainer extends React.Component {
           </section>
 
           <section id="xType">
-            <h2>xType / yType</h2>
+            <h2>xType & yType</h2>
 
             <p>
               The data passed associated to the particular axes can be in numeric, date (the default
@@ -1014,7 +1017,7 @@ class LineChartContainer extends React.Component {
           </section>
 
           <section id="domainRange">
-            <h2>Domain range</h2>
+            <h2>Domain Range</h2>
 
             <p>
               By default the axis ranges are automatically calculated based on the smallest and the
@@ -1161,7 +1164,7 @@ class LineChartContainer extends React.Component {
           </section>
 
           <section id="tickAmount">
-            <h2>Number of ticks</h2>
+            <h2>Number of Ticks</h2>
 
             <p>
               The number of ticks on the x and y axis can be set by passing in a number to xTicks

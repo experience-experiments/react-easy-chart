@@ -906,7 +906,7 @@ export default class BarChartContainer extends React.Component {
           </section>
 
           <section id="domainRange">
-            <h2>Domain range</h2>
+            <h2>Domain Range</h2>
 
             <p>
               By default the axis ranges are automatically calculated based on the smallest and
@@ -964,7 +964,7 @@ export default class BarChartContainer extends React.Component {
           </section>
 
           <section id="tickDisplay">
-            <h2>Tick display format</h2>
+            <h2>Tick Display Format</h2>
 
             <p>
               If the x or y axis  has an xType of time then a display for the axis can be overridden
@@ -1183,7 +1183,7 @@ export default class BarChartContainer extends React.Component {
           </section>
 
           <section id="mouseHandlers">
-            <h2>Mouse handlers</h2>
+            <h2>Mouse Handlers</h2>
 
             <p>
               The chart will send out a mouseOver event, mouseMove and mouseOut event. This can be
@@ -1336,7 +1336,7 @@ export default class BarChartContainer extends React.Component {
           </section>
 
           <section id="updateData">
-            <h2>Updating the data</h2>
+            <h2>Updating the Data</h2>
 
             <p>
               By selecting the button below to start the random data you can see a simulation of

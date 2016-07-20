@@ -1478,7 +1478,7 @@ class AreaChartContainer extends React.Component {
           </section>
 
           <section id="areaColors">
-            <h2>areaColors</h2>
+            <h2>Area Colors</h2>
 
             <p>
               The colours of the areas can be overridden easily. To do this we can pass in a
