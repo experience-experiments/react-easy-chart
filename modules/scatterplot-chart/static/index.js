@@ -349,7 +349,6 @@ export default class ScatterplotChart extends React.Component {
     if (label) {
       group
         .append('text')
-        .attr('id', 'label-x')
         .attr('class', 'label')
         .attr('x',
             (yAxisOrientRight)

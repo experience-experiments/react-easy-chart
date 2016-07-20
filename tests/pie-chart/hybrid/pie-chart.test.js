@@ -8,7 +8,7 @@ import chai, { expect } from 'chai'; // { should as shouldFactory, expect} from 
 import sinon from 'sinon';
 import spies from 'chai-spies';
 
-import { PieChart } from 'react-easy-chart';
+import { PieChartHybrid as PieChart } from 'react-easy-chart';
 
 // const should = chaiShould();
 
@@ -67,7 +67,7 @@ const mouseOutSpy = chai.spy(() => {});
 const mouseMoveSpy = chai.spy(() => {});
 const clickSpy = chai.spy(() => {});
 
-describe('PieChart component', () => {
+describe('PieChart (Hybrid) component', () => {
   it('should be defined as a function', () => {
     PieChart.should.be.a('function');
   });
@@ -656,41 +656,6 @@ describe('PieChart component', () => {
 
       it('renders the group', () => {
         expect(group.props.transform).to.equal('translate(200, 200)');
-      });
-    });
-
-    xdescribe('With optional props', () => {
-      const chart = TestUtils.renderIntoDocument(
-        <PieChart
-          data={mockData}
-          mouseOverHandler={mouseOverSpy}
-          mouseOutHandler={mouseOutSpy}
-          mouseMoveHandler={mouseMoveSpy}
-          clickHandler={clickSpy}
-        />
-      );
-      const domRoot = ReactDOM.findDOMNode(chart);
-      const svgNode = domRoot.childNodes[1];
-      const pieNode = svgNode.childNodes[0]; // .childNodes[0]
-
-      it('responds to click events', () => {
-        TestUtils.Simulate.click(pieNode);
-        expect(clickSpy).to.have.been.called();
-      });
-
-      it('responds to mouse over events', () => {
-        TestUtils.SimulateNative.mouseOver(pieNode);
-        expect(mouseOverSpy).to.have.been.called();
-      });
-
-      it('responds to mouse out events', () => {
-        TestUtils.SimulateNative.mouseOut(pieNode);
-        expect(mouseOutSpy).to.have.been.called();
-      });
-
-      it('responds to mouse move events', () => {
-        TestUtils.SimulateNative.mouseMove(pieNode);
-        expect(mouseMoveSpy).to.have.been.called();
       });
     });
   });

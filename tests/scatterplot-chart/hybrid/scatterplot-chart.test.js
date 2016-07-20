@@ -7,7 +7,7 @@ import TestUtils from 'react/lib/ReactTestUtils';
 import chai, { expect } from 'chai'; // { should as shouldFactory, expect } from 'chai';
 import sinon from 'sinon';
 import spies from 'chai-spies';
-import { ScatterplotChart } from 'react-easy-chart';
+import { ScatterplotChartHybrid as ScatterplotChart } from 'react-easy-chart';
 
 // const should = shouldFactory();
 
@@ -62,7 +62,7 @@ const mockData = [
   { key: 'C', value: 0.1 }
 ];
 
-describe('ScatterplotChart component', () => {
+describe('ScatterplotChart (Hybrid) component', () => {
   it('should be defined as a function', () => {
     ScatterplotChart.should.be.a('function');
   });
@@ -376,6 +376,7 @@ describe('ScatterplotChart component', () => {
               data={mockData}
             />
           );
+
           chart.uid = 'mock-uid';
           chart.createXAxis(p);
         });
@@ -396,6 +397,7 @@ describe('ScatterplotChart component', () => {
               axisLabels={mockAxisLabels}
             />
           );
+
           chart.uid = 'mock-uid';
           chart.createXAxis(p);
         });
@@ -420,6 +422,7 @@ describe('ScatterplotChart component', () => {
               yAxisOrientRight
             />
           );
+
           chart.uid = 'mock-uid';
           chart.createXAxis(p);
         });
@@ -441,6 +444,7 @@ describe('ScatterplotChart component', () => {
               yAxisOrientRight
             />
           );
+
           chart.uid = 'mock-uid';
           chart.createXAxis(p);
         });
@@ -493,6 +497,7 @@ describe('ScatterplotChart component', () => {
               data={mockData}
             />
           );
+
           chart.uid = 'mock-uid';
           chart.createYAxis(p);
         });
@@ -513,6 +518,7 @@ describe('ScatterplotChart component', () => {
               axisLabels={mockAxisLabels}
             />
           );
+
           chart.uid = 'mock-uid';
           chart.createYAxis(p);
         });
@@ -539,6 +545,7 @@ describe('ScatterplotChart component', () => {
               yAxisOrientRight
             />
           );
+
           chart.uid = 'mock-uid';
           chart.createYAxis(p);
         });
@@ -560,6 +567,7 @@ describe('ScatterplotChart component', () => {
               yAxisOrientRight
             />
           );
+
           chart.uid = 'mock-uid';
           chart.createYAxis(p);
         });
@@ -599,6 +607,7 @@ describe('ScatterplotChart component', () => {
           axisLabels={mockAxisLabels}
         />
       );
+
       chart.uid = 'mock-uid';
       chart.createScatterplotChart(p);
     });
@@ -1064,92 +1073,6 @@ describe('ScatterplotChart component', () => {
 
       it('renders the group', () => {
         expect(group.props.transform).to.equal('translate(10, 10)');
-      });
-    });
-
-    describe('With optional props', () => {
-      describe('initialise()', () => {
-        const chart = TestUtils.renderIntoDocument(
-          <ScatterplotChart
-            data={mockData}
-            axes
-            mouseOverHandler={mouseOverSpy}
-            mouseOutHandler={mouseOutSpy}
-            mouseMoveHandler={mouseMoveSpy}
-            clickHandler={clickSpy}
-          />
-        );
-
-        chart.initialise();
-
-        const domRoot = ReactDOM.findDOMNode(chart);
-        const svgNode = domRoot.childNodes[1];
-        const circleNode = svgNode
-          .childNodes[0]
-          .childNodes[2]
-          .childNodes[0];
-
-        xit('responds to click events', () => {
-          TestUtils.Simulate.click(circleNode);
-          expect(clickSpy).to.have.been.called();
-        });
-
-        xit('responds to mouse over events', () => {
-          TestUtils.SimulateNative.mouseOver(circleNode);
-          expect(mouseOverSpy).to.have.been.called();
-        });
-
-        xit('responds to mouse out events', () => {
-          TestUtils.SimulateNative.mouseOut(circleNode);
-          expect(mouseOutSpy).to.have.been.called();
-        });
-
-        xit('responds to mouse move events', () => {
-          TestUtils.SimulateNative.mouseMove(circleNode);
-          expect(mouseMoveSpy).to.have.been.called();
-        });
-      });
-
-      describe('transition()', () => {
-        const chart = TestUtils.renderIntoDocument(
-          <ScatterplotChart
-            data={mockData}
-            axes
-            mouseOverHandler={mouseOverSpy}
-            mouseOutHandler={mouseOutSpy}
-            mouseMoveHandler={mouseMoveSpy}
-            clickHandler={clickSpy}
-          />
-        );
-
-        chart.transition();
-
-        const domRoot = ReactDOM.findDOMNode(chart);
-        const svgNode = domRoot.childNodes[1];
-        const circleNode = svgNode
-          .childNodes[0]
-          .childNodes[2]
-          .childNodes[0];
-
-        xit('responds to click events', () => {
-          TestUtils.Simulate.click(circleNode);
-          expect(clickSpy).to.have.been.called();
-        });
-
-        xit('responds to mouse over events', () => {
-          TestUtils.SimulateNative.mouseOver(circleNode);
-          expect(mouseOverSpy).to.have.been.called();
-        });
-
-        xit('responds to mouse out events', () => {
-          TestUtils.SimulateNative.mouseOut(circleNode);
-          expect(mouseOutSpy).to.have.been.called();
-        });
-
-        xit('responds to mouse move events', () => {
-          TestUtils.SimulateNative.mouseMove(circleNode);
-          expect(mouseMoveSpy).to.have.been.called();
-        });
       });
     });
   });

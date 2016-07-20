@@ -117,6 +117,11 @@ export default class PieChart extends React.Component {
 
     const radius = this.getOuterRadius();
 
+    const mouseover = (d) => mouseOverHandler(d, lastEvent);
+    const mouseout = (d) => mouseOutHandler(d, lastEvent);
+    const mousemove = (d) => mouseMoveHandler(d, lastEvent);
+    const click = (d) => clickHandler(d, lastEvent);
+
     const path = root
       .append('g')
       .attr('transform', `translate(${radius}, ${radius})`)
@@ -130,10 +135,10 @@ export default class PieChart extends React.Component {
       .attr('class', 'pie-chart-slice')
       .attr('fill', getSliceFill)
       .attr('d', this.getSliceArc())
-      .on('mouseover', (d) => mouseOverHandler(d, lastEvent))
-      .on('mouseout', (d) => mouseOutHandler(d, lastEvent))
-      .on('mousemove', (d) => mouseMoveHandler(d, lastEvent))
-      .on('click', (d) => clickHandler(d, lastEvent));
+      .on('mouseover', mouseover)
+      .on('mouseout', mouseout)
+      .on('mousemove', mousemove)
+      .on('click', click);
   }
 
   createLabels({ root }) {
@@ -143,22 +148,23 @@ export default class PieChart extends React.Component {
 
     const radius = this.getOuterRadius();
 
+    const getLabelArcTransform = (d) => {
+      const [labelX, labelY] = this.getLabelArc().centroid(d);
+      return `translate(${labelX}, ${labelY})`;
+    };
+
     const text = root
       .append('g')
       .attr('transform', `translate(${radius}, ${radius})`)
       .datum(data)
       .selectAll('text')
       .data(pie);
-
     text
       .enter()
       .append('text')
       .attr('class', 'pie-chart-label')
       .attr('dy', '.35em')
-      .attr('transform', (d) => {
-        const [labelX, labelY] = this.getLabelArc().centroid(d);
-        return `translate(${labelX}, ${labelY})`;
-      })
+      .attr('transform', getLabelArcTransform)
       .text(getLabelText);
   }
 
