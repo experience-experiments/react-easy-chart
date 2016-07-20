@@ -110,7 +110,7 @@ export default class AreaChart extends React.Component {
   createXAxis({ root, m, w, h, x }) {
     const {
       xType,
-      axisLabels,
+      axisLabels: { x: label },
       xTicks,
       grid,
       verticalGrid,
@@ -149,27 +149,28 @@ export default class AreaChart extends React.Component {
     group
       .call(axis);
 
-    group
-      .append('text')
-      .attr('class', 'label')
-      .attr('x',
-        (yAxisOrientRight)
-          ? 0
-          : w)
-      .attr('y', m.bottom - 10)
-      .style('text-anchor',
-        (yAxisOrientRight)
-          ? 'start'
-          : 'end')
-      .text(axisLabels.x);
-
+    if (label) {
+      group
+        .append('text')
+        .attr('class', 'label')
+        .attr('x',
+          (yAxisOrientRight)
+            ? 0
+            : w)
+        .attr('y', m.bottom - 10)
+        .style('text-anchor',
+          (yAxisOrientRight)
+            ? 'start'
+            : 'end')
+        .text(label);
+    }
     return axis;
   }
 
   createYAxis({ root, m, w, y }) {
     const {
       yType,
-      axisLabels,
+      axisLabels: { y: label },
       yTicks,
       grid,
       tickTimeDisplayFormat,
@@ -199,25 +200,31 @@ export default class AreaChart extends React.Component {
         .ticks(yTicks);
     }
 
-    root
+    const group = root
       .append('g')
       .attr('class', 'y axis')
-      .call(axis)
       .attr('transform',
         (yAxisOrientRight)
           ? `translate(${w}, 0)`
-          : 'translate(0, 0)')
-      .append('text')
-      .attr('class', 'label')
-      .attr('transform', 'rotate(-90)')
-      .attr('x', 0)
-      .attr('y',
-        (yAxisOrientRight)
-          ? -20 + m.right
-          : 0 - m.left)
-      .attr('dy', '.9em')
-      .style('text-anchor', 'end')
-      .text(axisLabels.y);
+          : 'translate(0, 0)');
+
+    group
+      .call(axis);
+
+    if (label) {
+      group
+        .append('text')
+        .attr('class', 'label')
+        .attr('transform', 'rotate(-90)')
+        .attr('x', 0)
+        .attr('y',
+          (yAxisOrientRight)
+            ? -20 + m.right
+            : 0 - m.left)
+        .attr('dy', '.9em')
+        .style('text-anchor', 'end')
+        .text(label);
+    }
 
     return axis;
   }
@@ -237,13 +244,15 @@ export default class AreaChart extends React.Component {
 
       defaultStyles[`.dot${i}`] = { fill: color };
 
-      gradient.append('stop')
-          .attr('offset', '0%')
-          .attr('style', `stop-color:${color}; stop-opacity:0.6`);
+      gradient
+        .append('stop')
+        .attr('offset', '0%')
+        .attr('style', `stop-color:${color}; stop-opacity:0.6`);
 
-      gradient.append('stop')
-          .attr('offset', '100%')
-          .attr('style', `stop-color:${color}; stop-opacity:0.4`);
+      gradient
+        .append('stop')
+        .attr('offset', '100%')
+        .attr('style', `stop-color:${color}; stop-opacity:0.4`);
     });
   }
 
@@ -253,6 +262,16 @@ export default class AreaChart extends React.Component {
       interpolate,
       noAreaGradient
     } = this.props;
+
+    const uid = this.uid;
+
+    const getFill = (d, i) => (
+      (noAreaGradient)
+        ? colors[i]
+        : `url(#gradient-${i}-${uid})`
+    );
+
+    const getStroke = (d, i) => colors[i];
 
     const areaPath = svg.area()
       .interpolate(interpolate)
@@ -265,32 +284,27 @@ export default class AreaChart extends React.Component {
       .x((d) => x(xValue(d)))
       .y((d) => y(yValue(d)));
 
-    const uid = this.uid;
-
     const group = root
       .append('g')
       .attr('class', 'areaChart');
 
-    data.forEach((lineItem, i) => {
-      const color = colors[i];
+    group
+      .selectAll('path.area')
+      .data(data)
+      .enter()
+      .append('path')
+      .attr('class', 'area')
+      .style('fill', getFill)
+      .attr('d', areaPath);
 
-      group
-        .append('path')
-        .datum(lineItem)
-        .attr('class', 'area')
-        .style('fill',
-          (noAreaGradient)
-            ? color
-            : `url(#gradient-${i}-${uid})`)
-        .attr('d', areaPath);
-
-      group
-        .append('path')
-        .datum(lineItem)
-        .attr('class', 'line')
-        .attr('style', `stroke:${color}`)
-        .attr('d', linePath);
-    });
+    group
+      .selectAll('path.line')
+      .data(data)
+      .enter()
+      .append('path')
+      .attr('class', 'line')
+      .style('stroke', getStroke)
+      .attr('d', linePath);
   }
 
   createPoints({ root, x, y, colors }) {
@@ -310,39 +324,41 @@ export default class AreaChart extends React.Component {
      */
     const calculateDate = (v) => this.parseDate(v);
 
+    const getStroke = (d, i) => colors[i];
+
+    /*
+     * Creating the calculation functions
+     */
+    const calculateCX = (d) => (
+      (xType === 'time')
+        ? x(calculateDate(d.x))
+        : x(d.x));
+
+    const calculateCY = (d) => (
+      (yType === 'time')
+        ? y(calculateDate(d.y))
+        : y(d.y));
+
+    const mouseover = (d) => mouseOverHandler(d, lastEvent);
+    const mouseout = (d) => mouseOutHandler(d, lastEvent);
+    const mousemove = (d) => mouseMoveHandler(d, lastEvent);
+    const click = (d) => clickHandler(d, lastEvent);
+
     const group = root
       .append('g')
       .attr('class', 'dataPoints');
 
-    data.forEach((lineItem, i) => {
-      const color = colors[i];
-
-      lineItem.forEach((dataPoint) => {
-        /*
-         * Creating the calculation functions
-         */
-        const calculateCX = () => (
-          (xType === 'time')
-            ? x(calculateDate(dataPoint.x))
-            : x(dataPoint.x));
-
-        const calculateCY = () => (
-          (yType === 'time')
-            ? y(calculateDate(dataPoint.y))
-            : y(dataPoint.y));
-
-        const mouseover = () => mouseOverHandler(dataPoint, lastEvent);
-        const mouseout = () => mouseOutHandler(dataPoint, lastEvent);
-        const mousemove = () => mouseMoveHandler(dataPoint, lastEvent);
-        const click = () => clickHandler(dataPoint, lastEvent);
-
+    data.forEach((item) => {
+      item.forEach((d) => {
         /*
          * Applying the calculation functions
          */
-        group.append('circle')
+        group
+          .datum(d)
+          .append('circle')
           .attr('class', 'data-point')
           .style('strokeWidth', '2px')
-          .style('stroke', color)
+          .style('stroke', getStroke)
           .style('fill', 'white')
           .attr('cx', calculateCX)
           .attr('cy', calculateCY)
@@ -407,6 +423,10 @@ export default class AreaChart extends React.Component {
      */
     const parseDate = (v) => this.parseDate(v);
 
+    /*
+     * 'w' and 'h' are the width and height of the graph canvas
+     * (excluding axes and other furniture)
+     */
     const m = calculateMargin(axes, margin, yAxisOrientRight);
     const w = reduce(width, m.left, m.right);
     const h = reduce(height, m.top, m.bottom);

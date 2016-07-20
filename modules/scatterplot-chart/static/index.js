@@ -115,6 +115,43 @@ export default class ScatterplotChart extends React.Component {
     }
   }
 
+  getDataConfig(type) {
+    const {
+      config
+    } = this.props;
+
+    const index = config.findIndex((item) => item.type === type);
+    return config[index];
+  }
+
+  getFill(data) {
+    const configItem = this.getDataConfig(data.type);
+    return (configItem)
+      ? configItem.color
+      : color(data.type);
+  }
+
+  getRadius(data, dataItem, dotRadius) {
+    if (typeof data[0].z !== 'undefined') {
+      const range = extent(data, (d) => d.z);
+      const mn = range[0];
+      const mx = range[1];
+      const p = ((dataItem.z - mn) / (mx - mn));
+      const minRad = 5;
+      const maxRad = 20;
+      const rad = minRad + ((maxRad - minRad) * p);
+      return rad;
+    }
+    return dotRadius;
+  }
+
+  getStroke(data) {
+    const configItem = this.getDataConfig(data.type);
+    return (configItem)
+      ? configItem.stroke
+      : 'none'; // typeof configItem !== 'undefined' ? configItem.stroke : 'none';
+  }
+
   createDomainRangeGenerator(axisType, domainRange, data, type, length, yAxisOrientRight) {
     const dataIndex =
       (axisType === 'x')
@@ -184,43 +221,6 @@ export default class ScatterplotChart extends React.Component {
         break;
     }
     return axis;
-  }
-
-  getDataConfig(type) {
-    const {
-      config
-    } = this.props;
-
-    const index = config.findIndex((item) => item.type === type);
-    return config[index];
-  }
-
-  getFill(data) {
-    const configItem = this.getDataConfig(data.type);
-    return (configItem)
-      ? configItem.color
-      : color(data.type);
-  }
-
-  getRadius(data, dataItem, dotRadius) {
-    if (typeof data[0].z !== 'undefined') {
-      const range = extent(data, (d) => d.z);
-      const mn = range[0];
-      const mx = range[1];
-      const p = ((dataItem.z - mn) / (mx - mn));
-      const minRad = 5;
-      const maxRad = 20;
-      const rad = minRad + ((maxRad - minRad) * p);
-      return rad;
-    }
-    return dotRadius;
-  }
-
-  getStroke(data) {
-    const configItem = this.getDataConfig(data.type);
-    return (configItem)
-      ? configItem.stroke
-      : 'none'; // typeof configItem !== 'undefined' ? configItem.stroke : 'none';
   }
 
   calculateMargin(axes, spacer, yAxisOrientRight) {
@@ -336,7 +336,7 @@ export default class ScatterplotChart extends React.Component {
   createXAxis({ m, innerW, innerH, xAxis, root }) {
     const {
       yAxisOrientRight,
-      axisLabels
+      axisLabels: { x: label }
     } = this.props;
 
     const group = root
@@ -346,8 +346,6 @@ export default class ScatterplotChart extends React.Component {
 
     group
       .call(xAxis);
-
-    const label = axisLabels.x;
 
     if (label) {
       group
@@ -370,7 +368,7 @@ export default class ScatterplotChart extends React.Component {
   createYAxis({ m, innerW, yAxis, root }) {
     const {
       yAxisOrientRight,
-      axisLabels
+      axisLabels: { y: label }
     } = this.props;
 
     const group = root
@@ -383,8 +381,6 @@ export default class ScatterplotChart extends React.Component {
 
     group
       .call(yAxis);
-
-    const label = axisLabels.y;
 
     if (label) {
       group
