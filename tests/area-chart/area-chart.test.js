@@ -530,10 +530,12 @@ describe('AreaChart component', () => {
     };
 
     beforeEach(() => {
-      sinon.spy(mockRoot, 'datum');
+      sinon.spy(mockRoot, 'selectAll');
+      sinon.spy(mockRoot, 'data');
+      sinon.spy(mockRoot, 'enter');
       sinon.spy(mockRoot, 'append');
-      sinon.spy(mockRoot, 'attr');
       sinon.spy(mockRoot, 'style');
+      sinon.spy(mockRoot, 'attr');
 
       const chart = TestUtils.renderIntoDocument(
         <AreaChart
@@ -544,19 +546,31 @@ describe('AreaChart component', () => {
     });
 
     afterEach(() => {
-      mockRoot.datum.restore();
+      mockRoot.selectAll.restore();
+      mockRoot.data.restore();
+      mockRoot.enter.restore();
       mockRoot.append.restore();
-      mockRoot.attr.restore();
       mockRoot.style.restore();
+      mockRoot.attr.restore();
     });
 
-    it('creates the area chart', () => {
+    it('creates the area paths', () => {
+      expect(mockRoot.selectAll.calledWith('path.area')).to.be.true;
+      expect(mockRoot.data.calledWith(mockData)).to.be.true;
+      expect(mockRoot.enter.called).to.be.true;
       expect(mockRoot.append.calledWith('path')).to.be.true;
-      expect(mockRoot.datum.called).to.be.true;
       expect(mockRoot.attr.calledWith('class', 'area')).to.be.true;
-      expect(mockRoot.attr.calledWith('class', 'line')).to.be.true;
       expect(mockRoot.style.calledWith('fill')).to.be.true;
-      expect(mockRoot.attr.calledWith('style')).to.be.true;
+      expect(mockRoot.attr.calledWith('d')).to.be.true;
+    });
+
+    it('creates the line paths', () => {
+      expect(mockRoot.selectAll.calledWith('path.line')).to.be.true;
+      expect(mockRoot.data.calledWith(mockData)).to.be.true;
+      expect(mockRoot.enter.called).to.be.true;
+      expect(mockRoot.append.calledWith('path')).to.be.true;
+      expect(mockRoot.attr.calledWith('class', 'line')).to.be.true;
+      expect(mockRoot.style.calledWith('stroke')).to.be.true;
       expect(mockRoot.attr.calledWith('d')).to.be.true;
     });
   });

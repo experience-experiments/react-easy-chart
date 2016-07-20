@@ -154,9 +154,8 @@ export default class BarChart extends React.Component {
 
   createSvgNode({ m, w, h }) {
     const node = createElement('svg');
-    select(node)
-      .attr('width', w + m.left + m.right)
-      .attr('height', h + m.top + m.bottom);
+    node.setAttribute('width', w + m.left + m.right);
+    node.setAttribute('height', h + m.top + m.bottom)
     return node;
   }
 
@@ -168,7 +167,7 @@ export default class BarChart extends React.Component {
 
   createXAxis({ root, m, w, h, x }) {
     const {
-      axisLabels,
+      axisLabels: { x: label },
       xType,
       tickTimeDisplayFormat,
       xTickNumber,
@@ -201,8 +200,6 @@ export default class BarChart extends React.Component {
     group
       .call(axis);
 
-    const label = axisLabels.x;
-
     if (label) {
       group
         .append('text')
@@ -222,7 +219,7 @@ export default class BarChart extends React.Component {
 
   createYAxis({ root, m, w, y }) {
     const {
-      axisLabels,
+      axisLabels: { y: label },
       yTickNumber,
       yAxisOrientRight,
       grid
@@ -253,8 +250,6 @@ export default class BarChart extends React.Component {
     group
       .call(axis);
 
-    const label = axisLabels.y;
-
     if (label) {
       group
         .attr('transform',
@@ -278,7 +273,7 @@ export default class BarChart extends React.Component {
   createYAxis2({ root, m, w, h }) {
     const {
       lineData,
-      axisLabels,
+      axisLabels: { y2: label },
       y2Type,
       yTickNumber,
       yAxisOrientRight,
@@ -315,8 +310,6 @@ export default class BarChart extends React.Component {
 
     group
       .call(axis);
-
-    const label = axisLabels.y2;
 
     if (label) {
       group

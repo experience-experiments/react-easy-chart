@@ -521,8 +521,11 @@ describe('LineChart component', () => {
     };
 
     beforeEach(() => {
-      sinon.spy(mockRoot, 'datum');
+      sinon.spy(mockRoot, 'selectAll');
+      sinon.spy(mockRoot, 'data');
+      sinon.spy(mockRoot, 'enter');
       sinon.spy(mockRoot, 'append');
+      sinon.spy(mockRoot, 'style');
       sinon.spy(mockRoot, 'attr');
 
       const chart = TestUtils.renderIntoDocument(
@@ -535,16 +538,20 @@ describe('LineChart component', () => {
     });
 
     afterEach(() => {
-      mockRoot.datum.restore();
+      mockRoot.data.restore();
+      mockRoot.enter.restore();
       mockRoot.append.restore();
+      mockRoot.style.restore();
       mockRoot.attr.restore();
     });
 
     it('creates the line chart', () => {
+      expect(mockRoot.selectAll.calledWith('path')).to.be.true;
+      expect(mockRoot.data.calledWith(mockData)).to.be.true;
+      expect(mockRoot.enter.called).to.be.true;
       expect(mockRoot.append.calledWith('path')).to.be.true;
-      expect(mockRoot.datum.called).to.be.true;
       expect(mockRoot.attr.calledWith('class', 'line')).to.be.true;
-      expect(mockRoot.attr.calledWith('style')).to.be.true;
+      expect(mockRoot.style.calledWith('stroke')).to.be.true;
       expect(mockRoot.attr.calledWith('d')).to.be.true;
     });
   });

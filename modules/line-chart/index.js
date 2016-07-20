@@ -95,9 +95,8 @@ export default class LineChart extends React.Component {
 
   createSvgNode({ m, w, h }) {
     const node = createElement('svg');
-    select(node)
-      .attr('width', w + m.left + m.right)
-      .attr('height', h + m.top + m.bottom);
+    node.setAttribute('width', w + m.left + m.right);
+    node.setAttribute('height', h + m.top + m.bottom);
     return node;
   }
 
@@ -110,7 +109,7 @@ export default class LineChart extends React.Component {
   createXAxis({ root, m, w, h, x }) {
     const {
       xType,
-      axisLabels,
+      axisLabels: { x: label },
       xTicks,
       grid,
       verticalGrid,
@@ -149,22 +148,24 @@ export default class LineChart extends React.Component {
     group
       .call(axis);
 
-    group
-      .append('text')
-      .attr('class', 'label')
-      .attr('y', m.bottom - 10)
-      .attr('x', yAxisOrientRight ? 0 : w)
-      .style('text-anchor',
-        (yAxisOrientRight)
-          ? 'start'
-          : 'end')
-      .text(axisLabels.x);
+    if (label) {
+      group
+        .append('text')
+        .attr('class', 'label')
+        .attr('y', m.bottom - 10)
+        .attr('x', yAxisOrientRight ? 0 : w)
+        .style('text-anchor',
+          (yAxisOrientRight)
+            ? 'start'
+            : 'end')
+        .text(label);
+    }
   }
 
   createYAxis({ root, m, w, y }) {
     const {
       yType,
-      axisLabels,
+      axisLabels: { y: label },
       yTicks,
       grid,
       tickTimeDisplayFormat,
@@ -203,18 +204,20 @@ export default class LineChart extends React.Component {
     group
       .call(axis);
 
-    group
-      .append('text')
-      .attr('class', 'label')
-      .attr('transform', 'rotate(-90)')
-      .attr('x', 0)
-      .attr('y',
-        (yAxisOrientRight)
-          ? -20 + m.right
-          : 0 - m.left)
-      .attr('dy', '.9em')
-      .style('text-anchor', 'end')
-      .text(axisLabels.y);
+    if (label) {
+      group
+        .append('text')
+        .attr('class', 'label')
+        .attr('transform', 'rotate(-90)')
+        .attr('x', 0)
+        .attr('y',
+          (yAxisOrientRight)
+            ? -20 + m.right
+            : 0 - m.left)
+        .attr('dy', '.9em')
+        .style('text-anchor', 'end')
+        .text(label);
+    }
   }
 
   createLinePathChart({ root, x, y, xValue, yValue, colors }) {
@@ -222,6 +225,8 @@ export default class LineChart extends React.Component {
       data,
       interpolate
     } = this.props;
+
+    const getStroke = (d, i) => colors[i];
 
     const linePath = svg.line()
       .interpolate(interpolate)
@@ -232,14 +237,14 @@ export default class LineChart extends React.Component {
       .append('g')
       .attr('class', 'lineChart');
 
-    data.forEach((lineItem, i) => {
-      const color = colors[i];
-      group.append('path')
-        .datum(lineItem)
-        .attr('class', 'line')
-        .attr('style', `stroke: ${color}`)
-        .attr('d', linePath);
-    });
+    group
+      .selectAll('path')
+      .data(data)
+      .enter()
+      .append('path')
+      .attr('class', 'line')
+      .style('stroke', getStroke)
+      .attr('d', linePath);
   }
 
   createPoints({ root, x, y, colors }) {
@@ -259,37 +264,40 @@ export default class LineChart extends React.Component {
      */
     const calculateDate = (v) => this.parseDate(v);
 
+    const getStroke = (d, i) => colors[i];
+
+    /*
+     * Creating the calculation functions
+     */
+    const calculateCX = (d) => (
+      (xType === 'time')
+        ? x(calculateDate(d.x))
+        : x(d.x));
+    const calculateCY = (d) => (
+      (yType === 'time')
+        ? y(calculateDate(d.y))
+        : y(d.y));
+
+    const mouseover = (d) => mouseOverHandler(d, lastEvent);
+    const mouseout = (d) => mouseOutHandler(d, lastEvent);
+    const mousemove = (d) => mouseMoveHandler(d, lastEvent);
+    const click = (d) => clickHandler(d, lastEvent);
+
     const group = root
       .append('g')
       .attr('class', 'dataPoints');
 
-    data.forEach((lineItem, i) => {
-      const color = colors[i];
-      lineItem.forEach((dataPoint) => {
-        /*
-         * Creating the calculation functions
-         */
-        const calculateCX = () => (
-          (xType === 'time')
-            ? x(calculateDate(dataPoint.x))
-            : x(dataPoint.x));
-        const calculateCY = () => (
-          (yType === 'time')
-            ? y(calculateDate(dataPoint.y))
-            : y(dataPoint.y));
-
-        const mouseover = () => mouseOverHandler(dataPoint, lastEvent);
-        const mouseout = () => mouseOutHandler(dataPoint, lastEvent);
-        const mousemove = () => mouseMoveHandler(dataPoint, lastEvent);
-        const click = () => clickHandler(dataPoint, lastEvent);
-
+    data.forEach((item) => {
+      item.forEach((d) => {
         /*
          * Applying the calculation functions
          */
-        group.append('circle')
+        group
+          .datum(d)
+          .append('circle')
           .attr('class', 'data-point')
           .style('strokeWidth', '2px')
-          .style('stroke', color)
+          .style('stroke', getStroke)
           .style('fill', 'white')
           .attr('cx', calculateCX)
           .attr('cy', calculateCY)
@@ -354,6 +362,10 @@ export default class LineChart extends React.Component {
      */
     const parseDate = (v) => this.parseDate(v);
 
+    /*
+     * 'w' and 'h' are the width and height of the graph canvas
+     * (excluding axes and other furniture)
+     */
     const m = calculateMargin(axes, margin, yAxisOrientRight);
     const w = reduce(width, m.left, m.right);
     const h = reduce(height, m.top, m.bottom);

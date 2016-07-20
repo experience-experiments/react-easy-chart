@@ -509,9 +509,8 @@ export default class ScatterplotChart extends React.Component {
 
   createSvgNode({ m, w, h }) {
     const node = createElement('svg');
-    select(node)
-      .attr('width', w + m.left + m.right)
-      .attr('height', h + m.top + m.bottom);
+    node.setAttribute('width', w + m.left + m.right);
+    node.setAttribute('height', h + m.top + m.bottom);
     return node;
   }
 
@@ -524,7 +523,7 @@ export default class ScatterplotChart extends React.Component {
   createXAxis({ m, innerW, innerH, root }) {
     const {
       yAxisOrientRight,
-      axisLabels
+      axisLabels: { x: label }
     } = this.props;
 
     const uid = this.uid;
@@ -534,8 +533,6 @@ export default class ScatterplotChart extends React.Component {
       .attr('class', 'x axis')
       .attr('id', `scatterplot-x-axis-${uid}`)
       .attr('transform', `translate(0, ${innerH})`);
-
-    const label = axisLabels.x;
 
     if (label) {
       group
@@ -557,7 +554,7 @@ export default class ScatterplotChart extends React.Component {
   createYAxis({ m, innerW, root }) {
     const {
       yAxisOrientRight,
-      axisLabels
+      axisLabels: { y: label }
     } = this.props;
 
     const uid = this.uid;
@@ -570,8 +567,6 @@ export default class ScatterplotChart extends React.Component {
         (yAxisOrientRight)
           ? `translate(${innerW}, 0)`
           : 'translate(0, 0)');
-
-    const label = axisLabels.y;
 
     if (label) {
       group
