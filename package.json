@@ -1,13 +1,12 @@
 {
   "name": "react-easy-chart",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "React component implementations of Mike Bostok's D3 visualisation library.",
   "main": "lib/index.js",
   "scripts": {
     "test": "NODE_ENV='test' karma start",
     "dev-test": "karma start --no-single-run --auto-watch",
     "eslint": "eslint ./modules/ ./examples/",
-    "eslint-fix": "eslint --fix ./modules/",
     "start": "npm run eslint && node examples/server.js",
     "docbuild": "mkdir -p docs && rm -rf docs/* && cp -rf examples/ docs/temp/ && cd docs && NODE_ENV=production webpack -p --config temp/webpack.config.docs.js && rm -r temp",
     "publishToNPM": "cd npmdist && npm version patch && npm publish"
@@ -39,6 +38,12 @@
     "babel-runtime": "^6.9.2",
     "chai": "^3.5.0",
     "chai-spies": "^0.7.1",
+    "copy-webpack-plugin": "^3.0.1",
+    "d3": "^3.5.17",
+    "d3-array": "^0.8.1",
+    "d3-scale": "^0.9.3",
+    "d3-shape": "^0.7.1",
+    "d3-time-format": "^0.4.0",
     "es5-shim": "^4.5.9",
     "es6-shim": "^0.35.1",
     "eslint": "^2.13.1",
@@ -47,6 +52,7 @@
     "eslint-plugin-import": "^1.11.1",
     "eslint-plugin-jsx-a11y": "^2.0.1",
     "eslint-plugin-react": "^5.2.2",
+    "html-webpack-plugin": "^2.22.0",
     "isparta": "^4.0.0",
     "isparta-loader": "^2.0.0",
     "istanbul": "^0.4.4",
@@ -67,6 +73,9 @@
     "open": "0.0.5",
     "phantomjs": "^2.1.7",
     "phantomjs-polyfill": "0.0.2",
+    "react": "^15.1.0",
+    "react-dom": "^15.1.0",
+    "react-faux-dom": "^2.5.0",
     "react-scrollspy": "^2.1.1",
     "rimraf": "^2.4.4",
     "sinon": "^1.17.4",
@@ -75,13 +84,15 @@
     "webpack-dev-server": "^1.14.0"
   },
   "dependencies": {
+    "lodash.merge": "^4.0.1",
+    "radium": "^0.18.1"
+  },
+  "peerDependencies": {
     "d3": "^3.5.17",
     "d3-array": "^0.8.1",
     "d3-scale": "^0.9.3",
     "d3-shape": "^0.7.1",
     "d3-time-format": "^0.4.0",
-    "lodash.merge": "^4.0.1",
-    "radium": "^0.18.1",
     "react": "^15.1.0",
     "react-dom": "^15.1.0",
     "react-faux-dom": "^2.5.0"
