@@ -1,6 +1,7 @@
 import { extent } from 'd3-array';
 import { scaleLinear as linear, scalePoint as point } from 'd3-scale';
 import { time, select } from 'd3';
+import hash from 'object-hash';
 
 export const defaultColors = [
   '#3F4C55',
@@ -157,8 +158,8 @@ export function getAxisStyles(grid, verticalGrid, yAxisOrientRight) {
   };
 }
 
-export function createUniqueID() {
-  return Math.floor(Math.random() * new Date().getTime());
+export function createUniqueID(obj) {
+  return hash(obj);
 }
 
 export function calculateMargin(axes, margin, yAxisOrientRight, y2) {
