@@ -1,6 +1,6 @@
 {
   "name": "react-easy-chart",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "React component implementations of Mike Bostok's D3 visualisation library.",
   "main": "lib/index.js",
   "scripts": {
@@ -9,7 +9,8 @@
     "eslint": "eslint ./modules/ ./examples/",
     "start": "npm run eslint && node examples/server.js",
     "docbuild": "mkdir -p docs && rm -rf docs/* && cp -rf examples/ docs/temp/ && cd docs && NODE_ENV=production webpack -p --config temp/webpack.config.docs.js && rm -r temp",
-    "publishToNPM": "cd npmdist && npm version patch && npm publish"
+    "publishToNPM": "cd npmdist && npm version patch && npm publish",
+    "babel": "babel ./modules --out-dir ./npmdist --source-maps --presets es2015,react --plugins babel-plugin-add-module-exports"
   },
   "repository": {
     "type": "git",

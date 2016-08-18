@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../../../../modules/line-chart/hybrid/LineChart/common/defaultColors.js"],"names":[],"mappings":";;;;;kBACe,CACb,SADa,EAEb,SAFa,EAGb,SAHa,EAIb,SAJa,C","file":"defaultColors.js","sourcesContent":["\nexport default [\n  '#3F4C55',\n  '#E3A51A',\n  '#F4E956',\n  '#AAAC84'\n];\n"]}

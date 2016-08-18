@@ -30,9 +30,9 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactFauxDom = require('react-faux-dom');
 
-var _shared = require('../shared');
-
 var _d = require('d3');
+
+var _shared = require('../../shared');
 
 var _radium = require('radium');
 
@@ -46,9 +46,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var dateParser = {};
 
-var AreaChart = function (_React$Component) {
-  (0, _inherits3.default)(AreaChart, _React$Component);
-  (0, _createClass3.default)(AreaChart, null, [{
+var LineChart = function (_React$Component) {
+  (0, _inherits3.default)(LineChart, _React$Component);
+  (0, _createClass3.default)(LineChart, null, [{
     key: 'propTypes',
     get: function get() {
       return {
@@ -66,12 +66,11 @@ var AreaChart = function (_React$Component) {
         verticalGrid: _react2.default.PropTypes.bool,
         xDomainRange: _react2.default.PropTypes.array,
         yDomainRange: _react2.default.PropTypes.array,
-        areaColors: _react2.default.PropTypes.array,
-        noAreaGradient: _react2.default.PropTypes.bool,
         tickTimeDisplayFormat: _react2.default.PropTypes.string,
         yTicks: _react2.default.PropTypes.number,
         xTicks: _react2.default.PropTypes.number,
         dataPoints: _react2.default.PropTypes.bool,
+        lineColors: _react2.default.PropTypes.array,
         axisLabels: _react2.default.PropTypes.shape({
           x: _react2.default.PropTypes.string,
           y: _react2.default.PropTypes.string
@@ -92,9 +91,9 @@ var AreaChart = function (_React$Component) {
         datePattern: '%d-%b-%y',
         interpolate: 'linear',
         axes: false,
-        areaColors: [],
         xType: 'linear',
         yType: 'linear',
+        lineColors: [],
         axisLabels: {
           x: '',
           y: ''
@@ -107,26 +106,26 @@ var AreaChart = function (_React$Component) {
     }
   }]);
 
-  function AreaChart(props) {
-    (0, _classCallCheck3.default)(this, AreaChart);
+  function LineChart(props) {
+    (0, _classCallCheck3.default)(this, LineChart);
 
-    var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(AreaChart).call(this, props));
+    var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(LineChart).call(this, props));
 
-    _this.uid = (0, _shared.createUniqueID)(props);
+    _this.uid = (0, _shared.createUniqueID)();
     return _this;
   }
 
-  (0, _createClass3.default)(AreaChart, [{
+  (0, _createClass3.default)(LineChart, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      var ref = this.refs.areaChart;
-      (0, _shared.createCircularTicks)(ref);
+      var lineChart = this.refs.lineChart;
+      (0, _shared.createCircularTicks)(lineChart);
     }
   }, {
     key: 'componentDidUpdate',
     value: function componentDidUpdate() {
-      var ref = this.refs.areaChart;
-      (0, _shared.createCircularTicks)(ref);
+      var lineChart = this.refs.lineChart;
+      (0, _shared.createCircularTicks)(lineChart);
     }
   }, {
     key: 'createSvgNode',
@@ -171,10 +170,11 @@ var AreaChart = function (_React$Component) {
       if (xType === 'time' && tickTimeDisplayFormat) {
         axis.tickFormat(_d.time.format(tickTimeDisplayFormat));
       }
+
       if (grid && verticalGrid) {
-        axis.tickSize(-h, 6).tickPadding(15);
+        axis.tickSize(-h, 6).tickPadding(10);
       } else {
-        axis.tickSize(0).tickPadding(15);
+        axis.tickSize(0, 6).tickPadding(16); // wut
       }
 
       if (xTicks) {
@@ -186,9 +186,8 @@ var AreaChart = function (_React$Component) {
       group.call(axis);
 
       if (label) {
-        group.append('text').attr('class', 'label').attr('x', yAxisOrientRight ? 0 : w).attr('y', m.bottom - 10).style('text-anchor', yAxisOrientRight ? 'start' : 'end').text(label);
+        group.append('text').attr('class', 'label').attr('x', yAxisOrientRight ? 0 : w).attr('y', m.bottom - m.top).attr('dx', yAxisOrientRight ? '0em' : '-.175em').attr('dy', '-.175em').style('dominant-baseline', 'ideographic').style('text-anchor', yAxisOrientRight ? 'start' : 'end').text(label);
       }
-      return axis;
     }
   }, {
     key: 'createYAxis',
@@ -213,9 +212,9 @@ var AreaChart = function (_React$Component) {
       }
 
       if (grid) {
-        axis.tickSize(-w, 6).tickPadding(12);
+        axis.tickSize(-w, 6).tickPadding(10);
       } else {
-        axis.tickPadding(10);
+        axis.tickSize(0, 6).tickPadding(16); // wut
       }
 
       if (yTicks) {
@@ -227,60 +226,26 @@ var AreaChart = function (_React$Component) {
       group.call(axis);
 
       if (label) {
-        group.append('text').attr('class', 'label').attr('transform', 'rotate(-90)').attr('x', 0).attr('y', yAxisOrientRight ? -20 + m.right : 0 - m.left).attr('dy', '.9em').style('text-anchor', 'end').text(label);
+        group.append('text').attr('class', 'label').attr('transform', 'rotate(-90)').attr('x', 0).attr('y', yAxisOrientRight ? +m.right - m.left : -m.left + m.right).attr('dx', 0).attr('dy', yAxisOrientRight ? '-.175em' : '1em').style('dominant-baseline', 'ideographic').style('text-anchor', 'end').text(label);
       }
-
-      return axis;
     }
   }, {
-    key: 'createFill',
-    value: function createFill(_ref5) {
-      var node = _ref5.node;
+    key: 'createLinePathChart',
+    value: function createLinePathChart(_ref5) {
+      var root = _ref5.root;
+      var x = _ref5.x;
+      var y = _ref5.y;
+      var xValue = _ref5.xValue;
+      var yValue = _ref5.yValue;
       var colors = _ref5.colors;
-
-      var uid = this.uid;
-
-      colors.forEach(function (color, i) {
-        var gradient = (0, _d.select)(node).append('defs').append('linearGradient').attr('id', 'gradient-' + i + '-' + uid).attr('x1', '0%').attr('x2', '0%').attr('y1', '40%').attr('y2', '100%');
-
-        _shared.defaultStyles['.dot' + i] = { fill: color };
-
-        gradient.append('stop').attr('offset', '0%').attr('style', 'stop-color:' + color + '; stop-opacity:0.6');
-
-        gradient.append('stop').attr('offset', '100%').attr('style', 'stop-color:' + color + '; stop-opacity:0.4');
-      });
-    }
-  }, {
-    key: 'createAreaPathChart',
-    value: function createAreaPathChart(_ref6) {
-      var root = _ref6.root;
-      var h = _ref6.h;
-      var x = _ref6.x;
-      var y = _ref6.y;
-      var xValue = _ref6.xValue;
-      var yValue = _ref6.yValue;
-      var colors = _ref6.colors;
       var _props3 = this.props;
       var data = _props3.data;
       var interpolate = _props3.interpolate;
-      var noAreaGradient = _props3.noAreaGradient;
 
-
-      var uid = this.uid;
-
-      var getFill = function getFill(d, i) {
-        return noAreaGradient ? colors[i] : 'url(#gradient-' + i + '-' + uid + ')';
-      };
 
       var getStroke = function getStroke(d, i) {
         return colors[i];
       };
-
-      var areaPath = _d.svg.area().interpolate(interpolate).x(function (d) {
-        return x(xValue(d));
-      }).y0(h).y1(function (d) {
-        return y(yValue(d));
-      });
 
       var linePath = _d.svg.line().interpolate(interpolate).x(function (d) {
         return x(xValue(d));
@@ -288,21 +253,19 @@ var AreaChart = function (_React$Component) {
         return y(yValue(d));
       });
 
-      var group = root.append('g').attr('class', 'areaChart');
+      var group = root.append('g').attr('class', 'lineChart');
 
-      group.selectAll('path.area').data(data).enter().append('path').attr('class', 'area').style('fill', getFill).attr('d', areaPath);
-
-      group.selectAll('path.line').data(data).enter().append('path').attr('class', 'line').style('stroke', getStroke).attr('d', linePath);
+      group.selectAll('path').data(data).enter().append('path').attr('class', 'line').style('stroke', getStroke).attr('d', linePath);
     }
   }, {
     key: 'createPoints',
-    value: function createPoints(_ref7) {
+    value: function createPoints(_ref6) {
       var _this2 = this;
 
-      var root = _ref7.root;
-      var x = _ref7.x;
-      var y = _ref7.y;
-      var colors = _ref7.colors;
+      var root = _ref6.root;
+      var x = _ref6.x;
+      var y = _ref6.y;
+      var colors = _ref6.colors;
       var _props4 = this.props;
       var data = _props4.data;
       var xType = _props4.xType;
@@ -331,7 +294,6 @@ var AreaChart = function (_React$Component) {
       var calculateCX = function calculateCX(d) {
         return xType === 'time' ? x(calculateDate(d.x)) : x(d.x);
       };
-
       var calculateCY = function calculateCY(d) {
         return yType === 'time' ? y(calculateDate(d.y)) : y(d.y);
       };
@@ -371,7 +333,7 @@ var AreaChart = function (_React$Component) {
 
 
       var uid = this.uid;
-      var scope = '.area-chart-' + uid;
+      var scope = '.line-chart-' + uid;
       var axisStyles = (0, _shared.getAxisStyles)(grid, verticalGrid, yAxisOrientRight);
       var rules = (0, _lodash2.default)({}, _shared.defaultStyles, style, axisStyles);
 
@@ -397,16 +359,16 @@ var AreaChart = function (_React$Component) {
 
       var _props6 = this.props;
       var data = _props6.data;
+      var axes = _props6.axes;
       var xType = _props6.xType;
       var yType = _props6.yType;
-      var axes = _props6.axes;
       var xDomainRange = _props6.xDomainRange;
       var yDomainRange = _props6.yDomainRange;
-      var yAxisOrientRight = _props6.yAxisOrientRight;
-      var areaColors = _props6.areaColors;
       var margin = _props6.margin;
       var width = _props6.width;
       var height = _props6.height;
+      var lineColors = _props6.lineColors;
+      var yAxisOrientRight = _props6.yAxisOrientRight;
 
       /*
        * We could "bind"!
@@ -430,7 +392,7 @@ var AreaChart = function (_React$Component) {
       var xValue = (0, _shared.createValueGenerator)('x', xType, parseDate);
       var yValue = (0, _shared.createValueGenerator)('y', yType, parseDate);
 
-      var colors = areaColors.concat(_shared.defaultColors);
+      var colors = lineColors.concat(_shared.defaultColors);
 
       var node = this.createSvgNode({ m: m, w: w, h: h });
       var root = this.createSvgRoot({ node: node, m: m });
@@ -454,10 +416,8 @@ var AreaChart = function (_React$Component) {
       var _props7 = this.props;
       var axes = _props7.axes;
       var dataPoints = _props7.dataPoints;
-      var noAreaGradient = _props7.noAreaGradient;
 
 
-      var hasFill = !noAreaGradient;
       var p = this.calculateChartParameters();
 
       if (axes) {
@@ -466,32 +426,28 @@ var AreaChart = function (_React$Component) {
         this.createYAxis(p);
       }
 
-      if (hasFill) {
-        this.createFill(p);
-      }
-
-      this.createAreaPathChart(p);
+      this.createLinePathChart(p);
 
       if (dataPoints) {
         this.createPoints(p);
       }
 
       var uid = this.uid;
-      var className = 'area-chart-' + uid;
+      var className = 'line-chart-' + uid;
       var node = p.node;
 
 
       return _react2.default.createElement(
         'div',
-        { ref: 'areaChart', className: className },
+        { ref: 'lineChart', className: className },
         this.createStyle(),
         node.toReact()
       );
     }
   }]);
-  return AreaChart;
+  return LineChart;
 }(_react2.default.Component);
 
-exports.default = AreaChart;
+exports.default = LineChart;
 module.exports = exports['default'];
 //# sourceMappingURL=index.js.map

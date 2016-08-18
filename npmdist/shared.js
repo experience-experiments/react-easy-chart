@@ -3,16 +3,22 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.defaultStyle = exports.rmaColorPalet = undefined;
+exports.defaultStyles = exports.defaultColors = undefined;
+
+var _slicedToArray2 = require('babel-runtime/helpers/slicedToArray');
+
+var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
+
 exports.reduce = reduce;
-exports.getValueFunction = getValueFunction;
+exports.createValueGenerator = createValueGenerator;
 exports.createCircularTicks = createCircularTicks;
 exports.getAxisStyles = getAxisStyles;
-exports.getRandomId = getRandomId;
-exports.calcMargin = calcMargin;
-exports.findLargestExtent = findLargestExtent;
-exports.calcDefaultDomain = calcDefaultDomain;
-exports.setLineDomainAndRange = setLineDomainAndRange;
+exports.createUniqueID = createUniqueID;
+exports.calculateMargin = calculateMargin;
+exports.textDomainRange = textDomainRange;
+exports.calculateExtent = calculateExtent;
+exports.calculateDomainRange = calculateDomainRange;
+exports.createDomainRangeGenerator = createDomainRangeGenerator;
 
 var _d3Array = require('d3-array');
 
@@ -20,18 +26,24 @@ var _d3Scale = require('d3-scale');
 
 var _d = require('d3');
 
-var rmaColorPalet = exports.rmaColorPalet = ['#3F4C55', '#E3A51A', '#F4E956', '#AAAC84'];
+var _objectHash = require('object-hash');
 
-var defaultStyle = exports.defaultStyle = {
-  '.pie_chart_lines': {
+var _objectHash2 = _interopRequireDefault(_objectHash);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var defaultColors = exports.defaultColors = ['#3F4C55', '#E3A51A', '#F4E956', '#AAAC84'];
+
+var defaultStyles = exports.defaultStyles = {
+  '.pie-chart-slice': {
     stroke: '#fff',
     strokeWidth: 1,
     opacity: '1'
   },
-  '.pie_chart_lines:hover': {
+  '.pie-chart-slice:hover': {
     opacity: '0.8'
   },
-  '.pie_chart_text': {
+  '.pie-chart-label': {
     fontFamily: 'sans-serif',
     fontSize: '12px',
     textAnchor: 'middle',
@@ -39,7 +51,7 @@ var defaultStyle = exports.defaultStyle = {
   },
   '.bar': {
     fill: 'blue',
-    transition: 'height 0.5s ease-in, y 0.5s ease-in',
+    transition: 'x 0.35s ease-in, y 0.35s ease-in, height 0.5s ease-in, width 0.5s ease-in',
     opacity: 1
   },
   '.bar:hover': {
@@ -61,14 +73,16 @@ var defaultStyle = exports.defaultStyle = {
   },
   '.dot': {
     strokeWidth: 0,
-    opacity: 0.85
+    opacity: 0.85,
+    transition: 'cx 0.35s ease-in, cy 0.35s ease-in, r 0.5s ease-in'
   },
   '.dot:hover': {
     opacity: 1
   },
   'circle.data-point': {
     r: 4,
-    opacity: 0.7
+    opacity: 0.7,
+    transition: 'cx 0.35s ease-in, cy 0.35s ease-in'
   },
   'circle.data-point:hover': {
     r: 6,
@@ -88,7 +102,7 @@ var defaultStyle = exports.defaultStyle = {
   '.axis .label': {
     font: '14px arial'
   },
-  '.axis path,.axis line': {
+  '.axis path, .axis line': {
     fill: 'none',
     strokeWidth: 1,
     'shape-rendering': 'crispEdges'
@@ -104,31 +118,32 @@ var defaultStyle = exports.defaultStyle = {
   }
 };
 
-function reduce(x) {
-  var rVal = x;
-  for (var i = 1; i < arguments.length; i++) {
-    rVal -= arguments[i];
+function reduce() {
+  for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+    args[_key] = arguments[_key];
+  }
+
+  var rVal = args[0];
+  for (var i = 1; i < args.length; i++) {
+    rVal -= args[i];
   }
   return rVal;
 }
 
-function getValueFunction(scale, type, dateParser) {
+function createValueGenerator(scale, type, parseDate) {
   var dataIndex = scale === 'x' ? 'x' : 'y';
-  switch (type) {
-    case 'time':
-      return function (d) {
-        return dateParser(d[dataIndex]);
-      };
-    default:
-      return function (d) {
-        return d[dataIndex];
-      };
-  }
+  return type === 'time' ? function (d) {
+    return parseDate(d[dataIndex]);
+  } : function (d) {
+    return d[dataIndex];
+  };
 }
 
 function createCircularTicks(containerElement) {
   (0, _d.select)(containerElement).select('svg').selectAll('.tick-circle').remove();
+
   var ticks = (0, _d.select)(containerElement).select('svg').selectAll('.tick');
+
   function circleAppender() {
     (0, _d.select)(this).append('circle').attr('class', 'tick-circle');
   }
@@ -151,65 +166,92 @@ function getAxisStyles(grid, verticalGrid, yAxisOrientRight) {
   };
 }
 
-function getRandomId() {
-  return Math.floor(Math.random() * new Date().getTime());
+function createUniqueID(o) {
+  return (0, _objectHash2.default)(o);
 }
 
-function calcMargin(axes, margin, yAxisOrientRight, y2) {
+function calculateMargin(axes, margin, yAxisOrientRight, y2) {
   if (margin) return margin;
-  var defaultMargins = axes ? { top: 20, right: y2 ? 50 : 20, bottom: 50, left: 50 } : { top: 0, right: 0, bottom: 0, left: 0 };
   if (yAxisOrientRight) {
-    defaultMargins = axes ? { top: 20, right: 50, bottom: 50, left: y2 ? 50 : 20 } : { top: 0, right: 0, bottom: 0, left: 0 };
+    return axes ? { top: 20, right: 50, bottom: 50, left: y2 ? 50 : 20 } : { top: 0, right: 0, bottom: 0, left: 0 };
   }
-  return defaultMargins;
+  return axes ? { top: 20, right: y2 ? 50 : 20, bottom: 50, left: 50 } : { top: 0, right: 0, bottom: 0, left: 0 };
 }
 
-function findLargestExtent(data, valueFunction) {
-  var low = undefined;
-  var high = undefined;
-  data.map(function (dataElement) {
-    var calcDomainRange = (0, _d3Array.extent)(dataElement, valueFunction);
-    low = low < calcDomainRange[0] ? low : calcDomainRange[0];
-    high = high > calcDomainRange[1] ? high : calcDomainRange[1];
+/* eslint no-shadow: 0 */
+function textDomainRange(d, s) {
+  var a = [];
+
+  d.forEach(function (d) {
+    d.forEach(function (d, i) {
+      var v = d[s];
+      if (!a.includes(v)) a.splice(i, 0, v);
+    });
   });
-  return [low, high];
+
+  return a;
 }
 
-function calcDefaultDomain(domainRange, type, dateParser) {
-  if (!domainRange) return null;
-  switch (type) {
-    case 'time':
-      return [dateParser(domainRange[0]), dateParser(domainRange[1])];
-    default:
-      return domainRange;
-  }
+function calculateExtent(data, accessor) {
+  var lo = void 0; // Low
+  var hi = void 0; // High
+  data.forEach(function (item) {
+    var _extent = (0, _d3Array.extent)(item, accessor);
+
+    var _extent2 = (0, _slicedToArray3.default)(_extent, 2);
+
+    var LO = _extent2[0];
+    var HI = _extent2[1];
+
+    lo = lo < LO ? lo : LO;
+    hi = hi > HI ? hi : HI;
+  });
+  return [lo, hi];
 }
 
-function setLineDomainAndRange(scale, domainRange, data, type, length, parseDate) {
-  var dataIndex = scale === 'x' ? 'x' : 'y';
-  var d3Axis = undefined;
+function timeDomainRange(domainRange, parseDate) {
+  var _domainRange = (0, _slicedToArray3.default)(domainRange, 2);
+
+  var LO = _domainRange[0];
+  var HI = _domainRange[1];
+
+  var lo = parseDate(LO);
+  var hi = parseDate(HI);
+  return [lo, hi];
+}
+
+function calculateDomainRange(domainRange, type, parseDate) {
+  if (!Array.isArray(domainRange)) return null;
+  return type === 'time' ? timeDomainRange(domainRange, parseDate) : domainRange;
+}
+
+function createDomainRangeGenerator(scale, domainRange, data, type, length, parseDate) {
+  /*
+  const dataIndex =
+    (scale === 'x')
+      ? 'x'
+      : 'y';
+  */
+  var axis = void 0;
+
   switch (type) {
     case 'text':
-      d3Axis = (0, _d3Scale.ordinal)();
-      d3Axis.domain(domainRange ? calcDefaultDomain(domainRange, type, parseDate) : data[0].map(function (d) {
-        return d[dataIndex];
-      }));
-
-      d3Axis.rangePoints([0, length], 0);
+      axis = (0, _d3Scale.scalePoint)();
+      axis.domain(Array.isArray(domainRange) ? domainRange // calculateDomainRange(domainRange, type, parseDate)
+      : textDomainRange(data, scale)).range([0, length]).padding(0);
       break;
     case 'linear':
-      d3Axis = (0, _d3Scale.linear)();
-      d3Axis.domain(domainRange ? calcDefaultDomain(domainRange, type, parseDate) : findLargestExtent(data, getValueFunction(scale, type, parseDate)));
-      d3Axis.range(scale === 'x' ? [0, length] : [length, 0]);
+      axis = (0, _d3Scale.scaleLinear)();
+      axis.domain(Array.isArray(domainRange) ? domainRange // calculateDomainRange(domainRange, type, parseDate)
+      : calculateExtent(data, createValueGenerator(scale, type, parseDate))).range(scale === 'x' ? [0, length] : [length, 0]);
       break;
     case 'time':
-      d3Axis = _d.time.scale();
-      d3Axis.domain(domainRange ? calcDefaultDomain(domainRange, type, parseDate) : findLargestExtent(data, getValueFunction(scale, type, parseDate)));
-      d3Axis.range(scale === 'x' ? [0, length] : [length, 0]);
+      axis = _d.time.scale();
+      axis.domain(Array.isArray(domainRange) ? timeDomainRange(domainRange, parseDate) : calculateExtent(data, createValueGenerator(scale, type, parseDate))).range(scale === 'x' ? [0, length] : [length, 0]);
       break;
     default:
       break;
   }
-  return d3Axis;
+  return axis;
 }
 //# sourceMappingURL=shared.js.map

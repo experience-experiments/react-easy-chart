@@ -4,7 +4,25 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _getPrototypeOf = require('babel-runtime/core-js/object/get-prototype-of');
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _possibleConstructorReturn2 = require('babel-runtime/helpers/possibleConstructorReturn');
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _createClass2 = require('babel-runtime/helpers/createClass');
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _inherits2 = require('babel-runtime/helpers/inherits');
+
+var _inherits3 = _interopRequireDefault(_inherits2);
 
 var _react = require('react');
 
@@ -14,136 +32,134 @@ var _radium = require('radium');
 
 var _d = require('d3');
 
+var _shared = require('../shared');
+
 var _lodash = require('lodash.merge');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
+var _defaultStyles = require('./defaultStyles');
+
+var _defaultStyles2 = _interopRequireDefault(_defaultStyles);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var defaultStyles = {
-  '.legend': {
-    'list-style': 'none',
-    margin: 0,
-    padding: 0
-  },
-  '.legend li': {
-    display: 'block',
-    lineHeight: '24px',
-    marginRight: '24px',
-    marginBottom: '6px',
-    paddingLeft: '24px',
-    position: 'relative'
-  },
-  '.legend li.horizontal': {
-    display: 'inline-block'
-  },
-  '.legend .icon': {
-    width: '12px',
-    height: '12px',
-    borderRadius: '6px',
-    position: 'absolute',
-    left: '0',
-    top: '50%',
-    marginTop: '-6px'
-  }
-};
 
 var colors = _d.scale.category20().range();
 
-var Legend = (function (_React$Component) {
-  _inherits(Legend, _React$Component);
-
-  _createClass(Legend, null, [{
+var Legend = function (_React$Component) {
+  (0, _inherits3.default)(Legend, _React$Component);
+  (0, _createClass3.default)(Legend, null, [{
     key: 'propTypes',
     get: function get() {
       return {
         config: _react2.default.PropTypes.array,
         data: _react2.default.PropTypes.array.isRequired,
+        tags: _react2.default.PropTypes.array,
         dataId: _react2.default.PropTypes.string.isRequired,
         horizontal: _react2.default.PropTypes.bool,
         styles: _react2.default.PropTypes.object
       };
     }
+  }, {
+    key: 'defaultProps',
+    get: function get() {
+      return {
+        tags: []
+      };
+    }
   }]);
 
   function Legend(props) {
-    _classCallCheck(this, Legend);
+    (0, _classCallCheck3.default)(this, Legend);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Legend).call(this, props));
+    var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Legend).call(this, props));
 
-    _this.tags = [];
+    _this.uid = (0, _shared.createUniqueID)(props);
     return _this;
   }
 
-  _createClass(Legend, [{
-    key: 'componentWillMount',
-    value: function componentWillMount() {
-      var _this2 = this;
+  (0, _createClass3.default)(Legend, [{
+    key: 'getBackgroundColor',
+    value: function getBackgroundColor(index) {
+      var config = this.props.config;
 
-      var dataId = this.props.dataId;
-      this.props.data.map(function (item) {
-        var index = _this2.tags.findIndex(function (tag) {
-          return tag === item[dataId];
-        });
-        if (index === -1) _this2.tags.push(item[dataId]);
-      });
-    }
-  }, {
-    key: 'getList',
-    value: function getList() {
-      var _this3 = this;
 
-      var cn = this.props.horizontal ? 'horizontal' : '';
-      return this.tags.map(function (item, index) {
-        return _react2.default.createElement(
-          'li',
-          { key: index, className: cn },
-          _react2.default.createElement('span', {
-            className: 'icon',
-            style: { backgroundColor: _this3.getIconColor(index) }
-          }),
-          item
-        );
-      });
-    }
-  }, {
-    key: 'getIconColor',
-    value: function getIconColor(index) {
-      if (typeof this.props.config !== 'undefined') {
-        if (this.props.config.length > index) {
-          return this.props.config[index].color;
+      if (typeof config !== 'undefined') {
+        if (config.length > index) {
+          return config[index].color;
         }
       }
       return colors[index];
     }
   }, {
+    key: 'createLegend',
+    value: function createLegend() {
+      var _this2 = this;
+
+      var _props = this.props;
+      var dataId = _props.dataId;
+      var data = _props.data;
+      var tags = _props.tags;
+      var horizontal = _props.horizontal;
+
+
+      var className = horizontal ? 'horizontal' : false;
+
+      data.forEach(function (item) {
+        var index = tags.findIndex(function (tag) {
+          return tag === item[dataId];
+        });
+        if (index < 0) tags.push(item[dataId]);
+      });
+
+      return _react2.default.createElement(
+        'ul',
+        { className: 'legend' },
+        tags.map(function (item, index) {
+          var key = 'legend-' + index;
+          var backgroundColor = _this2.getBackgroundColor(index);
+          return _react2.default.createElement(
+            'li',
+            { key: key, className: className },
+            _react2.default.createElement('span', {
+              className: 'icon',
+              style: { backgroundColor: backgroundColor }
+            }),
+            item
+          );
+        })
+      );
+    }
+  }, {
+    key: 'createStyle',
+    value: function createStyle() {
+      var styles = this.props.styles;
+
+
+      var uid = this.uid;
+      var rules = (0, _lodash2.default)({}, _defaultStyles2.default, styles);
+      var scope = '.legend-container-' + uid;
+
+      return _react2.default.createElement(_radium.Style, {
+        scopeSelector: scope,
+        rules: rules
+      });
+    }
+  }, {
     key: 'render',
     value: function render() {
-      var uid = Math.floor(Math.random() * new Date().getTime());
+      var uid = this.uid;
+      var className = 'legend-container-' + uid;
       return _react2.default.createElement(
         'div',
-        { className: 'legend-container-' + uid },
-        _react2.default.createElement(_radium.Style, {
-          scopeSelector: '.legend-container-' + uid,
-          rules: (0, _lodash2.default)({}, defaultStyles, this.props.styles)
-        }),
-        _react2.default.createElement(
-          'ul',
-          { className: 'legend' },
-          this.getList()
-        )
+        { className: className },
+        this.createStyle(),
+        this.createLegend()
       );
     }
   }]);
-
   return Legend;
-})(_react2.default.Component);
+}(_react2.default.Component);
 
 exports.default = Legend;
 module.exports = exports['default'];
