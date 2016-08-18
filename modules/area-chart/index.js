@@ -80,7 +80,7 @@ export default class AreaChart extends React.Component {
 
   constructor(props) {
     super(props);
-    this.uid = createUniqueID();
+    this.uid = createUniqueID(props);
   }
 
   componentDidMount() {

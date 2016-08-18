@@ -31,7 +31,7 @@ export default class Legend extends React.Component {
 
   constructor(props) {
     super(props);
-    this.uid = createUniqueID(); // Math.floor(Math.random() * new Date().getTime());
+    this.uid = createUniqueID(props);
   }
 
   getBackgroundColor(index) {

@@ -91,7 +91,7 @@ export default class ScatterplotChart extends React.Component {
 
   constructor(props) {
     super(props);
-    this.uid = createUniqueID();
+    this.uid = createUniqueID(props);
   }
 
   componentDidMount() {
@@ -168,7 +168,7 @@ export default class ScatterplotChart extends React.Component {
       case 'text':
         axis = point();
         axis
-          .domain(data.map((d) => d[dataIndex]), 1)
+          .domain(data.map((d) => d[dataIndex])) // , 1)
           .range([0, length])
           .padding(1);
         break;
