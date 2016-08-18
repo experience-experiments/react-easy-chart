@@ -10,7 +10,7 @@
     "start": "npm run eslint && node examples/server.js",
     "docbuild": "mkdir -p docs && rm -rf docs/* && cp -rf examples/ docs/temp/ && cd docs && NODE_ENV=production webpack -p --config temp/webpack.config.docs.js && rm -r temp",
     "publishToNPM": "cd npmdist && npm version patch && npm publish",
-    "babel": "babel ./modules --out-dir ./npmdist --source-maps --presets es2015,react --plugins babel-plugin-add-module-exports"
+    "babel": "babel ./modules --out-dir ./npmdist --source-maps --presets es2015,react,stage-0,stage-1 --plugins babel-plugin-add-module-exports,babel-plugin-transform-class-properties,babel-plugin-transform-object-rest-spread,babel-plugin-transform-react-jsx,babel-plugin-transform-runtime"
   },
   "repository": {
     "type": "git",
