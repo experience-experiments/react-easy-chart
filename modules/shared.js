@@ -158,8 +158,8 @@ export function getAxisStyles(grid, verticalGrid, yAxisOrientRight) {
   };
 }
 
-export function createUniqueID(obj) {
-  return hash(obj);
+export function createUniqueID(o) {
+  return hash(o);
 }
 
 export function calculateMargin(axes, margin, yAxisOrientRight, y2) {
@@ -174,12 +174,25 @@ export function calculateMargin(axes, margin, yAxisOrientRight, y2) {
     : { top: 0, right: 0, bottom: 0, left: 0 };
 }
 
-export function calculateExtent(data, valueGenerator) {
+/* eslint no-shadow: 0 */
+export function textDomainRange(d, s) {
+  const a = [];
+
+  d.forEach((d) => {
+    d.forEach((d, i) => {
+      const v = d[s];
+      if (!a.includes(v)) a.splice(i, 0, v);
+    });
+  });
+
+  return a;
+}
+
+export function calculateExtent(data, accessor) {
   let lo; // Low
   let hi; // High
   data.forEach((item) => {
-    const domainRange = extent(item, valueGenerator);
-    const [LO, HI] = domainRange;
+    const [LO, HI] = extent(item, accessor);
     lo = lo < LO ? lo : LO;
     hi = hi > HI ? hi : HI;
   });
@@ -201,11 +214,12 @@ export function calculateDomainRange(domainRange, type, parseDate) {
 }
 
 export function createDomainRangeGenerator(scale, domainRange, data, type, length, parseDate) {
+  /*
   const dataIndex =
     (scale === 'x')
       ? 'x'
       : 'y';
-
+  */
   let axis;
 
   switch (type) {
@@ -215,7 +229,7 @@ export function createDomainRangeGenerator(scale, domainRange, data, type, lengt
         .domain(
           Array.isArray(domainRange)
             ? domainRange // calculateDomainRange(domainRange, type, parseDate)
-            : data[0].map((d) => d[dataIndex]))
+            : textDomainRange(data, scale))
           .range([0, length])
           .padding(0);
       break;
