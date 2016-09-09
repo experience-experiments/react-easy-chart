@@ -1,6 +1,6 @@
 {
   "name": "react-easy-chart",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "React component implementations of Mike Bostok's D3 visualisation library.",
   "main": "index.js",
   "scripts": {
