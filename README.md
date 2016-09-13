@@ -48,7 +48,7 @@ Chart Legend:
 
 
 ## Documentation
-Each of the charts have had extensive documentation produced for them with working examples. These can be found at  [http://rma-consulting.github.io/react-easy-chart/docs](http://rma-consulting.github.io/react-easy-chart/docs)
+Each of the charts have had extensive documentation produced for them with working examples. These can be found at  [http://rma-consulting.github.io/react-easy-chart](http://rma-consulting.github.io/react-easy-chart)
 
 ## Contributing
 We welcome pull requests and forks of the current graph implementations. If you are able to follow the API we have set out and are developing a chart we currently do not have we would love to add to our existing library.
