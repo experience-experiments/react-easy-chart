@@ -1,7 +1,6 @@
 # IntelliJ project files
 .idea
 *.iml
-docs/
 
 ### OSX template
 .DS_Store
