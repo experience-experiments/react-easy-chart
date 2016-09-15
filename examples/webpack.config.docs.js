@@ -66,6 +66,12 @@ module.exports = {
       filename: path.join('..', 'scatterplot-chart/index.html'),
       excludeChunks: ['area-chart', 'line-chart', 'pie-chart', 'bar-chart']
     }),
+    new HtmlWebpackPlugin({
+      title: 'Legend',
+      template: path.join(__dirname, 'document_template.html'),
+      filename: path.join('..', 'legend/index.html'),
+      excludeChunks: ['area-chart', 'line-chart', 'pie-chart', 'bar-chart', 'scatterplot-chart']
+    }),
     new CopyWebpackPlugin([{
       from: path.join(__dirname, 'root-styles.css'),
       to: path.join('..', '/root-styles.css')
