@@ -1,0 +1,16 @@
+.idea
+*.iml
+node_modules
+coverage/
+*.log
+.babelrc
+.editorconfig
+.eslintrc
+.gitignore
+.travis.yml
+index.html
+karma.conf.js
+docs
+examples
+styles
+tests

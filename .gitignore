@@ -30,6 +30,8 @@ logs
 *.log
 node_modules
 
+npmdist
+
 # Runtime data
 pids
 *.pid
@@ -39,4 +41,5 @@ pids
 
 # Build Folders
 coverage/
+lib/
 npm-debug.log*
