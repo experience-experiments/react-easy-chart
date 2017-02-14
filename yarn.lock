@@ -1461,19 +1461,15 @@ d3-time-format@1:
   dependencies:
     d3-time "1"
 
-d3-time-format@^0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/d3-time-format/-/d3-time-format-0.4.0.tgz#fbf29db178a873e012933d927fe4582577aa9cf6"
+d3-time-format@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/d3-time-format/-/d3-time-format-2.0.3.tgz#3241569b74ddc9c42e0689c0e8a903579fd6280a"
   dependencies:
-    d3-time "~0.3.0"
+    d3-time "1"
 
 d3-time@1:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/d3-time/-/d3-time-1.0.4.tgz#2ceba09a76b7450c992a1ded4e10fc6195e69649"
-
-d3-time@~0.3.0:
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/d3-time/-/d3-time-0.3.2.tgz#41a23b9b6f41d1bd9cb0d9598958e9affe346503"
 
 d3@^3.5.17:
   version "3.5.17"
