@@ -3,7 +3,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import TestUtils from 'react/lib/ReactTestUtils';
+import ReactTestUtils from 'react-addons-test-utils';
 import chai, { expect } from 'chai'; // { should as shouldFactory, expect} from 'chai';
 import sinon from 'sinon';
 import spies from 'chai-spies';
@@ -86,7 +86,7 @@ describe('PieChart (Hybrid) component', () => {
 
       it('throws an \'Error\'', () => {
         expect(() => {
-          TestUtils.renderIntoDocument(
+          ReactTestUtils.renderIntoDocument(
             <PieChart />
           );
         }).to.throw(Error);
@@ -98,7 +98,7 @@ describe('PieChart (Hybrid) component', () => {
 
         beforeEach(() => {
           sinon.spy(PieChart.prototype, 'render');
-          chart = TestUtils.renderIntoDocument(
+          chart = ReactTestUtils.renderIntoDocument(
             <PieChart
               data={mockData}
             />
@@ -151,7 +151,7 @@ describe('PieChart (Hybrid) component', () => {
 
       describe('Without optional props', () => {
         describe('Consuming the \'defaultProps\'', () => {
-          const chart = TestUtils.renderIntoDocument(
+          const chart = ReactTestUtils.renderIntoDocument(
             <PieChart
               data={mockData}
             />
@@ -213,7 +213,7 @@ describe('PieChart (Hybrid) component', () => {
             sinon.spy(PieChart.prototype, 'createSlices');
             sinon.spy(PieChart.prototype, 'createStyle');
             sinon.spy(PieChart.prototype, 'createLabels');
-            chart = TestUtils.renderIntoDocument(
+            chart = ReactTestUtils.renderIntoDocument(
               <PieChart
                 data={mockData}
               />
@@ -246,7 +246,7 @@ describe('PieChart (Hybrid) component', () => {
 
           beforeEach(() => {
             sinon.spy(PieChart.prototype, 'createLabels');
-            chart = TestUtils.renderIntoDocument(
+            chart = ReactTestUtils.renderIntoDocument(
               <PieChart
                 data={mockData}
                 labels
@@ -267,7 +267,7 @@ describe('PieChart (Hybrid) component', () => {
   });
 
   describe('createSlices()', () => {
-    const chart = TestUtils.renderIntoDocument(
+    const chart = ReactTestUtils.renderIntoDocument(
       <PieChart
         data={mockData}
       />
@@ -298,7 +298,7 @@ describe('PieChart (Hybrid) component', () => {
   });
 
   describe('createLabels()', () => {
-    const chart = TestUtils.renderIntoDocument(
+    const chart = ReactTestUtils.renderIntoDocument(
       <PieChart
         data={mockData}
       />
@@ -342,7 +342,7 @@ describe('PieChart (Hybrid) component', () => {
     });
 
     describe('Always', () => {
-      const chart = TestUtils.renderIntoDocument(
+      const chart = ReactTestUtils.renderIntoDocument(
         <PieChart
           data={mockData}
         />
@@ -364,7 +364,7 @@ describe('PieChart (Hybrid) component', () => {
     describe('With optional props', () => {
       describe('\'labels\' is \'true\'', () => {
         it('initialises the labels (\'labels\' is \'true\')', () => {
-          const chart = TestUtils.renderIntoDocument(
+          const chart = ReactTestUtils.renderIntoDocument(
             <PieChart
               data={mockData}
               labels
@@ -380,7 +380,7 @@ describe('PieChart (Hybrid) component', () => {
   });
 
   describe('initialiseSlices()', () => {
-    const chart = TestUtils.renderIntoDocument(
+    const chart = ReactTestUtils.renderIntoDocument(
       <PieChart
         data={mockData}
       />
@@ -425,7 +425,7 @@ describe('PieChart (Hybrid) component', () => {
   });
 
   describe('initialiseLabels()', () => {
-    const chart = TestUtils.renderIntoDocument(
+    const chart = ReactTestUtils.renderIntoDocument(
       <PieChart
         data={mockData}
       />
@@ -480,7 +480,7 @@ describe('PieChart (Hybrid) component', () => {
     });
 
     describe('Always', () => {
-      const chart = TestUtils.renderIntoDocument(
+      const chart = ReactTestUtils.renderIntoDocument(
         <PieChart
           data={mockData}
         />
@@ -502,7 +502,7 @@ describe('PieChart (Hybrid) component', () => {
     describe('With optional props', () => {
       describe('\'labels\' is \'true\'', () => {
         it('transitions the labels (\'labels\' is \'true\')', () => {
-          const chart = TestUtils.renderIntoDocument(
+          const chart = ReactTestUtils.renderIntoDocument(
             <PieChart
               data={mockData}
               labels
@@ -518,7 +518,7 @@ describe('PieChart (Hybrid) component', () => {
   });
 
   describe('transitionSlices()', () => {
-    const chart = TestUtils.renderIntoDocument(
+    const chart = ReactTestUtils.renderIntoDocument(
       <PieChart
         data={mockData}
       />
@@ -578,7 +578,7 @@ describe('PieChart (Hybrid) component', () => {
   });
 
   describe('transitionLabels()', () => {
-    const chart = TestUtils.renderIntoDocument(
+    const chart = ReactTestUtils.renderIntoDocument(
       <PieChart
         data={mockData}
       />
@@ -636,7 +636,7 @@ describe('PieChart (Hybrid) component', () => {
 
   describe('Rendering the PieChart', () => {
     describe('Always', () => {
-      const renderer = TestUtils.createRenderer();
+      const renderer = ReactTestUtils.createRenderer();
       renderer.render(
         <PieChart
           data={mockData}

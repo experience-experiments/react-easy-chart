@@ -1,7 +1,7 @@
 /* eslint-env node, mocha */
 import {should as chaiShould, expect} from 'chai';
 import React from 'react';
-import TestUtils from 'react/lib/ReactTestUtils';
+import ReactTestUtils from 'react-addons-test-utils';
 import {Legend} from 'react-easy-chart';
 import {scale} from 'd3';
 
@@ -34,13 +34,13 @@ describe('Legend component', () => {
   });
 
   it('Should render without problems', () => {
-    const legend = TestUtils.renderIntoDocument(<Legend data={pieData} dataId={'key'} />);
+    const legend = ReactTestUtils.renderIntoDocument(<Legend data={pieData} dataId={'key'} />);
     should.exist(legend);
   });
 
   it(`Should render an unordered list with correct number of list items and
   show the correct label and color for each item`, () => {
-    const shallowRenderer = TestUtils.createRenderer();
+    const shallowRenderer = ReactTestUtils.createRenderer();
     shallowRenderer.render(<Legend data={pieData} dataId={'key'} />);
     const vDom = shallowRenderer.getRenderOutput();
     expect(vDom.type).to.equal('div');
@@ -61,7 +61,7 @@ describe('Legend component', () => {
   });
 
   it('Should set li class prop to horizontal if horizontal is true', () => {
-    const shallowRenderer = TestUtils.createRenderer();
+    const shallowRenderer = ReactTestUtils.createRenderer();
     shallowRenderer.render(<Legend data={pieData} dataId={'key'} horizontal />);
     const vDom = shallowRenderer.getRenderOutput();
     const li = vDom.props.children[1].props.children[0];
@@ -69,7 +69,7 @@ describe('Legend component', () => {
   });
 
   it('Should render custom icon colors if a config is provided', () => {
-    const shallowRenderer = TestUtils.createRenderer();
+    const shallowRenderer = ReactTestUtils.createRenderer();
     shallowRenderer.render(<Legend data={pieDataCustom} dataId={'key'} config={config} />);
     const vDom = shallowRenderer.getRenderOutput();
     const ul = vDom.props.children[1];

@@ -3,7 +3,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import TestUtils from 'react/lib/ReactTestUtils';
+import ReactTestUtils from 'react-addons-test-utils';
 import chai, { expect } from 'chai'; // { should as shouldFactory, expect } from 'chai';
 import sinon from 'sinon';
 import spies from 'chai-spies';
@@ -81,7 +81,7 @@ describe('ScatterplotChart (Hybrid) component', () => {
 
       it('throws an \'Error\'', () => {
         expect(() => {
-          TestUtils.renderIntoDocument(
+          ReactTestUtils.renderIntoDocument(
             <ScatterplotChart />
           );
         }).to.throw(Error);
@@ -94,7 +94,7 @@ describe('ScatterplotChart (Hybrid) component', () => {
 
         beforeEach(() => {
           sinon.spy(ScatterplotChart.prototype, 'render');
-          chart = TestUtils.renderIntoDocument(
+          chart = ReactTestUtils.renderIntoDocument(
             <ScatterplotChart
               data={mockData}
             />
@@ -133,7 +133,7 @@ describe('ScatterplotChart (Hybrid) component', () => {
 
       describe('Without optional props', () => {
         describe('Consuming the \'defaultProps\'', () => {
-          const chart = TestUtils.renderIntoDocument(
+          const chart = ReactTestUtils.renderIntoDocument(
             <ScatterplotChart
               data={mockData}
             />
@@ -224,7 +224,7 @@ describe('ScatterplotChart (Hybrid) component', () => {
             sinon.spy(ScatterplotChart.prototype, 'createYAxis');
             sinon.spy(ScatterplotChart.prototype, 'createScatterplotChart');
             sinon.spy(ScatterplotChart.prototype, 'createStyle');
-            chart = TestUtils.renderIntoDocument(
+            chart = ReactTestUtils.renderIntoDocument(
               <ScatterplotChart
                 data={mockData}
               />
@@ -273,7 +273,7 @@ describe('ScatterplotChart (Hybrid) component', () => {
             beforeEach(() => {
               sinon.spy(ScatterplotChart.prototype, 'createXAxis');
               sinon.spy(ScatterplotChart.prototype, 'createYAxis');
-              chart = TestUtils.renderIntoDocument(
+              chart = ReactTestUtils.renderIntoDocument(
                 <ScatterplotChart
                   data={mockData}
                   axes
@@ -305,7 +305,7 @@ describe('ScatterplotChart (Hybrid) component', () => {
     let p;
 
     beforeEach(() => {
-      chart = TestUtils.renderIntoDocument(
+      chart = ReactTestUtils.renderIntoDocument(
         <ScatterplotChart
           data={mockData}
         />
@@ -371,7 +371,7 @@ describe('ScatterplotChart (Hybrid) component', () => {
     describe('Y axis orient to the left hand side (\'yAxisOrientRight\' is \'false\')', () => {
       describe('Always', () => {
         beforeEach(() => {
-          const chart = TestUtils.renderIntoDocument(
+          const chart = ReactTestUtils.renderIntoDocument(
             <ScatterplotChart
               data={mockData}
             />
@@ -391,7 +391,7 @@ describe('ScatterplotChart (Hybrid) component', () => {
 
       describe('With axis labels', () => {
         beforeEach(() => {
-          const chart = TestUtils.renderIntoDocument(
+          const chart = ReactTestUtils.renderIntoDocument(
             <ScatterplotChart
               data={mockData}
               axisLabels={mockAxisLabels}
@@ -416,7 +416,7 @@ describe('ScatterplotChart (Hybrid) component', () => {
     describe('Y axis orient to the right hand side (\'yAxisOrientRight\' is \'true\')', () => {
       describe('Always', () => {
         beforeEach(() => {
-          const chart = TestUtils.renderIntoDocument(
+          const chart = ReactTestUtils.renderIntoDocument(
             <ScatterplotChart
               data={mockData}
               yAxisOrientRight
@@ -437,7 +437,7 @@ describe('ScatterplotChart (Hybrid) component', () => {
 
       describe('With optional props', () => {
         beforeEach(() => {
-          const chart = TestUtils.renderIntoDocument(
+          const chart = ReactTestUtils.renderIntoDocument(
             <ScatterplotChart
               data={mockData}
               axisLabels={mockAxisLabels}
@@ -492,7 +492,7 @@ describe('ScatterplotChart (Hybrid) component', () => {
     describe('Y axis orient to the left hand side (\'yAxisOrientRight\' is \'false\')', () => {
       describe('Always', () => {
         beforeEach(() => {
-          const chart = TestUtils.renderIntoDocument(
+          const chart = ReactTestUtils.renderIntoDocument(
             <ScatterplotChart
               data={mockData}
             />
@@ -512,7 +512,7 @@ describe('ScatterplotChart (Hybrid) component', () => {
 
       describe('With optional props', () => {
         beforeEach(() => {
-          const chart = TestUtils.renderIntoDocument(
+          const chart = ReactTestUtils.renderIntoDocument(
             <ScatterplotChart
               data={mockData}
               axisLabels={mockAxisLabels}
@@ -538,7 +538,7 @@ describe('ScatterplotChart (Hybrid) component', () => {
     describe('Y axis orient to the right hand side (\'yAxisOrientRight\' is \'true\')', () => {
       describe('Always', () => {
         beforeEach(() => {
-          const chart = TestUtils.renderIntoDocument(
+          const chart = ReactTestUtils.renderIntoDocument(
             <ScatterplotChart
               data={mockData}
               axisLabels={mockAxisLabels}
@@ -560,7 +560,7 @@ describe('ScatterplotChart (Hybrid) component', () => {
 
       describe('With axis labels', () => {
         beforeEach(() => {
-          const chart = TestUtils.renderIntoDocument(
+          const chart = ReactTestUtils.renderIntoDocument(
             <ScatterplotChart
               data={mockData}
               axisLabels={mockAxisLabels}
@@ -601,7 +601,7 @@ describe('ScatterplotChart (Hybrid) component', () => {
       sinon.spy(mockRoot, 'append');
       sinon.spy(mockRoot, 'attr');
 
-      const chart = TestUtils.renderIntoDocument(
+      const chart = ReactTestUtils.renderIntoDocument(
         <ScatterplotChart
           data={mockData}
           axisLabels={mockAxisLabels}
@@ -642,7 +642,7 @@ describe('ScatterplotChart (Hybrid) component', () => {
       let chart;
 
       beforeEach(() => {
-        chart = TestUtils.renderIntoDocument(
+        chart = ReactTestUtils.renderIntoDocument(
           <ScatterplotChart
             data={mockData}
           />
@@ -672,7 +672,7 @@ describe('ScatterplotChart (Hybrid) component', () => {
         let chart;
 
         beforeEach(() => {
-          chart = TestUtils.renderIntoDocument(
+          chart = ReactTestUtils.renderIntoDocument(
             <ScatterplotChart
               data={mockData}
               axes
@@ -699,7 +699,7 @@ describe('ScatterplotChart (Hybrid) component', () => {
 
     const mockXAxisGenerator = () => true;
 
-    const chart = TestUtils.renderIntoDocument(
+    const chart = ReactTestUtils.renderIntoDocument(
       <ScatterplotChart
         data={mockData}
         axes
@@ -723,7 +723,7 @@ describe('ScatterplotChart (Hybrid) component', () => {
 
     const mockYAxisGenerator = () => true;
 
-    const chart = TestUtils.renderIntoDocument(
+    const chart = ReactTestUtils.renderIntoDocument(
       <ScatterplotChart
         data={mockData}
         axes
@@ -753,7 +753,7 @@ describe('ScatterplotChart (Hybrid) component', () => {
       data: () => true
     };
 
-    const chart = TestUtils.renderIntoDocument(
+    const chart = ReactTestUtils.renderIntoDocument(
       <ScatterplotChart
         data={mockData}
         axes
@@ -822,7 +822,7 @@ describe('ScatterplotChart (Hybrid) component', () => {
       let chart;
 
       beforeEach(() => {
-        chart = TestUtils.renderIntoDocument(
+        chart = ReactTestUtils.renderIntoDocument(
           <ScatterplotChart
             data={mockData}
           />
@@ -852,7 +852,7 @@ describe('ScatterplotChart (Hybrid) component', () => {
         let chart;
 
         beforeEach(() => {
-          chart = TestUtils.renderIntoDocument(
+          chart = ReactTestUtils.renderIntoDocument(
             <ScatterplotChart
               data={mockData}
               axes
@@ -881,7 +881,7 @@ describe('ScatterplotChart (Hybrid) component', () => {
 
     const mockXAxisGenerator = () => true;
 
-    const chart = TestUtils.renderIntoDocument(
+    const chart = ReactTestUtils.renderIntoDocument(
       <ScatterplotChart
         data={mockData}
         axes
@@ -928,7 +928,7 @@ describe('ScatterplotChart (Hybrid) component', () => {
 
     const mockYAxisGenerator = () => true;
 
-    const chart = TestUtils.renderIntoDocument(
+    const chart = ReactTestUtils.renderIntoDocument(
       <ScatterplotChart
         data={mockData}
         axes
@@ -983,7 +983,7 @@ describe('ScatterplotChart (Hybrid) component', () => {
       data: () => true
     };
 
-    const chart = TestUtils.renderIntoDocument(
+    const chart = ReactTestUtils.renderIntoDocument(
       <ScatterplotChart
         data={mockData}
         axes
@@ -1052,7 +1052,7 @@ describe('ScatterplotChart (Hybrid) component', () => {
 
   describe('Rendering the ScatterplotChart', () => {
     describe('Always', () => {
-      const renderer = TestUtils.createRenderer();
+      const renderer = ReactTestUtils.createRenderer();
       renderer.render(
         <ScatterplotChart
           data={mockData}

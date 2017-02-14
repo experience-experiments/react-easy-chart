@@ -3,7 +3,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import TestUtils from 'react/lib/ReactTestUtils';
+import ReactTestUtils from 'react-addons-test-utils';
 import chai, { expect } from 'chai'; // { should as shouldFactory, expect } from 'chai';
 import sinon from 'sinon';
 import spies from 'chai-spies';
@@ -82,7 +82,7 @@ describe('AreaChart component', () => {
 
       it('throws an \'Error\'', () => {
         expect(() => {
-          TestUtils.renderIntoDocument(
+          ReactTestUtils.renderIntoDocument(
             <AreaChart />
           );
         }).to.throw(Error);
@@ -95,7 +95,7 @@ describe('AreaChart component', () => {
 
         beforeEach(() => {
           sinon.spy(AreaChart.prototype, 'render');
-          chart = TestUtils.renderIntoDocument(
+          chart = ReactTestUtils.renderIntoDocument(
             <AreaChart
               data={mockData}
             />
@@ -134,7 +134,7 @@ describe('AreaChart component', () => {
 
       describe('Without optional props', () => {
         describe('Consuming the \'defaultProps\'', () => {
-          const chart = TestUtils.renderIntoDocument(
+          const chart = ReactTestUtils.renderIntoDocument(
             <AreaChart
               data={mockData}
             />
@@ -219,7 +219,7 @@ describe('AreaChart component', () => {
             sinon.spy(AreaChart.prototype, 'createFill');
             sinon.spy(AreaChart.prototype, 'createPoints');
             sinon.spy(AreaChart.prototype, 'createStyle');
-            chart = TestUtils.renderIntoDocument(
+            chart = ReactTestUtils.renderIntoDocument(
               <AreaChart
                 data={mockData}
               />
@@ -281,7 +281,7 @@ describe('AreaChart component', () => {
             beforeEach(() => {
               sinon.spy(AreaChart.prototype, 'createXAxis');
               sinon.spy(AreaChart.prototype, 'createYAxis');
-              chart = TestUtils.renderIntoDocument(
+              chart = ReactTestUtils.renderIntoDocument(
                 <AreaChart
                   data={mockData}
                   axes
@@ -312,7 +312,7 @@ describe('AreaChart component', () => {
     let p;
 
     beforeEach(() => {
-      chart = TestUtils.renderIntoDocument(
+      chart = ReactTestUtils.renderIntoDocument(
         <AreaChart
           data={mockData}
         />
@@ -384,7 +384,7 @@ describe('AreaChart component', () => {
 
     describe('Y axis orient to the left hand side (\'yAxisOrientRight\' is \'false\')', () => {
       beforeEach(() => {
-        const chart = TestUtils.renderIntoDocument(
+        const chart = ReactTestUtils.renderIntoDocument(
           <AreaChart
             data={mockData}
             axisLabels={mockAxisLabels}
@@ -409,7 +409,7 @@ describe('AreaChart component', () => {
 
     describe('Y axis orient tp the right hand side (\'yAxisOrientRight\' is \'true\')', () => {
       beforeEach(() => {
-        const chart = TestUtils.renderIntoDocument(
+        const chart = ReactTestUtils.renderIntoDocument(
           <AreaChart
             data={mockData}
             axisLabels={mockAxisLabels}
@@ -462,7 +462,7 @@ describe('AreaChart component', () => {
 
     describe('Y axis orient to the left hand side (\'yAxisOrientRight\' is \'false\')', () => {
       beforeEach(() => {
-        const chart = TestUtils.renderIntoDocument(
+        const chart = ReactTestUtils.renderIntoDocument(
           <AreaChart
             data={mockData}
             axisLabels={mockAxisLabels}
@@ -489,7 +489,7 @@ describe('AreaChart component', () => {
 
     describe('Y axis orient to the right hand side (\'yAxisOrientRight\' is \'true\')', () => {
       beforeEach(() => {
-        const chart = TestUtils.renderIntoDocument(
+        const chart = ReactTestUtils.renderIntoDocument(
           <AreaChart
             data={mockData}
             axisLabels={mockAxisLabels}
@@ -537,7 +537,7 @@ describe('AreaChart component', () => {
       sinon.spy(mockRoot, 'style');
       sinon.spy(mockRoot, 'attr');
 
-      const chart = TestUtils.renderIntoDocument(
+      const chart = ReactTestUtils.renderIntoDocument(
         <AreaChart
           data={mockData}
           axisLabels={mockAxisLabels}
@@ -594,7 +594,7 @@ describe('AreaChart component', () => {
       sinon.spy(mockRoot, 'style');
       sinon.spy(mockRoot, 'on');
 
-      chart = TestUtils.renderIntoDocument(
+      chart = ReactTestUtils.renderIntoDocument(
         <AreaChart
           data={mockData}
           dataPoints
@@ -627,7 +627,7 @@ describe('AreaChart component', () => {
 
   describe('Rendering the AreaChart', () => {
     describe('Always', () => {
-      const renderer = TestUtils.createRenderer();
+      const renderer = ReactTestUtils.createRenderer();
       renderer.render(
         <AreaChart
           data={mockData}
@@ -654,7 +654,7 @@ describe('AreaChart component', () => {
     });
 
     describe('With optional props', () => {
-      const chart = TestUtils.renderIntoDocument(
+      const chart = ReactTestUtils.renderIntoDocument(
         <AreaChart
           data={mockData}
           dataPoints
@@ -672,22 +672,22 @@ describe('AreaChart component', () => {
         .childNodes[2]; // 2 - 4
 
       it('responds to click events', () => {
-        TestUtils.Simulate.click(dataPointNode);
+        ReactTestUtils.Simulate.click(dataPointNode);
         expect(clickSpy).to.have.been.called();
       });
 
       it('responds to mouse over events', () => {
-        TestUtils.SimulateNative.mouseOver(dataPointNode);
+        ReactTestUtils.SimulateNative.mouseOver(dataPointNode);
         expect(mouseOverSpy).to.have.been.called();
       });
 
       it('responds to mouse out events', () => {
-        TestUtils.SimulateNative.mouseOut(dataPointNode);
+        ReactTestUtils.SimulateNative.mouseOut(dataPointNode);
         expect(mouseOutSpy).to.have.been.called();
       });
 
       it('responds to mouse move events', () => {
-        TestUtils.SimulateNative.mouseMove(dataPointNode);
+        ReactTestUtils.SimulateNative.mouseMove(dataPointNode);
         expect(mouseMoveSpy).to.have.been.called();
       });
     });

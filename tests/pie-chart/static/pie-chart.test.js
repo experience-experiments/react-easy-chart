@@ -3,7 +3,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import TestUtils from 'react/lib/ReactTestUtils';
+import ReactTestUtils from 'react-addons-test-utils';
 import chai, { expect } from 'chai'; // { should as shouldFactory, expect} from 'chai';
 import sinon from 'sinon';
 import spies from 'chai-spies';
@@ -92,7 +92,7 @@ describe('PieChart (Static) component', () => {
 
       it('throws an \'Error\'', () => {
         expect(() => {
-          TestUtils.renderIntoDocument(
+          ReactTestUtils.renderIntoDocument(
             <PieChart />
           );
         }).to.throw(Error);
@@ -104,7 +104,7 @@ describe('PieChart (Static) component', () => {
 
         beforeEach(() => {
           sinon.spy(PieChart.prototype, 'render');
-          chart = TestUtils.renderIntoDocument(
+          chart = ReactTestUtils.renderIntoDocument(
             <PieChart
               data={mockData}
             />
@@ -136,7 +136,7 @@ describe('PieChart (Static) component', () => {
 
       describe('Without optional props', () => {
         describe('Consuming the \'defaultProps\'', () => {
-          const chart = TestUtils.renderIntoDocument(
+          const chart = ReactTestUtils.renderIntoDocument(
             <PieChart
               data={mockData}
             />
@@ -198,7 +198,7 @@ describe('PieChart (Static) component', () => {
             sinon.spy(PieChart.prototype, 'createSlices');
             sinon.spy(PieChart.prototype, 'createStyle');
             sinon.spy(PieChart.prototype, 'createLabels');
-            chart = TestUtils.renderIntoDocument(
+            chart = ReactTestUtils.renderIntoDocument(
               <PieChart
                 data={mockData}
               />
@@ -231,7 +231,7 @@ describe('PieChart (Static) component', () => {
 
           beforeEach(() => {
             sinon.spy(PieChart.prototype, 'createLabels');
-            chart = TestUtils.renderIntoDocument(
+            chart = ReactTestUtils.renderIntoDocument(
               <PieChart
                 data={mockData}
                 labels
@@ -254,7 +254,7 @@ describe('PieChart (Static) component', () => {
   describe('createSlices()', () => {
     const mockSliceArc = {};
 
-    const chart = TestUtils.renderIntoDocument(
+    const chart = ReactTestUtils.renderIntoDocument(
       <PieChart
         data={mockData}
       />
@@ -315,7 +315,7 @@ describe('PieChart (Static) component', () => {
      * 'getLabelArc()' behind an arrow function
      */
 
-    const chart = TestUtils.renderIntoDocument(
+    const chart = ReactTestUtils.renderIntoDocument(
       <PieChart
         data={mockData}
       />
@@ -368,7 +368,7 @@ describe('PieChart (Static) component', () => {
 
   describe('Rendering the PieChart', () => {
     describe('Always', () => {
-      const renderer = TestUtils.createRenderer();
+      const renderer = ReactTestUtils.createRenderer();
       renderer.render(
         <PieChart
           data={mockData}
@@ -392,7 +392,7 @@ describe('PieChart (Static) component', () => {
     });
 
     describe('With optional props', () => {
-      const chart = TestUtils.renderIntoDocument(
+      const chart = ReactTestUtils.renderIntoDocument(
         <PieChart
           data={mockData}
           mouseOverHandler={mouseOverSpy}
@@ -406,22 +406,22 @@ describe('PieChart (Static) component', () => {
       const pieNode = svgNode.childNodes[0].childNodes[0];
 
       it('responds to click events', () => {
-        TestUtils.Simulate.click(pieNode);
+        ReactTestUtils.Simulate.click(pieNode);
         expect(clickSpy).to.have.been.called();
       });
 
       it('responds to mouse over events', () => {
-        TestUtils.SimulateNative.mouseOver(pieNode);
+        ReactTestUtils.SimulateNative.mouseOver(pieNode);
         expect(mouseOverSpy).to.have.been.called();
       });
 
       it('responds to mouse out events', () => {
-        TestUtils.SimulateNative.mouseOut(pieNode);
+        ReactTestUtils.SimulateNative.mouseOut(pieNode);
         expect(mouseOutSpy).to.have.been.called();
       });
 
       it('responds to mouse move events', () => {
-        TestUtils.SimulateNative.mouseMove(pieNode);
+        ReactTestUtils.SimulateNative.mouseMove(pieNode);
         expect(mouseMoveSpy).to.have.been.called();
       });
     });

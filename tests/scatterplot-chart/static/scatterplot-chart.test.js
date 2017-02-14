@@ -3,7 +3,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import TestUtils from 'react/lib/ReactTestUtils';
+import ReactTestUtils from 'react-addons-test-utils';
 import chai, { expect } from 'chai'; // { should as shouldFactory, expect } from 'chai';
 import sinon from 'sinon';
 import spies from 'chai-spies';
@@ -83,7 +83,7 @@ describe('ScatterplotChart (Static) component', () => {
 
       it('throws an \'Error\'', () => {
         expect(() => {
-          TestUtils.renderIntoDocument(
+          ReactTestUtils.renderIntoDocument(
             <ScatterplotChart />
           );
         }).to.throw(Error);
@@ -96,7 +96,7 @@ describe('ScatterplotChart (Static) component', () => {
 
         beforeEach(() => {
           sinon.spy(ScatterplotChart.prototype, 'render');
-          chart = TestUtils.renderIntoDocument(
+          chart = ReactTestUtils.renderIntoDocument(
             <ScatterplotChart
               data={mockData}
             />
@@ -135,7 +135,7 @@ describe('ScatterplotChart (Static) component', () => {
 
       describe('Without optional props', () => {
         describe('Consuming the \'defaultProps\'', () => {
-          const chart = TestUtils.renderIntoDocument(
+          const chart = ReactTestUtils.renderIntoDocument(
             <ScatterplotChart
               data={mockData}
             />
@@ -226,7 +226,7 @@ describe('ScatterplotChart (Static) component', () => {
             sinon.spy(ScatterplotChart.prototype, 'createYAxis');
             sinon.spy(ScatterplotChart.prototype, 'createScatterplotChart');
             sinon.spy(ScatterplotChart.prototype, 'createStyle');
-            chart = TestUtils.renderIntoDocument(
+            chart = ReactTestUtils.renderIntoDocument(
               <ScatterplotChart
                 data={mockData}
               />
@@ -275,7 +275,7 @@ describe('ScatterplotChart (Static) component', () => {
             beforeEach(() => {
               sinon.spy(ScatterplotChart.prototype, 'createXAxis');
               sinon.spy(ScatterplotChart.prototype, 'createYAxis');
-              chart = TestUtils.renderIntoDocument(
+              chart = ReactTestUtils.renderIntoDocument(
                 <ScatterplotChart
                   data={mockData}
                   axes
@@ -307,7 +307,7 @@ describe('ScatterplotChart (Static) component', () => {
     let p;
 
     beforeEach(() => {
-      chart = TestUtils.renderIntoDocument(
+      chart = ReactTestUtils.renderIntoDocument(
         <ScatterplotChart
           data={mockData}
         />
@@ -373,7 +373,7 @@ describe('ScatterplotChart (Static) component', () => {
     describe('Y axis orient to the left hand side (\'yAxisOrientRight\' is \'false\')', () => {
       describe('Always', () => {
         beforeEach(() => {
-          const chart = TestUtils.renderIntoDocument(
+          const chart = ReactTestUtils.renderIntoDocument(
             <ScatterplotChart
               data={mockData}
             />
@@ -391,7 +391,7 @@ describe('ScatterplotChart (Static) component', () => {
 
       describe('With axis labels', () => {
         beforeEach(() => {
-          const chart = TestUtils.renderIntoDocument(
+          const chart = ReactTestUtils.renderIntoDocument(
             <ScatterplotChart
               data={mockData}
               axisLabels={mockAxisLabels}
@@ -415,7 +415,7 @@ describe('ScatterplotChart (Static) component', () => {
     describe('Y axis orient to the right hand side (\'yAxisOrientRight\' is \'true\')', () => {
       describe('Always', () => {
         beforeEach(() => {
-          const chart = TestUtils.renderIntoDocument(
+          const chart = ReactTestUtils.renderIntoDocument(
             <ScatterplotChart
               data={mockData}
               yAxisOrientRight
@@ -434,7 +434,7 @@ describe('ScatterplotChart (Static) component', () => {
 
       describe('With optional props', () => {
         beforeEach(() => {
-          const chart = TestUtils.renderIntoDocument(
+          const chart = ReactTestUtils.renderIntoDocument(
             <ScatterplotChart
               data={mockData}
               axisLabels={mockAxisLabels}
@@ -488,7 +488,7 @@ describe('ScatterplotChart (Static) component', () => {
     describe('Y axis orient to the left hand side (\'yAxisOrientRight\' is \'false\')', () => {
       describe('Always', () => {
         beforeEach(() => {
-          const chart = TestUtils.renderIntoDocument(
+          const chart = ReactTestUtils.renderIntoDocument(
             <ScatterplotChart
               data={mockData}
             />
@@ -506,7 +506,7 @@ describe('ScatterplotChart (Static) component', () => {
 
       describe('With optional props', () => {
         beforeEach(() => {
-          const chart = TestUtils.renderIntoDocument(
+          const chart = ReactTestUtils.renderIntoDocument(
             <ScatterplotChart
               data={mockData}
               axisLabels={mockAxisLabels}
@@ -531,7 +531,7 @@ describe('ScatterplotChart (Static) component', () => {
     describe('Y axis orient to the right hand side (\'yAxisOrientRight\' is \'true\')', () => {
       describe('Always', () => {
         beforeEach(() => {
-          const chart = TestUtils.renderIntoDocument(
+          const chart = ReactTestUtils.renderIntoDocument(
             <ScatterplotChart
               data={mockData}
               axisLabels={mockAxisLabels}
@@ -551,7 +551,7 @@ describe('ScatterplotChart (Static) component', () => {
 
       describe('With axis labels', () => {
         beforeEach(() => {
-          const chart = TestUtils.renderIntoDocument(
+          const chart = ReactTestUtils.renderIntoDocument(
             <ScatterplotChart
               data={mockData}
               axisLabels={mockAxisLabels}
@@ -599,7 +599,7 @@ describe('ScatterplotChart (Static) component', () => {
       sinon.spy(mockRoot, 'exit');
       sinon.spy(mockRoot, 'remove');
 
-      const chart = TestUtils.renderIntoDocument(
+      const chart = ReactTestUtils.renderIntoDocument(
         <ScatterplotChart
           data={mockData}
           axisLabels={mockAxisLabels}
@@ -652,7 +652,7 @@ describe('ScatterplotChart (Static) component', () => {
 
   describe('Rendering the ScatterplotChart', () => {
     describe('Always', () => {
-      const renderer = TestUtils.createRenderer();
+      const renderer = ReactTestUtils.createRenderer();
       renderer.render(
         <ScatterplotChart
           data={mockData}
@@ -677,7 +677,7 @@ describe('ScatterplotChart (Static) component', () => {
     });
 
     describe('With optional props', () => {
-      const chart = TestUtils.renderIntoDocument(
+      const chart = ReactTestUtils.renderIntoDocument(
         <ScatterplotChart
           data={mockData}
           axes
@@ -696,22 +696,22 @@ describe('ScatterplotChart (Static) component', () => {
         .childNodes[0];
 
       it('responds to click events', () => {
-        TestUtils.Simulate.click(circleNode);
+        ReactTestUtils.Simulate.click(circleNode);
         expect(clickSpy).to.have.been.called();
       });
 
       it('responds to mouse over events', () => {
-        TestUtils.SimulateNative.mouseOver(circleNode);
+        ReactTestUtils.SimulateNative.mouseOver(circleNode);
         expect(mouseOverSpy).to.have.been.called();
       });
 
       it('responds to mouse out events', () => {
-        TestUtils.SimulateNative.mouseOut(circleNode);
+        ReactTestUtils.SimulateNative.mouseOut(circleNode);
         expect(mouseOutSpy).to.have.been.called();
       });
 
       it('responds to mouse move events', () => {
-        TestUtils.SimulateNative.mouseMove(circleNode);
+        ReactTestUtils.SimulateNative.mouseMove(circleNode);
         expect(mouseMoveSpy).to.have.been.called();
       });
     });

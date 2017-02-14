@@ -3,7 +3,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import TestUtils from 'react/lib/ReactTestUtils';
+import ReactTestUtils from 'react-addons-test-utils';
 import chai, { expect } from 'chai'; // { should as shouldFactory, expect } from 'chai';
 import sinon from 'sinon';
 import spies from 'chai-spies';
@@ -87,7 +87,7 @@ describe('BarChart component', () => {
 
       it('throws a \'TypeError\'', () => {
         expect(() => {
-          TestUtils.renderIntoDocument(
+          ReactTestUtils.renderIntoDocument(
             <BarChart />
           );
         }).to.throw(Error);
@@ -100,7 +100,7 @@ describe('BarChart component', () => {
 
         beforeEach(() => {
           sinon.spy(BarChart.prototype, 'render');
-          chart = TestUtils.renderIntoDocument(
+          chart = ReactTestUtils.renderIntoDocument(
             <BarChart
               data={mockData}
             />
@@ -139,7 +139,7 @@ describe('BarChart component', () => {
 
       describe('Without optional props', () => {
         describe('Consuming the \'defaultProps\'', () => {
-          const chart = TestUtils.renderIntoDocument(
+          const chart = ReactTestUtils.renderIntoDocument(
             <BarChart
               data={mockData}
             />
@@ -227,7 +227,7 @@ describe('BarChart component', () => {
             sinon.spy(BarChart.prototype, 'createStyle');
             sinon.spy(BarChart.prototype, 'createYAxis2');
             sinon.spy(BarChart.prototype, 'createLinePath');
-            chart = TestUtils.renderIntoDocument(
+            chart = ReactTestUtils.renderIntoDocument(
               <BarChart
                 data={mockData}
               />
@@ -291,7 +291,7 @@ describe('BarChart component', () => {
             beforeEach(() => {
               sinon.spy(BarChart.prototype, 'createXAxis');
               sinon.spy(BarChart.prototype, 'createYAxis');
-              chart = TestUtils.renderIntoDocument(
+              chart = ReactTestUtils.renderIntoDocument(
                 <BarChart
                   data={mockData}
                   axes
@@ -319,7 +319,7 @@ describe('BarChart component', () => {
             beforeEach(() => {
               sinon.spy(BarChart.prototype, 'createYAxis2');
               sinon.spy(BarChart.prototype, 'createLinePath');
-              chart = TestUtils.renderIntoDocument(
+              chart = ReactTestUtils.renderIntoDocument(
                 <BarChart
                   data={mockData}
                   axes
@@ -352,7 +352,7 @@ describe('BarChart component', () => {
     let p;
 
     beforeEach(() => {
-      chart = TestUtils.renderIntoDocument(
+      chart = ReactTestUtils.renderIntoDocument(
         <BarChart
           data={mockData}
           axes
@@ -455,7 +455,7 @@ describe('BarChart component', () => {
 
     describe('Y axis orient to the left hand side (\'yAxisOrientRight\' is \'false\')', () => {
       beforeEach(() => {
-        const chart = TestUtils.renderIntoDocument(
+        const chart = ReactTestUtils.renderIntoDocument(
           <BarChart
             data={mockData}
             axisLabels={mockAxisLabels}
@@ -480,7 +480,7 @@ describe('BarChart component', () => {
 
     describe('Y axis orient to the right hand side (\'yAxisOrientRight\' is \'true\')', () => {
       beforeEach(() => {
-        const chart = TestUtils.renderIntoDocument(
+        const chart = ReactTestUtils.renderIntoDocument(
           <BarChart
             data={mockData}
             axisLabels={mockAxisLabels}
@@ -533,7 +533,7 @@ describe('BarChart component', () => {
 
     describe('Y axis orient to the left hand side (\'yAxisOrientRight\' is \'false\')', () => {
       beforeEach(() => {
-        const chart = TestUtils.renderIntoDocument(
+        const chart = ReactTestUtils.renderIntoDocument(
           <BarChart
             data={mockData}
             axisLabels={mockAxisLabels}
@@ -559,7 +559,7 @@ describe('BarChart component', () => {
 
     describe('Y axis orient to the right hand side (\'yAxisOrientRight\' is \'true\')', () => {
       beforeEach(() => {
-        const chart = TestUtils.renderIntoDocument(
+        const chart = ReactTestUtils.renderIntoDocument(
           <BarChart
             data={mockData}
             axisLabels={mockAxisLabels}
@@ -606,7 +606,7 @@ describe('BarChart component', () => {
       sinon.spy(mockRoot, 'style');
       sinon.spy(mockRoot, 'on');
 
-      const chart = TestUtils.renderIntoDocument(
+      const chart = ReactTestUtils.renderIntoDocument(
         <BarChart
           data={mockData}
           axisLabels={mockAxisLabels}
@@ -666,7 +666,7 @@ describe('BarChart component', () => {
       sinon.spy(mockRoot, 'datum');
       sinon.spy(mockRoot, 'attr');
 
-      chart = TestUtils.renderIntoDocument(
+      chart = ReactTestUtils.renderIntoDocument(
         <BarChart
           data={mockData}
           lineData={mockLineData}
@@ -703,7 +703,7 @@ describe('BarChart component', () => {
 
   describe('Rendering the BarChart', () => {
     describe('Always', () => {
-      const renderer = TestUtils.createRenderer();
+      const renderer = ReactTestUtils.createRenderer();
       renderer.render(
         <BarChart
           data={mockData}
@@ -731,7 +731,7 @@ describe('BarChart component', () => {
     });
 
     describe('With optional props', () => {
-      const chart = TestUtils.renderIntoDocument(
+      const chart = ReactTestUtils.renderIntoDocument(
         <BarChart
           data={mockData}
           mouseOverHandler={mouseOverSpy}
@@ -745,22 +745,22 @@ describe('BarChart component', () => {
       const barNode = svgNode.childNodes[0].childNodes[1];
 
       it('responds to click events', () => {
-        TestUtils.Simulate.click(barNode);
+        ReactTestUtils.Simulate.click(barNode);
         expect(clickSpy).to.have.been.called();
       });
 
       it('responds to mouse over events', () => {
-        TestUtils.SimulateNative.mouseOver(barNode);
+        ReactTestUtils.SimulateNative.mouseOver(barNode);
         expect(mouseOverSpy).to.have.been.called();
       });
 
       it('responds to mouse out events', () => {
-        TestUtils.SimulateNative.mouseOut(barNode);
+        ReactTestUtils.SimulateNative.mouseOut(barNode);
         expect(mouseOutSpy).to.have.been.called();
       });
 
       it('responds to mouse move events', () => {
-        TestUtils.SimulateNative.mouseMove(barNode);
+        ReactTestUtils.SimulateNative.mouseMove(barNode);
         expect(mouseMoveSpy).to.have.been.called();
       });
     });
