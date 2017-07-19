@@ -90,7 +90,7 @@
   "dependencies": {
     "lodash.merge": "^4.0.1",
     "object-hash": "^1.1.4",
-    "radium": "^0.18.1"
+    "radium": "^0.19.1"
   },
   "peerDependencies": {
     "d3": "^3.5.17",
