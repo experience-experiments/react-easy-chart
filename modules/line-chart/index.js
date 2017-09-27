@@ -17,6 +17,7 @@ import {
   getAxisStyles,
   createCircularTicks
 } from '../shared';
+import PropTypes from 'prop-types';
 import { Style } from 'radium';
 import merge from 'lodash.merge';
 import { timeParse as parse } from 'd3-time-format';
@@ -26,34 +27,34 @@ const dateParser = {};
 export default class LineChart extends React.Component {
   static get propTypes() {
     return {
-      data: React.PropTypes.array.isRequired,
-      width: React.PropTypes.number,
-      height: React.PropTypes.number,
-      xType: React.PropTypes.string,
-      yType: React.PropTypes.string,
-      datePattern: React.PropTypes.string,
-      interpolate: React.PropTypes.string,
-      style: React.PropTypes.object,
-      margin: React.PropTypes.object,
-      axes: React.PropTypes.bool,
-      grid: React.PropTypes.bool,
-      verticalGrid: React.PropTypes.bool,
-      xDomainRange: React.PropTypes.array,
-      yDomainRange: React.PropTypes.array,
-      tickTimeDisplayFormat: React.PropTypes.string,
-      yTicks: React.PropTypes.number,
-      xTicks: React.PropTypes.number,
-      dataPoints: React.PropTypes.bool,
-      lineColors: React.PropTypes.array,
-      axisLabels: React.PropTypes.shape({
-        x: React.PropTypes.string,
-        y: React.PropTypes.string
+      data: PropTypes.array.isRequired,
+      width: PropTypes.number,
+      height: PropTypes.number,
+      xType: PropTypes.string,
+      yType: PropTypes.string,
+      datePattern: PropTypes.string,
+      interpolate: PropTypes.string,
+      style: PropTypes.object,
+      margin: PropTypes.object,
+      axes: PropTypes.bool,
+      grid: PropTypes.bool,
+      verticalGrid: PropTypes.bool,
+      xDomainRange: PropTypes.array,
+      yDomainRange: PropTypes.array,
+      tickTimeDisplayFormat: PropTypes.string,
+      yTicks: PropTypes.number,
+      xTicks: PropTypes.number,
+      dataPoints: PropTypes.bool,
+      lineColors: PropTypes.array,
+      axisLabels: PropTypes.shape({
+        x: PropTypes.string,
+        y: PropTypes.string
       }),
-      yAxisOrientRight: React.PropTypes.bool,
-      mouseOverHandler: React.PropTypes.func,
-      mouseOutHandler: React.PropTypes.func,
-      mouseMoveHandler: React.PropTypes.func,
-      clickHandler: React.PropTypes.func
+      yAxisOrientRight: PropTypes.bool,
+      mouseOverHandler: PropTypes.func,
+      mouseOutHandler: PropTypes.func,
+      mouseMoveHandler: PropTypes.func,
+      clickHandler: PropTypes.func
     };
   }
 

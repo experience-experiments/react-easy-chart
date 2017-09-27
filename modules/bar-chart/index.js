@@ -21,6 +21,7 @@ import {
 import { extent } from 'd3-array';
 import { timeParse as parse } from 'd3-time-format';
 import { createElement } from 'react-faux-dom';
+import PropTypes from 'prop-types';
 import { Style } from 'radium';
 import merge from 'lodash.merge';
 
@@ -32,35 +33,35 @@ export default class BarChart extends React.Component {
 
   static get propTypes() {
     return {
-      data: React.PropTypes.array.isRequired,
-      lineData: React.PropTypes.array,
-      width: React.PropTypes.number,
-      height: React.PropTypes.number,
-      margin: React.PropTypes.object,
-      mouseOverHandler: React.PropTypes.func,
-      mouseOutHandler: React.PropTypes.func,
-      mouseMoveHandler: React.PropTypes.func,
-      clickHandler: React.PropTypes.func,
-      interpolate: React.PropTypes.string,
-      style: React.PropTypes.object,
-      colorBars: React.PropTypes.bool,
-      axes: React.PropTypes.bool,
-      grid: React.PropTypes.bool,
-      axisLabels: React.PropTypes.shape({
-        x: React.PropTypes.string,
-        y: React.PropTypes.string
+      data: PropTypes.array.isRequired,
+      lineData: PropTypes.array,
+      width: PropTypes.number,
+      height: PropTypes.number,
+      margin: PropTypes.object,
+      mouseOverHandler: PropTypes.func,
+      mouseOutHandler: PropTypes.func,
+      mouseMoveHandler: PropTypes.func,
+      clickHandler: PropTypes.func,
+      interpolate: PropTypes.string,
+      style: PropTypes.object,
+      colorBars: PropTypes.bool,
+      axes: PropTypes.bool,
+      grid: PropTypes.bool,
+      axisLabels: PropTypes.shape({
+        x: PropTypes.string,
+        y: PropTypes.string
       }),
-      xType: React.PropTypes.string,
-      yType: React.PropTypes.string,
-      y2Type: React.PropTypes.string,
-      xDomainRange: React.PropTypes.array,
-      yDomainRange: React.PropTypes.array,
-      datePattern: React.PropTypes.string,
-      tickTimeDisplayFormat: React.PropTypes.string,
-      yAxisOrientRight: React.PropTypes.bool,
-      barWidth: React.PropTypes.number,
-      xTickNumber: React.PropTypes.number,
-      yTickNumber: React.PropTypes.number
+      xType: PropTypes.string,
+      yType: PropTypes.string,
+      y2Type: PropTypes.string,
+      xDomainRange: PropTypes.array,
+      yDomainRange: PropTypes.array,
+      datePattern: PropTypes.string,
+      tickTimeDisplayFormat: PropTypes.string,
+      yAxisOrientRight: PropTypes.bool,
+      barWidth: PropTypes.number,
+      xTickNumber: PropTypes.number,
+      yTickNumber: PropTypes.number
     };
   }
 

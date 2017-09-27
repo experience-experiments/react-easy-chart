@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Style } from 'radium';
 
 const toolTipStyles = {
@@ -22,9 +23,9 @@ const ToolTip = (props) => (
 
 // https://github.com/yannickcr/eslint-plugin-react/issues/7
 ToolTip.propTypes = {
-  left: React.PropTypes.string,
-  top: React.PropTypes.string,
-  children: React.PropTypes.node
+  left: PropTypes.string,
+  top: PropTypes.string,
+  children: PropTypes.node
 };
 
 export default ToolTip;

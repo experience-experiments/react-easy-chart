@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Style } from 'radium';
 import d3 from 'd3';
 
@@ -35,8 +36,8 @@ class Legend extends React.Component {
 
   static get propTypes() {
     return {
-      config: React.PropTypes.array,
-      data: React.PropTypes.array
+      config: PropTypes.array,
+      data: PropTypes.array
     };
   }
 

@@ -15,6 +15,7 @@ import {
 import { timeParse as parse } from 'd3-time-format';
 import { extent } from 'd3-array';
 import { createElement } from 'react-faux-dom';
+import PropTypes from 'prop-types';
 import { Style } from 'radium';
 import merge from 'lodash.merge';
 import {
@@ -34,36 +35,36 @@ const axisMargin = 18;
 export default class ScatterplotChart extends React.Component {
   static get propTypes() {
     return {
-      axes: React.PropTypes.bool,
-      axisLabels: React.PropTypes.shape({
-        x: React.PropTypes.string,
-        y: React.PropTypes.string
+      axes: PropTypes.bool,
+      axisLabels: PropTypes.shape({
+        x: PropTypes.string,
+        y: PropTypes.string
       }),
-      clickHandler: React.PropTypes.func,
-      config: React.PropTypes.array,
-      data: React.PropTypes.array.isRequired,
-      datePattern: React.PropTypes.string,
-      yAxisOrientRight: React.PropTypes.bool,
-      dotRadius: React.PropTypes.number,
-      verticalGrid: React.PropTypes.bool,
-      grid: React.PropTypes.bool,
-      height: React.PropTypes.number,
-      useLegend: React.PropTypes.bool,
-      margin: React.PropTypes.object,
-      mouseOverHandler: React.PropTypes.func,
-      mouseOutHandler: React.PropTypes.func,
-      mouseMoveHandler: React.PropTypes.func,
-      style: React.PropTypes.object,
-      tickTimeDisplayFormat: React.PropTypes.string,
-      width: React.PropTypes.number,
-      xDomainRange: React.PropTypes.array,
-      yDomainRange: React.PropTypes.array,
-      xTickNumber: React.PropTypes.number,
-      yTickNumber: React.PropTypes.number,
-      xTicks: React.PropTypes.number,
-      yTicks: React.PropTypes.number,
-      xType: React.PropTypes.string,
-      yType: React.PropTypes.string
+      clickHandler: PropTypes.func,
+      config: PropTypes.array,
+      data: PropTypes.array.isRequired,
+      datePattern: PropTypes.string,
+      yAxisOrientRight: PropTypes.bool,
+      dotRadius: PropTypes.number,
+      verticalGrid: PropTypes.bool,
+      grid: PropTypes.bool,
+      height: PropTypes.number,
+      useLegend: PropTypes.bool,
+      margin: PropTypes.object,
+      mouseOverHandler: PropTypes.func,
+      mouseOutHandler: PropTypes.func,
+      mouseMoveHandler: PropTypes.func,
+      style: PropTypes.object,
+      tickTimeDisplayFormat: PropTypes.string,
+      width: PropTypes.number,
+      xDomainRange: PropTypes.array,
+      yDomainRange: PropTypes.array,
+      xTickNumber: PropTypes.number,
+      yTickNumber: PropTypes.number,
+      xTicks: PropTypes.number,
+      yTicks: PropTypes.number,
+      xType: PropTypes.string,
+      yType: PropTypes.string
     };
   }
 

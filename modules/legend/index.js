@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Style } from 'radium';
 import { scale } from 'd3';
 import {
@@ -14,12 +15,12 @@ export default class Legend extends React.Component {
 
   static get propTypes() {
     return {
-      config: React.PropTypes.array,
-      data: React.PropTypes.array.isRequired,
-      tags: React.PropTypes.array,
-      dataId: React.PropTypes.string.isRequired,
-      horizontal: React.PropTypes.bool,
-      styles: React.PropTypes.object
+      config: PropTypes.array,
+      data: PropTypes.array.isRequired,
+      tags: PropTypes.array,
+      dataId: PropTypes.string.isRequired,
+      horizontal: PropTypes.bool,
+      styles: PropTypes.object
     };
   }
 

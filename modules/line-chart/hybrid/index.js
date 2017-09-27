@@ -4,6 +4,7 @@ import {
   defaultStyles,
   getDefaultAxisStyles
 } from './LineChart/common';
+import PropTypes from 'prop-types';
 import { Style } from 'radium';
 import merge from 'lodash.merge';
 
@@ -76,35 +77,35 @@ export default class LineChart extends React.Component {
 }
 
 LineChart.propTypes = {
-  data: React.PropTypes.array.isRequired,
-  axes: React.PropTypes.bool,
-  grid: React.PropTypes.bool,
-  hGrid: React.PropTypes.bool,
-  vGrid: React.PropTypes.bool,
-  type: React.PropTypes.string,
-  xType: React.PropTypes.string,
-  yType: React.PropTypes.string,
-  interpolate: React.PropTypes.string,
-  margin: React.PropTypes.shape({
-    top: React.PropTypes.number,
-    right: React.PropTypes.number,
-    bottom: React.PropTypes.number,
-    left: React.PropTypes.number
+  data: PropTypes.array.isRequired,
+  axes: PropTypes.bool,
+  grid: PropTypes.bool,
+  hGrid: PropTypes.bool,
+  vGrid: PropTypes.bool,
+  type: PropTypes.string,
+  xType: PropTypes.string,
+  yType: PropTypes.string,
+  interpolate: PropTypes.string,
+  margin: PropTypes.shape({
+    top: PropTypes.number,
+    right: PropTypes.number,
+    bottom: PropTypes.number,
+    left: PropTypes.number
   }),
-  width: React.PropTypes.number,
-  height: React.PropTypes.number,
-  orient: React.PropTypes.string,
-  colors: React.PropTypes.array,
-  strokeWidth: React.PropTypes.number,
-  stroke: React.PropTypes.object,
-  style: React.PropTypes.object,
-  xLabel: React.PropTypes.string,
-  yLabel: React.PropTypes.string,
-  xDomain: React.PropTypes.array,
-  yDomain: React.PropTypes.array,
-  pattern: React.PropTypes.string,
-  xPattern: React.PropTypes.string,
-  yPattern: React.PropTypes.string
+  width: PropTypes.number,
+  height: PropTypes.number,
+  orient: PropTypes.string,
+  colors: PropTypes.array,
+  strokeWidth: PropTypes.number,
+  stroke: PropTypes.object,
+  style: PropTypes.object,
+  xLabel: PropTypes.string,
+  yLabel: PropTypes.string,
+  xDomain: PropTypes.array,
+  yDomain: PropTypes.array,
+  pattern: PropTypes.string,
+  xPattern: PropTypes.string,
+  yPattern: PropTypes.string
 };
 
 LineChart.defaultProps = {

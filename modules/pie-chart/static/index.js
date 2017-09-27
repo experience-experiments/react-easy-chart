@@ -11,6 +11,7 @@ import {
   defaultStyles
 } from '../../shared';
 import { createElement } from 'react-faux-dom';
+import PropTypes from 'prop-types';
 import { Style } from 'radium';
 import merge from 'lodash.merge';
 
@@ -29,16 +30,16 @@ const getLabelText = (d) => d.data.key;
 export default class PieChart extends React.Component {
   static get propTypes() {
     return {
-      data: React.PropTypes.array.isRequired,
-      innerHoleSize: React.PropTypes.number,
-      size: React.PropTypes.number,
-      padding: React.PropTypes.number,
-      labels: React.PropTypes.bool,
-      styles: React.PropTypes.object,
-      mouseOverHandler: React.PropTypes.func,
-      mouseOutHandler: React.PropTypes.func,
-      mouseMoveHandler: React.PropTypes.func,
-      clickHandler: React.PropTypes.func
+      data: PropTypes.array.isRequired,
+      innerHoleSize: PropTypes.number,
+      size: PropTypes.number,
+      padding: PropTypes.number,
+      labels: PropTypes.bool,
+      styles: PropTypes.object,
+      mouseOverHandler: PropTypes.func,
+      mouseOutHandler: PropTypes.func,
+      mouseMoveHandler: PropTypes.func,
+      clickHandler: PropTypes.func
     };
   }
 
