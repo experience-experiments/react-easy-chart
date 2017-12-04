@@ -59,7 +59,7 @@ export default class Legend extends React.Component {
     const className =
       (horizontal)
         ? 'horizontal'
-        : false;
+        : '';
 
     data.forEach((item) => {
       const index = tags.findIndex((tag) => tag === item[dataId]);
