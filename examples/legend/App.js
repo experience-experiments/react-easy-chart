@@ -8,7 +8,7 @@ import {
   ScatterplotChart
 } from 'react-easy-chart';
 import { escapeHTML } from '../util';
-import { Scrollspy } from 'react-scrollspy';
+import Scrollspy from 'react-scrollspy';
 
 const pieData = [
   { key: 'Cats', value: 100 },

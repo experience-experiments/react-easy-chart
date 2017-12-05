@@ -6,7 +6,7 @@ import { ScatterplotChart } from 'react-easy-chart';
 import ToolTip from '../ToolTip';
 import Legend from '../Legend';
 import { escapeHTML } from '../util';
-import { Scrollspy } from 'react-scrollspy';
+import Scrollspy from 'react-scrollspy';
 
 const exampleText = [
   {

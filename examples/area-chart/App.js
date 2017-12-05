@@ -7,7 +7,7 @@ import ToolTip from '../ToolTip';
 import { AreaChart } from 'react-easy-chart';
 import moment from 'moment';
 import { timeParse as parse } from 'd3-time-format';
-import { Scrollspy } from 'react-scrollspy';
+import Scrollspy from 'react-scrollspy';
 
 class AreaChartContainer extends React.Component {
   constructor(props) {
