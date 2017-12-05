@@ -81,7 +81,7 @@
     "react-addons-test-utils": "^15.5.0",
     "react-dom": "^15.5.0",
     "react-faux-dom": "^4.1.0",
-    "react-scrollspy": "^2.1.1",
+    "react-scrollspy": "^3.0.2",
     "rimraf": "^2.4.4",
     "sinon": "^1.17.4",
     "sinon-chai": "^2.8.0",
