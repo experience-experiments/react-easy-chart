@@ -42,11 +42,6 @@
     "chai": "^3.5.0",
     "chai-spies": "^0.7.1",
     "copy-webpack-plugin": "^3.0.1",
-    "d3": "^3.5.17",
-    "d3-array": "^0.8.1",
-    "d3-scale": "^1.0.7",
-    "d3-shape": "^0.7.1",
-    "d3-time-format": "^2.0.3",
     "es5-shim": "^4.5.9",
     "es6-shim": "^0.35.1",
     "eslint": "^2.13.1",
@@ -76,11 +71,9 @@
     "open": "0.0.5",
     "phantomjs-polyfill": "0.0.2",
     "phantomjs-prebuilt": "2.1.14",
-    "prop-types": "^15.6.0",
     "react": "^15.5.0",
     "react-addons-test-utils": "^15.5.0",
     "react-dom": "^15.5.0",
-    "react-faux-dom": "^4.1.0",
     "react-scrollspy": "^2.1.1",
     "rimraf": "^2.4.4",
     "sinon": "^1.17.4",
@@ -89,19 +82,19 @@
     "webpack-dev-server": "^1.14.0"
   },
   "dependencies": {
-    "lodash.merge": "^4.0.1",
-    "object-hash": "^1.1.4",
-    "radium": "^0.19.1"
-  },
-  "peerDependencies": {
     "d3": "^3.5.17",
     "d3-array": "^0.8.1",
     "d3-scale": "^0.9.3",
     "d3-shape": "^0.7.1",
     "d3-time-format": "^2.0.3",
+    "lodash.merge": "^4.0.1",
+    "object-hash": "^1.1.4",
     "prop-types": "^15.6.0",
-    "react": "^15.5.0",
-    "react-dom": "^15.5.0",
+    "radium": "^0.19.1",
     "react-faux-dom": "^2.5.0"
+  },
+  "peerDependencies": {
+    "react": "^15.5.0 || ^16.0.0",
+    "react-dom": "^15.5.0 || ^16.0.0"
   }
 }
