@@ -3,11 +3,11 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ReactTestUtils from 'react-addons-test-utils';
+import ShallowRenderer from 'react-test-renderer/shallow';
 import chai, { expect } from 'chai'; // { should as shouldFactory, expect} from 'chai';
 import sinon from 'sinon';
 import spies from 'chai-spies';
-
+import ReactTestUtils from 'react-dom/test-utils';
 import { PieChartHybrid as PieChart } from 'react-easy-chart';
 
 // const should = chaiShould();
@@ -636,7 +636,7 @@ describe('PieChart (Hybrid) component', () => {
 
   describe('Rendering the PieChart', () => {
     describe('Always', () => {
-      const renderer = ReactTestUtils.createRenderer();
+      const renderer = new ShallowRenderer();
       renderer.render(
         <PieChart
           data={mockData}
