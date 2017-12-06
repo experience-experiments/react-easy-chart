@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { scaleBand as band, scaleLinear as linear } from 'd3-scale';
 import {
   event as lastEvent,
@@ -29,7 +29,7 @@ const dateParser = {};
 
 const colorScale = scale.category20();
 
-export default class BarChart extends React.Component {
+export default class BarChart extends PureComponent {
 
   static get propTypes() {
     return {

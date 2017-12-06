@@ -1,6 +1,6 @@
 /* eslint import/no-unresolved: 0 */
 
-import React from 'react';
+import React, { PureComponent } from 'react';
 import ReactDOM from 'react-dom';
 import {
   Legend,
@@ -128,7 +128,7 @@ const bigData = [
   }
 ];
 
-export default class LegendContainer extends React.Component {
+export default class LegendContainer extends PureComponent {
 
   constructor(props) {
     super(props);

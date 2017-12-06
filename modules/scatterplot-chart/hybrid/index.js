@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import {
   scaleLinear as linear,
   scalePoint as point
@@ -32,7 +32,7 @@ const color = scale.category20();
 
 const axisMargin = 18;
 
-export default class ScatterplotChart extends React.Component {
+export default class ScatterplotChart extends PureComponent {
   static get propTypes() {
     return {
       axes: PropTypes.bool,

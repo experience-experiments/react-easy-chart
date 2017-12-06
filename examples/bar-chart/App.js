@@ -1,13 +1,13 @@
 /* eslint import/no-unresolved: 0 */
 
-import React from 'react';
+import React, { PureComponent } from 'react';
 import ReactDOM from 'react-dom';
 import { BarChart } from 'react-easy-chart';
 import ToolTip from '../ToolTip';
 import { escapeHTML } from '../util';
 import Scrollspy from 'react-scrollspy';
 
-export default class BarChartContainer extends React.Component {
+export default class BarChartContainer extends PureComponent {
   constructor(props) {
     super(props);
 

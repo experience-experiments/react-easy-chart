@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { createElement } from 'react-faux-dom';
 import {
   createUniqueID,
@@ -23,7 +23,7 @@ import { timeParse as parse } from 'd3-time-format';
 
 const dateParser = {};
 
-export default class AreaChart extends React.Component {
+export default class AreaChart extends PureComponent {
   static get propTypes() {
     return {
       data: PropTypes.array.isRequired,

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { createElement } from 'react-faux-dom';
 import {
   event as lastEvent,
@@ -24,7 +24,7 @@ import { timeParse as parse } from 'd3-time-format';
 
 const dateParser = {};
 
-export default class LineChart extends React.Component {
+export default class LineChart extends PureComponent {
   static get propTypes() {
     return {
       data: PropTypes.array.isRequired,

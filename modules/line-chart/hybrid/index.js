@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import {
   createUniqueID,
   defaultStyles,
@@ -10,7 +10,7 @@ import merge from 'lodash.merge';
 
 import lineChart from './LineChart';
 
-export default class LineChart extends React.Component {
+export default class LineChart extends PureComponent {
   constructor(props) {
     super(props);
     this.uid = createUniqueID();

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import {
   scale,
   layout,
@@ -28,7 +28,7 @@ const getSliceFill = (d, i) => (
 
 const getLabelText = (d) => d.data.key;
 
-export default class PieChart extends React.Component {
+export default class PieChart extends PureComponent {
   static get propTypes() {
     return {
       data: PropTypes.array.isRequired,
