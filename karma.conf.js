@@ -16,7 +16,6 @@ module.exports = (config) => {
     // base path that will be used to resolve all patterns (eg. files, exclude)
     basePath: processCwd,
 
-
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
     frameworks: ['mocha', 'chai', 'sinon', 'phantomjs-shim', 'es6-shim'],
@@ -25,9 +24,11 @@ module.exports = (config) => {
     // list of files / patterns to load in the browser
     files: [
       'node_modules/phantomjs-polyfill/bind-polyfill.js',
-      'tests/index.js'
+      './tests/**/*.js'
     ],
-
+    exclude: [
+      './tests/index.js'
+    ],
 
     plugins: [
       'karma-chai',
@@ -51,7 +52,7 @@ module.exports = (config) => {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'tests/index.js': ['webpack', 'sourcemap']
+      'tests/**/*.js': ['webpack', 'sourcemap']
     },
 
 
