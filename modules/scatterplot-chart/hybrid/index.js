@@ -14,7 +14,7 @@ import {
 } from 'd3';
 import { timeParse as parse } from 'd3-time-format';
 import { extent } from 'd3-array';
-import { createElement } from 'react-faux-dom';
+import ReactFauxDOM from 'react-faux-dom';
 import PropTypes from 'prop-types';
 import { Style } from 'radium';
 import merge from 'lodash.merge';
@@ -509,7 +509,7 @@ export default class ScatterplotChart extends PureComponent {
   }
 
   createSvgNode({ m, w, h }) {
-    const node = createElement('svg');
+    const node = new ReactFauxDOM.Element('svg');
     node.setAttribute('width', w + m.left + m.right);
     node.setAttribute('height', h + m.top + m.bottom);
     return node;

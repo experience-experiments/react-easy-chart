@@ -1,6 +1,6 @@
 {
   "name": "react-easy-chart",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "description": "React component implementations of Mike Bostok's D3 visualisation library.",
   "main": "lib/index.js",
   "scripts": {
@@ -12,7 +12,7 @@
     "publish-patch": "npm version patch && npm run babel && npm publish",
     "publish-minor": "npm version minor && npm run babel && npm publish",
     "publish-major": "npm version major && npm run babel && npm publish",
-    "babel": "babel ./modules --out-dir ./lib --source-maps --presets es2015,react,stage-0,stage-1 --plugins babel-plugin-add-module-exports,babel-plugin-transform-class-properties,babel-plugin-transform-object-rest-spread,babel-plugin-transform-react-jsx,babel-plugin-transform-runtime"
+    "babel": "npx babel ./modules --out-dir ./lib --source-maps --presets env,react,stage-0,stage-1 --plugins babel-plugin-add-module-exports,babel-plugin-transform-class-properties,babel-plugin-transform-object-rest-spread,babel-plugin-transform-react-jsx,babel-plugin-transform-runtime"
   },
   "repository": {
     "type": "git",
@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/rma-consulting/react-easy-chart#readme",
   "devDependencies": {
-    "babel-cli": "^6.11.4",
+    "babel-cli": "^6.26.0",
     "babel-core": "^6.11.4",
     "babel-eslint": "^6.1.2",
     "babel-loader": "^6.2.4",
@@ -33,7 +33,7 @@
     "babel-plugin-transform-object-rest-spread": "^6.8.0",
     "babel-plugin-transform-react-jsx": "^6.8.0",
     "babel-plugin-transform-runtime": "^6.9.0",
-    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.11.1",
     "babel-preset-stage-0": "^6.5.0",
     "babel-preset-stage-1": "^6.5.0",
@@ -42,11 +42,6 @@
     "chai": "^3.5.0",
     "chai-spies": "^0.7.1",
     "copy-webpack-plugin": "^3.0.1",
-    "d3": "^3.5.17",
-    "d3-array": "^0.8.1",
-    "d3-scale": "^1.0.7",
-    "d3-shape": "^0.7.1",
-    "d3-time-format": "^2.0.3",
     "es5-shim": "^4.5.9",
     "es6-shim": "^0.35.1",
     "eslint": "^2.13.1",
@@ -79,7 +74,6 @@
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-faux-dom": "^4.1.0",
     "react-scrollspy": "^3.0.2",
     "react-test-renderer": "^16.2.0",
     "rimraf": "^2.4.4",
@@ -89,19 +83,18 @@
     "webpack-dev-server": "^1.14.0"
   },
   "dependencies": {
-    "lodash.merge": "^4.0.1",
-    "object-hash": "^1.1.4",
-    "radium": "^0.19.1"
-  },
-  "peerDependencies": {
     "d3": "^3.5.17",
     "d3-array": "^0.8.1",
     "d3-scale": "^0.9.3",
     "d3-shape": "^0.7.1",
     "d3-time-format": "^2.0.3",
-    "prop-types": "^15.6.0",
-    "react": "^15.5.0",
-    "react-dom": "^15.5.0",
-    "react-faux-dom": "^2.5.0"
+    "lodash.merge": "^4.0.1",
+    "object-hash": "^1.1.4",
+    "radium": "^0.19.1",
+    "react-faux-dom": "^4.1.0"
+  },
+  "peerDependencies": {
+    "react": "^15.5.0 || ^16.0.0",
+    "react-dom": "^15.5.0 || ^16.0.0"
   }
 }

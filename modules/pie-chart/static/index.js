@@ -10,7 +10,7 @@ import {
   createUniqueID,
   defaultStyles
 } from '../../shared';
-import { createElement } from 'react-faux-dom';
+import ReactFauxDOM from 'react-faux-dom';
 import PropTypes from 'prop-types';
 import { Style } from 'radium';
 import merge from 'lodash.merge';
@@ -97,7 +97,7 @@ export default class PieChart extends PureComponent {
   }
 
   createSvgNode({ size }) {
-    const node = createElement('svg');
+    const node = new ReactFauxDOM.Element('svg');
     node.setAttribute('width', size);
     node.setAttribute('height', size);
     return node;
