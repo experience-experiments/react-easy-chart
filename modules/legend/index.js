@@ -1,7 +1,11 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Style } from 'radium';
-import { scale } from 'd3';
+import {
+  scaleOrdinal,
+  schemeCategory20,
+  range
+ } from 'd3';
 import {
   createUniqueID
 } from '../shared';
@@ -9,7 +13,7 @@ import merge from 'lodash.merge';
 
 import defaultStyles from './defaultStyles';
 
-const colors = scale.category20().range();
+const colors = scaleOrdinal(schemeCategory20).domain(range(0, 20)).range();
 
 export default class Legend extends PureComponent {
 

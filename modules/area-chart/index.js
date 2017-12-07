@@ -14,8 +14,13 @@ import {
 import {
   event as lastEvent,
   select,
-  svg,
-  time } from 'd3';
+  axisBottom,
+  axisLeft,
+  axisRight,
+  line,
+  area,
+  timeFormat } from 'd3';
+import interpolateLine from '../interpolate';
 import PropTypes from 'prop-types';
 import { Style } from 'radium';
 import merge from 'lodash.merge';
@@ -118,13 +123,11 @@ export default class AreaChart extends PureComponent {
       yAxisOrientRight
     } = this.props;
 
-    const axis = svg.axis()
-      .scale(x)
-      .orient('bottom');
+    const axis = axisBottom(x);
 
     if (xType === 'time' && tickTimeDisplayFormat) {
       axis
-        .tickFormat(time.format(tickTimeDisplayFormat));
+        .tickFormat(timeFormat(tickTimeDisplayFormat));
     }
     if (grid && verticalGrid) {
       axis
@@ -177,13 +180,11 @@ export default class AreaChart extends PureComponent {
       yAxisOrientRight
     } = this.props;
 
-    const axis = svg.axis()
-      .scale(y)
-      .orient(yAxisOrientRight ? 'right' : 'left');
+    const axis = yAxisOrientRight ? axisRight(y) : axisLeft(y);
 
     if (yType === 'time' && tickTimeDisplayFormat) {
       axis
-        .tickFormat(time.format(tickTimeDisplayFormat));
+        .tickFormat(timeFormat(tickTimeDisplayFormat));
     }
 
     if (grid) {
@@ -273,14 +274,14 @@ export default class AreaChart extends PureComponent {
 
     const getStroke = (d, i) => colors[i];
 
-    const areaPath = svg.area()
-      .interpolate(interpolate)
+    const areaPath = area()
+      .curve(interpolateLine(interpolate))
       .x((d) => x(xValue(d)))
       .y0(h)
       .y1((d) => y(yValue(d)));
 
-    const linePath = svg.line()
-      .interpolate(interpolate)
+    const linePath = line()
+      .curve(interpolateLine(interpolate))
       .x((d) => x(xValue(d)))
       .y((d) => y(yValue(d)));
 

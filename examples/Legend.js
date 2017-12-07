@@ -1,7 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Style } from 'radium';
-import d3 from 'd3';
+import {
+  scaleOrdinal,
+  schemeCategory10,
+  range,
+} from 'd3';
 
 const legendStyles = {
   '.legend': {
@@ -30,7 +34,7 @@ const legendStyles = {
   }
 };
 
-const colors = d3.scale.category10().range();
+const colors = scaleOrdinal(schemeCategory10).domain(range(0, 20)).range();
 
 class Legend extends React.Component {
 

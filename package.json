@@ -1,6 +1,6 @@
 {
   "name": "react-easy-chart",
-  "version": "0.1.15",
+  "version": "0.1.16",
   "description": "React component implementations of Mike Bostok's D3 visualisation library.",
   "main": "lib/index.js",
   "scripts": {
@@ -25,7 +25,7 @@
   "homepage": "https://github.com/rma-consulting/react-easy-chart#readme",
   "devDependencies": {
     "babel-cli": "^6.26.0",
-    "babel-core": "^6.11.4",
+    "babel-core": "^6.26.0",
     "babel-eslint": "^6.1.2",
     "babel-loader": "^6.2.4",
     "babel-plugin-add-module-exports": "^0.2.1",
@@ -83,11 +83,11 @@
     "webpack-dev-server": "^1.14.0"
   },
   "dependencies": {
-    "d3": "^3.5.17",
-    "d3-array": "^0.8.1",
-    "d3-scale": "^0.9.3",
-    "d3-shape": "^0.7.1",
-    "d3-time-format": "^2.0.3",
+    "d3": "^4.12.0",
+    "d3-array": "^1.2.1",
+    "d3-scale": "^1.0.7",
+    "d3-shape": "^1.2.0",
+    "d3-time-format": "^2.1.1",
     "lodash.merge": "^4.0.1",
     "object-hash": "^1.1.4",
     "radium": "^0.19.1",

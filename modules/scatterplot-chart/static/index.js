@@ -7,10 +7,15 @@ import {
   event as lastEvent,
   min,
   max,
-  scale,
+  scaleOrdinal,
+  schemeCategory20,
+  range,
   select,
-  svg,
-  time
+  scaleTime,
+  axisBottom,
+  axisLeft,
+  axisRight,
+  timeFormat
 } from 'd3';
 import { timeParse as parse } from 'd3-time-format';
 import { extent } from 'd3-array';
@@ -28,7 +33,7 @@ import {
 
 const dateParser = {};
 
-const color = scale.category20();
+const color = scaleOrdinal(schemeCategory20).domain(range(0, 20));
 
 const axisMargin = 18;
 
@@ -108,7 +113,7 @@ export default class ScatterplotChart extends PureComponent {
   getScale(type) {
     switch (type) {
       case 'time':
-        return time.scale();
+        return scaleTime();
       case 'text':
         return point();
       default:
@@ -134,9 +139,9 @@ export default class ScatterplotChart extends PureComponent {
 
   getRadius(data, dataItem, dotRadius) {
     if (typeof data[0].z !== 'undefined') {
-      const range = extent(data, (d) => d.z);
-      const mn = range[0];
-      const mx = range[1];
+      const rangeRadius = extent(data, (d) => d.z);
+      const mn = rangeRadius[0];
+      const mx = rangeRadius[1];
       const p = ((dataItem.z - mn) / (mx - mn));
       const minRad = 5;
       const maxRad = 20;
@@ -207,7 +212,7 @@ export default class ScatterplotChart extends PureComponent {
               : [length, 0]);
         break;
       case 'time':
-        axis = time.scale();
+        axis = scaleTime();
         axis
           .domain(
             (domainRange)
@@ -257,13 +262,11 @@ export default class ScatterplotChart extends PureComponent {
       xTicks
     } = this.props;
 
-    const axis = svg.axis()
-      .scale(x)
-      .orient('bottom');
+    const axis = axisBottom(x);
 
     if (xType === 'time' && tickTimeDisplayFormat) {
       axis
-        .tickFormat(time.format(tickTimeDisplayFormat));
+        .tickFormat(timeFormat(tickTimeDisplayFormat));
     }
 
     if (xTickNumber) {
@@ -296,12 +299,7 @@ export default class ScatterplotChart extends PureComponent {
       yAxisOrientRight
     } = this.props;
 
-    const axis = svg.axis()
-      .scale(y)
-      .orient(
-        (yAxisOrientRight)
-          ? 'right'
-          : 'left');
+    const axis = yAxisOrientRight ? axisRight(y) : axisLeft(y);
 
     if (grid) {
       axis

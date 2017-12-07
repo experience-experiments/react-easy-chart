@@ -3,8 +3,11 @@ import ReactFauxDOM from 'react-faux-dom';
 import {
   event as lastEvent,
   select,
-  svg,
-  time
+  axisBottom,
+  axisLeft,
+  axisRight,
+  line,
+  timeFormat
 } from 'd3';
 import {
   createUniqueID,
@@ -17,6 +20,7 @@ import {
   getAxisStyles,
   createCircularTicks
 } from '../../shared';
+import interpolateLine from '../../interpolate';
 import PropTypes from 'prop-types';
 import { Style } from 'radium';
 import merge from 'lodash.merge';
@@ -118,13 +122,11 @@ export default class LineChart extends PureComponent {
       yAxisOrientRight
     } = this.props;
 
-    const axis = svg.axis()
-      .scale(x)
-      .orient('bottom');
+    const axis = axisBottom(x);
 
     if (xType === 'time' && tickTimeDisplayFormat) {
       axis
-        .tickFormat(time.format(tickTimeDisplayFormat));
+        .tickFormat(timeFormat(tickTimeDisplayFormat));
     }
 
     if (grid && verticalGrid) {
@@ -183,16 +185,11 @@ export default class LineChart extends PureComponent {
       yAxisOrientRight
     } = this.props;
 
-    const axis = svg.axis()
-      .scale(y)
-      .orient(
-        (yAxisOrientRight)
-          ? 'right'
-          : 'left');
+    const axis = yAxisOrientRight ? axisRight(y) : axisLeft(y);
 
     if (yType === 'time' && tickTimeDisplayFormat) {
       axis
-        .tickFormat(time.format(tickTimeDisplayFormat));
+        .tickFormat(timeFormat(tickTimeDisplayFormat));
     }
 
     if (grid) {
@@ -250,8 +247,8 @@ export default class LineChart extends PureComponent {
 
     const getStroke = (d, i) => colors[i];
 
-    const linePath = svg.line()
-      .interpolate(interpolate)
+    const linePath = line()
+      .curve(interpolateLine(interpolate))
       .x((d) => x(xValue(d)))
       .y((d) => y(yValue(d)));
 
