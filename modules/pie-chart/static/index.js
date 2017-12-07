@@ -1,8 +1,10 @@
 import React, { PureComponent } from 'react';
 import {
-  scale,
-  layout,
-  svg,
+  scaleOrdinal,
+  schemeCategory20,
+  range,
+  pie as layout,
+  arc,
   select,
   event as lastEvent
 } from 'd3';
@@ -15,8 +17,8 @@ import PropTypes from 'prop-types';
 import { Style } from 'radium';
 import merge from 'lodash.merge';
 
-const color = scale.category20();
-const pie = layout.pie()
+const color = scaleOrdinal(schemeCategory20).domain(range(0, 20));
+const pie = layout()
   .value((d) => d.value)
   .sort(null);
 
@@ -70,7 +72,7 @@ export default class PieChart extends PureComponent {
     const innerRadius = this.getInnerRadius();
     const outerRadius = this.getOuterRadius();
 
-    return svg.arc()
+    return arc()
       .innerRadius(innerRadius - padding)
       .outerRadius(outerRadius - padding);
   }
@@ -83,7 +85,7 @@ export default class PieChart extends PureComponent {
     const outerRadius = this.getOuterRadius();
     const radius = outerRadius - padding - ((20 * outerRadius) / 100);
 
-    return svg.arc()
+    return arc()
       .outerRadius(radius)
       .innerRadius(radius);
   }

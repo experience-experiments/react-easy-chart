@@ -3,9 +3,15 @@ import { scaleBand as band, scaleLinear as linear } from 'd3-scale';
 import {
   event as lastEvent,
   select,
-  svg,
-  time,
-  scale,
+  axisBottom,
+  axisLeft,
+  axisRight,
+  scaleTime,
+  timeFormat,
+  scaleOrdinal,
+  schemeCategory20,
+  range,
+  line,
   max
 } from 'd3';
 import {
@@ -18,6 +24,7 @@ import {
   createValueGenerator,
   createCircularTicks
 } from '../shared';
+import interpolateLine from '../interpolate';
 import { extent } from 'd3-array';
 import { timeParse as parse } from 'd3-time-format';
 import ReactFauxDOM from 'react-faux-dom';
@@ -27,7 +34,7 @@ import merge from 'lodash.merge';
 
 const dateParser = {};
 
-const colorScale = scale.category20();
+const colorScale = scaleOrdinal(schemeCategory20).domain(range(0, 20));
 
 export default class BarChart extends PureComponent {
 
@@ -130,7 +137,7 @@ export default class BarChart extends PureComponent {
           );
         break;
       case 'time':
-        axis = time.scale();
+        axis = scaleTime();
         axis
           .domain(
             Array.isArray(domainRange)
@@ -175,13 +182,11 @@ export default class BarChart extends PureComponent {
       yAxisOrientRight
     } = this.props;
 
-    const axis = svg.axis()
-        .scale(x)
-        .orient('bottom');
+    const axis = axisBottom(x);
 
     if (xType === 'time' && tickTimeDisplayFormat) {
       axis
-        .tickFormat(time.format(tickTimeDisplayFormat));
+        .tickFormat(timeFormat(tickTimeDisplayFormat));
     }
 
     axis
@@ -226,9 +231,7 @@ export default class BarChart extends PureComponent {
       grid
     } = this.props;
 
-    const axis = svg.axis()
-        .scale(y)
-        .orient(yAxisOrientRight ? 'right' : 'left');
+    const axis = yAxisOrientRight ? axisRight(y) : axisLeft(y);
 
     if (yTickNumber) {
       axis
@@ -284,12 +287,7 @@ export default class BarChart extends PureComponent {
 
     const y = this.createDomainRangeGenerator('y', yDomainRange, lineData, y2Type, h);
 
-    const axis = svg.axis()
-        .scale(y)
-        .orient(
-          (yAxisOrientRight)
-            ? 'left'
-            : 'right');
+    const axis = yAxisOrientRight ? axisRight(y) : axisLeft(y);
 
     if (yTickNumber) {
       axis
@@ -402,8 +400,8 @@ export default class BarChart extends PureComponent {
     const yValue = createValueGenerator('y', y2Type, parseDate);
     const xValue = createValueGenerator('x', xType, parseDate);
 
-    const linePath = svg.line()
-      .interpolate(interpolate)
+    const linePath = line()
+      .curve(interpolateLine(interpolate))
       .x((d) => x(xValue(d)))
       .y((d) => y(yValue(d)));
 

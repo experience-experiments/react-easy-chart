@@ -1,5 +1,5 @@
 
-import { time } from 'd3';
+import { scaleTime, timeFormat } from 'd3';
 import { extent } from 'd3-array';
 import { scaleLinear, scalePoint } from 'd3-scale';
 import { timeParse } from 'd3-time-format';
@@ -94,7 +94,7 @@ export { createParser };
 function createFormat(pattern = '%b %d') {
   return (
     TIMEFORMAT[pattern] || (
-    TIMEFORMAT[pattern] = time.format(pattern)));
+    TIMEFORMAT[pattern] = timeFormat(pattern)));
 }
 
 export function createFormatX(type, pattern) {
@@ -179,13 +179,13 @@ export const reduce = (p, c) => (p -= c);
 export const createUniqueID = () => Math.floor(Math.random() * new Date().getTime());
 
 export function createScaleTimeX(domain = [], x = 0) {
-  return time.scale()
+  return scaleTime()
     .domain(domain)
     .range([0, x]);
 }
 
 export function createScaleTimeY(domain = [], y = 0) {
-  return time.scale()
+  return scaleTime()
     .domain(domain)
     .range([y, 0]);
 }

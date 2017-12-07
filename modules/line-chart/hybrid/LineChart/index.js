@@ -1,6 +1,9 @@
 import {
   select,
-  svg
+  axisBottom,
+  axisLeft,
+  axisRight,
+  line
 } from 'd3';
 
 import {
@@ -18,6 +21,7 @@ import {
   // createFormatX,
   // createFormatY
 } from './common';
+import interpolateLine from '../../../interpolate';
 
 function initialise(chart, props) {
   const {
@@ -109,8 +113,8 @@ function initialise(chart, props) {
   };
   */
 
-  const linePath = svg.line()
-    .interpolate(interpolate)
+  const linePath = line()
+    .curve(interpolateLine(interpolate))
     .x((d) => scales.x(parsers.x(d)))
     .y((d) => scales.y(parsers.y(d)));
 
@@ -119,9 +123,7 @@ function initialise(chart, props) {
     .attr('class', 'chartGroup')
     .attr('transform', `translate(${l}, ${t})`);
 
-  const xAxis = svg.axis()
-    .scale(scales.x)
-    .orient('bottom');
+  const xAxis = axisBottom(scales.x);
 
   if (vGrid || grid) {
     xAxis
@@ -159,12 +161,7 @@ function initialise(chart, props) {
         : 'end')
       .text(xLabel);
   }
-
-  const yAxis = svg.axis()
-    .scale(scales.y)
-    .orient((orient === 'right')
-      ? 'right'
-      : 'left');
+  const yAxis = (orient === 'right') ? axisRight(scales.y) : axisLeft(scales.y);
 
   if (hGrid || grid) {
     yAxis
@@ -310,8 +307,8 @@ function transition(chart, props) {
   };
   */
 
-  const linePath = svg.line()
-    .interpolate(interpolate)
+  const linePath = line()
+    .curve(interpolateLine(interpolate))
     .x((d) => scales.x(parsers.x(d)))
     .y((d) => scales.y(parsers.y(d)));
 
@@ -325,9 +322,7 @@ function transition(chart, props) {
     .duration(750)
     .attr('transform', `translate(${l}, ${t})`);
 
-  const xAxis = svg.axis()
-    .scale(scales.x)
-    .orient('bottom');
+  const xAxis = axisBottom(scales.x);
 
   if (vGrid || grid) {
     xAxis
@@ -373,11 +368,7 @@ function transition(chart, props) {
       .text(xLabel);
   }
 
-  const yAxis = svg.axis()
-    .scale(scales.y)
-    .orient((orient === 'right')
-      ? 'right'
-      : 'left');
+  const yAxis = (orient === 'right') ? axisRight(scales.y) : axisLeft(scales.y);
 
   if (hGrid || grid) {
     yAxis

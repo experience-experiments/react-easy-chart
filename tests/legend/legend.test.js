@@ -4,7 +4,9 @@ import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 import ReactTestUtils from 'react-dom/test-utils';
 import {Legend} from 'react-easy-chart';
-import {scale} from 'd3';
+import {scaleOrdinal,
+schemeCategory20,
+range} from 'd3';
 
 const should = chaiShould();
 
@@ -26,7 +28,7 @@ const config = [
   {color: 'tomato'}
 ];
 
-const colors = scale.category20().range();
+const colors = scaleOrdinal(schemeCategory20).domain(range(0, 20)).range();
 
 describe('Legend component', () => {
   it('Should be defined', () => {

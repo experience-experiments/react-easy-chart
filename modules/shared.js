@@ -1,6 +1,6 @@
 import { extent } from 'd3-array';
 import { scaleLinear as linear, scalePoint as point } from 'd3-scale';
-import { time, select } from 'd3';
+import { scaleTime, select } from 'd3';
 import hash from 'object-hash';
 
 export const defaultColors = [
@@ -246,7 +246,7 @@ export function createDomainRangeGenerator(scale, domainRange, data, type, lengt
             : [length, 0]);
       break;
     case 'time':
-      axis = time.scale();
+      axis = scaleTime();
       axis
         .domain(
           Array.isArray(domainRange)

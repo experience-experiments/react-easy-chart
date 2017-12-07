@@ -26,8 +26,9 @@ module.exports = (config) => {
       'node_modules/phantomjs-polyfill/bind-polyfill.js',
       './tests/**/*.js'
     ],
+    // list of files to exclude
     exclude: [
-      './tests/index.js'
+      './tests/index.js', 'node_modules', 'bower_components'
     ],
 
     plugins: [
@@ -43,11 +44,6 @@ module.exports = (config) => {
       'karma-spec-reporter',
       'karma-webpack'
     ],
-
-
-    // list of files to exclude
-    exclude: ['node_modules', 'bower_components'],
-
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
@@ -108,6 +104,9 @@ module.exports = (config) => {
           'react-easy-chart': modulesPath
         }
       },
+      externals: [{
+        xmlhttprequest: '{XMLHttpRequest:XMLHttpRequest}'
+      }],
       module: {
         preLoaders: [
           {

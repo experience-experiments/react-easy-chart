@@ -13,7 +13,9 @@ module.exports = {
 
     return entries
   }, {}),
-
+  externals: [{
+    xmlhttprequest: '{XMLHttpRequest:XMLHttpRequest}'
+  }],
   output: {
     path: __dirname + '/__build__',
     filename: '[name].js',
