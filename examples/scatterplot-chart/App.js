@@ -1,12 +1,12 @@
 /* eslint import/no-unresolved: 0 */
 
-import React from 'react';
+import React, { PureComponent } from 'react';
 import ReactDOM from 'react-dom';
 import { ScatterplotChart } from 'react-easy-chart';
 import ToolTip from '../ToolTip';
 import Legend from '../Legend';
 import { escapeHTML } from '../util';
-import { Scrollspy } from 'react-scrollspy';
+import Scrollspy from 'react-scrollspy';
 
 const exampleText = [
   {
@@ -253,7 +253,7 @@ const configGen = [
   }
 ];
 
-export default class ScatterplotContainer extends React.Component {
+export default class ScatterplotContainer extends PureComponent {
   constructor(props) {
     super(props);
 

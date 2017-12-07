@@ -1,6 +1,6 @@
 /* eslint import/no-unresolved: 0 */
 
-import React from 'react';
+import React, { PureComponent } from 'react';
 import ReactDOM from 'react-dom';
 import {
   Legend,
@@ -8,7 +8,7 @@ import {
   ScatterplotChart
 } from 'react-easy-chart';
 import { escapeHTML } from '../util';
-import { Scrollspy } from 'react-scrollspy';
+import Scrollspy from 'react-scrollspy';
 
 const pieData = [
   { key: 'Cats', value: 100 },
@@ -128,7 +128,7 @@ const bigData = [
   }
 ];
 
-export default class LegendContainer extends React.Component {
+export default class LegendContainer extends PureComponent {
 
   constructor(props) {
     super(props);

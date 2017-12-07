@@ -1,5 +1,6 @@
 import React from 'react';
-import { createElement } from 'react-faux-dom';
+import ReactFauxDOM from 'react-faux-dom';
+
 import {
   event as lastEvent,
   select,
@@ -95,7 +96,7 @@ export default class LineChart extends React.Component {
   }
 
   createSvgNode({ m, w, h }) {
-    const node = createElement('svg');
+    const node = new ReactFauxDOM.Element('svg');
     node.setAttribute('width', w + m.left + m.right);
     node.setAttribute('height', h + m.top + m.bottom);
     return node;

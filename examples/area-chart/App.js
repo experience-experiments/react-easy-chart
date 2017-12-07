@@ -1,15 +1,15 @@
 /* eslint import/no-unresolved: 0 */
 
-import React from 'react';
+import React, { PureComponent } from 'react';
 import ReactDom from 'react-dom';
 import { escapeHTML } from '../util';
 import ToolTip from '../ToolTip';
 import { AreaChart } from 'react-easy-chart';
 import moment from 'moment';
 import { timeParse as parse } from 'd3-time-format';
-import { Scrollspy } from 'react-scrollspy';
+import Scrollspy from 'react-scrollspy';
 
-class AreaChartContainer extends React.Component {
+class AreaChartContainer extends PureComponent {
   constructor(props) {
     super(props);
       // Generate multiple Areas of data

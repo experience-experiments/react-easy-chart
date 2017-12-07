@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Style } from 'radium';
 import { scale } from 'd3';
@@ -11,7 +11,7 @@ import defaultStyles from './defaultStyles';
 
 const colors = scale.category20().range();
 
-export default class Legend extends React.Component {
+export default class Legend extends PureComponent {
 
   static get propTypes() {
     return {

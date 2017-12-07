@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { scaleBand as band, scaleLinear as linear } from 'd3-scale';
 import {
   event as lastEvent,
@@ -20,7 +20,7 @@ import {
 } from '../shared';
 import { extent } from 'd3-array';
 import { timeParse as parse } from 'd3-time-format';
-import { createElement } from 'react-faux-dom';
+import ReactFauxDOM from 'react-faux-dom';
 import PropTypes from 'prop-types';
 import { Style } from 'radium';
 import merge from 'lodash.merge';
@@ -29,7 +29,7 @@ const dateParser = {};
 
 const colorScale = scale.category20();
 
-export default class BarChart extends React.Component {
+export default class BarChart extends PureComponent {
 
   static get propTypes() {
     return {
@@ -154,7 +154,7 @@ export default class BarChart extends React.Component {
   }
 
   createSvgNode({ m, w, h }) {
-    const node = createElement('svg');
+    const node = new ReactFauxDOM.Element('svg');
     node.setAttribute('width', w + m.left + m.right);
     node.setAttribute('height', h + m.top + m.bottom);
     return node;
