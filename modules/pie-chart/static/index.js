@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import {
   scale,
   layout,
@@ -10,7 +10,7 @@ import {
   createUniqueID,
   defaultStyles
 } from '../../shared';
-import { createElement } from 'react-faux-dom';
+import ReactFauxDOM from 'react-faux-dom';
 import PropTypes from 'prop-types';
 import { Style } from 'radium';
 import merge from 'lodash.merge';
@@ -27,7 +27,7 @@ const getSliceFill = (d, i) => (
 
 const getLabelText = (d) => d.data.key;
 
-export default class PieChart extends React.Component {
+export default class PieChart extends PureComponent {
   static get propTypes() {
     return {
       data: PropTypes.array.isRequired,
@@ -97,7 +97,7 @@ export default class PieChart extends React.Component {
   }
 
   createSvgNode({ size }) {
-    const node = createElement('svg');
+    const node = new ReactFauxDOM.Element('svg');
     node.setAttribute('width', size);
     node.setAttribute('height', size);
     return node;

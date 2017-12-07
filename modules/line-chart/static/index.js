@@ -1,5 +1,5 @@
-import React from 'react';
-import { createElement } from 'react-faux-dom';
+import React, { PureComponent } from 'react';
+import ReactFauxDOM from 'react-faux-dom';
 import {
   event as lastEvent,
   select,
@@ -24,7 +24,7 @@ import { timeParse as parse } from 'd3-time-format';
 
 const dateParser = {};
 
-export default class LineChart extends React.Component {
+export default class LineChart extends PureComponent {
   static get propTypes() {
     return {
       data: PropTypes.array.isRequired,
@@ -95,7 +95,7 @@ export default class LineChart extends React.Component {
   }
 
   createSvgNode({ m, w, h }) {
-    const node = createElement('svg');
+    const node = new ReactFauxDOM.Element('svg');
     node.setAttribute('width', w + m.left + m.right);
     node.setAttribute('height', h + m.top + m.bottom);
     return node;

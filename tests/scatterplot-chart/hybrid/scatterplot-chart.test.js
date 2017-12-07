@@ -3,10 +3,11 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ReactTestUtils from 'react-addons-test-utils';
+import ShallowRenderer from 'react-test-renderer/shallow';
 import chai, { expect } from 'chai'; // { should as shouldFactory, expect } from 'chai';
 import sinon from 'sinon';
 import spies from 'chai-spies';
+import ReactTestUtils from 'react-dom/test-utils';
 import { ScatterplotChartHybrid as ScatterplotChart } from 'react-easy-chart';
 
 // const should = shouldFactory();
@@ -1052,7 +1053,7 @@ describe('ScatterplotChart (Hybrid) component', () => {
 
   describe('Rendering the ScatterplotChart', () => {
     describe('Always', () => {
-      const renderer = ReactTestUtils.createRenderer();
+      const renderer = new ShallowRenderer();
       renderer.render(
         <ScatterplotChart
           data={mockData}

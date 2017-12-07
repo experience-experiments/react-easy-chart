@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import {
   scaleLinear as linear,
   scalePoint as point
@@ -14,7 +14,7 @@ import {
 } from 'd3';
 import { timeParse as parse } from 'd3-time-format';
 import { extent } from 'd3-array';
-import { createElement } from 'react-faux-dom';
+import ReactFauxDOM from 'react-faux-dom';
 import PropTypes from 'prop-types';
 import { Style } from 'radium';
 import merge from 'lodash.merge';
@@ -32,7 +32,7 @@ const color = scale.category20();
 
 const axisMargin = 18;
 
-export default class ScatterplotChart extends React.Component {
+export default class ScatterplotChart extends PureComponent {
   static get propTypes() {
     return {
       axes: PropTypes.bool,
@@ -509,7 +509,7 @@ export default class ScatterplotChart extends React.Component {
   }
 
   createSvgNode({ m, w, h }) {
-    const node = createElement('svg');
+    const node = new ReactFauxDOM.Element('svg');
     node.setAttribute('width', w + m.left + m.right);
     node.setAttribute('height', h + m.top + m.bottom);
     return node;

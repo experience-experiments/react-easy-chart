@@ -1,11 +1,11 @@
 /* eslint import/no-unresolved: 0 */
 
-import React from 'react';
+import React, { PureComponent } from 'react';
 import ReactDOM from 'react-dom';
 import ToolTip from '../ToolTip';
 import { escapeHTML } from '../util';
 import { PieChart } from 'react-easy-chart';
-import { Scrollspy } from 'react-scrollspy';
+import Scrollspy from 'react-scrollspy';
 
 const brandColors = {
   greyBlueOne: '#1e313c',
@@ -18,7 +18,7 @@ const brandColors = {
   lightGrey: '#e4e8ec'
 };
 
-export default class PieChartContainer extends React.Component {
+export default class PieChartContainer extends PureComponent {
   constructor(props) {
     super(props);
 
