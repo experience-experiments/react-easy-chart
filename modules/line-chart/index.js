@@ -103,6 +103,7 @@ export default class LineChart extends React.Component {
     const node = new ReactFauxDOM.Element('svg');
     node.setAttribute('width', w + m.left + m.right);
     node.setAttribute('height', h + m.top + m.bottom);
+    node.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
     return node;
   }
 
