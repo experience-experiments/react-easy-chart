@@ -211,7 +211,7 @@ class LineChartContainer extends PureComponent {
         </aside>
         <div className="content">
           <h1>The React Easy Line chart</h1>
-          <div ref="component">
+          <div ref={component => { this.refs.component = component; }}>
 
             <LineChart
               data={this.data}

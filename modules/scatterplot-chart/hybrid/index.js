@@ -702,7 +702,7 @@ export default class ScatterplotChart extends PureComponent {
     } = p;
 
     return (
-      <div ref="scatterplotChart" className={className}>
+      <div ref={scatterplotChart => { this.refs.scatterplotChart = scatterplotChart; }} className={className}>
         {this.createStyle()}
         {node.toReact()}
       </div>

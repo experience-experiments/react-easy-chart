@@ -424,7 +424,7 @@ export default class LineChart extends React.Component {
     } = p;
 
     return (
-      <div ref={ (input) => { this.refs.lineChart = input; } } className={className}>
+      <div ref={lineChart => { this.refs.lineChart = lineChart; }} className={className}>
         {this.createStyle()}
         {node.toReact()}
       </div>

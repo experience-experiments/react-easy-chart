@@ -518,7 +518,7 @@ export default class BarChart extends PureComponent {
     } = p;
 
     return (
-      <div ref="barChart" className={className}>
+      <div ref={barChart => { this.refs.barChart = barChart; }} className={className}>
         {this.createStyle()}
         {node.toReact()}
       </div>

@@ -490,7 +490,7 @@ export default class AreaChart extends PureComponent {
     } = p;
 
     return (
-      <div ref="areaChart" className={className}>
+      <div ref={areaChart => { this.refs.areaChart = areaChart; }} className={className}>
         {this.createStyle()}
         {node.toReact()}
       </div>

@@ -430,7 +430,7 @@ export default class ScatterplotContainer extends PureComponent {
 
         <div className="content">
           <h1>Scatterplot chart</h1>
-          <div ref="component">
+          <div ref={component => { this.refs.component = component; }}>
 
             <ScatterplotChart
               data={this.data}

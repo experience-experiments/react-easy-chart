@@ -214,7 +214,7 @@ class AreaChartContainer extends PureComponent {
 
         <div className="content">
           <h1>The React Easy Area chart </h1>
-          <div ref="component">
+          <div ref={component => { this.refs.component = component; }}>
 
             <AreaChart
               data={this.data}

@@ -68,9 +68,9 @@ export default class LineChart extends PureComponent {
     const className = `line-chart-${uid}`;
 
     return (
-      <div ref={ (input) => { this.refs.lineChart = input; } } className={className}>
+      <div ref={lineChart => { this.refs.lineChart = lineChart; }} className={className}>
         {this.createStyle()}
-        <svg ref={ (input) => { this.refs.chart = input; } } width={width} height={height} />
+        <svg ref={chart => { this.refs.chart = chart; }} width={width} height={height} />
       </div>
     );
   }

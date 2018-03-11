@@ -356,7 +356,7 @@ export default class BarChartContainer extends PureComponent {
 
         <div className="content">
           <h1>The React Easy Bar Chart</h1>
-          <div ref="component">
+          <div ref={component => { this.refs.component = component; }}>
 
             <BarChart
               axisLabels={{ x: 'My x Axis', y: 'My y Axis' }}
