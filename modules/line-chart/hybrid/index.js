@@ -19,7 +19,7 @@ export default class LineChart extends PureComponent {
   componentDidMount() {
     const {
       chart
-    } = this.refs;
+    } = this;
 
     const props = this.props;
 
@@ -29,7 +29,7 @@ export default class LineChart extends PureComponent {
   componentDidUpdate() {
     const {
       chart
-    } = this.refs;
+    } = this;
 
     const props = this.props;
 
@@ -68,9 +68,9 @@ export default class LineChart extends PureComponent {
     const className = `line-chart-${uid}`;
 
     return (
-      <div ref={lineChart => { this.refs.lineChart = lineChart; }} className={className}>
+      <div ref={lineChart => { this.lineChart = lineChart; }} className={className}>
         {this.createStyle()}
-        <svg ref={chart => { this.refs.chart = chart; }} width={width} height={height} />
+        <svg ref={chart => { this.chart = chart; }} width={width} height={height} />
       </div>
     );
   }

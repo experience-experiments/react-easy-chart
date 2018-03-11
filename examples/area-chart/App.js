@@ -56,7 +56,7 @@ class AreaChartContainer extends PureComponent {
   handleResize() {
     this.setState({
       windowWidth: window.innerWidth - 100,
-      componentWidth: this.refs.component.offsetWidth
+      componentWidth: this.component.offsetWidth
     });
   }
 
@@ -214,7 +214,7 @@ class AreaChartContainer extends PureComponent {
 
         <div className="content">
           <h1>The React Easy Area chart </h1>
-          <div ref={component => { this.refs.component = component; }}>
+          <div ref={component => { this.component = component; }}>
 
             <AreaChart
               data={this.data}

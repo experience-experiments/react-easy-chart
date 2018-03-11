@@ -101,12 +101,12 @@ export default class ScatterplotChart extends PureComponent {
   }
 
   componentDidMount() {
-    const ref = this.refs.scatterplotChart;
+    const ref = this.scatterplotChart;
     createCircularTicks(ref);
   }
 
   componentDidUpdate() {
-    const ref = this.refs.scatterplotChart;
+    const ref = this.scatterplotChart;
     createCircularTicks(ref);
   }
 
@@ -558,7 +558,7 @@ export default class ScatterplotChart extends PureComponent {
     } = p;
 
     return (
-      <div ref={scatterplotChart => { this.refs.scatterplotChart = scatterplotChart; }} className={className}>
+      <div ref={scatterplotChart => { this.scatterplotChart = scatterplotChart; }} className={className}>
         {this.createStyle()}
         {node.toReact()}
       </div>

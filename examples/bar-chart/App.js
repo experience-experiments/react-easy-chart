@@ -210,7 +210,7 @@ export default class BarChartContainer extends PureComponent {
   handleResize() {
     this.setState({
       windowWidth: window.innerWidth - 100,
-      componentWidth: this.refs.component.offsetWidth
+      componentWidth: this.component.offsetWidth
     });
   }
 
@@ -356,7 +356,7 @@ export default class BarChartContainer extends PureComponent {
 
         <div className="content">
           <h1>The React Easy Bar Chart</h1>
-          <div ref={component => { this.refs.component = component; }}>
+          <div ref={component => { this.component = component; }}>
 
             <BarChart
               axisLabels={{ x: 'My x Axis', y: 'My y Axis' }}

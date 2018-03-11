@@ -89,12 +89,12 @@ export default class LineChart extends PureComponent {
   }
 
   componentDidMount() {
-    const lineChart = this.refs.lineChart;
+    const lineChart = this.lineChart;
     createCircularTicks(lineChart);
   }
 
   componentDidUpdate() {
-    const lineChart = this.refs.lineChart;
+    const lineChart = this.lineChart;
     createCircularTicks(lineChart);
   }
 
@@ -441,7 +441,7 @@ export default class LineChart extends PureComponent {
     } = p;
 
     return (
-      <div ref={lineChart => { this.refs.lineChart = lineChart; }} className={className}>
+      <div ref={lineChart => { this.lineChart = lineChart; }} className={className}>
         {this.createStyle()}
         {node.toReact()}
       </div>
