@@ -90,12 +90,12 @@ export default class LineChart extends React.Component {
   }
 
   componentDidMount() {
-    const lineChart = this.refs.lineChart;
+    const lineChart = this.ref.lineChart;
     createCircularTicks(lineChart);
   }
 
   componentDidUpdate() {
-    const lineChart = this.refs.lineChart;
+    const lineChart = this.ref.lineChart;
     createCircularTicks(lineChart);
   }
 
@@ -424,7 +424,7 @@ export default class LineChart extends React.Component {
     } = p;
 
     return (
-      <div ref="lineChart" className={className}>
+      <div ref={(input) => { this.ref.lineChart = input; } } className={className}>
         {this.createStyle()}
         {node.toReact()}
       </div>
