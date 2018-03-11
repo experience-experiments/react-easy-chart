@@ -441,7 +441,7 @@ export default class LineChart extends PureComponent {
     } = p;
 
     return (
-      <div ref="lineChart" className={className}>
+      <div ref={ (input) => { this.refs.lineChart = input; } } className={className}>
         {this.createStyle()}
         {node.toReact()}
       </div>
