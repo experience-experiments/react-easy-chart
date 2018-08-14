@@ -8,7 +8,7 @@ import {
   min,
   max,
   scaleOrdinal,
-  schemeCategory20,
+  schemeCategory10,
   range,
   select,
   scaleTime,
@@ -33,7 +33,7 @@ import {
 
 const dateParser = {};
 
-const color = scaleOrdinal(schemeCategory20).domain(range(0, 20));
+const color = scaleOrdinal(schemeCategory10).domain(range(0, 10));
 
 const axisMargin = 18;
 

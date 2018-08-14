@@ -3,7 +3,7 @@ const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
 const config = require('./webpack.config');
 const open = require('open');
-const port = 8080;
+const port = 8082;
 
 const app = new WebpackDevServer(webpack(config), {
   publicPath: '/__build__/',
