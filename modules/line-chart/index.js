@@ -41,7 +41,13 @@ export default class LineChart extends React.Component {
       interpolate: PropTypes.string,
       style: PropTypes.object,
       margin: PropTypes.object,
-      axes: PropTypes.bool,
+      axes: PropTypes.oneOfType([
+        PropTypes.bool,
+        PropTypes.shape({
+          x: PropTypes.bool,
+          y: PropTypes.bool
+        })
+      ]),
       grid: PropTypes.bool,
       verticalGrid: PropTypes.bool,
       xDomainRange: PropTypes.array,
@@ -356,7 +362,7 @@ export default class LineChart extends React.Component {
       width,
       height,
       lineColors,
-      yAxisOrientRight
+      yAxisOrientRight,
     } = this.props;
 
     /*
@@ -405,10 +411,12 @@ export default class LineChart extends React.Component {
 
     const p = this.calculateChartParameters();
 
-    if (axes) {
-      this.createXAxis(p);
+    const hasXAxes = axes === true || axes.x;
+    const hasYAxes = axes === true || axes.y;
 
-      this.createYAxis(p);
+    if (axes) {
+      if (hasXAxes) this.createXAxis(p);
+      if (hasYAxes) this.createYAxis(p);
     }
 
     this.createLinePathChart(p);

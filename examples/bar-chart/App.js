@@ -586,7 +586,8 @@ export default class BarChartContainer extends PureComponent {
             <h2>Axes</h2>
 
             <p>
-              The axes can be turned on by simply passing a boolean flag to true for axes.
+              The axes can be turned on by simply passing a boolean flag to true for <b>axes</b>
+              or an object with both a x and y visibility boolean.
             </p>
 
             <pre>
@@ -617,6 +618,51 @@ export default class BarChartContainer extends PureComponent {
               height={250}
               width={650}
               axes
+              data={this.defaultData}
+            />
+
+            <pre>
+            {(() => {
+              const html = (`
+                <BarChart
+                  height={250}
+                  width={650}
+                  axes={{ x: true, y: false }}
+                  data={this.defaultData}
+                />`);
+              return (
+                <code dangerouslySetInnerHTML={{ __html: escapeHTML(html) }} />
+              );
+            })()}
+            </pre>
+
+            <BarChart
+              height={250}
+              width={650}
+              axes={{ x: true, y: false }}
+              data={this.defaultData}
+            />
+
+
+            <pre>
+            {(() => {
+              const html = (`
+                <BarChart
+                  height={250}
+                  width={650}
+                  axes={{ x: false, y: true }}
+                  data={this.defaultData}
+                />`);
+              return (
+                <code dangerouslySetInnerHTML={{ __html: escapeHTML(html) }} />
+              );
+            })()}
+            </pre>
+
+            <BarChart
+              height={250}
+              width={650}
+              axes={{ x: false, y: true }}
               data={this.defaultData}
             />
 

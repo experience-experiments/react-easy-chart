@@ -52,7 +52,13 @@ export default class BarChart extends PureComponent {
       interpolate: PropTypes.string,
       style: PropTypes.object,
       colorBars: PropTypes.bool,
-      axes: PropTypes.bool,
+      axes: PropTypes.oneOfType([
+        PropTypes.bool,
+        PropTypes.shape({
+          x: PropTypes.bool,
+          y: PropTypes.bool
+        })
+      ]),
       grid: PropTypes.bool,
       axisLabels: PropTypes.shape({
         x: PropTypes.string,
@@ -463,7 +469,7 @@ export default class BarChart extends PureComponent {
       yDomainRange,
       margin,
       width,
-      height
+      height,
     } = this.props;
 
     const hasLineData = this.hasLineData();
@@ -489,16 +495,19 @@ export default class BarChart extends PureComponent {
 
   render() {
     const {
-      axes
+      axes,
     } = this.props;
 
     const hasLineData = this.hasLineData();
     const p = this.calculateChartParameters();
 
-    if (axes) {
-      this.createXAxis(p);
+    const hasXAxes = axes === true || axes.x;
+    const hasYAxes = axes === true || axes.y;
 
-      this.createYAxis(p); // const yAxis = this.createYAxis(p);
+    if (axes) {
+      if (hasXAxes) this.createXAxis(p);
+
+      if (hasYAxes) this.createYAxis(p); // const yAxis = this.createYAxis(p);
 
       if (hasLineData) {
         this.createYAxis2(p); // { ...p, yAxis });

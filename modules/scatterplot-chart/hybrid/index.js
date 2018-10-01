@@ -40,7 +40,13 @@ const axisMargin = 18;
 export default class ScatterplotChart extends PureComponent {
   static get propTypes() {
     return {
-      axes: PropTypes.bool,
+      axes: PropTypes.oneOfType([
+        PropTypes.bool,
+        PropTypes.shape({
+          x: PropTypes.bool,
+          y: PropTypes.bool
+        })
+      ]),
       axisLabels: PropTypes.shape({
         x: PropTypes.string,
         y: PropTypes.string
@@ -685,12 +691,14 @@ export default class ScatterplotChart extends PureComponent {
       axes
     } = this.props;
 
+    const hasXAxes = axes === true || axes.x;
+    const hasYAxes = axes === true || axes.y;
+
     const p = this.calculateChartParameters();
 
     if (axes) {
-      this.createXAxis(p);
-
-      this.createYAxis(p);
+      if (hasXAxes) this.createXAxis(p);
+      if (hasYAxes) this.createYAxis(p);
     }
 
     this.createScatterplotChart(p);
