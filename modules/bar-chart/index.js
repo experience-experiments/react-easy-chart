@@ -266,8 +266,8 @@ export default class BarChart extends PureComponent {
         .attr('x', 0)
         .attr('y',
           (yAxisOrientRight)
-            ? -25 + m.right
-            : 10 - m.left)
+            ? -20 + m.right
+            : 5 - m.left)
         .attr('dy', '.9em')
         .style('text-anchor', 'end')
         .text(label);

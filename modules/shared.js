@@ -76,7 +76,9 @@ export const defaultStyles = {
     'font-size': '9px'
   },
   '.axis .label': {
-    font: '14px arial'
+    'font-size': '14px',
+    'font-family': 'dobra-light,Arial,sans-serif',
+    fill: '#000'
   },
   '.axis path, .axis line': {
     fill: 'none',
