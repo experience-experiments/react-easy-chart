@@ -52,6 +52,7 @@ export default class PieChart extends PureComponent {
       padding: 2,
       labels: false,
       styles: {},
+      innerHoleSize: 0,
       mouseOverHandler: () => {},
       mouseOutHandler: () => {},
       mouseMoveHandler: () => {},
@@ -112,7 +113,7 @@ export default class PieChart extends PureComponent {
 
   getInnerRadius() {
     const { innerHoleSize, padding } = this.props;
-    return innerHoleSize ? innerHoleSize * 0.5 - padding : 0;
+    return (innerHoleSize !== 0) ? innerHoleSize * 0.5 - padding : 0;
   }
 
   getSlices() {
