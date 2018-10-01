@@ -58,9 +58,9 @@ const mouseMoveSpy = chai.spy(() => {});
 const clickSpy = chai.spy(() => {});
 
 const mockData = [
-  { key: 'A', value: 0.5 },
-  { key: 'B', value: 0.2 },
-  { key: 'C', value: 0.1 }
+  { x: 'A', y: 0.5 },
+  { x: 'B', y: 0.2 },
+  { x: 'C', y: 0.1 }
 ];
 
 const mockLineData = [
