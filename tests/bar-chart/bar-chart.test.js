@@ -551,7 +551,7 @@ describe('BarChart component', () => {
         expect(mockRoot.append.calledWith('text')).to.be.true;
         expect(mockRoot.attr.calledWith('class', 'label')).to.be.true;
         expect(mockRoot.attr.calledWith('x', 0)).to.be.true;
-        expect(mockRoot.attr.calledWith('y', 10)).to.be.true;
+        expect(mockRoot.attr.calledWith('y', 5)).to.be.true;
         expect(mockRoot.attr.calledWith('dy', '.9em')).to.be.true;
         expect(mockRoot.style.calledWith('text-anchor', 'end')).to.be.true;
         expect(mockRoot.text.calledWith('Mock Y Label')).to.be.true;
@@ -578,7 +578,7 @@ describe('BarChart component', () => {
         expect(mockRoot.append.calledWith('text')).to.be.true;
         expect(mockRoot.attr.calledWith('class', 'label')).to.be.true;
         expect(mockRoot.attr.calledWith('x', 0)).to.be.true;
-        expect(mockRoot.attr.calledWith('y', -25)).to.be.true;
+        expect(mockRoot.attr.calledWith('y', -20)).to.be.true;
         expect(mockRoot.attr.calledWith('dy', '.9em')).to.be.true;
         expect(mockRoot.style.calledWith('text-anchor', 'end')).to.be.true;
         expect(mockRoot.text.calledWith('Mock Y Label')).to.be.true;
