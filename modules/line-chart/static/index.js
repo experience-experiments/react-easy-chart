@@ -315,6 +315,7 @@ export default class LineChart extends PureComponent {
           .datum(d)
           .append('circle')
           .attr('class', 'data-point')
+          .attr('r', 4)
           .style('strokeWidth', '2px')
           .style('stroke', getStroke)
           .style('fill', 'white')
