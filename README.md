@@ -48,7 +48,7 @@ Chart Legend:
 
 
 ## Documentation
-Each of the charts have had extensive documentation produced for them with working examples. These can be found at  [http://rma-consulting.github.io/react-easy-chart](http://rma-consulting.github.io/react-easy-chart)
+Each of the charts have had extensive documentation produced for them with working examples. These can be found at  [http://experience-experiments.github.io/react-easy-chart](http://experience-experiments.github.io/react-easy-chart)
 
 ## Contributing
 We welcome pull requests and forks of the current graph implementations. If you are able to follow the API we have set out and are developing a chart we currently do not have we would love to add to our existing library.
@@ -64,4 +64,4 @@ The complexity of developing D3 based graphs intermittently often means that eve
 [![npm version](https://badge.fury.io/js/react-easy-chart.png)](https://www.npmjs.com/package/react-easy-chart)
 
 ### Build Status
-[![Build Status](https://travis-ci.org/rma-consulting/react-easy-chart.svg)](https://travis-ci.org/rma-consulting/react-easy-chart)
+[![Build Status](https://travis-ci.org/experience-experiments/react-easy-chart.svg)](https://travis-ci.org/experience-experiments/react-easy-chart)
