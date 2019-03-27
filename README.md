@@ -1,4 +1,8 @@
-# React Easy Chart
+# [DEPRECATED] - React Easy Chart
+
+## Deprecation notice
+
+We have moved on from this library, so it is not actively maintained. We recommend users to migrate to the brilliant http://recharts.org for easy to use react charting components.
 
 ![animated graph](examples/images/animated-graph.gif)
 
