@@ -16,13 +16,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rma-consulting/react-easy-chart.git"
+    "url": "git+https://github.com/experience-experiments/react-easy-chart.git"
   },
   "license": "BSD-3-Clause",
   "bugs": {
-    "url": "https://github.com/rma-consulting/react-easy-chart/issues"
+    "url": "https://github.com/experience-experiments/react-easy-chart/issues"
   },
-  "homepage": "https://github.com/rma-consulting/react-easy-chart#readme",
+  "homepage": "https://github.com/experience-experiments/react-easy-chart#readme",
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
