@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import {
   scaleOrdinal,
-  schemeCategory20,
+  schemeCategory10,
   range,
   pie as layout,
   arc,
@@ -18,7 +18,7 @@ import PropTypes from 'prop-types';
 import { Style } from 'radium';
 import merge from 'lodash.merge';
 
-const color = scaleOrdinal(schemeCategory20).domain(range(0, 20));
+const color = scaleOrdinal(schemeCategory10).domain(range(0, 10));
 const pie = layout()
   .value((d) => d.value)
   .sort(null);
