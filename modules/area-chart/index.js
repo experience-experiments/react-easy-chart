@@ -90,12 +90,12 @@ export default class AreaChart extends PureComponent {
   }
 
   componentDidMount() {
-    const ref = this.refs.areaChart;
+    const ref = this.areaChart;
     createCircularTicks(ref);
   }
 
   componentDidUpdate() {
-    const ref = this.refs.areaChart;
+    const ref = this.areaChart;
     createCircularTicks(ref);
   }
 
@@ -490,7 +490,7 @@ export default class AreaChart extends PureComponent {
     } = p;
 
     return (
-      <div ref="areaChart" className={className}>
+      <div ref={areaChart => { this.areaChart = areaChart; }} className={className}>
         {this.createStyle()}
         {node.toReact()}
       </div>

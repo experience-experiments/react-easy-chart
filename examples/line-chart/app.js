@@ -56,7 +56,7 @@ class LineChartContainer extends PureComponent {
   handleResize() {
     this.setState({
       windowWidth: window.innerWidth - 100,
-      componentWidth: this.refs.component.offsetWidth
+      componentWidth: this.component.offsetWidth
     });
   }
 
@@ -211,7 +211,7 @@ class LineChartContainer extends PureComponent {
         </aside>
         <div className="content">
           <h1>The React Easy Line chart</h1>
-          <div ref="component">
+          <div ref={component => { this.component = component; }}>
 
             <LineChart
               data={this.data}

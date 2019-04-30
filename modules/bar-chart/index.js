@@ -101,12 +101,12 @@ export default class BarChart extends PureComponent {
   }
 
   componentDidMount() {
-    const ref = this.refs.barChart;
+    const ref = this.barChart;
     createCircularTicks(ref);
   }
 
   componentDidUpdate() {
-    const ref = this.refs.barChart;
+    const ref = this.barChart;
     createCircularTicks(ref);
   }
 
@@ -518,7 +518,7 @@ export default class BarChart extends PureComponent {
     } = p;
 
     return (
-      <div ref="barChart" className={className}>
+      <div ref={barChart => { this.barChart = barChart; }} className={className}>
         {this.createStyle()}
         {node.toReact()}
       </div>
