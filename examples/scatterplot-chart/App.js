@@ -594,8 +594,8 @@ export default class ScatterplotContainer extends PureComponent {
             <h2>Axes</h2>
 
             <p>
-              The axes can be turned on by simply passing a boolean flag to true for
-              <strong>axes</strong>.
+              The axes can be turned on by simply passing a boolean flag to true for <b>axes</b>
+              or an object with both a x and y visibility boolean.
             </p>
 
             <pre>
@@ -613,6 +613,49 @@ export default class ScatterplotContainer extends PureComponent {
             </pre>
 
             <ScatterplotChart data={bigData} axes width={480} height={270} />
+
+
+            <pre>
+            {(() => {
+              const html = (`
+  <ScatterplotChart
+    data={data}
+    axes={{ x: true, y: false }}
+    width={480}
+    height={270} />`);
+              return (
+                <code dangerouslySetInnerHTML={{ __html: escapeHTML(html) }} />
+              );
+            })()}
+            </pre>
+
+            <ScatterplotChart
+              data={bigData}
+              axes={{ x: true, y: false }}
+              width={480}
+              height={270}
+            />
+
+            <pre>
+            {(() => {
+              const html = (`
+  <ScatterplotChart
+    data={data}
+    axes={{ x: false, y: true }}
+    width={480}
+    height={270} />`);
+              return (
+                <code dangerouslySetInnerHTML={{ __html: escapeHTML(html) }} />
+              );
+            })()}
+            </pre>
+
+            <ScatterplotChart
+              data={bigData}
+              axes={{ x: false, y: true }}
+              width={480}
+              height={270}
+            />
 
           </section>
 

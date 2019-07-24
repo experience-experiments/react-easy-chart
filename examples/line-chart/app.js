@@ -430,7 +430,8 @@ class LineChartContainer extends PureComponent {
             <h2>Axes</h2>
 
             <p>
-              The axes can be turned on by simply passing a boolean flag to true for <b>axes</b>.
+              The axes can be turned on by simply passing a boolean flag to true for <b>axes</b>
+              or an object with both a x and y visibility boolean.
             </p>
 
             <pre>
@@ -461,6 +462,91 @@ class LineChartContainer extends PureComponent {
             <LineChart
               axes
               width={350}
+              height={250}
+              data={[
+                [
+                  { x: 1, y: 20 },
+                  { x: 2, y: 10 },
+                  { x: 3, y: 25 }
+                ], [
+                  { x: 1, y: 10 },
+                  { x: 2, y: 12 },
+                  { x: 3, y: 4 }
+                ]
+              ]}
+            />
+
+
+            <pre>
+            {(() => {
+              const html = (`
+  <LineChart
+    axes={{ x: true, y: false }}
+    width={250}
+    height={250}
+    data={[
+      [
+        { x: 1, y: 20 },
+        { x: 2, y: 10 },
+        { x: 3, y: 25 }
+      ], [
+        { x: 1, y: 10 },
+        { x: 2, y: 12 },
+        { x: 3, y: 4 }
+      ]
+    ]}
+  />`);
+              return (
+                <code dangerouslySetInnerHTML={{ __html: escapeHTML(html) }} />
+              );
+            })()}
+            </pre>
+
+            <LineChart
+              axes={{ x: true, y: false }}
+              width={250}
+              height={250}
+              data={[
+                [
+                  { x: 1, y: 20 },
+                  { x: 2, y: 10 },
+                  { x: 3, y: 25 }
+                ], [
+                  { x: 1, y: 10 },
+                  { x: 2, y: 12 },
+                  { x: 3, y: 4 }
+                ]
+              ]}
+            />
+
+            <pre>
+            {(() => {
+              const html = (`
+            <LineChart
+            axes={{ x: false, y: true }}
+            width={250}
+            height={250}
+            data={[
+              [
+                { x: 1, y: 20 },
+                { x: 2, y: 10 },
+                { x: 3, y: 25 }
+              ], [
+                { x: 1, y: 10 },
+                { x: 2, y: 12 },
+                { x: 3, y: 4 }
+              ]
+            ]}
+            />`);
+              return (
+                <code dangerouslySetInnerHTML={{ __html: escapeHTML(html) }} />
+              );
+            })()}
+            </pre>
+
+            <LineChart
+              axes={{ x: false, y: true }}
+              width={250}
               height={250}
               data={[
                 [

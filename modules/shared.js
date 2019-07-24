@@ -164,16 +164,28 @@ export function createUniqueID(o) {
   return hash(o);
 }
 
-export function calculateMargin(axes, margin, yAxisOrientRight, y2) {
+export function calculateMargin(
+  axes,
+  margin,
+  yAxisOrientRight,
+  y2) {
   if (margin) return margin;
+  const hasXAxes = axes === true || axes.x;
+  const hasYAxes = axes === true || axes.y;
   if (yAxisOrientRight) {
-    return (axes)
-      ? { top: 20, right: 50, bottom: 50, left: (y2) ? 50 : 20 }
-      : { top: 0, right: 0, bottom: 0, left: 0 };
+    return (hasXAxes || hasYAxes)
+        ? { top: 20,
+          right: hasXAxes ? 50 : 20,
+          bottom: hasYAxes ? 50 : 20,
+          left: (y2) ? 50 : 20 }
+        : { top: 0, right: 0, bottom: 0, left: 0 };
   }
-  return (axes)
-    ? { top: 20, right: (y2) ? 50 : 20, bottom: 50, left: 50 }
-    : { top: 0, right: 0, bottom: 0, left: 0 };
+  return (hasXAxes || hasYAxes)
+      ? { top: 20,
+        right: (y2) ? 50 : 20,
+        bottom: hasXAxes ? 50 : 20,
+        left: hasYAxes ? 50 : 20 }
+      : { top: 0, right: 0, bottom: 0, left: 0 };
 }
 
 /* eslint no-shadow: 0 */
