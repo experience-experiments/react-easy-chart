@@ -77,7 +77,6 @@ export default class BarChart extends PureComponent {
       lineData: [],
       width: 400,
       height: 200,
-      barWidth: 10,
       axes: false,
       xType: 'text',
       yType: 'linear',
@@ -339,7 +338,7 @@ export default class BarChart extends PureComponent {
       clickHandler,
       colorBars,
       xType,
-      barWidth
+      barWidth = 10
     } = this.props;
 
     const calculateDate = (v) => this.parseDate(v);
@@ -352,8 +351,8 @@ export default class BarChart extends PureComponent {
     const calculateY = (d) => y(d.y);
     const calculateW = () => (
       (xType === 'text')
-        ? x.bandwidth()
-        : barWidth);
+        ? Math.max(x.bandwidth(), barWidth) : barWidth);
+
     const calculateH = (d) => h - y(d.y);
 
     const mouseover = (d) => mouseOverHandler(d, lastEvent);
@@ -463,16 +462,20 @@ export default class BarChart extends PureComponent {
       yDomainRange,
       margin,
       width,
-      height
+      height,
+      barWidth
     } = this.props;
 
     const hasLineData = this.hasLineData();
     const m = calculateMargin(axes, margin, yAxisOrientRight, hasLineData);
-    const w = reduce(width, m.left, m.right);
+    const calcWidth = (barWidth && data.length > 0) ?
+      Math.max((((barWidth + 1) * data.length) + m.left + m.right), width)
+      : width;
+    const w = reduce(calcWidth, m.left, m.right);
+
     const h = reduce(height, m.top, m.bottom);
     const x = this.createDomainRangeGenerator('x', xDomainRange, data, xType, w);
     const y = this.createDomainRangeGenerator('y', yDomainRange, data, yType, h);
-
     const node = this.createSvgNode({ m, w, h });
     const root = this.createSvgRoot({ node, m });
 

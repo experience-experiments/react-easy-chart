@@ -155,14 +155,6 @@ describe('BarChart component', () => {
             expect(chart.props).to.have.property('height', 200);
           });
 
-          it('has a width for the bar on the chart', () => {
-            /**
-             * Bar Charts must have a non-zero width for the bars
-             * on the graph. We default to 10
-             */
-            expect(chart.props).to.have.property('barWidth', 10);
-          });
-
           it('has a pattern for formatting dates on the chart', () => {
             /**
              * We provide a pattern for formatting dates
