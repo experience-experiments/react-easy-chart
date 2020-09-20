@@ -296,7 +296,8 @@ export default class ScatterplotContainer extends PureComponent {
       data.push({
         type: key,
         x: this.getRandomArbitrary(1, 1000),
-        y: this.getRandomArbitrary(1, 1000)
+        y: this.getRandomArbitrary(1, 1000),
+        z: this.getRandomArbitrary(1, 10)
       });
     });
     return data;
@@ -689,8 +690,8 @@ export default class ScatterplotContainer extends PureComponent {
             <h2>Dot radius</h2>
 
             <p>
-              The default size of the dot can be changed via the
-              <strong>dotRadius</strong> parameter.
+              The default size of the dot can be changed via
+              the <strong>dotRadius</strong> parameter.
             </p>
 
             <pre>
@@ -1134,7 +1135,8 @@ export default class ScatterplotContainer extends PureComponent {
 
             <p>
               Its also possible to pass in a third variable (z). This variable is a number and is
-              used to scale the radius of the dot.
+              used to scale the radius of the dot. The radius can be controlled with
+              the <strong>dotRadius</strong> and <strong>minRadius</strong> parameters.
             </p>
 
             <pre>
@@ -1205,6 +1207,8 @@ export default class ScatterplotContainer extends PureComponent {
 
   <ScatterplotChart
     data={bigDataZ}
+    dotRadius={20}
+    minRadius={5}
     axes
     axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
     width={480}
@@ -1222,6 +1226,8 @@ export default class ScatterplotContainer extends PureComponent {
 
             <ScatterplotChart
               data={bigDataZ}
+              dotRadius={20}
+              minRadius={5}
               axes
               axisLabels={{ x: 'My x Axis', y: 'My y Axis' }}
               width={480}
@@ -1255,6 +1261,8 @@ export default class ScatterplotContainer extends PureComponent {
               data={this.data}
               grid
               axes
+              dotRadius={10}
+              minRadius={1}
               axisLabels={{ x: 'My x Axis', y: 'My y Axis' }}
               margin={{ top: 10, right: 10, bottom: 30, left: 60 }}
               width={480}

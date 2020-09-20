@@ -51,6 +51,7 @@ export default class ScatterplotChart extends PureComponent {
       datePattern: PropTypes.string,
       yAxisOrientRight: PropTypes.bool,
       dotRadius: PropTypes.number,
+      minRadius: PropTypes.number,
       verticalGrid: PropTypes.bool,
       grid: PropTypes.bool,
       height: PropTypes.number,
@@ -84,6 +85,7 @@ export default class ScatterplotChart extends PureComponent {
       config: [],
       datePattern: '%d-%b-%y',
       dotRadius: 5,
+      minRadius: 1,
       grid: false,
       mouseOverHandler: () => {},
       mouseOutHandler: () => {},
@@ -139,16 +141,12 @@ export default class ScatterplotChart extends PureComponent {
       : color(data.type);
   }
 
-  getRadius(data, dataItem, dotRadius) {
+  getRadius(data, dataItem, dotRadius, minRadius) {
     if (typeof data[0].z !== 'undefined') {
-      const rangeRadius = extent(data, (d) => d.z);
-      const mn = rangeRadius[0];
-      const mx = rangeRadius[1];
-      const p = ((dataItem.z - mn) / (mx - mn));
-      const minRad = 5;
-      const maxRad = 20;
-      const rad = minRad + ((maxRad - minRad) * p);
-      return rad;
+      const r = linear()
+        .domain(extent(data, (d) => d.z))
+        .range([minRadius, dotRadius]);
+      return r(dataItem.z);
     }
     return dotRadius;
   }
@@ -366,6 +364,7 @@ export default class ScatterplotChart extends PureComponent {
     const {
       data,
       dotRadius,
+      minRadius,
       xType,
       mouseOverHandler,
       mouseOutHandler,
@@ -375,7 +374,7 @@ export default class ScatterplotChart extends PureComponent {
 
     const calculateDate = (v) => this.parseDate(v);
 
-    const calculateR = (d) => this.getRadius(data, d, dotRadius);
+    const calculateR = (d) => this.getRadius(data, d, dotRadius, minRadius);
     const calculateCX = (d) => (
         (xType === 'time')
           ? x(calculateDate(d.x))
@@ -442,6 +441,7 @@ export default class ScatterplotChart extends PureComponent {
     const {
       data,
       dotRadius,
+      minRadius,
       xType,
       mouseOverHandler,
       mouseOutHandler,
@@ -451,7 +451,7 @@ export default class ScatterplotChart extends PureComponent {
 
     const calculateDate = (v) => this.parseDate(v);
 
-    const calculateR = (d) => this.getRadius(data, d, dotRadius);
+    const calculateR = (d) => this.getRadius(data, d, dotRadius, minRadius);
     const calculateCX = (d) => (
         (xType === 'time')
           ? x(calculateDate(d.x))
