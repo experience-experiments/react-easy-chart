@@ -5,10 +5,20 @@ import ReactDOM from 'react-dom';
 import {
   Legend,
   PieChart,
-  ScatterplotChart
+  ScatterplotChart,
+  LineChart,
+  AreaChart,
+  BarChart
 } from 'react-easy-chart';
 import { escapeHTML } from '../util';
 import Scrollspy from 'react-scrollspy';
+
+const lineColors = [
+  { color: '#3F4C55' },
+  { color: '#E3A51A' },
+  { color: '#F4E956' },
+  { color: '#AAAC84' }
+];
 
 const pieData = [
   { key: 'Cats', value: 100 },
@@ -49,6 +59,7 @@ const scatterStyle = {
     padding: '12px'
   }
 };
+
 
 const bigData = [
   {
@@ -128,6 +139,35 @@ const bigData = [
   }
 ];
 
+const lineData = [
+  [
+    { x: 'Mon', y: 20 },
+    { x: 'Tue', y: 10 },
+    { x: 'Wed', y: 33 },
+    { x: 'Thu', y: 45 },
+    { x: 'Fri', y: 15 }
+  ], [
+    { x: 'Mon', y: 10 },
+    { x: 'Tue', y: 15 },
+    { x: 'Wed', y: 13 },
+    { x: 'Thu', y: 15 },
+    { x: 'Fri', y: 10 }
+  ],
+  [
+    { x: 'Mon', y: 5 },
+    { x: 'Tue', y: 40 },
+    { x: 'Wed', y: 33 },
+    { x: 'Thu', y: 12 },
+    { x: 'Fri', y: 8 }
+  ]
+];
+
+const barData = [
+  { x: 'Cats', y: 20 },
+  { x: 'Dogs', y: 10 },
+  { x: 'Other', y: 25 }
+];
+
 export default class LegendContainer extends PureComponent {
 
   constructor(props) {
@@ -179,6 +219,8 @@ export default class LegendContainer extends PureComponent {
               <li><a href="#config">Config</a></li>
               <li><a href="#styles">Styles</a></li>
               <li><a href="#scatterplot">Scatterplot</a></li>
+              <li><a href="#linecharts">Line and area charts</a></li>
+              <li><a href="#barcharts">Bar charts</a></li>
             </Scrollspy>
           </nav>
         </aside>
@@ -427,6 +469,124 @@ export default class LegendContainer extends PureComponent {
               data={bigData}
               dataId={'type'}
               styles={scatterStyle}
+              horizontal
+            />
+
+          </section>
+
+
+          <section id="linecharts">
+            <h2>Line and area charts</h2>
+            <p>Line and area charts example</p>
+            <pre>
+            {(() => {
+              const html = (`
+                <LineChart
+                  data={lineData}
+                  width={440}
+                  height={270}
+                  axes
+                  xType={'text'}
+                />
+
+                <AreaChart
+                  data={lineData}
+                  width={440}
+                  height={270}
+                  axes
+                  xType={'text'}
+                />
+
+                <Legend
+                  data={[
+                    { key: 'Cats' },
+                    { key: 'Dogs' },
+                    { key: 'Other' }
+                  ]}
+                  dataId={'key'}
+                  horizontal
+                  config={lineColors}
+                />`);
+              return (
+                <code dangerouslySetInnerHTML={{ __html: escapeHTML(html) }} />
+              );
+            })()}
+            </pre>
+
+            <div style={{ float: 'left' }}>
+              <LineChart
+                data={lineData}
+                width={440}
+                height={270}
+                axes
+                xType={'text'}
+              />
+            </div>
+            <div style={{ float: 'right' }}>
+              <AreaChart
+                data={lineData}
+                width={440}
+                height={270}
+                axes
+                xType={'text'}
+              />
+            </div>
+            <div style={{ clear: 'both', textAlign: 'center' }}>
+              <Legend
+                data={[
+                  { key: 'Cats' },
+                  { key: 'Dogs' },
+                  { key: 'Other' }
+                ]}
+                dataId={'key'}
+                horizontal
+                config={lineColors}
+              />
+            </div>
+
+
+          </section>
+
+
+          <section id="barcharts">
+            <h2>Bar charts</h2>
+            <p>Bar charts example</p>
+            <pre>
+            {(() => {
+              const html = (`
+                <BarChart
+                  data={barData}
+                  width={480}
+                  height={270}
+                  axes
+                  xType={'text'}
+                  colorBars
+                />
+
+                <Legend
+                  data={barData}
+                  dataId={'x'}
+                  horizontal
+                />`);
+              return (
+                <code dangerouslySetInnerHTML={{ __html: escapeHTML(html) }} />
+              );
+            })()}
+            </pre>
+
+
+            <BarChart
+              data={barData}
+              width={480}
+              height={270}
+              axes
+              xType={'text'}
+              colorBars
+            />
+
+            <Legend
+              data={barData}
+              dataId={'x'}
               horizontal
             />
 
