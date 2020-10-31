@@ -141,13 +141,9 @@ export default class ScatterplotChart extends PureComponent {
 
   getRadius(data, dataItem, dotRadius) {
     if (typeof data[0].z !== 'undefined') {
-      const rangeRadius = extent(data, (d) => d.z);
-      const mn = rangeRadius[0];
-      const mx = rangeRadius[1];
-      const p = ((dataItem.z - mn) / (mx - mn));
-      const minRad = 5;
-      const maxRad = 20;
-      const rad = minRad + ((maxRad - minRad) * p);
+      const mx = max(data, (d) => d.z);
+      const p = mx ? dataItem.z / mx : 0;
+      const rad = dotRadius * p;
       return rad;
     }
     return dotRadius;
